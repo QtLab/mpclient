@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/mp">
+      <file>Views/Main.qml</file>
+      <file>Views/Grid.qml</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,223 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
+      <Extensions>moc;h;cpp</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="Generated Files\Debug">
+      <UniqueIdentifier>{5eb5066a-1c33-4333-ba41-cb362a798378}</UniqueIdentifier>
+      <Extensions>cpp;moc</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="Generated Files\Release">
+      <UniqueIdentifier>{70965f33-3464-4e14-8f06-b2c336232232}</UniqueIdentifier>
+      <Extensions>cpp;moc</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="Model">
+      <UniqueIdentifier>{11ae4897-4669-42ee-b25c-94431f144981}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Views">
+      <UniqueIdentifier>{7b5456dc-c64b-4fb3-b885-f58ccc64119e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Controllers">
+      <UniqueIdentifier>{a0286ad8-61ec-4b68-a83c-647d23bc0683}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{4283fae7-ac46-462c-9d7c-ad42869ab8d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Views\QML">
+      <UniqueIdentifier>{11968bc8-3fa1-4015-a62f-d65899212b2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Views\Widgets">
+      <UniqueIdentifier>{2480e685-5562-4c68-8758-922847712336}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Views\Dialogs">
+      <UniqueIdentifier>{05c5a248-8f54-4e04-99c0-b89f5ab0299c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="GeneratedFiles\Debug\moc_MainWindow.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_MainWindow.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\qrc_Player.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EntryPoint.cpp" />
+    <ClCompile Include="NcFramelessHelper.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_TabWidget.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_TabWidget.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="TabWidget.cpp">
+      <Filter>Views\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="TabPage.cpp">
+      <Filter>Views\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_TabPage.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_TabPage.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="MainWindow.cpp">
+      <Filter>Views\Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="AppController.cpp">
+      <Filter>Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_AppController.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_AppController.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="TVPage.cpp">
+      <Filter>Views\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_TVPage.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_TVPage.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="RadioPage.cpp">
+      <Filter>Views\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_RadioPage.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_RadioPage.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="Titlebar.cpp">
+      <Filter>Views\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_Titlebar.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_Titlebar.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_MediaController.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_MediaController.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="MediaController.cpp">
+      <Filter>Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="TabPagesController.cpp">
+      <Filter>Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_ChannelSourceModel.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_ChannelSourceModel.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="ChannelSourceModel.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="ChannelMetadataModel.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="WidgetUtils.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="CheatController.cpp">
+      <Filter>Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_CheatController.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_CheatController.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="Player.qrc">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="TabWidget.h">
+      <Filter>Views\Widgets</Filter>
+    </CustomBuild>
+    <CustomBuild Include="TabPage.h">
+      <Filter>Views\Widgets</Filter>
+    </CustomBuild>
+    <CustomBuild Include="MainWindow.h">
+      <Filter>Views\Dialogs</Filter>
+    </CustomBuild>
+    <CustomBuild Include="AppController.h">
+      <Filter>Controllers</Filter>
+    </CustomBuild>
+    <CustomBuild Include="TVPage.h">
+      <Filter>Views\Widgets</Filter>
+    </CustomBuild>
+    <CustomBuild Include="RadioPage.h">
+      <Filter>Views\Widgets</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Titlebar.h">
+      <Filter>Views\Widgets</Filter>
+    </CustomBuild>
+    <CustomBuild Include="MediaController.h">
+      <Filter>Controllers</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ChannelSourceModel.h">
+      <Filter>Model</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ChannelMetadataModel.h">
+      <Filter>Model</Filter>
+    </CustomBuild>
+    <CustomBuild Include="CheatController.h">
+      <Filter>Controllers</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="NcFramelessHelper.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="WidgetUtils.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="TabPagesController.h">
+      <Filter>Controllers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Views\WebPage.qml">
+      <Filter>Views\QML</Filter>
+    </None>
+    <None Include="Views\Grid.qml">
+      <Filter>Views\QML</Filter>
+    </None>
+    <None Include="Views\Main.qml">
+      <Filter>Views\QML</Filter>
+    </None>
+    <None Include="Views\RadioPage.qml">
+      <Filter>Views\QML</Filter>
+    </None>
+    <None Include="Views\TabWidget.qml">
+      <Filter>Views\QML</Filter>
+    </None>
+    <None Include="Views\TVPage.qml">
+      <Filter>Views\QML</Filter>
+    </None>
+  </ItemGroup>
+</Project>
