@@ -150,6 +150,21 @@
     <ClCompile Include="GeneratedFiles\Release\moc_CheatController.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="IdleInputController.cpp">
+      <Filter>Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_IdleInputController.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_IdleInputController.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="DefaultBrowserController.cpp">
+      <Filter>Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="Log.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Player.qrc">
@@ -188,6 +203,12 @@
     <CustomBuild Include="CheatController.h">
       <Filter>Controllers</Filter>
     </CustomBuild>
+    <CustomBuild Include="IdleInputController.h">
+      <Filter>Controllers</Filter>
+    </CustomBuild>
+    <CustomBuild Include="DefaultBrowserController.h">
+      <Filter>Controllers</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="NcFramelessHelper.h">
@@ -198,6 +219,9 @@
     </ClInclude>
     <ClInclude Include="TabPagesController.h">
       <Filter>Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="Log.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
