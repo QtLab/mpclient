@@ -6,7 +6,7 @@ int main(int argc, char *argv[])
 	mp::AppController app(argc, argv);
 
 #ifndef _DEBUG
-	// ѕишем в лог файл только в релизе
+	// Write to the log file only in release mode
 	qInstallMsgHandler(CustomMessageHandler);
 #endif
 

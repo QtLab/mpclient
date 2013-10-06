@@ -1,6 +1,6 @@
 #include "CheatController.h"
 #include "TabPagesController.h"
-#include "MediaController.h"
+#include "AudioStreamController.h"
 
 #include "MainWindow.h"
 #include "TabWidget.h"
@@ -18,29 +18,18 @@ CheatController::~CheatController()
 {
 }
 
-void CheatController::CreateView()
+void  CheatController::LaunchView(const QString& viewNamve)
 {
-	m_view = new MainWindow();
-
-	TabWidget * tabs = TabPagesController::Inst().CreateTabsView();
-
-	TabPage * radioPage = TabPagesController::Inst().CreateRadioTabView();
-	tabs->SetRadioPage(radioPage);
-
-	TabPage * tvPage = TabPagesController::Inst().CreateTVTabView();
-	tabs->SetTvPage(tvPage);
-
-	m_view->AddWidget(tabs);
-
-	m_view->show();	
 }
 
-void CheatController::InitSignalSlotConnections()
+void  CheatController::StopView(const QString& viewNamve)
 {
-	// Metadata
-	connect(&MediaController::Inst(), SIGNAL(MetadataUpdated(const ChannelMetadata&)), 
-		m_view->TitleBar(), SLOT(MetadataUpdated(const ChannelMetadata&)));
 }
+
+void  CheatController::StopAllVideo()
+{
+}
+
 
 CheatController& CheatController::Inst()
 {
@@ -48,6 +37,7 @@ CheatController& CheatController::Inst()
 	return *inst;
 }
 
+/*
 void Log1(const char* eventName, QObject* receiver)
 {
 	qDebug("Error <unknown> sending event %s to object %s (%s)", 
@@ -80,5 +70,6 @@ bool CheatController::notify(QObject* receiver, QEvent* even)
 
 	return true;
 }
+*/
 
 }

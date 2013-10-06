@@ -1,6 +1,6 @@
 #include "TVPage.h"
 #include "ChannelSourceModel.h"
-#include "MediaController.h"
+#include "AudioStreamController.h"
 
 #include <QDeclarativeError>
 #include <QtDeclarative/QDeclarativeView>

@@ -2,12 +2,18 @@
 #define ZAXAR_CHANNEL_METDATA_MODEL_H
 
 #include <QMetaType>
+#include <QObject>
 #include <QSharedPointer>
 
 namespace mp {
 
-class ChannelMetadata
+class ChannelMetadata : public QObject
 {
+	Q_OBJECT
+	Q_PROPERTY(QString title READ Title WRITE SetTitle)
+	Q_PROPERTY(QString artist READ Artist WRITE SetArtist)
+	Q_PROPERTY(QString url READ Url WRITE SetUrl)
+
 public:
 	ChannelMetadata();
 	~ChannelMetadata();

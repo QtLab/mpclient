@@ -1,12 +1,15 @@
-#ifndef ZAXAR_CHANNEL_SOURCE_H
-#define ZAXAR_CHANNEL_SOURCE_H
+#ifndef MP_CHANNEL_SOURCE_H
+#define MP_CHANNEL_SOURCE_H
 
 #include <QMetaType>
 #include <QSharedPointer>
 #include <QAbstractListModel>
 #include <QReadWriteLock>
 
+#include "GenreModel.h"
+
 namespace mp {
+
 
 class ChannelSource : public QObject
 {
@@ -15,7 +18,7 @@ class ChannelSource : public QObject
 	Q_PROPERTY(QString id READ Id WRITE SetId)
 	Q_PROPERTY(QString logo READ Logo WRITE SetLogo)
 	Q_PROPERTY(QString url READ Url WRITE SetUrl)
-
+	Q_PROPERTY(QString url READ Url WRITE SetUrl)
 public:
 	ChannelSource();
 	~ChannelSource();
@@ -26,17 +29,25 @@ public:
 	QString Name() const;
 	void SetName(const QString& name);
 
+	// Preview
 	QString Logo() const;
 	void SetLogo(const QString& logo);
 
+	// Url to channel
 	QString Url() const;
 	void SetUrl(const QString& url);
+
+	GenreModelPtr Genre() const;
+	const QString& GenreId() const;
+	void SetGenreId(const QString& id);
 
 private:
 	QString					m_id;
 	QString					m_name;
 	QString					m_logo;
 	QString					m_url;
+	QString					m_genreId;
+	GenreModelPtr			m_genreModel;			
 	Q_DISABLE_COPY(ChannelSource)
 };
 
@@ -68,6 +79,10 @@ public:
 private:
 	void Add(ChannelSourcePtr contact, bool notifiChanged = false);
 	void Load(const QString& filePath);
+	//[
+	//{"id": "1", "name": "PSYCHEDELIK", "logo": "", "url": "http://88.191.104.69:8002/"},
+	//{"Id": "1", "name": "PSYCHEDELIK2", "logo": "", "url": "http://88.191.104.69:8002/"}
+	//]
 	void Parse(const QByteArray& json);
 	void Cleanup();
 

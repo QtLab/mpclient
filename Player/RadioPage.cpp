@@ -1,6 +1,6 @@
 #include "RadioPage.h"
 #include "ChannelSourceModel.h"
-#include "MediaController.h"
+#include "AudioStreamController.h"
 
 #include <QDeclarativeError>
 #include <QtDeclarative/QDeclarativeView>
@@ -16,14 +16,14 @@ RadioPage::RadioPage(QWidget* parent, ChannelSourceModel* channels)
 	QHBoxLayout *box = new QHBoxLayout(this);
     m_view = CreateDeclarativeView("../Player/Views/RadioPage.qml");
 
-	m_view->rootContext()->setContextProperty("MediaController", (MediaController*)&MediaController::Inst());
+	m_view->rootContext()->setContextProperty("AudioStreamController", (AudioStreamController*)&AudioStreamController::Inst());
 
 	ModelUpdated(channels);
 
 	box->addWidget(m_view);
 
-	//MediaController::Inst().SetChannel(channels.Items().first());
-	//MediaController::Inst().Play();
+	//AudioStreamController::Inst().SetChannel(channels.Items().first());
+	//AudioStreamController::Inst().Play();
 }
 
 RadioPage::~RadioPage()

@@ -58,6 +58,21 @@ void ChannelSource::SetUrl(const QString& url)
 	m_url = url;
 }
 
+GenreModelPtr ChannelSource::Genre() const
+{
+	return GenreModelPtr();
+}
+
+const QString& ChannelSource::GenreId() const
+{
+	return m_genreId;
+}
+
+void ChannelSource::SetGenreId(const QString& id)
+{
+	m_genreId = id;
+}
+
 ChannelSourceModel::ChannelSourceModel()
 {
 	QHash<int, QByteArray> roles;

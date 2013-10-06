@@ -1,6 +1,6 @@
 #include "AppController.h"
 #include "TabPagesController.h"
-#include "MediaController.h"
+#include "AudioStreamController.h"
 
 #include "MainWindow.h"
 #include "TabWidget.h"
@@ -38,7 +38,7 @@ void AppController::CreateView()
 void AppController::InitSignalSlotConnections()
 {
 	// Metadata
-	connect(&MediaController::Inst(), SIGNAL(MetadataUpdated(const ChannelMetadata&)), 
+	connect(&AudioStreamController::Inst(), SIGNAL(MetadataUpdated(const ChannelMetadata&)), 
 		m_view->TitleBar(), SLOT(MetadataUpdated(const ChannelMetadata&)));
 }
 

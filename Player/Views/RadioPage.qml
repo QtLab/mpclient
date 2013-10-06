@@ -27,10 +27,10 @@
 			{
 				anchors.fill: parent
 				onClicked: {
-					MediaController.Pause();
+					AudioStreamController.Pause();
 					gridView.currentIndex = index;
-					MediaController.SetUrl(Url);
-					MediaController.Play();
+					AudioStreamController.SetUrl(Url);
+					AudioStreamController.Play();
 				}
 			}
 		}

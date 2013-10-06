@@ -16,13 +16,11 @@ public:
 	CheatController(int argc, char *argv[]);
 	~CheatController();
 
-	void CreateView();
-	void InitSignalSlotConnections();
+	void LaunchView(const QString& viewNamve);
+	void StopView(const QString& viewNamve);
+	void StopAllVideo();
 
 	static CheatController& Inst();
-	
-private:
-	bool notify(QObject* receiver, QEvent* even);
 
 private:
 	MainWindow *			m_view;
