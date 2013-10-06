@@ -1,4 +1,5 @@
 #include "ChannelSourceModel.h"
+#include "UrlModel.h"
 
 #include <QFile>
 #include <QDir>
@@ -58,19 +59,24 @@ void ChannelSource::SetUrl(const QString& url)
 	m_url = url;
 }
 
-GenreModelPtr ChannelSource::Genre() const
-{
-	return GenreModelPtr();
-}
-
-const QString& ChannelSource::GenreId() const
+QString ChannelSource::GenreId() const
 {
 	return m_genreId;
 }
 
-void ChannelSource::SetGenreId(const QString& id)
+void ChannelSource::SetGenreId(const QString& genreId)
 {
-	m_genreId = id;
+	m_genreId = genreId;
+}
+
+GenreItemPtr ChannelSource::Genre() const
+{
+	return m_genre;
+}
+
+void ChannelSource::SetGenre(const GenreItemPtr& genre)
+{
+	m_genre = genre;
 }
 
 ChannelSourceModel::ChannelSourceModel()
@@ -117,6 +123,12 @@ void ChannelSourceModel::Load(const QString& path)
 	}
 }
 
+void ChannelSourceModel::SetGenres(const GenreModel& genres)
+{
+	m_genres.Cleanup();
+	m_genres.insertRows(0, genres.Items().count(), genres.index(0));
+}
+
 //[
 //{"id": "1", "name": "PSYCHEDELIK", "logo": "", "url": "http://88.191.104.69:8002/"},
 //{"Id": "1", "name": "PSYCHEDELIK2", "logo": "", "url": "http://88.191.104.69:8002/"}
@@ -141,13 +153,12 @@ void ChannelSourceModel::Parse(const QByteArray& json)
 
 			QJson::QObjectHelper::qvariant2qobject(record.toMap(), channel);
 
-			QFileInfo fi(channel->Logo());
-			if(fi.exists())
-			{
-				// Convert to absolute path
-				channel->SetLogo(fi.absoluteFilePath());
-				Add(ChannelSourcePtr(channel));
-			}
+			GenreItemPtr genre = m_genres.FindById(channel->GenreId());
+			channel->SetGenre(genre);
+
+			// Convert to absolute path
+			channel->SetLogo(UrlModel::CreateCurrentDirUrl(channel->Logo()).ToUrl());
+			Add(ChannelSourcePtr(channel));
 		}
 	}
 	else

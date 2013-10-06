@@ -78,7 +78,13 @@ TabPage* TabPagesController::CreateRadioTabView()
 
 void TabPagesController::LoadData()
 {
+	m_radioGenres.Load("radiogenres.json");
+	m_tvGenres.Load("tvgenres.json");
+
+	m_radioChannels.SetGenres(m_radioGenres);
 	m_radioChannels.Load("radio.json");
+
+	m_tvChannels.SetGenres(m_tvGenres);
 	m_tvChannels.Load("tv.json");
 }
 

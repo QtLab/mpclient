@@ -2,6 +2,7 @@
 #define MP_CHANNEL_SOURCES_CONTROLLER_H
 
 #include "ChannelSourceModel.h"
+#include "GenreModel.h"
 
 namespace mp {
 
@@ -31,7 +32,9 @@ private:
 private:
 	static TabPagesController*		m_instance;
 	ChannelSourceModel				m_radioChannels;
+	GenreModel						m_radioGenres;
 	ChannelSourceModel				m_tvChannels;
+	GenreModel						m_tvGenres;
 };
 
 }

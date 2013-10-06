@@ -18,7 +18,8 @@ class ChannelSource : public QObject
 	Q_PROPERTY(QString id READ Id WRITE SetId)
 	Q_PROPERTY(QString logo READ Logo WRITE SetLogo)
 	Q_PROPERTY(QString url READ Url WRITE SetUrl)
-	Q_PROPERTY(QString url READ Url WRITE SetUrl)
+	Q_PROPERTY(QString genre READ GenreId WRITE SetGenreId)
+
 public:
 	ChannelSource();
 	~ChannelSource();
@@ -37,17 +38,19 @@ public:
 	QString Url() const;
 	void SetUrl(const QString& url);
 
-	GenreModelPtr Genre() const;
-	const QString& GenreId() const;
-	void SetGenreId(const QString& id);
+	QString GenreId() const;
+	void SetGenreId(const QString& genreId);
+
+	GenreItemPtr Genre() const;
+	void SetGenre(const GenreItemPtr& genre);
 
 private:
 	QString					m_id;
 	QString					m_name;
 	QString					m_logo;
 	QString					m_url;
+	GenreItemPtr			m_genre;
 	QString					m_genreId;
-	GenreModelPtr			m_genreModel;			
 	Q_DISABLE_COPY(ChannelSource)
 };
 
@@ -79,6 +82,7 @@ public:
 private:
 	void Add(ChannelSourcePtr contact, bool notifiChanged = false);
 	void Load(const QString& filePath);
+	void SetGenres(const GenreModel& genres);
 	//[
 	//{"id": "1", "name": "PSYCHEDELIK", "logo": "", "url": "http://88.191.104.69:8002/"},
 	//{"Id": "1", "name": "PSYCHEDELIK2", "logo": "", "url": "http://88.191.104.69:8002/"}
@@ -90,6 +94,7 @@ private:
 	friend class TabPagesController;
 
 	ChannelSourceList			m_channels;
+	GenreModel					m_genres;
 	mutable QReadWriteLock		m_lock;
 
 	Q_DISABLE_COPY(ChannelSourceModel)
