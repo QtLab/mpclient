@@ -36,7 +36,7 @@ const ChannelSourceModel& TabPagesController::RadioChannels()
 TabWidget* TabPagesController::CreateTabsView()
 {
 	TabWidget * tabs = new TabWidget(NULL, "rootTab", "rootTabBar");
-	tabs->TabBar()->setCursor(Qt::PointingHandCursor);
+
 
 	qDebug() << "TabWidget widget created";
 
