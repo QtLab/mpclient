@@ -1,5 +1,10 @@
 #include "Common.h"
 
+void CommonLog(const char * funcName, const char* mess)
+{
+	Log((std::string(funcName) + " unhanded exception: " + mess).c_str());
+}
+
 void ClearLog()
 {
 	DeleteFileA("logfile.txt");

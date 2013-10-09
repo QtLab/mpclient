@@ -104,24 +104,24 @@ std::wstring Replace(std::wstring& text, const std::wstring& s, const std::wstri
 void Log(const std::string& mes);
 void LogErrStructed(const std::string& mes);
 void ClearLog();
+void CommonLog(const char * funcName, const char* mess);
 
 //Excpection
 void InstallUnhandleSEHProcessor();
 LONG WINAPI SEHProcessor(struct _EXCEPTION_POINTERS* ExceptionInfo);
 LONG WINAPI SEHProcessor(unsigned int code, struct _EXCEPTION_POINTERS *ExceptionInfo);
 
-#define ExceptHandle(e)  \
+#define ExceptHandle(mess)  \
 {\
 	do {\
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + e).c_str()); \
+		CommonLog(__FUNCDNAME__, mess); \
 	}while(false);\
 }\
-
-		//ExceptHandle("Unhandled exception"); \
 
 #define CATCH_UNHANDLED_SEH() \
 	__except(SEHProcessor(GetExceptionCode(), GetExceptionInformation())) \
 	{ \
+		ExceptHandle("Unhandled exception"); \
 	} \
 
 #define CATCH_ALL_EXCEPTIONS() \
