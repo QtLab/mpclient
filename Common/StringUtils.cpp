@@ -1,5 +1,23 @@
 #include "Common.h"
 
+bool IsRussian()
+{
+	LANGID lngId = GetSystemDefaultUILanguage();
+	if(lngId == 1049)
+		return true;
+
+	return false;;
+}
+
+bool IsEnglish()
+{
+	LANGID lngId = GetSystemDefaultUILanguage();
+	if(lngId == 0x0c09)
+		return true;
+
+	return false;;
+}
+
 std::string WstringToString( const std::wstring& in)
 {
 	//std::locale loc = std::locale();

@@ -82,16 +82,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DateTime.cpp" />
-    <ClCompile Include="FileSystem.cpp" />
-    <ClCompile Include="FlashPlayer.cpp" />
-    <ClCompile Include="Http.cpp" />
-    <ClCompile Include="Lang.cpp" />
-    <ClCompile Include="Link.cpp" />
-    <ClCompile Include="Log.cpp" />
-    <ClCompile Include="MD5.cpp" />
-    <ClCompile Include="Path.cpp" />
-    <ClCompile Include="Processes.cpp" />
-    <ClCompile Include="Registry.cpp" />
+    <ClCompile Include="FileIO.cpp" />
+    <ClCompile Include="FlashPlayerInstaller.cpp" />
+    <ClCompile Include="WinInet.cpp" />
+    <ClCompile Include="common.cpp" />
+    <ClCompile Include="commonlog.cpp" />
+    <ClCompile Include="computemd5.cpp" />
+    <ClCompile Include="commonpath.cpp" />
+    <ClCompile Include="commonprocesses.cpp" />
+    <ClCompile Include="cpmmonregistry.cpp" />
     <ClCompile Include="SEH.cpp" />
     <ClCompile Include="StackWalker.cpp" />
     <ClCompile Include="StringUtils.cpp" />

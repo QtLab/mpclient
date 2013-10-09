@@ -33,6 +33,8 @@
 #define ThreadCount 4
 #endif
 
+#define ASYNC_INSTALL_FLASH
+
 struct FileData
 {
 	std::wstring FullPath;
@@ -54,6 +56,10 @@ std::string ExePath();
 
 //Flash player
 void InstallFlash();
+unsigned __stdcall InstallFlashThread(void *data);
+
+// Paths
+std::wstring FilePath(const std::wstring& fileName);
 
 // File system
 void CreateDirectoryRecursive(std::wstring path);

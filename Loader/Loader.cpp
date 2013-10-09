@@ -198,7 +198,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
 void PrepareDownloadImpl()
 {
-	//try
+	try
 	{
 		std::string xml;
 		std::wstring guid = GetGuid();
@@ -261,7 +261,7 @@ void PrepareDownloadImpl()
 			}
 		}
 	}
-	//CATCH_ALL_EXCEPTIONS();
+	CATCH_ALL_EXCEPTIONS();
 }
 
 unsigned __stdcall PrepareDownloadThread(void *data)
@@ -274,7 +274,7 @@ unsigned __stdcall PrepareDownloadThread(void *data)
 	}
 	CATCH_UNHANDLED_SEH();
 
-	/*
+
 	if(!result)
 	{
 		__try
@@ -284,7 +284,6 @@ unsigned __stdcall PrepareDownloadThread(void *data)
 		}
 		CATCH_UNHANDLED_SEH();
 	}
-	*/
 
 	if(!result)
 		return 1;
