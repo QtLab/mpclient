@@ -5,16 +5,16 @@ void ClearLog()
 	DeleteFileA("logfile.txt");
 }
 
-void LogErrStructed(const char* msg)
+void LogErrStructed(const std::string& mess)
 {
-	Log((std::string(msg) + " unhanded strutted exception\r\n").c_str());
+	Log(mess + " unhanded strutted exception\r\n");
 }
 
-void Log(const char* msg)
+void Log(const std::string& mess)
 {
 	FILE *log = fopen("logfile.txt", "at");
 	if (!log) log = fopen("logfile.txt", "wt");
 
-	fputs  (msg, log);
+	fputs  (mess.c_str(), log);
 	fclose (log);
 }

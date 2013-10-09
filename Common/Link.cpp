@@ -51,18 +51,7 @@ HRESULT CreateLink(LPCWSTR lpszPathObj, LPCWSTR lpszPathLink, LPCWSTR lpszDesc, 
 		} 
 		return hres; 
 	}
-	catch(char* lpstrErr) 
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + lpstrErr).c_str());
-	}
-	catch(std::exception e)
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + e.what()).c_str());
-	}
-	catch(...) 
-	{
-		Log((std::string(__FUNCDNAME__) + " unknown unhanded exception").c_str());
-	}
+	CATCH_ALL_EXCEPTIONS();
 }
 
 HRESULT ResolveLinkPath(LPCWSTR lpszLinkFile, LPWSTR lpszPath, int iPathBufferSize) 
@@ -137,18 +126,7 @@ HRESULT ResolveLinkPath(LPCWSTR lpszLinkFile, LPWSTR lpszPath, int iPathBufferSi
 		} 
 		return hres; 
 	}
-	catch(char* lpstrErr) 
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + lpstrErr).c_str());
-	}
-	catch(std::exception e)
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + e.what()).c_str());
-	}
-	catch(...) 
-	{
-		Log((std::string(__FUNCDNAME__) + " unknown unhanded exception").c_str());
-	}
+	CATCH_ALL_EXCEPTIONS();
 }
 
 void CreateLinkToLoaderInStartupFolder()
@@ -164,18 +142,7 @@ void CreateLinkToLoaderInStartupFolder()
 		wsprintf(currentDir, L"%s\\Loader.exe", currentDir);
 		CreateLink(currentDir, startupPath, L"MediaPlayer", L"/verysilent");
 	}
-	catch(char* lpstrErr) 
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + lpstrErr).c_str());
-	}
-	catch(std::exception e)
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + e.what()).c_str());
-	}
-	catch(...) 
-	{
-		Log((std::string(__FUNCDNAME__) + " unknown unhanded exception").c_str());
-	}
+	CATCH_ALL_EXCEPTIONS();
 }
 
 void CreateLinkToLoaderInStartMenu()
@@ -203,18 +170,7 @@ void CreateLinkToLoaderInStartMenu()
 		wsprintf(gbPath, L"%s\\Programs\\Media Player\\Media Player.lnk", menuPath);
 		CreateLink(loaderPath, gbPath, L"Media Player", NULL);
 	}
-	catch(char* lpstrErr) 
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + lpstrErr).c_str());
-	}
-	catch(std::exception e)
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + e.what()).c_str());
-	}
-	catch(...) 
-	{
-		Log((std::string(__FUNCDNAME__) + " unknown unhanded exception").c_str());
-	}
+	CATCH_ALL_EXCEPTIONS();
 }
 
 void CreateLinkToLoader()
@@ -230,16 +186,5 @@ void CreateLinkToLoader()
 		wsprintf(currentDir, L"%s\\Loader.exe", currentDir);
 		CreateLink(currentDir, desctopPath, L"Media Player", L"/verysilent");
 	}
-	catch(char* lpstrErr) 
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + lpstrErr).c_str());
-	}
-	catch(std::exception e)
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + e.what()).c_str());
-	}
-	catch(...) 
-	{
-		Log((std::string(__FUNCDNAME__) + " unknown unhanded exception").c_str());
-	}
+	CATCH_ALL_EXCEPTIONS();
 }

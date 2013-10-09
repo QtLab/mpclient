@@ -16,8 +16,5 @@ void InstallFlash()
 			TEXT(" /qn /norestart /i \"install_flash_player_11_plugin.msi\" /L installflash.log")
 			,currentDir , SW_SHOW);
 	}
-	catch(std::exception e)
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + e.what()).c_str());
-	}
+	CATCH_ALL_EXCEPTIONS();
 }

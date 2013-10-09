@@ -9,8 +9,5 @@ std::string ExePath()
 		std::string::size_type pos = std::string( buffer ).find_last_of( "\\/" );
 		return std::string( buffer ).substr( 0, pos);
 	}
-	catch(std::exception e)
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + e.what()).c_str());
-	}
+	CATCH_ALL_EXCEPTIONS();
 }

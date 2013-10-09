@@ -3,9 +3,12 @@
 #include <QDir>
 #include <QFile>
 #include <QDateTime>
+
 #include <QTextStream>
 
-void CustomMessageHandler(QtMsgType type, const char *msg)
+namespace mp {
+
+void Log(QtMsgType type, const char *msg)
 {
 	static const QString logMessageTemplate("%0: %1");
 
@@ -37,4 +40,6 @@ void CustomMessageHandler(QtMsgType type, const char *msg)
 		QTextStream ts(&outFile);
 		ts << logMessage << endl;
 	}
+}
+
 }

@@ -13,8 +13,11 @@
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="Path.cpp" />
     <ClCompile Include="StringUtils.cpp" />
+    <ClCompile Include="SEH.cpp" />
+    <ClCompile Include="StackWalker.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h" />
+    <ClInclude Include="StackWalker.h" />
   </ItemGroup>
 </Project>

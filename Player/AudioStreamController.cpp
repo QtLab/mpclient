@@ -114,6 +114,11 @@ void AudioStreamController::SetUrl(const QString& url)
 	m_currentUrl = url;
 }
 
+QString AudioStreamController::Url() const
+{
+	return m_currentUrl;
+}
+
 void AudioStreamController::Play()
 {
 	if(m_currentUrl.isEmpty())

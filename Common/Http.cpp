@@ -2,7 +2,8 @@
 #include <Wininet.h>
 #include <iostream>
 #include <fstream>
-#include <list>
+
+std::wstring mDoaminToUpdate = L"http://www.somedomain.com";
 
 HINTERNET netstart ()
 {
@@ -19,10 +20,7 @@ HINTERNET netstart ()
 		}
 		return (handle);
 	}
-	catch(std::exception e)
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + e.what()).c_str());
-	}
+	CATCH_ALL_EXCEPTIONS();
 }
 
 void netclose ( HINTERNET object )
@@ -38,10 +36,7 @@ void netclose ( HINTERNET object )
 				<< std::endl;
 		}
 	}
-	catch(std::exception e)
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + e.what()).c_str());
-	}
+	CATCH_ALL_EXCEPTIONS();
 }
 
 HINTERNET netopen ( HINTERNET session, LPCWSTR url )
@@ -60,10 +55,7 @@ HINTERNET netopen ( HINTERNET session, LPCWSTR url )
 
 		return (handle);
 	}
-	catch(std::exception e)
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + e.what()).c_str());
-	}
+	CATCH_ALL_EXCEPTIONS();
 }
 
 bool netfetch ( HINTERNET istream, std::string * out )
@@ -89,102 +81,37 @@ bool netfetch ( HINTERNET istream, std::string * out )
 			out->append((char*)data, size);
 		}
 		while ((error == ERROR_SUCCESS) && (size > 0));
+	}
+	CATCH_ALL_EXCEPTIONS();
 
-		return true;
-	}
-	catch(std::exception e)
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + e.what()).c_str());
-	}
+	return true;
 }
 
 bool HttpDownload(const std::wstring& url, std::string * data)
 {
-	try
+	DeleteUrlCacheEntry(url.c_str());
+
+	HINTERNET session = netstart();
+	if(session)
 	{
-		DeleteUrlCacheEntry(url.c_str());
-		DeleteUrlCacheEntry(url.c_str());
+		const HINTERNET istream = netopen(session, url.c_str());
 
-		HINTERNET session = netstart();
-		if(session)
+		if(istream)
 		{
-			const HINTERNET istream = netopen(session, url.c_str());
-
-			if(istream)
+			if(!netfetch(istream, data))
 			{
-				if(!netfetch(istream, data))
-				{
-					data->clear();
-					netclose(session);
-					return false;
-				}
-
+				data->clear();
 				netclose(session);
-				return true;
-			}
-		}
-
-		return false;
-	}
-	catch(std::exception e)
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + e.what()).c_str());
-	}
-}
-
-void SendBugReport()
-{
-	try
-	{
-		SYSTEMTIME st;
-		GetSystemTime (&st);
-		TCHAR buff[20];
-
-		TCHAR path[MAX_PATH];
-		GetCurrentDirectory(MAX_PATH, path);
-		wsprintf(path, L"%s\\logs\\%02d-%02d-%d.log", path, st.wDay, st.wMonth, st.wYear);
-
-		if(FileExists(path))
-		{
-			std::ifstream hFile(path);
-
-			std::list<std::string> lines;
-			std::list<std::string>::iterator iter;
-
-			std::string line;
-			while(std::getline(hFile, line))
-			{
-				lines.push_back(line);
-				if(lines.size() > 40)
-				{
-					lines.pop_front();
-				}
+				return false;
 			}
 
-			iter = lines.begin();
-
-			std::string log;
-			while(iter != lines.end())
-			{
-				log.append((*iter));
-				iter++;
-			}
-
-			std::wstring url(L"http://somenodomain.com/client/errors.php?log=");
-			url += StringToWstring(log);
-			url += L"&guid=" + GetGuid();
-			std::string resp;
-
-			HttpDownload(url, &resp);
+			netclose(session);
+			return true;
 		}
 	}
-	catch(std::exception e)
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + e.what()).c_str());
-	}
-}
 
-std::wstring mDoaminToUpdate = L"http://www.somenodomain.com";
+	return false;
+}
 
 void SetDomainToUpdate(const std::wstring& domain)
 {

@@ -1,50 +1,35 @@
- import QtQuick 2.0
+ import QtQuick 1.1
 
- TabWidget {
-     id: tabs
-     width: 800; height: 600
+Rectangle 
+{
+	anchors.fill: parent
+	width: 800; height: 600
+	color: "white"
 
-     Rectangle {
-         property string title: "Radio"
-         color: "#e3e3e3"
+	Component {
+		id: highlight
+		Rectangle {
+			width: 180; height: 40
+			color: "lightsteelblue"; radius: 5
+			y: list.currentItem.y
+			Behavior on y {
+				SpringAnimation {
+					spring: 3
+					damping: 0.2
+				}
+			}
+		}
+	}
 
-         Rectangle {
-			RadioPage{}
-         }
-     }
+	ListView {
+		id: list
+		width: 180; height: 200
+		model: radioChannels
+		delegate: Text { text: Name }
 
-     Rectangle {
-         property string title: "TV"
-         anchors.fill: parent
-         color: "#e3e3e3"
+		highlight: highlight
+		highlightFollowsCurrentItem: false
+		focus: true
+	}
 
-         Rectangle {
-             anchors.fill: parent; anchors.margins: 20
-             colo r: "#7fff7f"
-             Text {
-                 width: parent.width - 20
-                 anchors.centerIn: parent; horizontalAlignment: Qt.AlignHCenter
-                 text: "Flower stems are green"
-                 font.pixelSize: 20
-                 wrapMode: Text.WordWrap
-             }
-         }
-     }
-
-     Rectangle {
-         property string title: "News"
-         anchors.fill: parent; color: "#e3e3e3"
-
-         Rectangle {
-             anchors.fill: parent; anchors.margins: 20
-             color: "#7f7fff"
-             Text {
-                 width: parent.width - 20
-                 anchors.centerIn: parent; horizontalAlignment: Qt.AlignHCenter
-                 text: "Violets are blue"
-                 font.pixelSize: 20
-                 wrapMode: Text.WordWrap
-             }
-         }
-     }
- }
+}

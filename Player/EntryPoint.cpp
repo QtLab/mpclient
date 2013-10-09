@@ -7,11 +7,11 @@ int main(int argc, char *argv[])
 
 #ifndef _DEBUG
 	// Write to the log file only in release mode
-	qInstallMsgHandler(CustomMessageHandler);
+	qInstallMsgHandler(mp::Log);
 #endif
 
 	app.CreateView();
-	app.InitSignalSlotConnections();
+	app.InitSignalsSlots();
 
 	return app.exec();
 }

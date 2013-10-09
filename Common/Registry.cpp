@@ -29,8 +29,5 @@ std::wstring GetGuid()
 
 		return std::wstring();
 	}
-	catch(std::exception e)
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + e.what()).c_str());
-	}
+	CATCH_ALL_EXCEPTIONS();
 }

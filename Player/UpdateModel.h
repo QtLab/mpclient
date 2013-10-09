@@ -61,7 +61,7 @@ public:
     // QModelIndex idx = (qrecap_model->index(row, 0));
 	// s = qrecap_model->data(idx).toString();
      //}
-	const FileToUpdateList& Items() const;
+	FileToUpdateList Items() const;
 
 	QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 	int rowCount(const QModelIndex &parent = QModelIndex()) const;

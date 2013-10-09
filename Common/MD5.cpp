@@ -16,10 +16,7 @@ bool InitMD5()
 		MD5Final = PMD5Final ( GetProcAddress(hLib, "MD5Final"));
 		return true;
 	}
-	catch(std::exception e)
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + e.what()).c_str());
-	}
+	CATCH_ALL_EXCEPTIONS();
 }
 
 TMD5 _ComputeMD5(PUCHAR Buffer, DWORD dwSize)
@@ -50,8 +47,5 @@ TMD5 _ComputeMD5(PUCHAR Buffer, DWORD dwSize)
 		memcpy(result.digest, context.digest, 16);
 		return result;
 	}
-	catch(std::exception e)
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + e.what()).c_str());
-	}
+	CATCH_ALL_EXCEPTIONS();
 }

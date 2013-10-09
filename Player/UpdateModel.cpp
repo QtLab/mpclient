@@ -148,7 +148,7 @@ QString UpdateModel::ComputeFileMD5(const QString& filePath)
 	return QString::null;
 }
 
-const FileToUpdateList& UpdateModel::Items() const
+FileToUpdateList UpdateModel::Items() const
 {
 	return m_filedToUpdate;
 }

@@ -96,10 +96,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Loader.cpp" />
-    <ClCompile Include="StackWalker.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="StackWalker.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -231,6 +231,15 @@
     <ClCompile Include="Path.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="LinkButton.cpp">
+      <Filter>Views\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_LinkButton.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_LinkButton.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Player.qrc">
@@ -292,6 +301,9 @@
     </CustomBuild>
     <CustomBuild Include="UpdateModel.h">
       <Filter>Model</Filter>
+    </CustomBuild>
+    <CustomBuild Include="LinkButton.h">
+      <Filter>Views\Widgets</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>

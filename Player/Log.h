@@ -3,6 +3,10 @@
 
 #include <QObject>
 
-void CustomMessageHandler(QtMsgType type, const char *msg);
+namespace mp {
+
+void Log(QtMsgType type, const char *msg);
+
+}
 
 #endif

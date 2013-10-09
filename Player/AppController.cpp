@@ -35,7 +35,7 @@ void AppController::CreateView()
 	m_view->show();	
 }
 
-void AppController::InitSignalSlotConnections()
+void AppController::InitSignalsSlots()
 {
 	// Metadata
 	connect(&AudioStreamController::Inst(), SIGNAL(MetadataUpdated(const ChannelMetadata&)), 

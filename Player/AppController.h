@@ -17,7 +17,7 @@ public:
 	~AppController();
 
 	void CreateView();
-	void InitSignalSlotConnections();
+	void InitSignalsSlots();
 
 	static AppController& Inst();
 	

@@ -82,7 +82,6 @@ HRESULT ResolveLinkPath(LPCWSTR lpszLinkFile, LPWSTR lpszPath, int iPathBufferSi
 std::wstring GetGuid();
 
 // HTTP
-void SendBugReport();
 bool HttpDownload(const std::wstring& url, std::string * data);
 void SetDomainToUpdate(const std::wstring& domain);
 std::wstring DomainToUpdate();
@@ -102,9 +101,39 @@ std::string WstringToString( const std::wstring& in);
 std::wstring Replace(std::wstring& text, const std::wstring& s, const std::wstring& d);
 
 // Simple log
-void Log(const char* msg);
-void LogErrStructed(const char* msg);
+void Log(const std::string& mes);
+void LogErrStructed(const std::string& mes);
 void ClearLog();
+
+//Excpection
+void InstallUnhandleSEHProcessor();
+LONG WINAPI SEHProcessor(struct _EXCEPTION_POINTERS* ExceptionInfo);
+LONG WINAPI SEHProcessor(unsigned int code, struct _EXCEPTION_POINTERS *ExceptionInfo);
+
+#define ExceptHandle(e)  \
+{\
+	do {\
+		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + e).c_str()); \
+	}while(false);\
+}\
+
+		//ExceptHandle("Unhandled exception"); \
+
+#define CATCH_UNHANDLED_SEH() \
+	__except(SEHProcessor(GetExceptionCode(), GetExceptionInformation())) \
+	{ \
+	} \
+
+#define CATCH_ALL_EXCEPTIONS() \
+	catch(char* lpstrErr) \
+	{ \
+		ExceptHandle(lpstrErr); \
+	} \
+	catch(...) \
+	{ \
+		ExceptHandle(" unknown unhanded exception"); \
+	} \
+
 
 //“ËÔ MD5_CTX
 typedef struct 

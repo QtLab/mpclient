@@ -40,11 +40,7 @@ LRESULT CALLBACK	WndProc(HWND, UINT, WPARAM, LPARAM);
 unsigned			__stdcall PrepareDownloadThread(void *data);
 unsigned			__stdcall DownloadThread(void *data);
 bool				GetNextFile(FileData * file);
-
 void				RestartLoader();
-LONG WINAPI			SEHFilter(struct _EXCEPTION_POINTERS* ExceptionInfo);
-int SEHFilter2(unsigned int code, struct _EXCEPTION_POINTERS *ep);
-
 void				StartLoader();
 bool				WaitPlayer(HANDLE hProcess);
 bool				IsLoaderInstanceAlreadyExists();
@@ -58,22 +54,16 @@ int MainImpl(HINSTANCE hInstance,
 {
 	try
 	{
-		// Не обработанные исключения
-		SetUnhandledExceptionFilter(SEHFilter);
+		InstallUnhandleSEHProcessor();
 
 		ClearLog();
 
-		// Иинциализаруем MD5
+		// Initialize md5
 		InitMD5();
 
-		// Убьём лишние процессе которе могут помешать апдейту
+		// Terminate all loadder processes without current
 		while(!TerminateProcess(L"Loader.exe")){}
-
-		Sleep(2000);
-
 		while(!TerminateProcess(L"Player.exe")){}
-
-		SetDomainToUpdate(L"http://www.somedomane.com");
 
 		SetCurrentDirectoryA(ExePath().c_str());
 
@@ -103,7 +93,7 @@ int MainImpl(HINSTANCE hInstance,
 
 		if(AfterCrash)
 		{
-			SendBugReport();
+			StartLoader();
 			Sleep(60 * 60 * 1000);
 		}
 
@@ -140,10 +130,7 @@ int MainImpl(HINSTANCE hInstance,
 			PrepareDownloadThread(NULL);
 		}
 	}
-	catch(std::exception e)
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + e.what()).c_str());
-	}
+	CATCH_ALL_EXCEPTIONS();
 }
 
 int APIENTRY _tWinMain(HINSTANCE hInstance,
@@ -155,10 +142,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	{
 		MainImpl(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
 	}
-	__except(SEHFilter2(GetExceptionCode(), GetExceptionInformation()))
-	{
-		LogErrStructed(__FUNCDNAME__);
-	}
+	CATCH_UNHANDLED_SEH();
 
 	return 0;
 }
@@ -185,10 +169,7 @@ ATOM RegisterClass(HINSTANCE hInstance)
 
 		return RegisterClassEx(&wcex);
 	}
-	catch(std::exception e)
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + e.what()).c_str());
-	}
+	CATCH_ALL_EXCEPTIONS();
 }
 
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
@@ -212,15 +193,12 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
 		return TRUE;
 	}
-	catch(std::exception e)
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + e.what()).c_str());
-	}
+	CATCH_ALL_EXCEPTIONS();
 }
 
 void PrepareDownloadImpl()
 {
-	try
+	//try
 	{
 		std::string xml;
 		std::wstring guid = GetGuid();
@@ -283,39 +261,33 @@ void PrepareDownloadImpl()
 			}
 		}
 	}
-	catch(char* lpstrErr) 
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + lpstrErr).c_str());
-	}
-	catch(std::exception e)
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + e.what()).c_str());
-	}
-	catch(...) 
-	{
-		Log((std::string(__FUNCDNAME__) + " unknown unhanded exception").c_str());
-	}
+	//CATCH_ALL_EXCEPTIONS();
 }
 
 unsigned __stdcall PrepareDownloadThread(void *data)
 {
+	bool result = false;
 	__try
 	{
 		PrepareDownloadImpl();
+		result = true;
 	}
-	__except(SEHFilter2(GetExceptionCode(), GetExceptionInformation()))
-	{
-		LogErrStructed(__FUNCDNAME__);
+	CATCH_UNHANDLED_SEH();
 
+	/*
+	if(!result)
+	{
 		__try
 		{
 			PrepareDownloadImpl();
+			result = true;
 		}
-		__except(SEHFilter2(GetExceptionCode(), GetExceptionInformation()))
-		{
-			LogErrStructed(__FUNCDNAME__);
-		}
+		CATCH_UNHANDLED_SEH();
 	}
+	*/
+
+	if(!result)
+		return 1;
 
 	return 0;
 }
@@ -356,61 +328,67 @@ void DownloadFileIfNotExistsImpl(FileData* fileData)
 			WriteToFile(fileData->FullPath, fileBody.c_str(), fileBody.size());	
 		}
 	}
-	catch(std::exception e)
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + e.what()).c_str());
-	}
+	CATCH_ALL_EXCEPTIONS();
 }
 
 void DownloadFileIfNotExists(FileData* fileData)
 {
+	bool result = false;
 	__try
 	{
 		DownloadFileIfNotExistsImpl(fileData);
+		result = true;
 	}
-	__except(SEHFilter2(GetExceptionCode(), GetExceptionInformation()))
-	{
-		LogErrStructed(__FUNCDNAME__);
+	CATCH_UNHANDLED_SEH();
 
+	if(!result)
+	{
 		__try
 		{
 			DownloadFileIfNotExistsImpl(fileData);
+			result = true;
 		}
-		__except(SEHFilter2(GetExceptionCode(), GetExceptionInformation()))
-		{
-			LogErrStructed(__FUNCDNAME__);
-		}
+		CATCH_UNHANDLED_SEH();
 	}
 }
 
 void DownloadThreadImpl()
 {
-	FileData file;
-
-	while(GetNextFile(&file))
+	try
 	{
-		DownloadFileIfNotExists(&file);
+		FileData file;
+
+		while(GetNextFile(&file))
+		{
+			DownloadFileIfNotExists(&file);
+		}
 	}
+	CATCH_ALL_EXCEPTIONS();
 }
 
 unsigned __stdcall DownloadThread(void *data)
 {
+	bool result = false;
 	__try
 	{
 		DownloadThreadImpl();
+		result = true;
 	}
-	__except(SEHFilter2(GetExceptionCode(), GetExceptionInformation()))
-	{
-		LogErrStructed(__FUNCDNAME__);
+	CATCH_UNHANDLED_SEH();
 
+	if(!result)
+	{
 		__try
 		{
 			DownloadThreadImpl();
+			result = true;
 		}
-		__except(SEHFilter2(GetExceptionCode(), GetExceptionInformation()))
-		{
-			LogErrStructed(__FUNCDNAME__);
-		}
+		CATCH_UNHANDLED_SEH();
+	}
+
+	if(!result)
+	{
+		return 1;
 	}
 
 	return 0;
@@ -420,39 +398,44 @@ bool GetNextFileImpl(FileData * file)
 {
 	bool result = false;
 
-	EnterCriticalSection(&mCriticalSection);
-	if(!mFilesToDownload.empty())
+	try
 	{
-
-		*file = mFilesToDownload.back();
-		mFilesToDownload.pop_back();
-
-		if(!IsSilent)
+		EnterCriticalSection(&mCriticalSection);
+		if(!mFilesToDownload.empty())
 		{
-			int pos = SendMessage(hProgBar, PBM_GETPOS, 0, 0);
-			pos += 1; // increase
-			SendMessage(hProgBar, PBM_SETPOS, pos, 0);
 
-			float onePecrent =  (float)mFilesCount / 100;
-			float percents =  ((float)(mFilesCount - mFilesToDownload.size()) / onePecrent);
-			TCHAR percentMessage[1024];
+			*file = mFilesToDownload.back();
+			mFilesToDownload.pop_back();
 
-			if(IsRussian())
+			if(!IsSilent)
 			{
-				wsprintf(percentMessage, L"Media Player - обновление - %d %% завершено", (int)percents);
-			}
-			else
-			{
-				wsprintf(percentMessage, L"Media Player - update - %d %% completed", (int)percents);
+				int pos = SendMessage(hProgBar, PBM_GETPOS, 0, 0);
+				pos += 1; // increase
+				SendMessage(hProgBar, PBM_SETPOS, pos, 0);
+
+				float onePecrent =  (float)mFilesCount / 100;
+				float percents =  ((float)(mFilesCount - mFilesToDownload.size()) / onePecrent);
+				TCHAR percentMessage[1024];
+
+				if(IsRussian())
+				{
+					wsprintf(percentMessage, L"Media Player - обновление - %d %% завершено", (int)percents);
+				}
+				else
+				{
+					wsprintf(percentMessage, L"Media Player - update - %d %% completed", (int)percents);
+				}
+
+				SetWindowText(hWnd, percentMessage);
 			}
 
-			SetWindowText(hWnd, percentMessage);
+			result = true;
 		}
 
-		result = true;
+		LeaveCriticalSection(&mCriticalSection);
 	}
+	CATCH_ALL_EXCEPTIONS();
 
-	LeaveCriticalSection(&mCriticalSection);
 	return result;
 }
 
@@ -462,10 +445,7 @@ bool GetNextFile(FileData * file)
 	{
 		return GetNextFileImpl(file);
 	}
-	__except(SEHFilter2(GetExceptionCode(), GetExceptionInformation()))
-	{
-		LogErrStructed(__FUNCDNAME__);
-	}
+	CATCH_UNHANDLED_SEH();
 
 	return false;
 }
@@ -588,18 +568,7 @@ LRESULT CALLBACK WndProc(HWND h, UINT message, WPARAM wParam, LPARAM lParam)
 			return DefWindowProc(h, message, wParam, lParam);
 		}
 	}
-	catch(char* lpstrErr) 
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + lpstrErr).c_str());
-	}
-	catch(std::exception e)
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + e.what()).c_str());
-	}
-	catch(...) 
-	{
-		Log((std::string(__FUNCDNAME__) + " unknown unhanded exception").c_str());
-	}
+	CATCH_ALL_EXCEPTIONS();
 
 	return 0;
 }
@@ -633,38 +602,6 @@ protected:
 	}
 };
 
-LONG WINAPI SEHFilter(struct _EXCEPTION_POINTERS* ExceptionInfo) 
-{
-	try
-	{
-		//Log("*******************************StackWalker*******************************");
-		//MyStackWalker sw;
-		//sw.ShowCallstack(GetCurrentThread(), ExceptionInfo->ContextRecord);
-		//Log("*************************************************************************");
-		return EXCEPTION_EXECUTE_HANDLER;
-	}
-	catch(std::exception e)
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + e.what()).c_str());
-	}
-}
-
-int SEHFilter2(unsigned int code, struct _EXCEPTION_POINTERS *ep)
-{
-	try
-	{
-		//Log("*******************************StackWalker*******************************");
-		//MyStackWalker sw;
-		//sw.ShowCallstack(GetCurrentThread(), ep->ContextRecord);
-		//Log("*************************************************************************");
-		return EXCEPTION_EXECUTE_HANDLER;
-	}
-	catch(std::exception e)
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + e.what()).c_str());
-	}
-}
-
 bool WaitPlayer(HANDLE hProcess)
 {
 	try
@@ -689,18 +626,7 @@ bool WaitPlayer(HANDLE hProcess)
 			return true;
 		}
 	}
-	catch(char* lpstrErr) 
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + lpstrErr).c_str());
-	}
-	catch(std::exception e)
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + e.what()).c_str());
-	}
-	catch(...) 
-	{
-		Log((std::string(__FUNCDNAME__) + " unknown unhanded exception").c_str());
-	}
+	CATCH_ALL_EXCEPTIONS();
 }
 
 void StartLoader()
@@ -756,18 +682,7 @@ void StartLoader()
 		}
 		*/
 	}
-	catch(char* lpstrErr) 
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + lpstrErr).c_str());
-	}
-	catch(std::exception e)
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + e.what()).c_str());
-	}
-	catch(...) 
-	{
-		Log((std::string(__FUNCDNAME__) + " unknown unhanded exception").c_str());
-	}
+	CATCH_ALL_EXCEPTIONS();
 }
 
 bool IsLoaderInstanceAlreadyExists()

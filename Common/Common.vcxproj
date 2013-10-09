@@ -78,6 +78,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Common.h" />
+    <ClInclude Include="StackWalker.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DateTime.cpp" />
@@ -91,6 +92,8 @@
     <ClCompile Include="Path.cpp" />
     <ClCompile Include="Processes.cpp" />
     <ClCompile Include="Registry.cpp" />
+    <ClCompile Include="SEH.cpp" />
+    <ClCompile Include="StackWalker.cpp" />
     <ClCompile Include="StringUtils.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

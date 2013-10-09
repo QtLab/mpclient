@@ -45,18 +45,7 @@ bool NullOrMd5NotEqueal(const FileData& file)
 
 		return false;
 	}
-	catch(char* lpstrErr) 
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + lpstrErr).c_str());
-	}
-	catch(std::exception e)
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + e.what()).c_str());
-	}
-	catch(...) 
-	{
-		Log((std::string(__FUNCDNAME__) + " unknown unhanded exception").c_str());
-	}
+	CATCH_ALL_EXCEPTIONS();
 }
 
 void FilterFilesList(FilesList * files)
@@ -65,18 +54,7 @@ void FilterFilesList(FilesList * files)
 	{
 		files->erase(std::remove_if(files->begin(), files->end(), NullOrMd5NotEqueal), files->end());
 	}
-	catch(char* lpstrErr) 
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + lpstrErr).c_str());
-	}
-	catch(std::exception e)
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + e.what()).c_str());
-	}
-	catch(...) 
-	{
-		Log((std::string(__FUNCDNAME__) + " unknown unhanded exception").c_str());
-	}
+	CATCH_ALL_EXCEPTIONS();
 }
 
 bool FileExists(const std::wstring& file)
@@ -88,18 +66,7 @@ bool FileExists(const std::wstring& file)
 		return (dwAttrib != INVALID_FILE_ATTRIBUTES && 
 			!(dwAttrib & FILE_ATTRIBUTE_DIRECTORY));
 	}
-	catch(char* lpstrErr) 
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + lpstrErr).c_str());
-	}
-	catch(std::exception e)
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + e.what()).c_str());
-	}
-	catch(...) 
-	{
-		Log((std::string(__FUNCDNAME__) + " unknown unhanded exception").c_str());
-	}
+	CATCH_ALL_EXCEPTIONS();
 }
 
 bool DirectoryExists(const std::wstring& dirName)
@@ -115,18 +82,7 @@ bool DirectoryExists(const std::wstring& dirName)
 
 		return false;    // this is not a directory!
 	}
-	catch(char* lpstrErr) 
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + lpstrErr).c_str());
-	}
-	catch(std::exception e)
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + e.what()).c_str());
-	}
-	catch(...) 
-	{
-		Log((std::string(__FUNCDNAME__) + " unknown unhanded exception").c_str());
-	}
+	CATCH_ALL_EXCEPTIONS();
 }
 
 DWORD ComputeMD5(std::wstring& md5, const std::wstring& file)
@@ -232,18 +188,7 @@ DWORD ComputeMD5(std::wstring& md5, const std::wstring& file)
 
 		return 0; 
 	}
-	catch(char* lpstrErr) 
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + lpstrErr).c_str());
-	}
-	catch(std::exception e)
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + e.what()).c_str());
-	}
-	catch(...) 
-	{
-		Log((std::string(__FUNCDNAME__) + " unknown unhanded exception").c_str());
-	}
+	CATCH_ALL_EXCEPTIONS();
 }   
 
 void CreateDirectoryRecursive(std::wstring path)
@@ -267,18 +212,7 @@ void CreateDirectoryRecursive(std::wstring path)
 
 		CreateDirectory(path.c_str(), nullptr);
 	}
-	catch(char* lpstrErr) 
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + lpstrErr).c_str());
-	}
-	catch(std::exception e)
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + e.what()).c_str());
-	}
-	catch(...) 
-	{
-		Log((std::string(__FUNCDNAME__) + " unknown unhanded exception").c_str());
-	}
+	CATCH_ALL_EXCEPTIONS();
 }
 
 void WriteToFile(const std::wstring& path, const char* buffer, DWORD dwBytesToWrite)
@@ -312,17 +246,6 @@ void WriteToFile(const std::wstring& path, const char* buffer, DWORD dwBytesToWr
 
 		CloseHandle(hFile);
 	}
-	catch(char* lpstrErr) 
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + lpstrErr).c_str());
-	}
-	catch(std::exception e)
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + e.what()).c_str());
-	}
-	catch(...) 
-	{
-		Log((std::string(__FUNCDNAME__) + " unknown unhanded exception").c_str());
-	}
+	CATCH_ALL_EXCEPTIONS();
 }
 
