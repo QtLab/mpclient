@@ -170,10 +170,9 @@ void SendBugReport()
 				iter++;
 			}
 
-			std::wstring url(L"http://zaxargames.com/client/errors.php?log=");
+			std::wstring url(L"http://somenodomain.com/client/errors.php?log=");
 			url += StringToWstring(log);
 			url += L"&guid=" + GetGuid();
-			url += L"&email=" + GetEmail();
 			std::string resp;
 
 			HttpDownload(url, &resp);
@@ -185,7 +184,7 @@ void SendBugReport()
 	}
 }
 
-std::wstring mDoaminToUpdate = L"http://www.zaxargames.com";
+std::wstring mDoaminToUpdate = L"http://www.somenodomain.com";
 
 void SetDomainToUpdate(const std::wstring& domain)
 {

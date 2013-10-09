@@ -50,7 +50,7 @@ public:
 	~GenreModel();
 
 	// Don't use in prod. It isn't thread-safe
-	const GenreItemList& Items() const;
+	GenreItemList Items() const;
 	GenreItemPtr FindById(const QString& id);
 
 	QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;

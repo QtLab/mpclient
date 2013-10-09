@@ -14,20 +14,6 @@
 
 namespace mp {
 
-class TabBar : public QTabBar
-{
-	Q_OBJECT
-
-public:
-	TabBar(QWidget * parent);
-
-	QSize TabBar::tabSizeHint(int indx) const;
-	//void paintEvent(QPaintEvent *);
-
-	void setFont( const QFont& font );
-};
-
-
 class TabPage;
 
 class TabWidget : public QTabWidget
@@ -35,10 +21,10 @@ class TabWidget : public QTabWidget
 	Q_OBJECT
 
 public:
-	TabWidget(QWidget * parent, const QString& name = QString::null, const QString& tabBarName = QString::null, bool useCustomTabBar = true);
-	QTabBar* TabBar();
-
+	TabWidget(QWidget * parent, const QString& name = QString(), const QString& tabBarName = QString());
 	int AddPage(TabPage * page, const QString& name);
+
+private:
 	void SetTvPage(TabPage * page);
 	void SetRadioPage(TabPage * page);
 

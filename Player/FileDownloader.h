@@ -1,5 +1,5 @@
-#ifndef ZAXAR_FILE_DOWNLOADER_H
-#define ZAXAR_FILE_DOWNLOADER_H
+#ifndef MP_FILE_DOWNLOADER_H
+#define MP_FILE_DOWNLOADER_H
 
 
 #include <QUrl>

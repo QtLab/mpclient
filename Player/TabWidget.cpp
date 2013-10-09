@@ -3,45 +3,15 @@
 
 namespace mp {
 
-TabBar::TabBar(QWidget * parent)
-		:QTabBar(parent)
-{
-}
-
-QSize TabBar::tabSizeHint(int indx) const
-{
-	QSize defaultSize = QTabBar::tabSizeHint(indx);
-	return defaultSize;
-}
-
-void TabBar::setFont( const QFont& font )
-{
-
-	QFontInfo fontInfo(font);
-	if(fontInfo.fixedPitch())
-		QTabBar::setFont(font);
-
-	// Otherwise ignore..
-}
-
-TabWidget::TabWidget(QWidget * parent, const QString& name, const QString& tabBarName, bool useCustomTabBar)
+TabWidget::TabWidget(QWidget * parent, const QString& name, const QString& tabBarName)
 	:QTabWidget(parent)
 {
 	setObjectName(name);
 
-	if(useCustomTabBar)
-	{
-		mp::TabBar * tabBar = new mp::TabBar(this);
-		setTabBar(tabBar);
-	}
-
 	tabBar()->setObjectName(tabBarName);
-	setUsesScrollButtons(false);
-}
+	tabBar()->setCursor(Qt::PointingHandCursor);
 
-QTabBar* TabWidget::TabBar()
-{
-	return tabBar();
+	setUsesScrollButtons(false);
 }
 
 int TabWidget::AddPage(TabPage * page, const QString& name)

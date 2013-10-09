@@ -6,15 +6,12 @@
     <ClCompile Include="Link.cpp" />
     <ClCompile Include="Http.cpp" />
     <ClCompile Include="FileSystem.cpp" />
-    <ClCompile Include="Xml.cpp" />
     <ClCompile Include="MD5.cpp" />
-    <ClCompile Include="EventLog.cpp" />
     <ClCompile Include="Processes.cpp" />
     <ClCompile Include="FlashPlayer.cpp" />
     <ClCompile Include="Lang.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="Path.cpp" />
-    <ClCompile Include="ServiceSpecific.cpp" />
     <ClCompile Include="StringUtils.cpp" />
   </ItemGroup>
   <ItemGroup>

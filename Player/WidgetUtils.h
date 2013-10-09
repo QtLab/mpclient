@@ -1,5 +1,5 @@
-#ifndef ZAXAR_WIDGET_UTILS_H
-#define ZAXAR_WIDGET_UTILS_H
+#ifndef MP_WIDGET_UTILS_H
+#define MP_WIDGET_UTILS_H
 
 #include <QString>
 #include <QObject>
@@ -11,7 +11,7 @@ class QWidget;
 class QLabel;
 class QMainWindow;
 
-namespace Zaxar {
+namespace mp {
 
 class WidgetUtils
 {

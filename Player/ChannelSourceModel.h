@@ -18,7 +18,8 @@ class ChannelSource : public QObject
 	Q_PROPERTY(QString id READ Id WRITE SetId)
 	Q_PROPERTY(QString logo READ Logo WRITE SetLogo)
 	Q_PROPERTY(QString url READ Url WRITE SetUrl)
-	Q_PROPERTY(QString genre READ GenreId WRITE SetGenreId)
+	Q_PROPERTY(QString genreid READ GenreId WRITE SetGenreId)
+	Q_PROPERTY(GenreItemPtr genre READ Genre)
 
 public:
 	ChannelSource();
@@ -67,7 +68,8 @@ public:
 		Name = Qt::UserRole + 1,
 		Id,
 		Logo,
-		Url
+		Url,
+		GenreId
 	};
 
 	ChannelSourceModel();

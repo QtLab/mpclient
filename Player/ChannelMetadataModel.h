@@ -1,5 +1,5 @@
-#ifndef ZAXAR_CHANNEL_METDATA_MODEL_H
-#define ZAXAR_CHANNEL_METDATA_MODEL_H
+#ifndef MP_CHANNEL_METDATA_MODEL_H
+#define MP_CHANNEL_METDATA_MODEL_H
 
 #include <QMetaType>
 #include <QObject>

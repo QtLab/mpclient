@@ -155,6 +155,7 @@
     <ClCompile Include="GenreModel.cpp" />
     <ClCompile Include="IdleInputController.cpp" />
     <ClCompile Include="Log.cpp" />
+    <ClCompile Include="Path.cpp" />
     <ClCompile Include="TabPagesController.cpp" />
     <ClCompile Include="EntryPoint.cpp" />
     <ClCompile Include="GeneratedFiles\Debug\moc_AppController.cpp">
@@ -246,6 +247,7 @@
   <ItemGroup>
     <None Include="Views\Grid.qml" />
     <None Include="Views\Main.qml" />
+    <None Include="Views\RadioList.qml" />
     <None Include="Views\RadioPage.qml" />
     <None Include="Views\TabWidget.qml" />
     <None Include="Views\TVPage.qml" />
@@ -349,6 +351,7 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_WEBKIT_LIB -DQT_DECLARATIVE_LIB "-I.\GeneratedFiles" "-I." "-I$(QTDIR)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtNetwork" "-I$(QTDIR)\include\QtWebKit" "-I$(QTDIR)\include\QtDeclarative" "-I$(SolutionDir)\Dependencies\qjson\include" "-I$(SolutionDir)\Dependencies\bass"</Command>
     </CustomBuild>
+    <ClInclude Include="Path.h" />
     <ClInclude Include="WidgetUtils.h" />
     <CustomBuild Include="Titlebar.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>

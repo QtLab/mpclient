@@ -228,6 +228,9 @@
     <ClCompile Include="GeneratedFiles\Release\moc_UpdateControler.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="Path.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Player.qrc">
@@ -304,6 +307,9 @@
     <ClInclude Include="Log.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Path.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Views\WebPage.qml">
@@ -322,6 +328,9 @@
       <Filter>Views\QML</Filter>
     </None>
     <None Include="Views\TVPage.qml">
+      <Filter>Views\QML</Filter>
+    </None>
+    <None Include="Views\RadioList.qml">
       <Filter>Views\QML</Filter>
     </None>
   </ItemGroup>

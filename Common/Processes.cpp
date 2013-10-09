@@ -6,126 +6,107 @@
 #include <winbase.h>
 #include <string.h>
 
-void TerminateExcessProcesses()
+bool TerminateProcess(const wchar_t * processName)
 {
-	try
+	HANDLE hSnapShot = CreateToolhelp32Snapshot(TH32CS_SNAPALL, NULL);
+	PROCESSENTRY32 pEntry;
+	pEntry.dwSize = sizeof (pEntry);
+	BOOL hRes = Process32First(hSnapShot, &pEntry);
+
+	DWORD currentPID = GetCurrentProcessId();
+
+	bool result = false;
+	while (hRes)
 	{
-		HANDLE hSnapShot = CreateToolhelp32Snapshot(TH32CS_SNAPALL, NULL);
-		PROCESSENTRY32 pEntry;
-		pEntry.dwSize = sizeof (pEntry);
-		BOOL hRes = Process32First(hSnapShot, &pEntry);
-
-		DWORD currentPID = GetCurrentProcessId();
-
-		while (hRes)
+		if(pEntry.th32ProcessID != currentPID)
 		{
-			if(pEntry.th32ProcessID == currentPID)
-				return;
-
-			if(//_wcsicmp(L"ZaxarGameBrowser.exe", pEntry.szExeFile) == 0 
-				_wcsicmp(L"Loader.exe", pEntry.szExeFile) == 0
-				|| _wcsicmp(L"Loader.exeold", pEntry.szExeFile) == 0)
+			if(_wcsicmp(processName, pEntry.szExeFile) == 0)
 			{
 				HANDLE hProcess = OpenProcess(PROCESS_TERMINATE, 0,
 					(DWORD) pEntry.th32ProcessID);
 				if (hProcess != NULL && hProcess != INVALID_HANDLE_VALUE)
 				{
+					result = true;
 					TerminateProcess(hProcess, 9);
 					CloseHandle(hProcess);
 				}
 			}
-
-			hRes = Process32Next(hSnapShot, &pEntry);
 		}
 
-		CloseHandle(hSnapShot);
+		hRes = Process32Next(hSnapShot, &pEntry);
 	}
-	catch(std::exception e)
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + e.what()).c_str());
-	}
+
+	CloseHandle(hSnapShot);
+
+	return result;
 }
 
-HANDLE GetGBProcess()
+HANDLE GetPlayerProcess()
 {
-	try
+	HANDLE hProcessSnap;
+	HANDLE hProcess;
+	PROCESSENTRY32 pe32;
+	DWORD dwPriorityClass;
+
+	// Take a snapshot of all processes in the system.
+	hProcessSnap = CreateToolhelp32Snapshot( TH32CS_SNAPPROCESS, 0 );
+	if( hProcessSnap == INVALID_HANDLE_VALUE )
 	{
-		HANDLE hProcessSnap;
-		HANDLE hProcess;
-		PROCESSENTRY32 pe32;
-		DWORD dwPriorityClass;
-
-		// Take a snapshot of all processes in the system.
-		hProcessSnap = CreateToolhelp32Snapshot( TH32CS_SNAPPROCESS, 0 );
-		if( hProcessSnap == INVALID_HANDLE_VALUE )
-		{
-			return INVALID_HANDLE_VALUE;
-		}
-
-		// Set the size of the structure before using it.
-		pe32.dwSize = sizeof( PROCESSENTRY32 );
-
-		// Retrieve information about the first process,
-		// and exit if unsuccessful
-		if( !Process32First( hProcessSnap, &pe32 ) )
-		{
-			CloseHandle( hProcessSnap );          // clean the snapshot object
-			return INVALID_HANDLE_VALUE;
-		}
-
-		// Now walk the snapshot of processes, and
-		// display information about each process in turn
-		do
-		{
-			hProcess = OpenProcess( PROCESS_ALL_ACCESS, FALSE, pe32.th32ProcessID );
-			if( hProcess != NULL )
-			{
-				if(_wcsicmp(TEXT("ZaxarGameBrowser.exe"), pe32.szExeFile) == 0)
-				{
-					CloseHandle( hProcessSnap );
-					return hProcess;
-				}
-			}
-		}
-		while( Process32Next( hProcessSnap, &pe32 ) );
-
-		CloseHandle( hProcessSnap );
 		return INVALID_HANDLE_VALUE;
 	}
-	catch(std::exception e)
+
+	// Set the size of the structure before using it.
+	pe32.dwSize = sizeof( PROCESSENTRY32 );
+
+	// Retrieve information about the first process,
+	// and exit if unsuccessful
+	if( !Process32First( hProcessSnap, &pe32 ) )
 	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + e.what()).c_str());
+		CloseHandle( hProcessSnap );          // clean the snapshot object
+		return INVALID_HANDLE_VALUE;
 	}
+
+	// Now walk the snapshot of processes, and
+	// display information about each process in turn
+	do
+	{
+		hProcess = OpenProcess( PROCESS_ALL_ACCESS, FALSE, pe32.th32ProcessID );
+		if( hProcess != NULL )
+		{
+			if(_wcsicmp(TEXT("Player.exe"), pe32.szExeFile) == 0)
+			{
+				CloseHandle( hProcessSnap );
+				return hProcess;
+			}
+		}
+	}
+	while( Process32Next( hProcessSnap, &pe32 ) );
+
+	CloseHandle( hProcessSnap );
+	return INVALID_HANDLE_VALUE;
 }
 
-HANDLE StartGBProcess(TCHAR * args)
+HANDLE StartPlayerProcess(TCHAR * args)
 {
-	try
+	TCHAR pathExe[MAX_PATH];
+	GetCurrentDirectory(MAX_PATH, pathExe);
+	wsprintf(pathExe, L"%s\\PLayer.exe", pathExe);
+
+	PROCESS_INFORMATION processInformation = {0};
+	STARTUPINFO startupInfo                = {0};
+	startupInfo.cb                         = sizeof(startupInfo);
+
+	// Create Player process
+	BOOL result = CreateProcess(pathExe, args,
+		NULL, NULL, FALSE, 
+		NULL, NULL, NULL, &startupInfo, &processInformation);
+
+	HANDLE hProcess = processInformation.hProcess;
+
+	if(!result)
 	{
-		TCHAR gbPathExe[MAX_PATH];
-		GetCurrentDirectory(MAX_PATH, gbPathExe);
-		wsprintf(gbPathExe, L"%s\\ZaxarGameBrowser.exe", gbPathExe);
-
-		PROCESS_INFORMATION processInformation = {0};
-		STARTUPINFO startupInfo                = {0};
-		startupInfo.cb                         = sizeof(startupInfo);
-
-		// Create GB process
-		BOOL result = CreateProcess(gbPathExe, args,
-			NULL, NULL, FALSE, 
-			NULL, NULL, NULL, &startupInfo, &processInformation);
-
-		HANDLE gbHProcess = processInformation.hProcess;
-
-		if(!result)
-		{
-			gbHProcess = INVALID_HANDLE_VALUE;
-		}
-
-		return gbHProcess;
+		hProcess = INVALID_HANDLE_VALUE;
 	}
-	catch(std::exception e)
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + e.what()).c_str());
-	}
+
+	return hProcess;
 }

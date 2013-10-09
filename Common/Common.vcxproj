@@ -81,7 +81,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DateTime.cpp" />
-    <ClCompile Include="EventLog.cpp" />
     <ClCompile Include="FileSystem.cpp" />
     <ClCompile Include="FlashPlayer.cpp" />
     <ClCompile Include="Http.cpp" />
@@ -92,9 +91,7 @@
     <ClCompile Include="Path.cpp" />
     <ClCompile Include="Processes.cpp" />
     <ClCompile Include="Registry.cpp" />
-    <ClCompile Include="ServiceSpecific.cpp" />
     <ClCompile Include="StringUtils.cpp" />
-    <ClCompile Include="Xml.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

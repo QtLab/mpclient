@@ -151,74 +151,18 @@ HRESULT ResolveLinkPath(LPCWSTR lpszLinkFile, LPWSTR lpszPath, int iPathBufferSi
 	}
 }
 
-void CreateLinkToScheduleInStartupFolder()
-{
-	try
-	{
-		// Path to startup folder
-		TCHAR startupPath[MAX_PATH];
-		SHGetFolderPath(0, CSIDL_STARTUP, 0, 0, startupPath);
-		wsprintf(startupPath, L"%s\\Schedule Games Browser.lnk", startupPath);
-		DeleteFileW(startupPath);
-		SHGetFolderPath(0, CSIDL_STARTUP, 0, 0, startupPath);
-		wsprintf(startupPath, L"%s\\Schedule.lnk", startupPath);
-
-		TCHAR currentDir[MAX_PATH];
-		GetCurrentDirectory(MAX_PATH, currentDir);
-		wsprintf(currentDir, L"%s\\Schedule.exe", currentDir);
-		CreateLink(currentDir, startupPath, L"Schedule", L"/verysilent");
-	}
-	catch(char* lpstrErr) 
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + lpstrErr).c_str());
-	}
-	catch(std::exception e)
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + e.what()).c_str());
-	}
-	catch(...) 
-	{
-		Log((std::string(__FUNCDNAME__) + " unknown unhanded exception").c_str());
-	}
-}
-
-void RemoveLinkToScheduleInStartupFolder()
-{
-	try
-	{
-		// Path to start menu
-		TCHAR startupPath[MAX_PATH];
-		SHGetFolderPath(0, CSIDL_STARTUP, 0, 0, startupPath);
-		wsprintf(startupPath, L"%s\\Schedule Games Browser.lnk", startupPath);
-
-		DeleteFile(startupPath);
-	}
-	catch(char* lpstrErr) 
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + lpstrErr).c_str());
-	}
-	catch(std::exception e)
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + e.what()).c_str());
-	}
-	catch(...) 
-	{
-		Log((std::string(__FUNCDNAME__) + " unknown unhanded exception").c_str());
-	}
-}
-
 void CreateLinkToLoaderInStartupFolder()
 {
 	try
 	{
 		TCHAR startupPath[MAX_PATH];
 		SHGetFolderPath(0, CSIDL_STARTUP, 0, 0, startupPath);
-		wsprintf(startupPath, L"%s\\Zaxar Games Browser.lnk", startupPath);
+		wsprintf(startupPath, L"%s\\MediaPlayer.lnk", startupPath);
 
 		TCHAR currentDir[MAX_PATH];
 		GetCurrentDirectory(MAX_PATH, currentDir);
-		wsprintf(currentDir, L"%s\\ZaxarLoader.exe", currentDir);
-		CreateLink(currentDir, startupPath, L"Zaxar Games Browser", L"/verysilent");
+		wsprintf(currentDir, L"%s\\Loader.exe", currentDir);
+		CreateLink(currentDir, startupPath, L"MediaPlayer", L"/verysilent");
 	}
 	catch(char* lpstrErr) 
 	{
@@ -249,15 +193,15 @@ void CreateLinkToLoaderInStartMenu()
 		TCHAR currentDir[MAX_PATH], loaderPath[MAX_PATH], gbPath[MAX_PATH];
 
 		GetCurrentDirectory(MAX_PATH, currentDir);
-		wsprintf(loaderPath, L"%s\\ZaxarLoader.exe", currentDir);
-		wsprintf(menuPath, L"%s\\Programs\\Zaxar Games Browser\\Zaxar Update.lnk", menuPath);
-		CreateLink(loaderPath, menuPath, L"Zaxar Update", NULL);
+		wsprintf(loaderPath, L"%s\\Loader.exe", currentDir);
+		wsprintf(menuPath, L"%s\\Programs\\Media Player\\Update.lnk", menuPath);
+		CreateLink(loaderPath, menuPath, L"Media Player Update", NULL);
 
 		GetCurrentDirectory(MAX_PATH, currentDir);
-		wsprintf(loaderPath, L"%s\\ZaxarGameBrowser.exe", currentDir);
+		wsprintf(loaderPath, L"%s\\Player.exe", currentDir);
 		SHGetFolderPath(0, CSIDL_STARTMENU, 0, 0, menuPath);
-		wsprintf(gbPath, L"%s\\Programs\\Zaxar Games Browser\\Zaxar Games Browser.lnk", menuPath);
-		CreateLink(loaderPath, gbPath, L"Zaxar Game Browser", NULL);
+		wsprintf(gbPath, L"%s\\Programs\\Media Player\\Media Player.lnk", menuPath);
+		CreateLink(loaderPath, gbPath, L"Media Player", NULL);
 	}
 	catch(char* lpstrErr) 
 	{
@@ -279,74 +223,12 @@ void CreateLinkToLoader()
 	{
 		TCHAR desctopPath[MAX_PATH];
 		SHGetSpecialFolderPath(0, desctopPath, CSIDL_DESKTOP, FALSE);
-		wsprintf(desctopPath, L"%s\\Zaxar Games Browser.lnk", desctopPath);
+		wsprintf(desctopPath, L"%s\\Media Player.lnk", desctopPath);
 
 		TCHAR currentDir[MAX_PATH];
 		GetCurrentDirectory(MAX_PATH, currentDir);
-		wsprintf(currentDir, L"%s\\ZaxarLoader.exe", currentDir);
-		CreateLink(currentDir, desctopPath, L"Zaxar Games Browser", L"/verysilent");
-	}
-	catch(char* lpstrErr) 
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + lpstrErr).c_str());
-	}
-	catch(std::exception e)
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + e.what()).c_str());
-	}
-	catch(...) 
-	{
-		Log((std::string(__FUNCDNAME__) + " unknown unhanded exception").c_str());
-	}
-}
-
-void CreateLinkToGB()
-{
-	try
-	{
-		TCHAR desctopPath[MAX_PATH];
-		SHGetSpecialFolderPath(0, desctopPath, CSIDL_DESKTOP, FALSE);
-		wsprintf(desctopPath, L"%s\\Zaxar Games Browser.lnk", desctopPath);
-
-		TCHAR currentDir[MAX_PATH];
-		GetCurrentDirectory(MAX_PATH, currentDir);
-		wsprintf(currentDir, L"%s\\ZaxarGameBrowser.exe", currentDir);
-		CreateLink(currentDir, desctopPath, L"Zaxar Games Browser",NULL);
-	}
-	catch(char* lpstrErr) 
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + lpstrErr).c_str());
-	}
-	catch(std::exception e)
-	{
-		Log((std::string(__FUNCDNAME__) + " unhanded exception: " + e.what()).c_str());
-	}
-	catch(...) 
-	{
-		Log((std::string(__FUNCDNAME__) + " unknown unhanded exception").c_str());
-	}
-}
-
-void RemoveLinksToOldGB()
-{
-	try
-	{
-		TCHAR path[MAX_PATH];
-		SHGetSpecialFolderPath(0, path, CSIDL_DESKTOP, FALSE);
-		wsprintf(path, L"%s\\ZaxarGames.lnk", path);
-		DeleteFile(path);
-
-		SHGetSpecialFolderPath(0, path, CSIDL_APPDATA, FALSE);
-		wsprintf(path, L"%s\\Microsoft\\Windows\\Start Menu\\Programs\\ZaxarGames\\ZaxarGames.lnk", path);
-		DeleteFile(path);
-
-		SHGetSpecialFolderPath(0, path, CSIDL_PROGRAMS, FALSE);
-		wsprintf(path, L"%s\\ZaxarGames.lnk", path);
-		DeleteFile(path);
-
-		SHGetSpecialFolderPath(0, path, CSIDL_PROGRAMS, FALSE);
-		wsprintf(path, L"%s\\ZaxarGames.lnk", path);
-		DeleteFile(path);
+		wsprintf(currentDir, L"%s\\Loader.exe", currentDir);
+		CreateLink(currentDir, desctopPath, L"Media Player", L"/verysilent");
 	}
 	catch(char* lpstrErr) 
 	{

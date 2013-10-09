@@ -12,7 +12,7 @@
 #include <QMainWindow>
 #include <QStyle>
 
-namespace Zaxar {
+namespace mp {
 
 QMap<QString, QString> WidgetUtils::m_cachedStyles = QMap<QString, QString>();
 

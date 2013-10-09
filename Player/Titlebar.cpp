@@ -24,10 +24,9 @@ Titlebar::Titlebar(QWidget *parent)
 	connect(m_logo, SIGNAL(clicked()), this, SLOT(ShowMenuSlot()));
 	m_layout->addWidget(m_logo, 0);
 
-	qDebug() << "Titlebar zaxarLogo created";
+	qDebug() << "Titlebar playerLogo created";
 
 	m_layout->addSpacerItem(new QSpacerItem(300, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
-
 
 	qDebug() << "Titlebar messages created";
 

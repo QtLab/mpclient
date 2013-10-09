@@ -58,7 +58,7 @@ void GenreModel::Add(GenreItemPtr channel, bool notifiChanged)
 
 	if(notifiChanged)
 	{
-		//говорим вью, что данные изменились
+		// notify view
 		emit dataChanged(createIndex(0,0),createIndex(m_genres.size(),0));
 	}
 }
@@ -119,7 +119,7 @@ void GenreModel::Cleanup()
 	m_genres.clear();
 }
 
-const GenreItemList& GenreModel::Items() const
+GenreItemList GenreModel::Items() const
 {
 	return m_genres;
 }

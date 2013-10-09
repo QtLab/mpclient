@@ -1,4 +1,5 @@
 #include "RadioPage.h"
+#include "Path.h"
 #include "ChannelSourceModel.h"
 #include "AudioStreamController.h"
 
@@ -14,7 +15,7 @@ RadioPage::RadioPage(QWidget* parent, ChannelSourceModel* channels)
 	:TabPage(parent)
 {
 	QHBoxLayout *box = new QHBoxLayout(this);
-    m_view = CreateDeclarativeView("../Player/Views/RadioPage.qml");
+    m_view = CreateDeclarativeView(QmlFilePath("RadioPage.qml"));
 
 	m_view->rootContext()->setContextProperty("AudioStreamController", (AudioStreamController*)&AudioStreamController::Inst());
 
