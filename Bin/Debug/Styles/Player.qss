@@ -1,0 +1,67 @@
+QMainWindow {
+	background-color: '#efefeb';
+	min-height: 320px;
+	min-width: 580px;
+	height: 320px;
+}
+
+QWidget#RadioPage {
+	background-color: '#dbdbdb';
+}
+
+QWidget#borderTop {
+	background-image: url(:/mp/Views/border.png);
+	background-position: top left;
+	background-repeat: repeat-xy;
+	max-height: 2px;
+	min-width: 580px;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+
+/* Titlebar */
+QWidget#titleBar {
+	background-color: '#efefeb';
+	max-height: 38px;
+}
+
+ QTabWidget::pane {
+     border: 6px solid #dbdbdb;
+ }
+
+ QTabWidget::tab-bar {
+    border: 0px solid #efefeb;
+ }
+
+ QTabBar::tab {
+	 font: 10pt;
+	 background-color: '#efefeb';
+     border: 0px solid #C4C4C3;
+     border-top-left-radius: 3px;
+     border-top-right-radius: 3px;
+     min-width: 100px;
+	 min-height: 30px;
+     padding: 2px;
+ }
+
+ QTabBar::tab:selected, QTabBar::tab:hover {
+
+ }
+
+ QTabBar::tab:selected {
+	background-color: '#dbdbdb';
+ }
+
+ QTabBar::tab:!selected {
+	background-color: '#efefeb';
+ }
+
+
+
+
+
+
+
+
+
+

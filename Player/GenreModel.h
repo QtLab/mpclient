@@ -70,6 +70,8 @@ private:
 private:
 	friend class TabPagesController;
 	friend class ChannelSourceModel;
+	friend class RadioCompositeModel;
+	friend class RadioPageController;
 
 	GenreItemList				m_genres;
 	mutable QReadWriteLock		m_lock;
@@ -77,7 +79,8 @@ private:
 	Q_DISABLE_COPY(GenreModel)
 };
 
-typedef GenreModel * GenreModelPtr;
+typedef QSharedPointer<GenreModel> GenreModelPtr;
+//typedef GenreModel * GenreModelPtr;
 //Q_DECLARE_METATYPE(GenreModelPtr);
 //Q_DECLARE_METATYPE(GenreItemPtr);
 

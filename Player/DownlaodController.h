@@ -27,7 +27,7 @@ public:
 		,QObject* listFinish = NULL, const char* slot = NULL);
 
 private slots:
-	void FileDownloaded(QNetworkReply* reply);
+	void ReplyFinished(QNetworkReply* reply);
 
 private:
 	DownlaodController();

@@ -45,6 +45,18 @@
     <Filter Include="Views\AutoClicks">
       <UniqueIdentifier>{15ac1937-cd16-46ba-952a-36e27357d0eb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ConfigExamples">
+      <UniqueIdentifier>{665bc4aa-4363-4b74-8202-c2230591ca2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Views\Styles">
+      <UniqueIdentifier>{5ebb2516-ef75-41c6-9f1b-a854f165aa2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ConfigExamples\Debug">
+      <UniqueIdentifier>{577ac111-8dc7-402b-baf5-076162019f45}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Views\Html">
+      <UniqueIdentifier>{eebaa700-66c3-4c51-a1dc-e4905e6e4219}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GeneratedFiles\Debug\moc_MainWindow.cpp">
@@ -240,6 +252,66 @@
     <ClCompile Include="GeneratedFiles\Release\moc_LinkButton.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="MultiEditDialog.cpp">
+      <Filter>Views\Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_MultiEditDialog.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_MultiEditDialog.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="TabModel.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_TabModel.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_TabModel.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="RadioCompositeModel.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_RadioCompositeModel.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_RadioCompositeModel.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="WebView.cpp">
+      <Filter>Views\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_WebView.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_WebView.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_QsltCursorShapeArea.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_QsltCursorShapeArea.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="QsltCursorShapeArea.cpp">
+      <Filter>Views\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_TabPagesController.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_TabPagesController.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="RadioPageController.cpp">
+      <Filter>Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_RadioPageController.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_RadioPageController.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Player.qrc">
@@ -305,6 +377,27 @@
     <CustomBuild Include="LinkButton.h">
       <Filter>Views\Widgets</Filter>
     </CustomBuild>
+    <CustomBuild Include="MultiEditDialog.h">
+      <Filter>Views\Dialogs</Filter>
+    </CustomBuild>
+    <CustomBuild Include="TabModel.h">
+      <Filter>Model</Filter>
+    </CustomBuild>
+    <CustomBuild Include="RadioCompositeModel.h">
+      <Filter>Model</Filter>
+    </CustomBuild>
+    <CustomBuild Include="WebView.h">
+      <Filter>Views\Widgets</Filter>
+    </CustomBuild>
+    <CustomBuild Include="QsltCursorShapeArea.h">
+      <Filter>Views\Widgets</Filter>
+    </CustomBuild>
+    <CustomBuild Include="TabPagesController.h">
+      <Filter>Controllers</Filter>
+    </CustomBuild>
+    <CustomBuild Include="RadioPageController.h">
+      <Filter>Controllers</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="NcFramelessHelper.h">
@@ -312,9 +405,6 @@
     </ClInclude>
     <ClInclude Include="WidgetUtils.h">
       <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="TabPagesController.h">
-      <Filter>Controllers</Filter>
     </ClInclude>
     <ClInclude Include="Log.h">
       <Filter>Utils</Filter>
@@ -324,25 +414,46 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Views\WebPage.qml">
+    <None Include="Views\RadioPageView.qml">
       <Filter>Views\QML</Filter>
     </None>
-    <None Include="Views\Grid.qml">
+    <None Include="Views\TopStationsView.qml">
       <Filter>Views\QML</Filter>
     </None>
-    <None Include="Views\Main.qml">
+    <None Include="Views\GenresView.qml">
       <Filter>Views\QML</Filter>
     </None>
-    <None Include="Views\RadioPage.qml">
+    <None Include="Views\Line.qml">
       <Filter>Views\QML</Filter>
     </None>
-    <None Include="Views\TabWidget.qml">
+    <None Include="..\Bin\Debug\Styles\Player.qss">
+      <Filter>Views\Styles</Filter>
+    </None>
+    <None Include="Views\StationsView.qml">
       <Filter>Views\QML</Filter>
     </None>
-    <None Include="Views\TVPage.qml">
+    <None Include="Views\CurrentStationView.qml">
       <Filter>Views\QML</Filter>
     </None>
-    <None Include="Views\RadioList.qml">
+    <None Include="Views\TVPageView.qml">
+      <Filter>Views\QML</Filter>
+    </None>
+    <None Include="..\Bin\tv.json">
+      <Filter>ConfigExamples\Debug</Filter>
+    </None>
+    <None Include="..\Bin\radio.json">
+      <Filter>ConfigExamples\Debug</Filter>
+    </None>
+    <None Include="..\Bin\radiogenres.json">
+      <Filter>ConfigExamples\Debug</Filter>
+    </None>
+    <None Include="..\Bin\tabs.json">
+      <Filter>ConfigExamples\Debug</Filter>
+    </None>
+    <None Include="..\Bin\Release\Html\VideoPlayer.html">
+      <Filter>Views\Html</Filter>
+    </None>
+    <None Include="Views\LastStationsView.qml">
       <Filter>Views\QML</Filter>
     </None>
   </ItemGroup>

@@ -105,6 +105,9 @@ void GenreModel::Parse(const QByteArray& json)
 			QJson::QObjectHelper::qvariant2qobject(record.toMap(), genre);
 			Add(GenreItemPtr(genre));
 		}
+
+		if(!m_genres.empty())
+			emit dataChanged(createIndex(0,0),createIndex(m_genres.size(),0));
 	}
 	else
 	{
@@ -169,10 +172,8 @@ int GenreModel::rowCount(const QModelIndex &parent) const
 		m_lock.unlock();
 		return count;
 	}
-	else
-	{
-		return m_genres.count();
-	}
+
+	return m_genres.count();
 }
 
 }

@@ -160,6 +160,9 @@ void ChannelSourceModel::Parse(const QByteArray& json)
 			channel->SetLogo(UrlModel::CreateCurrentDirUrl(channel->Logo()).ToUrl());
 			Add(ChannelSourcePtr(channel));
 		}
+
+		if(!m_channels.empty())
+			emit dataChanged(createIndex(0,0),createIndex(m_channels.size(),0));
 	}
 	else
 	{
@@ -177,6 +180,17 @@ void ChannelSourceModel::Cleanup()
 const ChannelSourceList& ChannelSourceModel::Items() const
 {
 	return m_channels;
+}
+
+ChannelSourcePtr ChannelSourceModel::FindById(const QString& id)
+{
+	QReadLocker locker(&m_lock);
+
+	foreach(ChannelSourcePtr channel, m_channels)
+	{
+		if(channel->Id() == id)
+			return channel;
+	}
 }
 
 QVariant ChannelSourceModel::data(const QModelIndex & index, int role) const 

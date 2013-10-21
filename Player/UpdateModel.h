@@ -70,8 +70,8 @@ private:
 	void Add(FileToUpdatePtr contact, bool notifiChanged = false);
 	void Load(const QString& filePath);
 	//[
-	//{"id": "1", "name": "PSYCHEDELIK"},
-	//{"Id": "1", "name": "PSYCHEDELIK2"}
+	//{"m": "dfdgdfgg", "f": "ttt.config", "u": "http://yoururl"},
+	//..
 	//]
 	void Parse(const QByteArray& json);
 	void Cleanup();

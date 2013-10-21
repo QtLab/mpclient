@@ -2,6 +2,7 @@
 #include "RadioPage.h"
 #include "TVPage.h"
 #include "TabWidget.h"
+#include "RadioPageController.h"
 
 namespace mp {
 
@@ -17,25 +18,23 @@ TabPagesController& TabPagesController::Inst()
 
 TabPagesController::TabPagesController()
 {
+	m_tabs.Load("..//tabs.json");
+
+	ReLoadData();
 }
 
 TabPagesController::~TabPagesController()
 {
+	
 }
 
 const ChannelSourceModel& TabPagesController::TVChannels()
 {
 	return m_tvChannels;
 }
-
-const ChannelSourceModel& TabPagesController::RadioChannels()
-{
-	return m_radioChannels;
-}
-
 TabWidget* TabPagesController::CreateTabsView()
 {
-	TabWidget * tabs = new TabWidget(NULL, "rootTab", "rootTabBar");
+	TabWidget * tabs = new TabWidget(NULL, "tabWidget", "taBar");
 
 
 	qDebug() << "TabWidget widget created";
@@ -51,41 +50,32 @@ TabPage* TabPagesController::CreateabView(const QString& tabName)
 	}
 	else if(tabName == "RADIO")
 	{	
-		return CreateRadioTabView();
+		return RadioPageController::Inst().View();
 	}
 
 	return NULL;
 }
 
-
 TabPage* TabPagesController::CreateTVTabView()
 {
-	TabPage * tab = new TVPage(NULL, &m_tvChannels);
-
+	TVPage * tab = new TVPage(NULL, &m_tvChannels);
+	
 	qDebug() << "RadioPage widget created";
 
 	return tab;
 }
 
-TabPage* TabPagesController::CreateRadioTabView()
+void TabPagesController::ReLoadData()
 {
-	TabPage * tab = new RadioPage(NULL, &m_radioChannels);
-
-	qDebug() << "TVPage widget created";
-
-	return tab;
-}
-
-void TabPagesController::LoadData()
-{
-	m_radioGenres.Load("radiogenres.json");
-	m_tvGenres.Load("tvgenres.json");
-
-	m_radioChannels.SetGenres(m_radioGenres);
-	m_radioChannels.Load("radio.json");
-
+#ifdef _DEBUG
+	m_tvGenres.Load("..\\tvgenres.json");
 	m_tvChannels.SetGenres(m_tvGenres);
-	m_tvChannels.Load("tv.json");
+	m_tvChannels.Load("..\\tv.json");
+#else
+	m_tvGenres.Load("config\\tvgenres.json");
+	m_tvChannels.SetGenres(m_tvGenres);
+	m_tvChannels.Load("config\\tv.json");
+#endif
 }
 
 }

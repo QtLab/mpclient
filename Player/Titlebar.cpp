@@ -15,12 +15,12 @@ Titlebar::Titlebar(QWidget *parent)
 	setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Fixed);
 
 	setObjectName("titleBar");
-	setAttribute(Qt::WA_StyledBackground);
-
+	//setAttribute(Qt::WA_StyledBackground);
+	setStyleSheet("background-color: '#efefeb'");
 	qDebug() << "Titlebar layouts created";
 
 	m_logo = new QLabel(this);
-	m_logo->setText("MP");
+	//m_logo->setText("MP");
 	connect(m_logo, SIGNAL(clicked()), this, SLOT(ShowMenuSlot()));
 	m_layout->addWidget(m_logo, 0);
 
@@ -67,7 +67,7 @@ void Titlebar::mouseMoveEvent(QMouseEvent *evt)
 
 void Titlebar::mouseDoubleClickEvent(QMouseEvent *evt)
 {
-	SwitchScreenMode();
+	//SwitchScreenMode();
 }
 
 void Titlebar::SwitchScreenMode()

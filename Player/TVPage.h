@@ -3,9 +3,15 @@
 
 #include "TabPage.h"
 
+
+
 class QDeclarativeView;
 
 namespace mp {
+
+class GenreModel;
+class ChannelSourceModel;
+class WebView;
 
 class TVPage : public TabPage
 {
@@ -25,10 +31,11 @@ public:
 	virtual void RetranslateUI();
 
 	// Channels model was updated
-	virtual void ModelUpdated(ChannelSourceModel* channels);
+	virtual void ChannelSourceModelUpdated(ChannelSourceModel* channels);
+	virtual void GenreModelUpdated(GenreModel* channels);
 
 private:
-	QDeclarativeView *		m_view;
+	WebView *		m_view;
 };
 
 

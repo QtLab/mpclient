@@ -11,7 +11,6 @@ namespace mp {
 AppController::AppController(int argc, char *argv[])
 	:QApplication(argc, argv)
 {
-	TabPagesController::Inst().LoadData();
 }
 
 AppController::~AppController()

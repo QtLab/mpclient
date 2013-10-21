@@ -8,9 +8,6 @@
 #define BUFSIZE 1024
 #define MD5LEN  16
 
-static const std::wstring NullMD5(L"00000000000000000000000000000000");
-
-
 DWORD ComputeMD5(std::wstring& md5, const std::wstring& file);
 
 bool NullOrMd5NotEqueal(const FileData& file)
@@ -19,7 +16,7 @@ bool NullOrMd5NotEqueal(const FileData& file)
 	{
 		TCHAR *filePath = (TCHAR *)file.FullPath.c_str();
 
-		if(file.MD5.compare(NullMD5) == 0)
+		if(file.MD5.compare(L"0") == 0)
 		{
 			DeleteFile(filePath);
 			return true;
@@ -124,15 +121,13 @@ DWORD ComputeMD5(std::wstring& md5, const std::wstring& file)
 			CRYPT_VERIFYCONTEXT))
 		{
 			dwStatus = GetLastError();
-			printf("CryptAcquireContext failed: %d\n", dwStatus); 
 			CloseHandle(hFile);
 			return dwStatus;
 		}
 
 		if (!CryptCreateHash(hProv, CALG_MD5, 0, 0, &hHash))
 		{
-			dwStatus = GetLastError();
-			printf("CryptAcquireContext failed: %d\n", dwStatus); 
+			dwStatus = GetLastError(); 
 			CloseHandle(hFile);
 			CryptReleaseContext(hProv, 0);
 			return dwStatus;
@@ -149,7 +144,6 @@ DWORD ComputeMD5(std::wstring& md5, const std::wstring& file)
 			if (!CryptHashData(hHash, rgbFile, cbRead, 0))
 			{
 				dwStatus = GetLastError();
-				printf("CryptHashData failed: %d\n", dwStatus); 
 				CryptReleaseContext(hProv, 0);
 				CryptDestroyHash(hHash);
 				CloseHandle(hFile);
@@ -160,7 +154,6 @@ DWORD ComputeMD5(std::wstring& md5, const std::wstring& file)
 		if (!bResult)
 		{
 			dwStatus = GetLastError();
-			printf("ReadFile failed: %d\n", dwStatus); 
 			CryptReleaseContext(hProv, 0);
 			CryptDestroyHash(hHash);
 			CloseHandle(hFile);

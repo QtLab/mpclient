@@ -11,6 +11,7 @@
 #include <QDesktopServices>
 #include <QMainWindow>
 #include <QStyle>
+#include <QFileInfo>
 
 namespace mp {
 
@@ -47,29 +48,22 @@ void WidgetUtils::LoadStyleSheets(QWidget* widget, const QString& qss)
 	}
 	else
 	{
-		filePath = "Styles/"+ qss;
+		filePath =  QFileInfo(qss).absoluteFilePath();
 	}
 
 	QMap<QString, QString>::const_iterator iter;
 	iter = m_cachedStyles.find(filePath);
 
-	if(iter != m_cachedStyles.end())
+	QFile file(filePath);
+	if(file.open(QIODevice::ReadOnly | QIODevice::Text))
 	{
-		widget->setStyleSheet(iter.value());
+		QString styleSheet = file.readAll();
+		widget->setStyleSheet(styleSheet);	
+		m_cachedStyles.insert(filePath, styleSheet);
 	}
 	else
 	{
-		QFile file(filePath);
-		if(file.open(QIODevice::ReadOnly | QIODevice::Text))
-		{
-			QString styleSheet = file.readAll();
-			widget->setStyleSheet(styleSheet);	
-			m_cachedStyles.insert(filePath, styleSheet);
-		}
-		else
-		{
-			qDebug() << "Stylesheet: " << filePath << "doesn't found";
-		}
+		qDebug() << "Stylesheet: " << filePath << "doesn't found";
 	}
 }
 

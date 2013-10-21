@@ -16,12 +16,45 @@ QString QmlFilePath(const QString& fileName)
 	QString path = pathTemplate.arg(fileName);
 	
 #else
-	static const QString pathTemplate("%0/%1");
-	QString path = pathTemplate.arg(QCoreApplication::applicationDirPath(), fileName);
+	QString path;
+	QDir dir = QDir::current();
+	if(dir.cd("QML"))
+	{
+		path = dir.absoluteFilePath(fileName);
+		//path = QUrl::fromLocalFile(path).toString();
+	}
+	//static const QString pathTemplate("%0\\qml\\%1");
+	//QString path = pathTemplate.arg(QCoreApplication::applicationDirPath(), fileName);
 #endif
 
-	path = QUrl::fromLocalFile(path).toString();
-	return path;//.replace("/", "\\");
+	//path =  path.replace("//", "\\").replace("/", "\\");
+	//path = QUrl::fromLocalFile(path).toString();
+	return path;
+}
+
+QString CssFilePath(const QString& fileName)
+{
+	QDir dir = QDir::current();
+	if(dir.cd("Styles"))
+	{
+		QString fn = dir.filePath(fileName);
+		return fn;
+	}
+
+	return QString();
+}
+
+QString HtmlilePath(const QString& fileName)
+{
+	QDir dir = QDir::current();
+	if(dir.cd("Html"))
+	{
+		QString fn = dir.filePath(fileName);
+		//fn = QUrl::fromLocalFile(fn).toString();
+		return fn;
+	}
+
+	return QString();
 }
 
 }

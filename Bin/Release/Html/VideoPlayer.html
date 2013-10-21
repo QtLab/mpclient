@@ -1,0 +1,64 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="swfobject.js"></script>
+
+<style>
+</style>
+
+<script type="text/javascript">
+    if (!swfobject.hasFlashPlayerVersion("10") && Player && Player.InsstallFlash)
+        Player.InsstallFlash();
+
+    $(document).ready(function () {
+        $(window).resize(function () {
+           
+
+            var winW = 630, winH = 460;
+            if (document.body && document.body.offsetWidth) {
+                winW = document.body.offsetWidth;
+                winH = document.body.offsetHeight;
+            }
+            if (document.compatMode == 'CSS1Compat' &&
+                document.documentElement &&
+                document.documentElement.offsetWidth) {
+                winW = document.documentElement.offsetWidth;
+                winH = document.documentElement.offsetHeight;
+            }
+            if (window.innerWidth && window.innerHeight) {
+                winW = window.innerWidth;
+                winH = window.innerHeight;
+            }
+
+            var embed = swfobject.getElementsByTagName("embed");
+            embed.setAttribute("width", winW.toString());
+            embed.setAttribute("height", winH.toString());
+        });
+    });
+
+
+
+</script>
+
+</head>
+
+<body style="background:#171614;padding:0px;margin:0px;">
+
+<object id="v6496_2"  name="vjs6496_2" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0" width="720" height="630" >
+<param name="FlashVars" value="vote=0&srv=pub.tvigle.ru&prt=0903a99aac739a1b79bb3849711eacc3&id=6496&w=720&h=540&type=&dopparam=&modes=2" />
+<param name="allowFullScreen" value="true" />
+<param name="movie" value="http://pub.tvigle.ru/swf/tvigle_publisher_v2.swf" />
+<param name="quality" value="high" />
+<param name="bgcolor" value="#000000" />
+<param name="allowscriptaccess" value="always" />
+<embed id="vjs6496_2" src="http://pub.tvigle.ru/swf/tvigle_publisher_v2.swf" allowscriptaccess="always"
+quality="high" width="580" height="360" bgcolor="#000000"  
+allowfullscreen="true" flashvars="vote=0&srv=pub.tvigle.ru&prt=0903a99aac739a1b79bb3849711eacc3&id=6496&w=720&h=540&type=&dopparam=&modes=2"
+type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" >
+<a style="display:none;"  href='http://www.tvigle.ru/'>Tvigle</a>
+</embed>
+</object>
+
+</body>
+</html>    

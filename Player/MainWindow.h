@@ -25,6 +25,9 @@ public:
 	Titlebar * TitleBar() const;
 	void AddWidget(QWidget* widget);
 
+protected:
+	bool eventFilter(QObject *obj, QEvent *ev);
+
 private:
 	QVBoxLayout *			m_layout;
 	Titlebar*				m_titleBar;

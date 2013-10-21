@@ -9,6 +9,7 @@ namespace mp {
 
 // Forward declaration
 class ChannelSourceModel;
+class GenreModel;
 
 // Base class for all tabs
 class TabPage : public QWidget
@@ -29,14 +30,15 @@ public:
 	virtual void RetranslateUI();
 
 	// Channels model was updated
-	virtual void ModelUpdated(ChannelSourceModel* channels);
+	virtual void ChannelSourceModelUpdated(ChannelSourceModel* channels);
+	virtual void GenreModelUpdated(GenreModel* channels);
 
 	QMargins Margins();
 
 protected:
 	void changeEvent(QEvent *event);
 
-	QDeclarativeView* CreateDeclarativeView(const QString& qmlFileName);
+	QDeclarativeView* CreateDeclarativeView(const QString& qmlFileName, const QString& key, QObject* obj);
 };
 
 }

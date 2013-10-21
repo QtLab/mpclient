@@ -27,12 +27,6 @@
 #include <commctrl.h>
 #include <comdef.h>
 
-#ifdef _DEBUG
-#define ThreadCount 1
-#else
-#define ThreadCount 4
-#endif
-
 #define ASYNC_INSTALL_FLASH
 
 struct FileData
@@ -89,8 +83,8 @@ std::wstring GetGuid();
 
 // HTTP
 bool HttpDownload(const std::wstring& url, std::string * data);
-void SetDomainToUpdate(const std::wstring& domain);
-std::wstring DomainToUpdate();
+void SetMPDomain(const std::wstring& domain);
+std::wstring MPDomain();
 
 // Processes
 bool TerminateProcess(const wchar_t * processName);
@@ -131,6 +125,10 @@ LONG WINAPI SEHProcessor(unsigned int code, struct _EXCEPTION_POINTERS *Exceptio
 	} \
 
 #define CATCH_ALL_EXCEPTIONS() \
+	catch(std::exception e) \
+	{ \
+		ExceptHandle(e.what()); \
+	} \
 	catch(char* lpstrErr) \
 	{ \
 		ExceptHandle(lpstrErr); \

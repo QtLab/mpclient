@@ -78,6 +78,8 @@ public:
 	// Don't use in prod. It isn't thread-safe
 	const ChannelSourceList& Items() const;
 
+	ChannelSourcePtr FindById(const QString& id);
+
 	QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 	int rowCount(const QModelIndex &parent = QModelIndex()) const;
 
@@ -94,6 +96,8 @@ private:
 
 private:
 	friend class TabPagesController;
+	friend class RadioCompositeModel;
+	friend class RadioPageController;
 
 	ChannelSourceList			m_channels;
 	GenreModel					m_genres;
@@ -102,7 +106,8 @@ private:
 	Q_DISABLE_COPY(ChannelSourceModel)
 };
 
-typedef ChannelSourceModel * ChannelSourceModelPtr;
+typedef QSharedPointer<ChannelSourceModel> ChannelSourceModelPtr;
+//typedef ChannelSourceModel * ChannelSourceModelPtr;
 //Q_DECLARE_METATYPE(ChannelSourceModelPtr);
 //Q_DECLARE_METATYPE(ChannelSourcePtr);
 

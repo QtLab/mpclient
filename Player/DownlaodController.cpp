@@ -57,7 +57,7 @@ void DownlaodController::Post(const UrlModel& requestUrl ,QObject* listFinish, c
 
 	if(listFinish == NULL)
 	{
-		connect(reply, SIGNAL(finished()), this , SLOT(FileDownloaded()));
+		connect(reply, SIGNAL(finished()), this , SLOT(ReplyFinished()));
 	}
 	else
 	{
@@ -68,7 +68,7 @@ void DownlaodController::Post(const UrlModel& requestUrl ,QObject* listFinish, c
 	connect(reply, SIGNAL(sslErrors(QList<QSslError>)), reply, SLOT(ignoreSslErrors()));
 }
 
-void DownlaodController::FileDownloaded(QNetworkReply* reply)
+void DownlaodController::ReplyFinished(QNetworkReply* reply)
 {
 	reply->deleteLater();
 }

@@ -1,5 +1,6 @@
 #include "AppController.h"
 #include "Log.h"
+#include "QsltCursorShapeArea.h"
 
 int main(int argc, char *argv[])
 {

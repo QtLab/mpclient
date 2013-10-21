@@ -3,8 +3,6 @@
 #include <iostream>
 #include <fstream>
 
-std::wstring mDoaminToUpdate = L"http://www.somedomain.com";
-
 HINTERNET netstart ()
 {
 	try
@@ -111,14 +109,4 @@ bool HttpDownload(const std::wstring& url, std::string * data)
 	}
 
 	return false;
-}
-
-void SetDomainToUpdate(const std::wstring& domain)
-{
-	mDoaminToUpdate = domain;
-}
-
-std::wstring DomainToUpdate()
-{
-	return mDoaminToUpdate;
 }

@@ -3,6 +3,7 @@
 
 #include "ChannelSourceModel.h"
 #include "GenreModel.h"
+#include "TabModel.h"
 
 namespace mp {
 
@@ -10,20 +11,19 @@ namespace mp {
 class TabPage;
 class TabWidget;
 
-class TabPagesController
+class TabPagesController : public QObject
 {
+	Q_OBJECT
+
 public:	
 	static TabPagesController& Inst();
 
 	const ChannelSourceModel& TVChannels();
-	const ChannelSourceModel& RadioChannels();
 
 	TabWidget* CreateTabsView();
 	TabPage* CreateabView(const QString& tabName);
 	TabPage* CreateTVTabView();
-	TabPage* CreateRadioTabView();
-
-	void LoadData();
+	void ReLoadData();
 
 private:
 	TabPagesController();
@@ -31,10 +31,11 @@ private:
 
 private:
 	static TabPagesController*		m_instance;
-	ChannelSourceModel				m_radioChannels;
-	GenreModel						m_radioGenres;
+	//ChannelSourceModel				m_radioChannels;
+	//GenreModel						m_radioGenres;
 	ChannelSourceModel				m_tvChannels;
 	GenreModel						m_tvGenres;
+	TabModel						m_tabs;
 };
 
 }

@@ -77,7 +77,7 @@ void FileDownloader::DownloadFinished()
 	QNetworkReply::NetworkError err = m_reply->error();
 	int fileSize = m_file->size();
 
-	qDebug() << "Download file:" << m_filePath << " size:" << fileSize <<" from url: " << m_url.toString() << " was finisehd";
+	qDebug() << "File download:" << m_filePath << " size:" << fileSize <<" from url: " << m_url.toString() << " was finisehd";
 
 	if(err == QNetworkReply::NoError && fileSize > 0)
 	{

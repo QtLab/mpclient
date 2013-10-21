@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/mp">
-      <file>Views/Main.qml</file>
-      <file>Views/Grid.qml</file>
+      <file>Views/border.png</file>
     </qresource>
 </RCC>

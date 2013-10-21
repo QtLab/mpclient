@@ -1,4 +1,7 @@
 #include "TVPage.h"
+#include "Path.h"
+#include "WebView.h"
+
 #include "ChannelSourceModel.h"
 #include "AudioStreamController.h"
 
@@ -7,17 +10,18 @@
 #include <QDeclarativeContext>
 #include <QDebug>
 #include <QHBoxLayout>
+#include <QWebView>
 
 namespace mp {
+
 
 TVPage::TVPage(QWidget* parent, ChannelSourceModel* channels)
 	:TabPage(parent)
 {
 	QHBoxLayout *box = new QHBoxLayout(this);
-    m_view = CreateDeclarativeView("Views/TVPage.qml");
-
-	ModelUpdated(channels);
-
+	box->setContentsMargins(0,0,0,0);
+	m_view = WebView::Create();
+	m_view->setUrl(HtmlilePath("VideoPlayer.html"));
 	box->addWidget(m_view);
 }
 
@@ -38,9 +42,12 @@ void TVPage::RetranslateUI()
 {
 }
 
-void TVPage::ModelUpdated(ChannelSourceModel* channels)
+void TVPage::ChannelSourceModelUpdated(ChannelSourceModel* channels)
 {
-	m_view->rootContext()->setContextProperty("tvChannels", channels);
+}
+
+void TVPage::GenreModelUpdated(GenreModel* channels)
+{
 }
 
 }

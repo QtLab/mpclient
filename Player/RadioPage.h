@@ -7,12 +7,16 @@ class QDeclarativeView;
 
 namespace mp {
 
+class ChannelSourceModel;
+class GenreModel;
+class ChannelSource;
+
 class RadioPage : public TabPage
 {
 	Q_OBJECT
 
 public:
-	RadioPage(QWidget* parent, ChannelSourceModel* channels);
+	RadioPage(QWidget* parent, ChannelSourceModel* channels, GenreModel* genres);
 	virtual ~RadioPage();
 
 	// User leave the page
@@ -24,8 +28,14 @@ public:
 	// Languege changed
 	virtual void RetranslateUI();
 
+	// Connect event to declarative QML view
+	void Connect(const char* signal, QObject* reciever, const char* slot);
+
+public slots:
 	// Channels model was updated
-	virtual void ModelUpdated(ChannelSourceModel* channels);
+	virtual void CurrentChannelChanged(ChannelSource* channel);
+	virtual void ChannelSourceModelUpdated(ChannelSourceModel* channels);
+	virtual void GenreModelUpdated(GenreModel* genres);
 
 private:
 	QDeclarativeView *		m_view;
