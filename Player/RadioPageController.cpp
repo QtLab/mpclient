@@ -30,7 +30,7 @@ RadioPageController::RadioPageController()
 
 	TopStationslUpdated();
 	m_view->UpdateCurrentGenreStations(&m_stations);
-	m_view->UpdateLastStations(&m_lastSations);
+	//m_view->UpdateLastStations(&m_lastSations);
 	m_view->GenreModelUpdated(&m_radioGenres);
 	m_view->Init();
 	

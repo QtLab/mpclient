@@ -20,14 +20,14 @@ public:
 	RadioCompositeModel();
 	~RadioCompositeModel();
 
-	ChannelSourceModelPtr Channels();
-	GenreModelPtr Genres();
+	//ChannelSourceModelPtr Channels();
+	//GenreModelPtr Genres();
 
 private:
 	friend class TabPagesController;
 
-	ChannelSourceModelPtr				m_channels;
-	GenreModelPtr						m_genres;
+	//ChannelSourceModelPtr				m_channels;
+	//GenreModelPtr						m_genres;
 
 	Q_DISABLE_COPY(RadioCompositeModel)
 };

@@ -45,8 +45,6 @@ Rectangle {
 		anchors.fill: parent
 		anchors.topMargin: 50
 		delegate: channelDelegate
-		//model: lastStations
-		model: currentStations
-
+		model: internalModel
 	}
 }

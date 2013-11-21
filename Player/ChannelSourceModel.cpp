@@ -84,14 +84,12 @@ void ChannelSource::SetGenre(const GenreItemPtr& genre)
 
 ChannelSourceModel::ChannelSourceModel()
 {
-	/*
 	QHash<int, QByteArray> roles;
 	roles[Name] = "Name";
 	roles[Id] = "Id";
 	roles[Logo] = "Logo";
 	roles[Url] = "Url";
 	setRoleNames(roles);
-	*/
 }
 
 ChannelSourceModel::~ChannelSourceModel() 
@@ -224,30 +222,29 @@ QVariant ChannelSourceModel::data(const QModelIndex & index, int role) const
 {
 	//QReadLocker locker(&m_lock);
 
-	//if (index.row() < 0 || index.row() > m_channels.count())
+	if (index.row() < 0 || index.row() > m_channels.count())
 		return QVariant();
-/*
-	const ChannelSourcePtr contact = m_channels.at(index.row());
+
+	const ChannelSourcePtr channel = m_channels.at(index.row());
 	
 	QVariant result;
 
 	switch (role) {
 	case Name:
-		result = QVariant(contact->Name());
+		result = QVariant(channel->Name());
 		break;
 	case Id:
-		result = QVariant(contact->Id());
+		result = QVariant(channel->Id());
 		break;
 	case Logo:
-		result = QVariant(contact->Logo());
+		result = QVariant(channel->Logo());
 		break;
 	case Url:
-		result = QVariant(contact->Url());
+		result = QVariant(channel->Url());
 		break;
 	}
 
 	return result;
-	*/
 }
 
 int ChannelSourceModel::rowCount(const QModelIndex &parent) const

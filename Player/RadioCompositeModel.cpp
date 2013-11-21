@@ -12,17 +12,18 @@
 namespace mp {
 
 RadioCompositeModel::RadioCompositeModel()
-	:m_channels(new ChannelSourceModel())
-	,m_genres(new GenreModel())
+	//:m_channels(new ChannelSourceModel())
+	//,m_genres(new GenreModel())
 {
-	m_genres->Load("..//radiogenres.json");
-	m_channels->Load("..//radio.json");
+	//m_genres->Load("..//radiogenres.json");
+	//m_channels->Load("..//radio.json");
 }
 
 RadioCompositeModel::~RadioCompositeModel()
 {
 }
 
+/*
 ChannelSourceModelPtr RadioCompositeModel::Channels()
 {
 	return m_channels;
@@ -32,5 +33,5 @@ GenreModelPtr RadioCompositeModel::Genres()
 {
 	return m_genres;
 }
-
+*/
 }

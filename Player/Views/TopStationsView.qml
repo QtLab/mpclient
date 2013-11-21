@@ -1,5 +1,43 @@
 import QtQuick 1.0
 
+
+Rectangle {
+	
+	property variant internalModel;
+
+		Text  {
+			id: topHeader
+			text: 'TOP' //currentChannel.Name
+			color: '#ff7e43'
+			font.pixelSize: 14
+			height: 30
+		}
+
+	Rectangle {
+
+
+
+		Column {
+			Repeater {
+				model: internalModel
+				Text  {
+					id: stationText
+					text: '  ' + Name + '  '
+					color: '#a2a2a2'
+					font.pixelSize: 12
+					height: 30
+
+					MouseArea  {
+						anchors.fill: parent
+						hoverEnabled: true
+					}
+				}
+			}
+		}
+	}
+}
+
+/*
 Rectangle {
 	
 	property variant internalModel;
@@ -42,8 +80,9 @@ Rectangle {
 		width:parent.width; height: 150
 		anchors.fill: parent
 		anchors.topMargin: 50
-		model: parent.model
+		model: parent.internalModel
 		delegate: channelDelegate
-		snapMode: ListView.SnapOneItem
+		snapMode: ListView.NoSnap
 	}
 }
+*/

@@ -102,6 +102,7 @@ public:
 	friend class TabPagesController;
 	friend class RadioCompositeModel;
 	friend class RadioPageController;
+	friend QAbstractListModel;
 
 	ChannelSourceList			m_channels;
 	GenreModel					m_genres;
