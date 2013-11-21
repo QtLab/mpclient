@@ -12,7 +12,8 @@ namespace mp {
 QString QmlFilePath(const QString& fileName)
 {
 #ifdef _DEBUG
-	static const QString pathTemplate("E:\\dev\\mpclient\\mpclient\\Player\\Views\\%0");
+	
+	static const QString pathTemplate("E:\\dev\\mp\\mpclient\\Player\\Views\\%0");
 	QString path = pathTemplate.arg(fileName);
 	
 #else

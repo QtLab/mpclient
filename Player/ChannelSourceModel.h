@@ -4,6 +4,7 @@
 #include <QMetaType>
 #include <QSharedPointer>
 #include <QAbstractListModel>
+#include <QDeclarativeListProperty>
 #include <QReadWriteLock>
 
 #include "GenreModel.h"
@@ -45,22 +46,25 @@ public:
 	GenreItemPtr Genre() const;
 	void SetGenre(const GenreItemPtr& genre);
 
-private:
+public:
 	QString					m_id;
 	QString					m_name;
 	QString					m_logo;
 	QString					m_url;
 	GenreItemPtr			m_genre;
 	QString					m_genreId;
+
 	Q_DISABLE_COPY(ChannelSource)
 };
 
 typedef QSharedPointer<ChannelSource> ChannelSourcePtr;
 typedef QList<ChannelSourcePtr> ChannelSourceList;
+typedef QDeclarativeListProperty<ChannelSource*> DeclarativeChannels;
 
 class ChannelSourceModel : public QAbstractListModel
 {
 	Q_OBJECT
+	//Q_PROPERTY(DeclarativeChannels Items READ DeclarativeItems CONSTANT)
 
 public:
 	enum ChannelSourceRoles
@@ -73,17 +77,17 @@ public:
 	};
 
 	ChannelSourceModel();
-	~ChannelSourceModel();
+	virtual ~ChannelSourceModel();
 
 	// Don't use in prod. It isn't thread-safe
-	const ChannelSourceList& Items() const;
+	//DeclarativeChannels DeclarativeItems() const;
+	ChannelSourceList Items() const;
 
 	ChannelSourcePtr FindById(const QString& id);
 
 	QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 	int rowCount(const QModelIndex &parent = QModelIndex()) const;
 
-private:
 	void Add(ChannelSourcePtr contact, bool notifiChanged = false);
 	void Load(const QString& filePath);
 	void SetGenres(const GenreModel& genres);
@@ -94,23 +98,26 @@ private:
 	void Parse(const QByteArray& json);
 	void Cleanup();
 
-private:
+public:
 	friend class TabPagesController;
 	friend class RadioCompositeModel;
 	friend class RadioPageController;
 
 	ChannelSourceList			m_channels;
 	GenreModel					m_genres;
-	mutable QReadWriteLock		m_lock;
+	//mutable QReadWriteLock		m_lock;
 
 	Q_DISABLE_COPY(ChannelSourceModel)
 };
 
-typedef QSharedPointer<ChannelSourceModel> ChannelSourceModelPtr;
+//typedef QSharedPointer<ChannelSourceModel> ChannelSourceModelPtr;
+
 //typedef ChannelSourceModel * ChannelSourceModelPtr;
 //Q_DECLARE_METATYPE(ChannelSourceModelPtr);
 //Q_DECLARE_METATYPE(ChannelSourcePtr);
-
 }
+
+Q_DECLARE_METATYPE(mp::ChannelSource);
+Q_DECLARE_METATYPE(mp::ChannelSourceModel);
 
 #endif

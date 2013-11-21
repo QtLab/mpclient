@@ -9,12 +9,16 @@ Rectangle {
 	//QML types also provide built-in property change 
 	//signals that are emitted whenever a property value changes
 
-	property string currentRadioId:""
+	property string currentRadioId:"64"
+	property string currentGenreId:"22"
+	property variant test:"22"
+
+	signal playRadio
 
 	// signals
-	signal playRadio(string id);
-	signal pauseRadio();
-	signal genreSelect(string id);
+	signal pauseRadio
+
+	signal genreChanged
 
 	LastStationsView {
 		id: lastStationsView
@@ -24,6 +28,7 @@ Rectangle {
 		anchors.leftMargin: 20
 		anchors.left: parent.left
 		anchors.top: genresView.bottom
+		internalModel: lastStations
 	}
 
 	TopStationsView {
@@ -34,14 +39,17 @@ Rectangle {
 		anchors.leftMargin: 20
 		anchors.left: parent.left
 		anchors.top: lastStationsView.bottom
+		internalModel: topStations
 	}
 
 	StationsView {
+		id: stationsView
 		width: 100
 		height: parent.height - 150
 		anchors.topMargin: 50
 		anchors.right: parent.right
 		anchors.top: genresView.bottom
+		internalModel: currentStations
 	}
 
 	GenresView {

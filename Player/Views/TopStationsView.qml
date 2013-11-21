@@ -1,6 +1,8 @@
 import QtQuick 1.0
 
 Rectangle {
+	
+	property variant internalModel;
 
 	Text  {
 		text: 'TOP'
@@ -36,11 +38,12 @@ Rectangle {
 	}
 
 	ListView {
-		id: channelsList
+		id: topChannelsList
 		width:parent.width; height: 150
 		anchors.fill: parent
 		anchors.topMargin: 50
-		model: radioChannels
+		model: parent.model
 		delegate: channelDelegate
+		snapMode: ListView.SnapOneItem
 	}
 }

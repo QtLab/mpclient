@@ -114,7 +114,7 @@ void UpdateModel::Parse(const QByteArray& json)
 			{
 				if(ComputeFileMD5(path) != file->MD5())
 				{
-					m_filedToUpdate.append(FileToUpdatePtr(file));
+					m_filedToUpdate.append(file);
 				}
 			}
 		}

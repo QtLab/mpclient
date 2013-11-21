@@ -47,14 +47,14 @@ signals:
 	void ProgressChanged(qint64 bytesReceived, qint64 bytesTotal);
 
 private:
-	bool					m_aborted;
-	bool					m_autoDelete;
-	QUrl					m_url;
-	QString					m_filePath;
-	QNetworkAccessManager*	m_manager;
-	QFile *					m_file;
-	QNetworkReply *			m_reply;
-	QVariant				m_data0;
+	bool						m_aborted;
+	bool						m_autoDelete;
+	QUrl						m_url;
+	QString						m_filePath;
+	QNetworkAccessManager*		m_manager;
+	QFile *						m_file;
+	QNetworkReply *				m_reply;
+	QVariant					m_data0;
 
 	Q_DISABLE_COPY(FileDownloader)
 };

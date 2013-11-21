@@ -3,30 +3,47 @@ import Cursor 1.0
 
 Rectangle {
 
-CursorShapeArea {
-	anchors.fill: parent
-	cursorShape: Qt.PointingHandCursor
+	property variant internalModel;
 
-	id: stationsView
+//CursorShapeArea {
+	//anchors.fill: parent
+	//cursorShape: Qt.PointingHandCursor
+
 	Component {
 		id: channelDelegate
 		Item {
 			
+
 			Rectangle { 
 				width: parent.width; height: parent.height
 
 				Row {
+
+					//MouseArea  {
+						//anchors.fill: parent
+						//hoverEnabled: true
+
 						Text  {
 							id: stationText
-							text: '  ' + Name + '  '
+							text: ' ' + Name + '  '
 							color: '#a2a2a2'
 							font.pixelSize: 12
+						}
 
 						MouseArea  {
+
+							onClicked: {
+								console.log("onClicked");
+								radioPageViewId.currentRadioId = Id;
+								
+								RadioPage.PlayCurrentRadio();
+							} 
+
 							anchors.fill: parent
 							hoverEnabled: true
-						}
-					}
+ 						}
+
+					//}
 				}
 			}
 			 
@@ -38,9 +55,9 @@ CursorShapeArea {
 		id: channelsList
 		width:parent.width; height: parent.height
 		anchors.fill: parent
-		model: radioChannels
 		delegate: channelDelegate
+		model: currentStations
 	}
 
-}
+//}
 }

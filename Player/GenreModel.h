@@ -47,7 +47,7 @@ public:
 	};
 
 	GenreModel();
-	~GenreModel();
+	virtual ~GenreModel();
 
 	// Don't use in prod. It isn't thread-safe
 	GenreItemList Items() const;
@@ -56,7 +56,6 @@ public:
 	QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 	int rowCount(const QModelIndex &parent = QModelIndex()) const;
 
-private:
 	void Add(GenreItemPtr contact, bool notifiChanged = false);
 	void Load(const QString& filePath);
 	//[
@@ -74,12 +73,11 @@ private:
 	friend class RadioPageController;
 
 	GenreItemList				m_genres;
-	mutable QReadWriteLock		m_lock;
-
-	Q_DISABLE_COPY(GenreModel)
+	//mutable QReadWriteLock		m_lock;
 };
 
 typedef QSharedPointer<GenreModel> GenreModelPtr;
+//Q_DECLARE_METATYPE(GenreModel);
 //typedef GenreModel * GenreModelPtr;
 //Q_DECLARE_METATYPE(GenreModelPtr);
 //Q_DECLARE_METATYPE(GenreItemPtr);

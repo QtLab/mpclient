@@ -94,7 +94,7 @@ void GenreModel::Parse(const QByteArray& json)
 
 	if(ok)
 	{
-		QWriteLocker locker(&m_lock);
+		//QWriteLocker locker(&m_lock);
 
 		QMap<QString, QVariant>::iterator i;
 
@@ -118,7 +118,7 @@ void GenreModel::Parse(const QByteArray& json)
 
 void GenreModel::Cleanup()
 {
-	QWriteLocker locker(&m_lock);
+	//QWriteLocker locker(&m_lock);
 	m_genres.clear();
 }
 
@@ -143,7 +143,7 @@ GenreItemPtr GenreModel::FindById(const QString& id)
 
 QVariant GenreModel::data(const QModelIndex & index, int role) const 
 {
-	QReadLocker locker(&m_lock);
+	//QReadLocker locker(&m_lock);
 
 	if (index.row() < 0 || index.row() > m_genres.count())
 		return QVariant();
@@ -166,10 +166,10 @@ QVariant GenreModel::data(const QModelIndex & index, int role) const
 
 int GenreModel::rowCount(const QModelIndex &parent) const
 {
-	if(m_lock.tryLockForRead())
+	//if(m_lock.tryLockForRead())
 	{
 		int count = m_genres.count();
-		m_lock.unlock();
+		//m_lock.unlock();
 		return count;
 	}
 

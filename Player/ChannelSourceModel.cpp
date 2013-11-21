@@ -8,8 +8,11 @@
 #include <QJson/Parser>
 #include <QJson/Serializer>
 #include <QJson/QObjectHelper>
+#include <QDeclarativeListProperty>
 
 namespace mp {
+
+
 
 ChannelSource::ChannelSource()
 {
@@ -81,12 +84,14 @@ void ChannelSource::SetGenre(const GenreItemPtr& genre)
 
 ChannelSourceModel::ChannelSourceModel()
 {
+	/*
 	QHash<int, QByteArray> roles;
 	roles[Name] = "Name";
 	roles[Id] = "Id";
 	roles[Logo] = "Logo";
 	roles[Url] = "Url";
 	setRoleNames(roles);
+	*/
 }
 
 ChannelSourceModel::~ChannelSourceModel() 
@@ -126,7 +131,10 @@ void ChannelSourceModel::Load(const QString& path)
 void ChannelSourceModel::SetGenres(const GenreModel& genres)
 {
 	m_genres.Cleanup();
-	m_genres.insertRows(0, genres.Items().count(), genres.index(0));
+
+	GenreItemList gernreList = genres.Items();
+
+	m_genres.insertRows(0, gernreList.count());
 }
 
 //[
@@ -143,7 +151,7 @@ void ChannelSourceModel::Parse(const QByteArray& json)
 
 	if(ok)
 	{
-		QWriteLocker locker(&m_lock);
+		//QWriteLocker locker(&m_lock);
 
 		QMap<QString, QVariant>::iterator i;
 
@@ -154,7 +162,11 @@ void ChannelSourceModel::Parse(const QByteArray& json)
 			QJson::QObjectHelper::qvariant2qobject(record.toMap(), channel);
 
 			GenreItemPtr genre = m_genres.FindById(channel->GenreId());
+
 			channel->SetGenre(genre);
+
+			if(!genre.isNull())
+				channel->SetGenreId(genre->Id());
 
 			// Convert to absolute path
 			channel->SetLogo(UrlModel::CreateCurrentDirUrl(channel->Logo()).ToUrl());
@@ -173,33 +185,48 @@ void ChannelSourceModel::Parse(const QByteArray& json)
 
 void ChannelSourceModel::Cleanup()
 {
-	QWriteLocker locker(&m_lock);
+	//QWriteLocker locker(&m_lock);
 	m_channels.clear();
 }
 
-const ChannelSourceList& ChannelSourceModel::Items() const
+/*
+DeclarativeChannels ChannelSourceModel::DeclarativeItems() const
+{
+	DeclarativeChannels channelsPointers;
+	foreach(ChannelSourcePtr channel, m_channels)
+	{
+		channelsPointers.append(channel.data());
+	}
+	
+	return DeclarativeChannels();//this, channelsPointers);
+}
+*/
+
+ChannelSourceList ChannelSourceModel::Items() const
 {
 	return m_channels;
 }
 
 ChannelSourcePtr ChannelSourceModel::FindById(const QString& id)
 {
-	QReadLocker locker(&m_lock);
+	//QReadLocker locker(&m_lock);
 
 	foreach(ChannelSourcePtr channel, m_channels)
 	{
 		if(channel->Id() == id)
 			return channel;
 	}
+
+	return ChannelSourcePtr();
 }
 
 QVariant ChannelSourceModel::data(const QModelIndex & index, int role) const 
 {
-	QReadLocker locker(&m_lock);
+	//QReadLocker locker(&m_lock);
 
-	if (index.row() < 0 || index.row() > m_channels.count())
+	//if (index.row() < 0 || index.row() > m_channels.count())
 		return QVariant();
-
+/*
 	const ChannelSourcePtr contact = m_channels.at(index.row());
 	
 	QVariant result;
@@ -220,17 +247,18 @@ QVariant ChannelSourceModel::data(const QModelIndex & index, int role) const
 	}
 
 	return result;
+	*/
 }
 
 int ChannelSourceModel::rowCount(const QModelIndex &parent) const
 {
-	if(m_lock.tryLockForRead())
+	//if(m_lock.tryLockForRead())
 	{
 		int count = m_channels.count();
-		m_lock.unlock();
+		//m_lock.unlock();
 		return count;
 	}
-	else
+	//else
 	{
 		return m_channels.count();
 	}
