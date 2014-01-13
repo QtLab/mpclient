@@ -4,9 +4,6 @@
 #include <QDir>
 #include <QHash>
 #include <QDebug>
-#include <QJson/Parser>
-#include <QJson/Serializer>
-#include <QJson/QObjectHelper>
 #include <QCryptographicHash>
 
 namespace mp {
@@ -52,87 +49,56 @@ void FileToUpdate::SetUrl(const QString& u)
 
 UpdateModel::UpdateModel()
 {
-	QHash<int, QByteArray> roles;
-	roles[FileName] = "FileName";
-	roles[MD5] = "MD5";
-	roles[Url] = "Url";
-	setRoleNames(roles);
 }
 
 UpdateModel::~UpdateModel() 
 {
 }
 
-void UpdateModel::Load(const QString& path)
-{
-	QFile file(path);
-	if(file.open(QIODevice::ReadOnly))
-	{
-		QByteArray arr = file.readAll();
-#ifdef _DEBUG
-		QString json = QString::fromAscii(arr.data(), arr.size());
-#endif
-		Parse(arr);
-	}
-	else
-	{
-		qDebug() << "UpdateModel::Load can't open file: " << path;
-	}
-}
 
 //[
 //{"m": "dfdgdfgg", "f": "ttt.config", "u": "http://yoururl"},
 //..
 //]
 
-void UpdateModel::Parse(const QByteArray& json)
+void UpdateModel::ParseJson(const QByteArray& json)
 {
-	QJson::Parser parser;
-	bool ok;
+	QJsonDocument d = QJsonDocument::fromJson(json);
+	QList<QVariant> list = d.toVariant().toList();
 
-	QVariantList result = parser.parse(json, &ok).toList();
+	const QMetaObject *metaObject = &FileToUpdate::staticMetaObject;
+	int count = metaObject->propertyCount();
 
-	if(ok)
+	foreach(QVariant record, list) 
 	{
-		QWriteLocker locker(&m_lock);
+		QSharedPointer<FileToUpdate> file(new FileToUpdate());
 
-		m_filedToUpdate.clear();
-		QMap<QString, QVariant>::iterator i;
+		QMap<QString, QVariant> map = record.toMap();
 
-		foreach(QVariant record, result) 
+		for (int i=0; i<count; ++i)
 		{
-			FileToUpdatePtr file(new FileToUpdate());
-
-			QJson::QObjectHelper::qvariant2qobject(record.toMap(), file.data());
-
-			QString path = QDir::current().filePath(file->FileName());
-			if(file->MD5() == "0")
+			QMetaProperty property = metaObject->property(i);
+			const char *name = property.name();
+			QVariant value = map[name];
+			file->setProperty(name, value);
+		}
+		
+		QString path = QDir::current().filePath(file->FileName());
+		if(file->MD5() == "0")
+		{
+			QFile::remove(path);
+		}
+		else
+		{
+			if(ComputeFileMD5(path) != file->MD5())
 			{
-				QFile::remove(path);
-			}
-			else
-			{
-				if(ComputeFileMD5(path) != file->MD5())
-				{
-					m_filedToUpdate.append(file);
-				}
+				Add(file);
 			}
 		}
-
-		if(!m_filedToUpdate.empty())
-			emit dataChanged(createIndex(0,0),createIndex(m_filedToUpdate.size(),0));
 	}
-	else
-	{
-		QString error = parser.errorString();
-		qDebug() << "UpdateModel::Parse error: " << error;
-	}
-}
 
-void UpdateModel::Cleanup()
-{
-	QWriteLocker locker(&m_lock);
-	m_filedToUpdate.clear();
+	if(!m_items.empty())
+		emit dataChanged(createIndex(0,0),createIndex(m_items.size(),0));
 }
 
 QString UpdateModel::ComputeFileMD5(const QString& filePath)
@@ -150,17 +116,15 @@ QString UpdateModel::ComputeFileMD5(const QString& filePath)
 
 FileToUpdateList UpdateModel::Items() const
 {
-	return m_filedToUpdate;
+	return m_items;
 }
 
 QVariant UpdateModel::data(const QModelIndex & index, int role) const 
 {
-	QReadLocker locker(&m_lock);
-
-	if (index.row() < 0 || index.row() > m_filedToUpdate.count())
+	if (index.row() < 0 || index.row() > m_items.count())
 		return QVariant();
 
-	const FileToUpdatePtr item = m_filedToUpdate.at(index.row());
+	const FileToUpdatePtr item = m_items.at(index.row());
 	
 	QVariant result;
 
@@ -181,16 +145,18 @@ QVariant UpdateModel::data(const QModelIndex & index, int role) const
 
 int UpdateModel::rowCount(const QModelIndex &parent) const
 {
-	if(m_lock.tryLockForRead())
-	{
-		int count = m_filedToUpdate.count();
-		m_lock.unlock();
-		return count;
-	}
-	else
-	{
-		return m_filedToUpdate.count();
-	}
+	//files to update
+	return m_items.count();
+}
+
+QHash<int, QByteArray>	UpdateModel::roleNames() const
+{
+	QHash<int, QByteArray> roles;
+	roles[FileName] = "FileName";
+	roles[MD5] = "MD5";
+	roles[Url] = "Url";
+
+	return roles;
 }
 
 }

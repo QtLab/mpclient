@@ -1,7 +1,7 @@
 #ifndef MP_APP_CONTROLLER_H
 #define MP_APP_CONTROLLER_H
 
-#include <QtGui/QApplication>
+#include <QApplication>
 #include <QtDeclarative/QDeclarativeView>
 
 namespace mp {

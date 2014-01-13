@@ -4,11 +4,7 @@
 #include <QDir>
 #include <QHash>
 #include <QDebug>
-#include <QJson/Parser>
-#include <QJson/Serializer>
-#include <QJson/QObjectHelper>
 #include <QCryptographicHash>
-
 
 namespace mp {
 
@@ -52,11 +48,6 @@ void TabModelItem::SetArguments(const QString& n)
 
 TabModel::TabModel()
 {
-	QHash<int, QByteArray> roles;
-	roles[Id] = "Id";
-	roles[Name] = "Name";
-	roles[Arguments] = "Args";
-	setRoleNames(roles);
 }
 
 TabModel::~TabModel()
@@ -106,6 +97,16 @@ int TabModel::rowCount(const QModelIndex &parent) const
 	}
 }
 
+QHash<int, QByteArray>	TabModel::roleNames() const
+{
+	QHash<int, QByteArray> roles;
+	roles[Id] = "Id";
+	roles[Name] = "Name";
+	roles[Arguments] = "Args";
+
+	return roles;
+}
+
 void TabModel::Add(TabModelItemPtr contact, bool notifiChanged)
 {
 }
@@ -117,7 +118,7 @@ void TabModel::Load(const QString& filePath)
 	{
 		QByteArray arr = file.readAll();
 #ifdef _DEBUG
-		QString json = QString::fromAscii(arr.data(), arr.size());
+		//QString json = QString::fromAscii(arr.data(), arr.size());
 #endif
 		Parse(arr);
 	}
@@ -130,6 +131,7 @@ void TabModel::Load(const QString& filePath)
 
 void TabModel::Parse(const QByteArray& json)
 {
+	/*
 	QJson::Parser parser;
 	bool ok;
 
@@ -159,6 +161,7 @@ void TabModel::Parse(const QByteArray& json)
 		QString error = parser.errorString();
 		qDebug() << "UpdateModel::Parse error: " << error;
 	}
+	*/
 }
 
 }

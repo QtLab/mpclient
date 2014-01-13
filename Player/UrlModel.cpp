@@ -24,29 +24,32 @@ UrlModel::~UrlModel()
 
 QString UrlModel::Domain() const
 {
-	return m_url.queryItemValue("domain");
+	//return m_url.queryItemValue("domain");
+
+	return "";
 }
 
 void UrlModel::SetDomain(const QString& domain)
 {
-	m_url.removeQueryItem("domain");
-	m_url.addQueryItem("domain", domain);
+	//m_url.removeQueryItem("domain");
+	//m_url.addQueryItem("domain", domain);
 }
 
 QString UrlModel::TrafferId() const
 {
-	return m_url.queryItemValue("tr");
+	//return m_url.queryItemValue("tr");
+	return "";
 }
 
 void UrlModel::SetTrafferId(const QString& id)
 {
-	m_url.removeQueryItem("tr");
-	m_url.addQueryItem("tr", id);
+	//m_url.removeQueryItem("tr");
+	//m_url.addQueryItem("tr", id);
 }
 
 void UrlModel::SetReqBodyRef(QByteArray * reqBody) 
 {  
-	m_reqBodyRef = reqBody; 
+	//m_reqBodyRef = reqBody; 
 }
 
 QByteArray* UrlModel::ReqBodyRef() const 

@@ -1,10 +1,7 @@
 #ifndef MP_GENRE_SOURCE_H
 #define MP_GENRE_SOURCE_H
 
-#include <QMetaType>
-#include <QSharedPointer>
-#include <QAbstractListModel>
-#include <QReadWriteLock>
+#include "BaseListModel.h"
 
 namespace mp {
 
@@ -33,7 +30,7 @@ private:
 typedef QSharedPointer<GenreItem> GenreItemPtr;
 typedef QList<GenreItemPtr> GenreItemList;
 
-class GenreModel : public QAbstractListModel
+class GenreModel : public BaseListModel<GenreItem>
 {
 	Q_OBJECT
 
@@ -55,25 +52,13 @@ public:
 
 	QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 	int rowCount(const QModelIndex &parent = QModelIndex()) const;
-
-	void Add(GenreItemPtr contact, bool notifiChanged = false);
-	void Load(const QString& filePath);
-	//[
-	//{"id": "1", "name": "PSYCHEDELIK"},
-	//{"Id": "1", "name": "PSYCHEDELIK2"}
-	//]
-	void Parse(const QByteArray& json);
-	
-	void Cleanup();
+	QHash<int, QByteArray>	roleNames() const;
 
 private:
 	friend class TabPagesController;
 	friend class ChannelSourceModel;
 	friend class RadioCompositeModel;
 	friend class RadioPageController;
-
-	GenreItemList				m_genres;
-	//mutable QReadWriteLock		m_lock;
 };
 
 typedef QSharedPointer<GenreModel> GenreModelPtr;

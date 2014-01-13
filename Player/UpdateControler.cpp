@@ -63,7 +63,7 @@ void UpdateControler::ProcessUpdateReply(QNetworkReply* reply)
 	{
 		bool restarRequired = false;
 
-		m_filesToUpdate.Parse(reply->readAll());
+		m_filesToUpdate.ParseJson(reply->readAll());
 
 		FileToUpdatePtr file;
 		foreach (file, m_filesToUpdate.Items())

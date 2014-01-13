@@ -5,13 +5,14 @@ Rectangle {
 	
 	property variant internalModel;
 
-		Text  {
-			id: topHeader
-			text: 'TOP' //currentChannel.Name
-			color: '#ff7e43'
-			font.pixelSize: 14
-			height: 30
-		}
+	Text  {
+		id: topHeader
+		text: 'TOP' //currentChannel.Name
+		color: '#ff7e43'
+		font.pixelSize: 14
+		height: 30
+		anchors.bottomMargin: 60
+	}
 
 	Rectangle {
 
@@ -28,6 +29,13 @@ Rectangle {
 					height: 30
 
 					MouseArea  {
+
+						onClicked: { 
+							console.log("onClicked Top started");
+							radioPageViewId.currentRadioId = Id;								
+							RadioPage.PlayCurrentRadio();
+							console.log(Id);
+						}
 						anchors.fill: parent
 						hoverEnabled: true
 					}

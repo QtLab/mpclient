@@ -4,8 +4,8 @@
     <LocalDebuggerCommand>$(SolutionDir)bin\$(ConfigurationName)\$(ProjectName).exe</LocalDebuggerCommand>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
     <LocalDebuggerWorkingDirectory>$(SolutionDir)bin\$(ConfigurationName)\</LocalDebuggerWorkingDirectory>
-    <QTDIR>E:\Qt\4.8.4</QTDIR>
-    <LocalDebuggerEnvironment>PATH=$(QTDIR)\bin%3b$(PATH)</LocalDebuggerEnvironment>
+    <QTDIR>C:\Qt\Qt5.2.0\5.2.0\msvc2012</QTDIR>
+    <LocalDebuggerEnvironment>PATH=$(QTDIR)\bin%3bC:\Qt\Qt5.2.0\5.2.0\msvc2012\bin%3b$(PATH)</LocalDebuggerEnvironment>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LocalDebuggerCommand>$(SolutionDir)\Bin\Debug\$(ProjectName).exe</LocalDebuggerCommand>
@@ -13,7 +13,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LocalDebuggerWorkingDirectory>$(SolutionDir)\Bin\Debug\</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <QTDIR>E:\Qt\4.8.4</QTDIR>
-    <LocalDebuggerEnvironment>PATH=$(QTDIR)\bin%3b$(PATH)</LocalDebuggerEnvironment>
+    <QTDIR>C:\Qt\Qt5.2.0\5.2.0\msvc2012</QTDIR>
+    <LocalDebuggerEnvironment>PATH=$(QTDIR)\bin%3bC:\Qt\Qt5.2.0\5.2.0\msvc2012\bin%3b$(PATH)</LocalDebuggerEnvironment>
   </PropertyGroup>
 </Project>

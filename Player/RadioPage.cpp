@@ -47,7 +47,8 @@ void RadioPage::Init()
 
 	//qmlRegisterType<RadioPage>("Cursor", 1, 0, "CursorShapeArea");
 	//qmlRegisterType<ChannelSourceModel>("Cursor", 1, 0, "CursorShapeArea");
-	//m_view->rootContext()->setContextProperty("RadioPage", this);
+	
+	m_view->rootContext()->setContextProperty("RadioPage", this);
 
 	QDeclarativeError err;
 	foreach(err, m_view->errors())

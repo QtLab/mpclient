@@ -1,11 +1,7 @@
 #ifndef MP_UPDATE_MODEL_H
 #define MP_UPDATE_MODEL_H
 
-#include <QMetaType>
-#include <QSharedPointer>
-#include <QAbstractListModel>
-#include <QReadWriteLock>
-#include <QObject>
+#include "BaseListModel.h"
 
 namespace mp {
 
@@ -40,7 +36,7 @@ private:
 typedef QSharedPointer<FileToUpdate> FileToUpdatePtr;
 typedef QList<FileToUpdatePtr> FileToUpdateList;
 
-class UpdateModel : public QAbstractListModel
+class UpdateModel : public BaseListModel<FileToUpdate>
 {
 	Q_OBJECT
 
@@ -65,23 +61,14 @@ public:
 
 	QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 	int rowCount(const QModelIndex &parent = QModelIndex()) const;
+	QHash<int, QByteArray>	roleNames() const;
 
 private:
-	void Add(FileToUpdatePtr contact, bool notifiChanged = false);
-	void Load(const QString& filePath);
-	//[
-	//{"m": "dfdgdfgg", "f": "ttt.config", "u": "http://yoururl"},
-	//..
-	//]
-	void Parse(const QByteArray& json);
-	void Cleanup();
+	void ParseJson(const QByteArray& json);
 	QString ComputeFileMD5(const QString& filePath);
 
 private:
 	friend class UpdateControler;
-
-	FileToUpdateList				m_filedToUpdate;
-	mutable QReadWriteLock			m_lock;
 
 	Q_DISABLE_COPY(UpdateModel)
 };

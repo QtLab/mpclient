@@ -398,63 +398,67 @@
     <CustomBuild Include="RadioPageController.h">
       <Filter>Controllers</Filter>
     </CustomBuild>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="NcFramelessHelper.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="WidgetUtils.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Log.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Path.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Views\RadioPageView.qml">
+    <CustomBuild Include="Views\GenresView.qml">
       <Filter>Views\QML</Filter>
-    </None>
-    <None Include="Views\TopStationsView.qml">
+    </CustomBuild>
+    <CustomBuild Include="Views\LastStationsView.qml">
       <Filter>Views\QML</Filter>
-    </None>
-    <None Include="Views\GenresView.qml">
+    </CustomBuild>
+    <CustomBuild Include="Views\Line.qml">
       <Filter>Views\QML</Filter>
-    </None>
-    <None Include="Views\Line.qml">
+    </CustomBuild>
+    <CustomBuild Include="Views\CurrentStationView.qml">
       <Filter>Views\QML</Filter>
-    </None>
-    <None Include="..\Bin\Debug\Styles\Player.qss">
+    </CustomBuild>
+    <CustomBuild Include="Views\RadioPageView.qml">
+      <Filter>Views\QML</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Views\StationsView.qml">
+      <Filter>Views\QML</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Views\TopStationsView.qml">
+      <Filter>Views\QML</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Views\TVPageView.qml">
+      <Filter>Views\QML</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\Bin\Debug\Styles\Player.qss">
       <Filter>Views\Styles</Filter>
-    </None>
-    <None Include="Views\StationsView.qml">
-      <Filter>Views\QML</Filter>
-    </None>
-    <None Include="Views\CurrentStationView.qml">
-      <Filter>Views\QML</Filter>
-    </None>
-    <None Include="Views\TVPageView.qml">
-      <Filter>Views\QML</Filter>
-    </None>
-    <None Include="..\Bin\tv.json">
-      <Filter>ConfigExamples\Debug</Filter>
-    </None>
-    <None Include="..\Bin\radio.json">
-      <Filter>ConfigExamples\Debug</Filter>
-    </None>
-    <None Include="..\Bin\radiogenres.json">
-      <Filter>ConfigExamples\Debug</Filter>
-    </None>
-    <None Include="..\Bin\tabs.json">
-      <Filter>ConfigExamples\Debug</Filter>
-    </None>
-    <None Include="..\Bin\Release\Html\VideoPlayer.html">
+    </CustomBuild>
+    <CustomBuild Include="..\Bin\Release\Html\VideoPlayer.html">
       <Filter>Views\Html</Filter>
-    </None>
-    <None Include="Views\LastStationsView.qml">
-      <Filter>Views\QML</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Log.h">
+      <Filter>Utils</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Path.h">
+      <Filter>Utils</Filter>
+    </CustomBuild>
+    <CustomBuild Include="WidgetUtils.h">
+      <Filter>Utils</Filter>
+    </CustomBuild>
+    <CustomBuild Include="NcFramelessHelper.h">
+      <Filter>Utils</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\Bin\radio.json">
+      <Filter>ConfigExamples\Debug</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\Bin\radiogenres.json">
+      <Filter>ConfigExamples\Debug</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\Bin\tabs.json">
+      <Filter>ConfigExamples\Debug</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\Bin\tv.json">
+      <Filter>ConfigExamples\Debug</Filter>
+    </CustomBuild>
+    <CustomBuild Include="BaseListModel.h">
+      <Filter>Model</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Bin\tvgenres.json">
+      <Filter>ConfigExamples\Debug</Filter>
     </None>
   </ItemGroup>
 </Project>

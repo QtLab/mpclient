@@ -4,9 +4,8 @@
 #include <QDir>
 #include <QHash>
 #include <QDebug>
-#include <QJson/Parser>
-#include <QJson/Serializer>
-#include <QJson/QObjectHelper>
+#include <QJsonDocument>
+#include <QMetaProperty>
 
 namespace mp {
 
@@ -40,97 +39,21 @@ void GenreItem::SetId(const QString& id)
 
 GenreModel::GenreModel()
 {
-	QHash<int, QByteArray> roles;
-	roles[Name] = "Name";
-	roles[Id] = "Id";
-	setRoleNames(roles);
 }
 
 GenreModel::~GenreModel() 
 {
 }
 
-void GenreModel::Add(GenreItemPtr channel, bool notifiChanged)
-{
-	beginInsertRows(QModelIndex(), m_genres.length(), m_genres.length());
-	m_genres.append(channel);
-	endInsertRows();
-
-	if(notifiChanged)
-	{
-		// notify view
-		emit dataChanged(createIndex(0,0),createIndex(m_genres.size(),0));
-	}
-}
-
-void GenreModel::Load(const QString& path)
-{
-	QFile file(path);
-	if(file.open(QIODevice::ReadOnly))
-	{
-		QByteArray arr = file.readAll();
-#ifdef _DEBUG
-		QString json = QString::fromAscii(arr.data(), arr.size());
-#endif
-		Parse(arr);
-	}
-	else
-	{
-		qDebug() << "GenreModel::Load can't open file: " << path;
-	}
-}
-
-//[
-//{"id": "1", "name": "PSYCHEDELIK"},
-//{"Id": "1", "name": "PSYCHEDELIK2"}
-//]
-
-void GenreModel::Parse(const QByteArray& json)
-{
-	QJson::Parser parser;
-	bool ok;
-
-	QVariantList result = parser.parse(json, &ok).toList();
-
-	if(ok)
-	{
-		//QWriteLocker locker(&m_lock);
-
-		QMap<QString, QVariant>::iterator i;
-
-		foreach(QVariant record, result) 
-		{
-			GenreItem * genre = new GenreItem();
-
-			QJson::QObjectHelper::qvariant2qobject(record.toMap(), genre);
-			Add(GenreItemPtr(genre));
-		}
-
-		if(!m_genres.empty())
-			emit dataChanged(createIndex(0,0),createIndex(m_genres.size(),0));
-	}
-	else
-	{
-		QString error = parser.errorString();
-		qDebug() << "GenreModel::Parse error: " << error;
-	}
-}
-
-void GenreModel::Cleanup()
-{
-	//QWriteLocker locker(&m_lock);
-	m_genres.clear();
-}
-
 GenreItemList GenreModel::Items() const
 {
-	return m_genres;
+	return m_items;
 }
 
 GenreItemPtr GenreModel::FindById(const QString& id)
 {
 	GenreItemPtr genre;
-	foreach(genre, m_genres)
+	foreach(genre, m_items)
 	{
 		if(genre->Id() == id)
 		{
@@ -145,10 +68,10 @@ QVariant GenreModel::data(const QModelIndex & index, int role) const
 {
 	//QReadLocker locker(&m_lock);
 
-	if (index.row() < 0 || index.row() > m_genres.count())
+	if (index.row() < 0 || index.row() > m_items.count())
 		return QVariant();
 
-	const GenreItemPtr contact = m_genres.at(index.row());
+	const GenreItemPtr contact = m_items.at(index.row());
 	
 	QVariant result;
 
@@ -168,12 +91,21 @@ int GenreModel::rowCount(const QModelIndex &parent) const
 {
 	//if(m_lock.tryLockForRead())
 	{
-		int count = m_genres.count();
+		int count = m_items.count();
 		//m_lock.unlock();
 		return count;
 	}
 
-	return m_genres.count();
+	return m_items.count();
+}
+
+QHash<int, QByteArray>	GenreModel::roleNames() const
+{
+	QHash<int, QByteArray> roles;
+	roles[Name] = "Name";
+	roles[Id] = "Id";
+
+	return roles;
 }
 
 }

@@ -5,14 +5,9 @@
 #include <QDir>
 #include <QHash>
 #include <QDebug>
-#include <QJson/Parser>
-#include <QJson/Serializer>
-#include <QJson/QObjectHelper>
 #include <QDeclarativeListProperty>
 
 namespace mp {
-
-
 
 ChannelSource::ChannelSource()
 {
@@ -84,46 +79,10 @@ void ChannelSource::SetGenre(const GenreItemPtr& genre)
 
 ChannelSourceModel::ChannelSourceModel()
 {
-	QHash<int, QByteArray> roles;
-	roles[Name] = "Name";
-	roles[Id] = "Id";
-	roles[Logo] = "Logo";
-	roles[Url] = "Url";
-	setRoleNames(roles);
 }
 
 ChannelSourceModel::~ChannelSourceModel() 
 {
-}
-
-void ChannelSourceModel::Add(ChannelSourcePtr channel, bool notifiChanged)
-{
-	beginInsertRows(QModelIndex(), m_channels.length(), m_channels.length());
-	m_channels.append(channel);
-	endInsertRows();
-
-	if(notifiChanged)
-	{
-		//говорим вью, что данные изменились
-		emit dataChanged(createIndex(0,0),createIndex(m_channels.size(),0));
-	}
-}
-
-void ChannelSourceModel::Load(const QString& path)
-{
-	QFile file(path);
-	if(file.open(QIODevice::ReadOnly))
-	{
-		QByteArray arr = file.readAll();
-#ifdef _DEBUG
-		QString json = QString::fromAscii(arr.data(), arr.size());
-#endif
-		Parse(arr);
-	}
-	else
-	{
-		qDebug() << "ChannelSourceModel::Load can't open file: " << path;
-	}
 }
 
 void ChannelSourceModel::SetGenres(const GenreModel& genres)
@@ -133,58 +92,6 @@ void ChannelSourceModel::SetGenres(const GenreModel& genres)
 	GenreItemList gernreList = genres.Items();
 
 	m_genres.insertRows(0, gernreList.count());
-}
-
-//[
-//{"id": "1", "name": "PSYCHEDELIK", "logo": "", "url": "http://88.191.104.69:8002/"},
-//{"Id": "1", "name": "PSYCHEDELIK2", "logo": "", "url": "http://88.191.104.69:8002/"}
-//]
-
-void ChannelSourceModel::Parse(const QByteArray& json)
-{
-	QJson::Parser parser;
-	bool ok;
-
-	QVariantList result = parser.parse(json, &ok).toList();
-
-	if(ok)
-	{
-		//QWriteLocker locker(&m_lock);
-
-		QMap<QString, QVariant>::iterator i;
-
-		foreach(QVariant record, result) 
-		{
-			ChannelSource * channel = new ChannelSource();
-
-			QJson::QObjectHelper::qvariant2qobject(record.toMap(), channel);
-
-			GenreItemPtr genre = m_genres.FindById(channel->GenreId());
-
-			channel->SetGenre(genre);
-
-			if(!genre.isNull())
-				channel->SetGenreId(genre->Id());
-
-			// Convert to absolute path
-			channel->SetLogo(UrlModel::CreateCurrentDirUrl(channel->Logo()).ToUrl());
-			Add(ChannelSourcePtr(channel));
-		}
-
-		if(!m_channels.empty())
-			emit dataChanged(createIndex(0,0),createIndex(m_channels.size(),0));
-	}
-	else
-	{
-		QString error = parser.errorString();
-		qDebug() << "ChannelSourceModel::Parse error: " << error;
-	}
-}
-
-void ChannelSourceModel::Cleanup()
-{
-	//QWriteLocker locker(&m_lock);
-	m_channels.clear();
 }
 
 /*
@@ -202,14 +109,14 @@ DeclarativeChannels ChannelSourceModel::DeclarativeItems() const
 
 ChannelSourceList ChannelSourceModel::Items() const
 {
-	return m_channels;
+	return m_items;
 }
 
 ChannelSourcePtr ChannelSourceModel::FindById(const QString& id)
 {
 	//QReadLocker locker(&m_lock);
 
-	foreach(ChannelSourcePtr channel, m_channels)
+	foreach(ChannelSourcePtr channel, m_items)
 	{
 		if(channel->Id() == id)
 			return channel;
@@ -222,10 +129,10 @@ QVariant ChannelSourceModel::data(const QModelIndex & index, int role) const
 {
 	//QReadLocker locker(&m_lock);
 
-	if (index.row() < 0 || index.row() > m_channels.count())
+	if (index.row() < 0 || index.row() > m_items.count())
 		return QVariant();
 
-	const ChannelSourcePtr channel = m_channels.at(index.row());
+	const ChannelSourcePtr channel = m_items.at(index.row());
 	
 	QVariant result;
 
@@ -251,14 +158,25 @@ int ChannelSourceModel::rowCount(const QModelIndex &parent) const
 {
 	//if(m_lock.tryLockForRead())
 	{
-		int count = m_channels.count();
+		int count = m_items.count();
 		//m_lock.unlock();
 		return count;
 	}
 	//else
 	{
-		return m_channels.count();
+		return m_items.count();
 	}
+}
+
+QHash<int, QByteArray>	ChannelSourceModel::roleNames() const
+{
+	QHash<int, QByteArray> roles;
+	roles[Name] = "Name";
+	roles[Id] = "Id";
+	roles[Logo] = "Logo";
+	roles[Url] = "Url";
+
+	return roles;
 }
 
 }

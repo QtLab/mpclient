@@ -130,9 +130,17 @@ void AudioStreamController::Play()
 		std::string url = m_currentUrl.toStdString();
 		BASS_StreamFree(m_bassChannel);
 		m_bassChannel = BASS_StreamCreateURL(url.c_str(), 0, BASS_STREAM_BLOCK|BASS_STREAM_STATUS|BASS_STREAM_AUTOFREE, StatusProc, NULL); // open URL
-		BASS_ChannelPlay(m_bassChannel,FALSE);
-		ProcessMeadata();
-		m_metadataTimer.start();
+
+		if(m_bassChannel)
+		{
+			BASS_ChannelPlay(m_bassChannel,FALSE);
+			ProcessMeadata();
+			m_metadataTimer.start();
+		}
+		else
+		{
+			qDebug() << "BASS_Init: can't initialize device, error code: " << BASS_ErrorGetCode();
+		}
 	}
 }
 

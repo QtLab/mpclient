@@ -1,6 +1,7 @@
 #ifndef MP_URL_MODEL_H
 #define MP_URL_MODEL_H
 
+#include <QObject>
 #include <QMetaType>
 #include <QUrl>
 #include <QString>
@@ -27,7 +28,11 @@ public:
 
 	QString TrafferId() const;
 	void SetTrafferId(const QString& id);
-	
+
+	//TODO:
+	//QString TrafferId() const;
+	//void SetTrafferId(const QString& id);
+
 	void SetReqBodyRef(QByteArray * reqBody);
 	QByteArray* ReqBodyRef() const;
 

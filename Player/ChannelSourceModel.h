@@ -1,16 +1,9 @@
 #ifndef MP_CHANNEL_SOURCE_H
 #define MP_CHANNEL_SOURCE_H
 
-#include <QMetaType>
-#include <QSharedPointer>
-#include <QAbstractListModel>
-#include <QDeclarativeListProperty>
-#include <QReadWriteLock>
-
 #include "GenreModel.h"
 
 namespace mp {
-
 
 class ChannelSource : public QObject
 {
@@ -61,7 +54,7 @@ typedef QSharedPointer<ChannelSource> ChannelSourcePtr;
 typedef QList<ChannelSourcePtr> ChannelSourceList;
 typedef QDeclarativeListProperty<ChannelSource*> DeclarativeChannels;
 
-class ChannelSourceModel : public QAbstractListModel
+class ChannelSourceModel : public BaseListModel<ChannelSource>
 {
 	Q_OBJECT
 	//Q_PROPERTY(DeclarativeChannels Items READ DeclarativeItems CONSTANT)
@@ -87,16 +80,9 @@ public:
 
 	QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 	int rowCount(const QModelIndex &parent = QModelIndex()) const;
+	QHash<int, QByteArray>	roleNames() const;
 
-	void Add(ChannelSourcePtr contact, bool notifiChanged = false);
-	void Load(const QString& filePath);
 	void SetGenres(const GenreModel& genres);
-	//[
-	//{"id": "1", "name": "PSYCHEDELIK", "logo": "", "url": "http://88.191.104.69:8002/"},
-	//{"Id": "1", "name": "PSYCHEDELIK2", "logo": "", "url": "http://88.191.104.69:8002/"}
-	//]
-	void Parse(const QByteArray& json);
-	void Cleanup();
 
 public:
 	friend class TabPagesController;
@@ -104,9 +90,7 @@ public:
 	friend class RadioPageController;
 	friend QAbstractListModel;
 
-	ChannelSourceList			m_channels;
 	GenreModel					m_genres;
-	//mutable QReadWriteLock		m_lock;
 
 	Q_DISABLE_COPY(ChannelSourceModel)
 };
