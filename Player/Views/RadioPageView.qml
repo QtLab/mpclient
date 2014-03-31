@@ -1,4 +1,4 @@
-import QtQuick 1.0
+import QtQuick 2.0
 
 Rectangle {
 	id: radioPageViewId;
@@ -8,6 +8,8 @@ Rectangle {
 
 	//QML types also provide built-in property change 
 	//signals that are emitted whenever a property value changes
+
+	FontLoader { id: openSansLight; source: "txdJ2vM9.ttf"}
 
 	property string currentRadioId:"64"
 	property string currentGenreId:"22"

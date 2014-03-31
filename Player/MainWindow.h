@@ -13,6 +13,8 @@ namespace mp {
 
 // Forward declaration
 class Titlebar;
+class TabWidget;
+class TabPage;
 
 class MainWindow : public QMainWindow
 {
@@ -23,14 +25,16 @@ public:
 	~MainWindow();
 
 	Titlebar * TitleBar() const;
-	void AddWidget(QWidget* widget);
+	TabWidget * Tabs() const;
 
-protected:
-	bool eventFilter(QObject *obj, QEvent *ev);
+	void AddPage(TabPage * page);
+
+	void closeEvent(QCloseEvent *evt);
 
 private:
 	QVBoxLayout *			m_layout;
 	Titlebar*				m_titleBar;
+	TabWidget *				m_tabWidget;
 };
 
 }

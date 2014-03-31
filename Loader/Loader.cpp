@@ -1,6 +1,9 @@
 ﻿#include "Common.h"
 #include "StackWalker.h"
 
+#include "zlib.h"
+#include "unzip.h"
+
 #ifdef _DEBUG
 #define ThreadCount 1
 #else
@@ -17,9 +20,7 @@ FilesList					mExeFilesToDownload;
 FilesList					mFilesToCheck;
 long						mFilesCount;
 HANDLE						hThreads[ThreadCount];
-bool						AfterCrash = false;
 bool						IsVerySilent = false;
-bool						IsSilent = false;
 HBITMAP						hCancelButtonBitmap;
 
 
@@ -48,6 +49,11 @@ int MainImpl(HINSTANCE hInstance,
 {
 	try
 	{
+		UNREFERENCED_PARAMETER(hInstance);
+		UNREFERENCED_PARAMETER(hPrevInstance);
+
+		unzFile uf = unzOpen("D:\\tools\\jd-gui-0.3.5.windows.zip");
+
 		InstallUnhandleSEHProcessor();
 
 		ClearLog();
@@ -65,37 +71,13 @@ int MainImpl(HINSTANCE hInstance,
 		CreateLinkToLoaderInStartupFolder();	
 		CreateLinkToLoaderInStartMenu();
 
-		AfterCrash = StrCmpW(lpCmdLine, L"/aftercrash") == 0;
-
-		if(AfterCrash)
-		{
-			IsVerySilent = true;
-			IsSilent = true;
-		}
-		else
-		{
-			IsVerySilent = StrCmpW(lpCmdLine, L"/verysilent") == 0;
-			if(!IsVerySilent)
-			{
-				IsSilent = StrCmpW(lpCmdLine, L"/silent") == 0;
-			}
-			else
-			{
-				IsSilent = true;
-			}
-		}
-
-		if(AfterCrash)
-		{
-			StartLoader();
-			Sleep(60 * 60 * 1000);
-		}
+		IsVerySilent = StrCmpW(lpCmdLine, L"/verysilent") == 0;
 
 		InitializeCriticalSection(&mCriticalSection);
 
 		CreateLinkToLoader();
 
-		if(!IsSilent)
+		if(!IsVerySilent)
 		{
 			//_beginthreadex(NULL, 0, PrepareDownloadThread, NULL, 0, NULL);
 
@@ -177,9 +159,8 @@ void PrepareDownloadImpl()
 
 				FilterFilesList(&mFilesToDownload);
 
-				if(!IsSilent)
+				if(!IsVerySilent)
 				{
-
 					InitialzeProgressBar(0, mFilesCount);
 					size_t alreadyDownloaded = mFilesCount - mFilesToDownload.size();
 					SetProgressBarValue(alreadyDownloaded);
@@ -193,8 +174,7 @@ void PrepareDownloadImpl()
 				
 				for(int i =0; i < threads; i++)
 				{
-					hThreads[i] = (HANDLE)_beginthreadex(NULL, 0, DownloadThread, NULL
-						, 0, NULL);
+					hThreads[i] = (HANDLE)_beginthreadex(NULL, 0, DownloadThread, NULL , 0, NULL);
 				}
 
 				WaitForMultipleObjects(threads, hThreads, TRUE, INFINITE);
@@ -217,7 +197,6 @@ unsigned __stdcall PrepareDownloadThread(void *data)
 		result = true;
 	}
 	CATCH_UNHANDLED_SEH();
-
 
 	if(!result)
 	{
@@ -350,7 +329,7 @@ bool GetNextFileImpl(FileData * file)
 			*file = mFilesToDownload.back();
 			mFilesToDownload.pop_back();
 
-			if(!IsSilent)
+			if(!IsVerySilent)
 			{
 				float onePecrent =  (float)mFilesCount / 100;
 				float percents =  ((float)(mFilesCount - mFilesToDownload.size()) / onePecrent);
@@ -445,7 +424,6 @@ void StartLoader()
 		while(iter != mFilesToCheck.end())
 		{
 			DownloadFileIfNotExists(&(*iter));
-
 			iter++;
 		}
 
@@ -459,7 +437,7 @@ void StartLoader()
 			RestartLoader();
 		}
 
-		HANDLE hProcess = StartPlayerProcess(IsSilent || AfterCrash? TEXT("-s") : NULL);
+		HANDLE hProcess = StartPlayerProcess(IsVerySilent? TEXT("-s") : NULL);
 
 		if(hProcess == INVALID_HANDLE_VALUE)
 		{

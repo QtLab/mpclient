@@ -83,7 +83,6 @@
     <ClInclude Include="StackWalker.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DateTime.cpp" />
     <ClCompile Include="FileIO.cpp" />
     <ClCompile Include="FlashPlayerInstaller.cpp" />
     <ClCompile Include="WinInet.cpp" />

@@ -2,6 +2,7 @@
 #define MP_UPDATE_MODEL_H
 
 #include "BaseListModel.h"
+#include "Prerequirements.h"
 
 namespace mp {
 
@@ -32,10 +33,6 @@ private:
 	Q_DISABLE_COPY(FileToUpdate)
 };
 
-
-typedef QSharedPointer<FileToUpdate> FileToUpdatePtr;
-typedef QList<FileToUpdatePtr> FileToUpdateList;
-
 class UpdateModel : public BaseListModel<FileToUpdate>
 {
 	Q_OBJECT
@@ -58,6 +55,7 @@ public:
 	// s = qrecap_model->data(idx).toString();
      //}
 	FileToUpdateList Items() const;
+	void Remove(FileToUpdatePtr fileInfo);
 
 	QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 	int rowCount(const QModelIndex &parent = QModelIndex()) const;
@@ -68,14 +66,9 @@ private:
 	QString ComputeFileMD5(const QString& filePath);
 
 private:
-	friend class UpdateControler;
-
+	friend class UpdateController;
 	Q_DISABLE_COPY(UpdateModel)
 };
-
-typedef UpdateModel * UpdateModelPtr;
-//Q_DECLARE_METATYPE(UpdateModelPtr);
-//Q_DECLARE_METATYPE(FileToUpdatePtr);
 
 }
 

@@ -98,7 +98,7 @@ void UpdateModel::ParseJson(const QByteArray& json)
 	}
 
 	if(!m_items.empty())
-		emit dataChanged(createIndex(0,0),createIndex(m_items.size(),0));
+		emit dataChanged(createIndex(0,0), createIndex(m_items.size(), 0));
 }
 
 QString UpdateModel::ComputeFileMD5(const QString& filePath)
@@ -117,6 +117,17 @@ QString UpdateModel::ComputeFileMD5(const QString& filePath)
 FileToUpdateList UpdateModel::Items() const
 {
 	return m_items;
+}
+
+void UpdateModel::Remove(FileToUpdatePtr fileInfo)
+{
+	int index = m_items.indexOf(fileInfo);
+	if(index > -1)
+	{
+		m_items.removeAt(index);
+	}
+
+	emit dataChanged(createIndex(0,0), createIndex(m_items.size(), 0));
 }
 
 QVariant UpdateModel::data(const QModelIndex & index, int role) const 

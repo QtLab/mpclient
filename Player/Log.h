@@ -5,7 +5,7 @@
 
 namespace mp {
 
-void Log(QtMsgType type, const char *msg);
+void Log(QtMsgType type, const QMessageLogContext &, const QString & str);
 
 }
 

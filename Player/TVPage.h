@@ -30,9 +30,7 @@ public:
 	// Languege changed
 	virtual void RetranslateUI();
 
-	// Channels model was updated
-	virtual void ChannelSourceModelUpdated(ChannelSourceModel* channels);
-	virtual void GenreModelUpdated(GenreModel* channels);
+	QString Name() const;
 
 private:
 	WebView *		m_view;

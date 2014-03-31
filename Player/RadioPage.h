@@ -3,7 +3,7 @@
 
 #include "TabPage.h"
 
-class QDeclarativeView;
+class QQuickView;
 
 namespace mp {
 
@@ -22,13 +22,15 @@ public:
 	void Init();
 
 	// User leave the page
-	virtual void Enter();
+	void Enter();
 
 	// User leave the page
-	virtual bool Leave();
+	bool Leave();
 
 	// Languege changed
-	virtual void RetranslateUI();
+	void RetranslateUI();
+
+	QString Name() const;
 
 	// Connect event to declarative QML view
 	void Connect(const char* signal, QObject* reciever, const char* slot);
@@ -57,7 +59,7 @@ signals:
 
 private:
 	// QML view
-	QDeclarativeView *		m_view;
+	QQuickView *				m_view;
 };
 
 

@@ -10,6 +10,7 @@ class QMouseEvent;
 namespace mp {
 
 class ChannelMetadata;
+class LinkButton;
 
 class Titlebar : public QWidget
 {
@@ -24,20 +25,20 @@ private:
 	
 	void changeEvent(QEvent *event);
 	void mouseMoveEvent(QMouseEvent *evt);
-	void mouseDoubleClickEvent(QMouseEvent *evt);
 
-public slots:
-	void SwitchScreenMode();
+private slots:
+	void CloseClicked();
+	void MinimizeClicked();
 	void MetadataUpdated(const ChannelMetadata& metadata);
 
 private:
-	QWidget	*					m_parent;
-	QPoint						m_cursorPosition;
-	QHBoxLayout *				m_layout;
-	QLabel *					m_logo;
+	QWidget	*						m_parent;
+	QPoint							m_cursorPosition;
+	QHBoxLayout *					m_layout;
+	QLabel *						m_logo;
 
-	QLabel *					m_minimizeLnk;
-	QLabel *					m_closeLnk;
+	LinkButton *					m_minimizeLnk;
+	LinkButton *					m_closeLnk;
 };
 
 }

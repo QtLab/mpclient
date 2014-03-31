@@ -8,7 +8,7 @@
 
 namespace mp {
 
-void Log(QtMsgType type, const char *msg)
+void Log(QtMsgType type, const QMessageLogContext &, const QString & msg)
 {
 	static const QString logMessageTemplate("%0: %1");
 

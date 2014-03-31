@@ -33,17 +33,8 @@
     <Filter Include="Utils">
       <UniqueIdentifier>{4283fae7-ac46-462c-9d7c-ad42869ab8d3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Views\QML">
-      <UniqueIdentifier>{11968bc8-3fa1-4015-a62f-d65899212b2b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Views\Widgets">
       <UniqueIdentifier>{2480e685-5562-4c68-8758-922847712336}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Views\Dialogs">
-      <UniqueIdentifier>{05c5a248-8f54-4e04-99c0-b89f5ab0299c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Views\AutoClicks">
-      <UniqueIdentifier>{15ac1937-cd16-46ba-952a-36e27357d0eb}</UniqueIdentifier>
     </Filter>
     <Filter Include="ConfigExamples">
       <UniqueIdentifier>{665bc4aa-4363-4b74-8202-c2230591ca2e}</UniqueIdentifier>
@@ -53,6 +44,21 @@
     </Filter>
     <Filter Include="ConfigExamples\Debug">
       <UniqueIdentifier>{577ac111-8dc7-402b-baf5-076162019f45}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Views\SystemTray">
+      <UniqueIdentifier>{57e35ca6-e664-4b56-85db-787aac19f8ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Views\Pages">
+      <UniqueIdentifier>{57246f38-cdd2-441e-a652-60e594bf513e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Views\QML">
+      <UniqueIdentifier>{11968bc8-3fa1-4015-a62f-d65899212b2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Audio">
+      <UniqueIdentifier>{90b9e824-c8f5-4ecc-ad36-134c9d501557}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network">
+      <UniqueIdentifier>{1448e3cb-8bc0-4a3f-9a94-4843486bf460}</UniqueIdentifier>
     </Filter>
     <Filter Include="Views\Html">
       <UniqueIdentifier>{eebaa700-66c3-4c51-a1dc-e4905e6e4219}</UniqueIdentifier>
@@ -90,29 +96,11 @@
     <ClCompile Include="GeneratedFiles\Release\moc_TabPage.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="MainWindow.cpp">
-      <Filter>Views\Dialogs</Filter>
-    </ClCompile>
-    <ClCompile Include="AppController.cpp">
-      <Filter>Controllers</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_AppController.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_AppController.cpp">
       <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="TVPage.cpp">
-      <Filter>Views\Widgets</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_TVPage.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_TVPage.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="RadioPage.cpp">
-      <Filter>Views\Widgets</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_RadioPage.cpp">
       <Filter>Generated Files\Debug</Filter>
@@ -129,9 +117,6 @@
     <ClCompile Include="GeneratedFiles\Release\moc_Titlebar.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="TabPagesController.cpp">
-      <Filter>Controllers</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_ChannelSourceModel.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
@@ -147,58 +132,13 @@
     <ClCompile Include="WidgetUtils.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
-    <ClCompile Include="CheatController.cpp">
-      <Filter>Controllers</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_CheatController.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_CheatController.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="IdleInputController.cpp">
-      <Filter>Controllers</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_IdleInputController.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_IdleInputController.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="DefaultBrowserController.cpp">
-      <Filter>Controllers</Filter>
-    </ClCompile>
     <ClCompile Include="Log.cpp">
       <Filter>Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="UpdateControler.cpp">
-      <Filter>Controllers</Filter>
-    </ClCompile>
-    <ClCompile Include="DownlaodController.cpp">
-      <Filter>Controllers</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_DownlaodController.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_DownlaodController.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="FileDownloader.cpp">
-      <Filter>Controllers</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_FileDownloader.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_FileDownloader.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="UrlModel.cpp">
-      <Filter>Model</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_UrlModel.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_UrlModel.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_ChannelMetadataModel.cpp">
@@ -216,15 +156,6 @@
     <ClCompile Include="GeneratedFiles\Release\moc_GenreModel.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_AudioStreamController.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_AudioStreamController.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="AudioStreamController.cpp">
-      <Filter>Controllers</Filter>
-    </ClCompile>
     <ClCompile Include="UpdateModel.cpp">
       <Filter>Model</Filter>
     </ClCompile>
@@ -232,12 +163,6 @@
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_UpdateModel.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_UpdateControler.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_UpdateControler.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
     <ClCompile Include="Path.cpp">
@@ -252,33 +177,6 @@
     <ClCompile Include="GeneratedFiles\Release\moc_LinkButton.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="MultiEditDialog.cpp">
-      <Filter>Views\Dialogs</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_MultiEditDialog.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_MultiEditDialog.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="TabModel.cpp">
-      <Filter>Model</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_TabModel.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_TabModel.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="RadioCompositeModel.cpp">
-      <Filter>Model</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_RadioCompositeModel.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_RadioCompositeModel.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
     <ClCompile Include="WebView.cpp">
       <Filter>Views\Widgets</Filter>
     </ClCompile>
@@ -288,29 +186,92 @@
     <ClCompile Include="GeneratedFiles\Release\moc_WebView.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_QsltCursorShapeArea.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_QsltCursorShapeArea.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="QsltCursorShapeArea.cpp">
-      <Filter>Views\Widgets</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_TabPagesController.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_TabPagesController.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="RadioPageController.cpp">
-      <Filter>Controllers</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_RadioPageController.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_RadioPageController.cpp">
       <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_RequestModel.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_RequestModel.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="RequestModel.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_SystemTray.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_SystemTray.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="SystemTray.cpp">
+      <Filter>Views\SystemTray</Filter>
+    </ClCompile>
+    <ClCompile Include="SystemTrayContextMenu.cpp">
+      <Filter>Views\SystemTray</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_SystemTrayContextMenu.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_SystemTrayContextMenu.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="AppController.cpp">
+      <Filter>Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="MainWindow.cpp">
+      <Filter>Views</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_AudioStream.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_AudioStream.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioStream.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="FileDownloader.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_DownlaodManager.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_DownlaodManager.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="DownlaodManager.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_UpdateController.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_UpdateController.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="UpdateController.cpp">
+      <Filter>Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="DefaultBrowser.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="RadioPage.cpp">
+      <Filter>Views\Pages</Filter>
+    </ClCompile>
+    <ClCompile Include="RadioPageController.cpp">
+      <Filter>Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_UserIdle.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_UserIdle.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="UserIdle.cpp">
+      <Filter>Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -323,18 +284,6 @@
     <CustomBuild Include="TabPage.h">
       <Filter>Views\Widgets</Filter>
     </CustomBuild>
-    <CustomBuild Include="MainWindow.h">
-      <Filter>Views\Dialogs</Filter>
-    </CustomBuild>
-    <CustomBuild Include="AppController.h">
-      <Filter>Controllers</Filter>
-    </CustomBuild>
-    <CustomBuild Include="TVPage.h">
-      <Filter>Views\Widgets</Filter>
-    </CustomBuild>
-    <CustomBuild Include="RadioPage.h">
-      <Filter>Views\Widgets</Filter>
-    </CustomBuild>
     <CustomBuild Include="Titlebar.h">
       <Filter>Views\Widgets</Filter>
     </CustomBuild>
@@ -344,32 +293,8 @@
     <CustomBuild Include="ChannelMetadataModel.h">
       <Filter>Model</Filter>
     </CustomBuild>
-    <CustomBuild Include="CheatController.h">
-      <Filter>Controllers</Filter>
-    </CustomBuild>
-    <CustomBuild Include="IdleInputController.h">
-      <Filter>Controllers</Filter>
-    </CustomBuild>
-    <CustomBuild Include="DefaultBrowserController.h">
-      <Filter>Controllers</Filter>
-    </CustomBuild>
-    <CustomBuild Include="UpdateControler.h">
-      <Filter>Controllers</Filter>
-    </CustomBuild>
-    <CustomBuild Include="DownlaodController.h">
-      <Filter>Controllers</Filter>
-    </CustomBuild>
-    <CustomBuild Include="FileDownloader.h">
-      <Filter>Controllers</Filter>
-    </CustomBuild>
-    <CustomBuild Include="UrlModel.h">
-      <Filter>Model</Filter>
-    </CustomBuild>
     <CustomBuild Include="GenreModel.h">
       <Filter>Model</Filter>
-    </CustomBuild>
-    <CustomBuild Include="AudioStreamController.h">
-      <Filter>Controllers</Filter>
     </CustomBuild>
     <CustomBuild Include="UpdateModel.h">
       <Filter>Model</Filter>
@@ -377,26 +302,8 @@
     <CustomBuild Include="LinkButton.h">
       <Filter>Views\Widgets</Filter>
     </CustomBuild>
-    <CustomBuild Include="MultiEditDialog.h">
-      <Filter>Views\Dialogs</Filter>
-    </CustomBuild>
-    <CustomBuild Include="TabModel.h">
-      <Filter>Model</Filter>
-    </CustomBuild>
-    <CustomBuild Include="RadioCompositeModel.h">
-      <Filter>Model</Filter>
-    </CustomBuild>
     <CustomBuild Include="WebView.h">
       <Filter>Views\Widgets</Filter>
-    </CustomBuild>
-    <CustomBuild Include="QsltCursorShapeArea.h">
-      <Filter>Views\Widgets</Filter>
-    </CustomBuild>
-    <CustomBuild Include="TabPagesController.h">
-      <Filter>Controllers</Filter>
-    </CustomBuild>
-    <CustomBuild Include="RadioPageController.h">
-      <Filter>Controllers</Filter>
     </CustomBuild>
     <CustomBuild Include="Views\GenresView.qml">
       <Filter>Views\QML</Filter>
@@ -446,19 +353,71 @@
     <CustomBuild Include="..\Bin\radiogenres.json">
       <Filter>ConfigExamples\Debug</Filter>
     </CustomBuild>
-    <CustomBuild Include="..\Bin\tabs.json">
-      <Filter>ConfigExamples\Debug</Filter>
-    </CustomBuild>
     <CustomBuild Include="..\Bin\tv.json">
       <Filter>ConfigExamples\Debug</Filter>
     </CustomBuild>
     <CustomBuild Include="BaseListModel.h">
       <Filter>Model</Filter>
     </CustomBuild>
+    <CustomBuild Include="RequestModel.h">
+      <Filter>Model</Filter>
+    </CustomBuild>
+    <CustomBuild Include="SystemTray.h">
+      <Filter>Views\SystemTray</Filter>
+    </CustomBuild>
+    <CustomBuild Include="SystemTrayContextMenu.h">
+      <Filter>Views\SystemTray</Filter>
+    </CustomBuild>
+    <CustomBuild Include="AppController.h">
+      <Filter>Controllers</Filter>
+    </CustomBuild>
+    <CustomBuild Include="MainWindow.h">
+      <Filter>Views</Filter>
+    </CustomBuild>
+    <CustomBuild Include="AudioStream.h">
+      <Filter>Audio</Filter>
+    </CustomBuild>
+    <CustomBuild Include="FileDownloader.h">
+      <Filter>Network</Filter>
+    </CustomBuild>
+    <CustomBuild Include="DownlaodManager.h">
+      <Filter>Network</Filter>
+    </CustomBuild>
+    <CustomBuild Include="UpdateController.h">
+      <Filter>Controllers</Filter>
+    </CustomBuild>
+    <CustomBuild Include="DefaultBrowser.h">
+      <Filter>Utils</Filter>
+    </CustomBuild>
+    <CustomBuild Include="RadioPage.h">
+      <Filter>Views\Pages</Filter>
+    </CustomBuild>
+    <CustomBuild Include="RadioPageController.h">
+      <Filter>Controllers</Filter>
+    </CustomBuild>
+    <CustomBuild Include="UserIdle.h">
+      <Filter>Utils</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Bin\tvgenres.json">
       <Filter>ConfigExamples\Debug</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\Player.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Prerequirements.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Player.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

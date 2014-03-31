@@ -2,22 +2,13 @@
 #include "RadioPage.h"
 #include "TVPage.h"
 #include "TabWidget.h"
-#include "AudioStreamController.h"
+#include "AudioStream.h"
 
 namespace mp {
 
-RadioPageController* RadioPageController::m_instance = 0;
-
-RadioPageController& RadioPageController::Inst()
-{
-	if(!m_instance)
-		m_instance = new RadioPageController();
-
-	return *m_instance;
-}
-
 RadioPageController::RadioPageController()
 	:m_view(NULL)
+	,m_audioStream(new AudioStream())
 {
 	ReLoadData();
 
@@ -47,12 +38,10 @@ void RadioPageController::ReLoadData()
 {
 #ifdef _DEBUG
 	m_radioGenres.Load("..\\radiogenres.json");
-	m_stations.SetGenres(m_radioGenres);
 	m_stations.Load("..\\radio.json");
 #else
 	m_radioGenres.Load("config\\radiogenres.json");
-	m_radioChannels.SetGenres(m_radioGenres);
-	m_radioChannels.Load("config\\radio.json");
+	m_stations.Load("config\\radio.json");
 #endif
 }
 
@@ -66,9 +55,9 @@ void RadioPageController::PlayRadio(const QString& id)
 {
 	ChannelSourcePtr channel = m_stations.FindById(id);
 	if(channel)
-	{		
-		AudioStreamController::Inst().SetUrl(channel->Url());
-		AudioStreamController::Inst().Play();
+	{
+		m_audioStream->SetUrl(channel->Url());
+		m_audioStream->Play();
 
 		// Update last staions with new  channel
 		LastStationsUpdated(channel);
@@ -81,7 +70,7 @@ void RadioPageController::PlayRadio(const QString& id)
 
 void RadioPageController::PauseRadio()
 {
-	AudioStreamController::Inst().Pause();
+	m_audioStream->Pause();
 }
 
 void RadioPageController::GenreChanged(const QString& id)
@@ -125,7 +114,7 @@ void RadioPageController::TopStationslUpdated()
 #ifdef _DEBUG
 	m_topSations.Load("..\\topradio.json");
 #else
-	m_topSations.Load("config\\topradio.json);
+	m_topSations.Load("config\\topradio.json");
 #endif
 
 	m_view->UpdateTopStations(&m_topSations);

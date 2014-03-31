@@ -1,38 +1,32 @@
-import QtQuick 1.0
+import QtQuick 2.0
 
 Rectangle {
 
-	id: stationsView
-	//width: parent.width
-	//height: 40
-
-	//color: '#ffffff'
-
-	Component {
+	property variant internalModel;
+	
+	//width: 180; height: 200
+	
+	width: parent.width; height: parent.height
+	
+	Component 
+	{
 		id: channelDelegate
-		Item {
-			
-			Rectangle { 
-				width: parent.width; height: parent.height
+		Item 
+		{
+			height: 40
 
-				Row {
-					
-					Text  {
-						id: stationText
-						text: '  ' + Name + '  '
-						color: '#a2a2a2'
-						font.pixelSize: 12
-
-						MouseArea  {
-							anchors.fill: parent
-							hoverEnabled: true
-						}
-					}
+			Text  {
+				id: stationText
+				text: ' ' + Name + '  '
+				color: '#a2a2a2'
+				font.pixelSize: 12
+				
+				MouseArea  {
+					anchors.fill: parent
+					hoverEnabled: true
+					cursorShape: Qt.PointingHandCursor
 				}
 			}
-
-			//width: stationText.paintedWidth; 
-			height: 30
 		}
 	}
 
@@ -40,8 +34,10 @@ Rectangle {
 		id: channelsList
 		width:parent.width; height: parent.height
 		anchors.fill: parent
-		model: radioChannels
 		delegate: channelDelegate
+		model: internalModel
 	}
-
 }
+
+
+			

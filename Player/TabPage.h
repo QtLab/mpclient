@@ -29,16 +29,12 @@ public:
 	// Languege changed
 	virtual void RetranslateUI();
 
-	// Channels model was updated
-	virtual void ChannelSourceModelUpdated(ChannelSourceModel* channels);
-	virtual void GenreModelUpdated(GenreModel* channels);
+	virtual QMargins Margins();
 
-	QMargins Margins();
+	virtual QString Name() const = 0;
 
 protected:
 	void changeEvent(QEvent *event);
-
-	QDeclarativeView* CreateDeclarativeView(const QString& qmlFileName, const QString& key, QObject* obj);
 };
 
 }

@@ -1,13 +1,12 @@
 #include "RadioPage.h"
 #include "Path.h"
 #include "ChannelSourceModel.h"
-#include "AudioStreamController.h"
-#include "QsltCursorShapeArea.h"
+#include "AudioStream.h"
 
-#include <QDeclarativeError>
-#include <QtDeclarative/QDeclarativeView>
-#include <QtDeclarative/QDeclarativeEngine>
-#include <QDeclarativeContext>
+#include <QQuickView>
+#include <QQmlContext>
+#include <QQuickItem>
+
 #include <QDebug>
 #include <QHBoxLayout>
 #include <QDir>
@@ -22,10 +21,8 @@ RadioPage::RadioPage(QWidget* parent)
 	QHBoxLayout *box = new QHBoxLayout(this);
 	box->setContentsMargins(0, 0, 0, 0);
 
-    m_view = new QDeclarativeView(this);
-
-	qmlRegisterType<QsltCursorShapeArea>("Cursor", 1, 0, "CursorShapeArea");
-	box->addWidget(m_view);
+	m_view = new QQuickView();
+	box->addWidget(QWidget::createWindowContainer(m_view, this));
 }
 
 RadioPage::~RadioPage()
@@ -34,33 +31,16 @@ RadioPage::~RadioPage()
 
 void RadioPage::Init()
 {
-	QString path = QmlFilePath("RadioPageView.qml");
-	
+	QString path = QmlFilePath("RadioPageView.qml");	
 	qDebug()  << "RadioPage::RadioPage path: "<< path;
-
-	//emit TopStationslUpdated();
-	//emit GenreChanged("0");
 
 	path = QUrl::fromLocalFile(path).toString();
 	m_view->setSource(path);
-    m_view->setResizeMode(QDeclarativeView::SizeRootObjectToView);	
+	m_view->setResizeMode(QQuickView::SizeRootObjectToView);
 
-	//qmlRegisterType<RadioPage>("Cursor", 1, 0, "CursorShapeArea");
-	//qmlRegisterType<ChannelSourceModel>("Cursor", 1, 0, "CursorShapeArea");
-	
-	m_view->rootContext()->setContextProperty("RadioPage", this);
-
-	QDeclarativeError err;
-	foreach(err, m_view->errors())
-	{
-		qDebug() << "RadioPage::RadioPage error: " << err.toString();
-	}
-
-	QObject *rootObject = dynamic_cast<QObject*>(m_view->rootObject());
-
-	connect(m_view->rootContext(), SIGNAL(playRadio()), this, SLOT(PlayCurrentRadio()));
-	connect(m_view->rootContext(), SIGNAL(pauseRadio()), this, SLOT(PauseCurrentRadio()));
-	connect(m_view->rootContext(), SIGNAL(genreChanged()), this, SLOT(CurrentGenreChanged()));
+	connect(m_view->rootObject(), SIGNAL(playRadio()), this, SLOT(PlayCurrentRadio()));
+	connect(m_view->rootObject(), SIGNAL(pauseRadio()), this, SLOT(PauseCurrentRadio()));
+	connect(m_view->rootObject(), SIGNAL(genreChanged()), this, SLOT(CurrentGenreChanged()));
 }
 
 void RadioPage::Enter()
@@ -74,6 +54,11 @@ bool RadioPage::Leave()
 
 void RadioPage::RetranslateUI()
 {
+}
+
+QString RadioPage::Name() const
+{
+	return tr("RADIO");
 }
 
 void RadioPage::Connect(const char* signal, QObject* reciever, const char* slot)
@@ -107,13 +92,6 @@ void RadioPage::UpdateTopStations(ChannelSourceModel* channels)
 {
 	m_view->rootContext()->setContextProperty("topStations", channels);
 	QVariant v = m_view->rootContext()->contextProperty("topStations");
-	QString s = v.typeName();
-
-	//ChannelSourceModel* channels
-	//ChannelSource* channel = v.toList().first().value<ChannelSource*>();
-
-	bool e = v.isNull();
-	bool n = e;
 }
 
 void RadioPage::UpdateCurrentGenreStations(ChannelSourceModel* channels)

@@ -1,6 +1,8 @@
-import QtQuick 1.0
+import QtQuick 2.0
 
 Rectangle {
+
+	property variant internalModel;
 
 	Text  {
 		text: 'LAST' //currentChannel.Name
@@ -42,7 +44,7 @@ Rectangle {
 		width:parent.width; height: parent.height
 		anchors.fill: parent
 		anchors.topMargin: 50
-		model: radioChannels
 		delegate: channelDelegate
+		model: internalModel
 	}
 }

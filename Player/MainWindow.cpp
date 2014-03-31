@@ -3,17 +3,19 @@
 #include "TabWidget.h"
 #include "Titlebar.h"
 #include "WidgetUtils.h"
-#include "MultiEditDialog.h"
 
 #include <QDebug>
 #include <QVBoxLayout>
-
 
 namespace mp {
 
 MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
 	: QMainWindow(parent, flags)
 {
+	WidgetUtils::LoadStyleSheets(this, "Player.qss");
+
+	setWindowIcon(QIcon(":/mp/Resources/Player.ico"));
+
 	resize(550, 600);
 
 	NcFramelessHelper* f = new NcFramelessHelper(this);
@@ -36,10 +38,13 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
 
 	m_titleBar = new Titlebar(this);
 	m_layout->addWidget(m_titleBar);
-	// Installs an event filter filterObj on this object.
-	//installEventFilter(this);
 
-	WidgetUtils::LoadStyleSheets(this, "Player.qss");
+	qDebug() << "Titlebar was created";
+
+	m_tabWidget = new TabWidget(NULL, "tabWidget", "taBar");
+	m_layout->addWidget(m_tabWidget);
+
+	qDebug() << "TabWidget was created";
 }
 
 MainWindow::~MainWindow()
@@ -51,42 +56,21 @@ Titlebar * MainWindow::TitleBar() const
 	return m_titleBar;
 }
 
-void MainWindow::AddWidget(QWidget* widget)
+TabWidget * MainWindow::Tabs() const
 {
-	m_layout->addWidget(widget);
+	return m_tabWidget;
 }
 
-bool MainWindow::eventFilter(QObject *obj, QEvent *evt)
+void MainWindow::AddPage(TabPage * page)
 {
-	if (evt->type() == QEvent::MouseButtonRelease) 
-	{
-		QMouseEvent * mouseEvt = static_cast<QMouseEvent *>(evt);
-		if(mouseEvt && mouseEvt->button() == Qt::RightButton)
-		{
-			QWidget * widg = qobject_cast<QWidget*>(obj);
-			if(widg)
-			{
-				QString stylesheet = widg->styleSheet();
-				MultiEditDialog* dlg = new MultiEditDialog(stylesheet);
-				stylesheet = dlg->ShowModal();
-				widg->setStyleSheet(stylesheet);
+	m_tabWidget->AddPage(page);
+}
 
-				return true;
-			}
-
-			//QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
-			//qDebug() << "Ate key press" << keyEvent->key();
-			return QMainWindow::eventFilter(obj, evt);
-		} 
-		else 
-		{
-			// pass the event on to the parent class
-			return QMainWindow::eventFilter(obj, evt);
-		}
-	}
-
-
-	return QMainWindow::eventFilter(obj, evt);
+void MainWindow::closeEvent(QCloseEvent *evt)
+{
+	// Hide the window to tray
+	hide();
+	evt->ignore();
 }
 
 }

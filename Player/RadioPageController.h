@@ -1,23 +1,20 @@
 #ifndef MP_RADIO_PAGE_CONTROLLER_H
 #define MP_RADIO_PAGE_CONTROLLER_H
 
+#include "Prerequirements.h"
 #include "ChannelSourceModel.h"
 #include "GenreModel.h"
-#include "TabModel.h"
 
 namespace mp {
-
-// Forward declaration
-class TabPage;
-class TabWidget;
-class RadioPage;
 
 class RadioPageController : public QObject
 {
 	Q_OBJECT
 
 public:	
-	static RadioPageController& Inst();
+	RadioPageController();
+	~RadioPageController();
+
 	void ReLoadData();
 	TabPage* View();
 
@@ -29,11 +26,6 @@ public slots:
 	void LastStationsUpdated(ChannelSourcePtr newchannel);
 
 private:
-	RadioPageController();
-	~RadioPageController();
-
-private:
-	static RadioPageController*		m_instance;
 	// All stations channnels
 	ChannelSourceModel				m_stations;
 	// Statinons of the cureent genre
@@ -46,6 +38,8 @@ private:
 	GenreModel						m_radioGenres;
 	// Widget view
 	RadioPage*						m_view;
+	// Audio stream manager
+	AudioStreamPtr					m_audioStream;
 };
 
 }

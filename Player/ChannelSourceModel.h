@@ -50,10 +50,6 @@ public:
 	Q_DISABLE_COPY(ChannelSource)
 };
 
-typedef QSharedPointer<ChannelSource> ChannelSourcePtr;
-typedef QList<ChannelSourcePtr> ChannelSourceList;
-typedef QDeclarativeListProperty<ChannelSource*> DeclarativeChannels;
-
 class ChannelSourceModel : public BaseListModel<ChannelSource>
 {
 	Q_OBJECT
@@ -82,24 +78,15 @@ public:
 	int rowCount(const QModelIndex &parent = QModelIndex()) const;
 	QHash<int, QByteArray>	roleNames() const;
 
-	void SetGenres(const GenreModel& genres);
-
 public:
 	friend class TabPagesController;
 	friend class RadioCompositeModel;
 	friend class RadioPageController;
 	friend QAbstractListModel;
 
-	GenreModel					m_genres;
-
 	Q_DISABLE_COPY(ChannelSourceModel)
 };
 
-//typedef QSharedPointer<ChannelSourceModel> ChannelSourceModelPtr;
-
-//typedef ChannelSourceModel * ChannelSourceModelPtr;
-//Q_DECLARE_METATYPE(ChannelSourceModelPtr);
-//Q_DECLARE_METATYPE(ChannelSourcePtr);
 }
 
 Q_DECLARE_METATYPE(mp::ChannelSource);

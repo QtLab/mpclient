@@ -1,44 +1,52 @@
 #include "AppController.h"
-#include "TabPagesController.h"
-#include "AudioStreamController.h"
+#include "UpdateController.h"
+#include "RadioPageController.h"
 
+#include "UserIdle.h"
 #include "MainWindow.h"
 #include "TabWidget.h"
 #include "Titlebar.h"
+#include "SystemTray.h"
 
 namespace mp {
 
 AppController::AppController(int argc, char *argv[])
 	:QApplication(argc, argv)
+	,m_updateController(new UpdateController())
+	,m_userIdle(new UserIdle())
 {
+	connect(m_updateController, SIGNAL(UpdateFinished(bool)), SLOT(UpdateFinished(bool)));
+	connect(m_userIdle, SIGNAL(IdleStateChanged(bool)), SLOT(UserIdleStateChanged(bool)));
 }
 
 AppController::~AppController()
 {
+	m_updateController->deleteLater();
 }
 
 void AppController::CreateView()
 {
-	m_view = new MainWindow();
+	m_mainWidow = new MainWindow();
 
-	TabWidget * tabs = TabPagesController::Inst().CreateTabsView();
+	m_trayIcon = new SystemTray(m_mainWidow);
+	m_trayIcon->show();
 
-	TabPage * radioPage = TabPagesController::Inst().CreateabView("RADIO");
-	tabs->AddPage(radioPage, tr("RADIO"));
+	m_radioPageController = new RadioPageController();
+	m_mainWidow->AddPage(m_radioPageController->View());
 
-	TabPage * tvPage = TabPagesController::Inst().CreateabView("TV");
-	tabs->AddPage(tvPage, tr("TV"));
+	//TabPage * tvPage = TabPagesController::Inst().CreateTabView("TV");
+	//tabs->AddPage(tvPage, tr("TV"));
 
-	m_view->AddWidget(tabs);
-
-	m_view->show();	
+	m_mainWidow->show();	
 }
 
 void AppController::InitSignalsSlots()
 {
 	// Metadata
-	connect(&AudioStreamController::Inst(), SIGNAL(MetadataUpdated(const ChannelMetadata&)), 
-		m_view->TitleBar(), SLOT(MetadataUpdated(const ChannelMetadata&)));
+	//connect(&AudioStreamController::Inst(), SIGNAL(MetadataUpdated(const ChannelMetadata&)), 
+		//m_mainWidow->TitleBar(), SLOT(MetadataUpdated(const ChannelMetadata&)));
+
+	connect(m_trayIcon, SIGNAL(ShowtdownApplicationReuest()), SLOT(Showtdown()));
 }
 
 AppController& AppController::Inst()
@@ -78,6 +86,22 @@ bool AppController::notify(QObject* receiver, QEvent* even)
 #endif
 
 	return true;
+}
+
+void AppController::Showtdown()
+{
+	m_mainWidow->deleteLater();
+	m_trayIcon->deleteLater();
+
+	quit();
+}
+
+void AppController::UpdateFinished(bool restartRequired)
+{
+}
+
+void AppController::UserIdleStateChanged(bool isIdle)
+{
 }
 
 }

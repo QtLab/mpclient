@@ -1,5 +1,5 @@
 <RCC>
     <qresource prefix="/mp">
-      <file>Views/border.png</file>
+        <file>Resources/Player.ico</file>
     </qresource>
 </RCC>

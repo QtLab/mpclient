@@ -1,11 +1,11 @@
 #include "ChannelSourceModel.h"
-#include "UrlModel.h"
+#include "RequestModel.h"
 
 #include <QFile>
 #include <QDir>
 #include <QHash>
 #include <QDebug>
-#include <QDeclarativeListProperty>
+//#include <QDeclarativeListProperty>
 
 namespace mp {
 
@@ -83,15 +83,6 @@ ChannelSourceModel::ChannelSourceModel()
 
 ChannelSourceModel::~ChannelSourceModel() 
 {
-}
-
-void ChannelSourceModel::SetGenres(const GenreModel& genres)
-{
-	m_genres.Cleanup();
-
-	GenreItemList gernreList = genres.Items();
-
-	m_genres.insertRows(0, gernreList.count());
 }
 
 /*

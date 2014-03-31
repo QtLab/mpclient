@@ -2,6 +2,7 @@
 #define MP_GENRE_SOURCE_H
 
 #include "BaseListModel.h"
+#include "Prerequirements.h"
 
 namespace mp {
 
@@ -27,8 +28,6 @@ private:
 	Q_DISABLE_COPY(GenreItem)
 };
 
-typedef QSharedPointer<GenreItem> GenreItemPtr;
-typedef QList<GenreItemPtr> GenreItemList;
 
 class GenreModel : public BaseListModel<GenreItem>
 {
@@ -61,11 +60,10 @@ private:
 	friend class RadioPageController;
 };
 
-typedef QSharedPointer<GenreModel> GenreModelPtr;
-//Q_DECLARE_METATYPE(GenreModel);
-//typedef GenreModel * GenreModelPtr;
-//Q_DECLARE_METATYPE(GenreModelPtr);
-//Q_DECLARE_METATYPE(GenreItemPtr);
+
+//Q_DECLARE_METATYPE(mp::GenreItem);
+//Q_DECLARE_METATYPE(mp::GenreModel);
+
 
 }
 

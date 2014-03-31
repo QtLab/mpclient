@@ -1,10 +1,12 @@
 ﻿#include "Titlebar.h"
 #include "ChannelMetadataModel.h"
+#include "LinkButton.h"
 
 #include <QHBoxLayout>
 #include <QMouseEvent>
 #include <QSpacerItem>
 #include <QDebug>
+#include <QCoreApplication>
 
 namespace mp {
 
@@ -32,13 +34,15 @@ Titlebar::Titlebar(QWidget *parent)
 
 	m_layout->addWidget(new QLabel(), 1);
 
-	m_minimizeLnk = new QLabel(this);
-	m_layout->addWidget(m_minimizeLnk);
+	m_minimizeLnk = new LinkButton();
 	m_minimizeLnk->setText("_");
+	connect(m_minimizeLnk, SIGNAL(clicked()), this, SLOT(MinimizeClicked()));
+	m_layout->addWidget(m_minimizeLnk);
 
-	m_closeLnk = new QLabel(this);
-	m_layout->addWidget(m_closeLnk);
+	m_closeLnk = new LinkButton();
 	m_closeLnk->setText("X");
+	connect(m_closeLnk, SIGNAL(clicked()), this, SLOT(CloseClicked()));
+	m_layout->addWidget(m_closeLnk);
 
 	qDebug() << "Titlebar right buttons created";
 }
@@ -65,21 +69,14 @@ void Titlebar::mouseMoveEvent(QMouseEvent *evt)
 	}
 }
 
-void Titlebar::mouseDoubleClickEvent(QMouseEvent *evt)
+void Titlebar::CloseClicked()
 {
-	//SwitchScreenMode();
+	m_parent->hide();
 }
 
-void Titlebar::SwitchScreenMode()
+void Titlebar::MinimizeClicked()
 {
-	if(m_parent->isMaximized())
-	{
-		m_parent->showNormal();
-	}
-	else
-	{
-		m_parent->showMaximized();
-	}
+	m_parent->showMinimized();
 }
 
 void Titlebar::MetadataUpdated(const ChannelMetadata& metadata)

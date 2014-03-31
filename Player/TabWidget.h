@@ -3,14 +3,7 @@
 
 #include <QTabWidget>
 #include <QTabBar>
-#include <QObject>
-#include <QString>
-#include <QResizeEvent>
-#include <QMainWindow>
-#include <QDebug>
-#include <QPainter>
-#include <QStyle>
-#include <QPaintEvent>
+#include <QMap>
 
 namespace mp {
 
@@ -22,18 +15,15 @@ class TabWidget : public QTabWidget
 
 public:
 	TabWidget(QWidget * parent, const QString& name = QString(), const QString& tabBarName = QString());
-	int AddPage(TabPage * page, const QString& name);
+	int AddPage(TabPage * page);
 
 private:
-	void SetTvPage(TabPage * page);
-	void SetRadioPage(TabPage * page);
+	void RetranslateUI();
+	void changeEvent(QEvent *event);
 
 private:
-	TabPage *		m_tvPage;
-	int				m_tvPageIndex;
-
-	TabPage *		m_radioPage;
-	int				m_radioPageIndex;
+	typedef	QMap<int, TabPage*> TabPages;
+	TabPages		m_pages;
 };
 
 }
