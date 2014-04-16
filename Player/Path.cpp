@@ -12,32 +12,26 @@ namespace mp {
 QString QmlFilePath(const QString& fileName)
 {
 #ifdef _DEBUG
-	
-	//static const QString pathTemplate("E:\\dev\\mp\\mpclient\\Player\\Views\\%0");
 	static const QString pathTemplate("..\\..\\Player\\Views\\%0");
 	QString path = pathTemplate.arg(fileName);
 	
 #else
 	QString path;
 	QDir dir = QDir::current();
-	if(dir.cd("QML"))
+	if(dir.cd("qml"))
 	{
 		path = dir.absoluteFilePath(fileName);
-		//path = QUrl::fromLocalFile(path).toString();
 	}
-	//static const QString pathTemplate("%0\\qml\\%1");
-	//QString path = pathTemplate.arg(QCoreApplication::applicationDirPath(), fileName);
 #endif
 
 	//path =  path.replace("//", "\\").replace("/", "\\");
-	//path = QUrl::fromLocalFile(path).toString();
 	return path;
 }
 
 QString CssFilePath(const QString& fileName)
 {
 	QDir dir = QDir::current();
-	if(dir.cd("Styles"))
+	if(dir.cd("styles"))
 	{
 		QString fn = dir.filePath(fileName);
 		return fn;
@@ -49,10 +43,25 @@ QString CssFilePath(const QString& fileName)
 QString HtmlilePath(const QString& fileName)
 {
 	QDir dir = QDir::current();
-	if(dir.cd("Html"))
+	if(dir.cd("html"))
 	{
 		QString fn = dir.filePath(fileName);
-		//fn = QUrl::fromLocalFile(fn).toString();
+		return fn;
+	}
+
+	return QString();
+}
+
+QString ConfigFilePath(const QString& fileName)
+{
+	QDir dir = QDir::current();
+#ifdef _DEBUG
+	if(dir.cd(".."))
+#else
+	if(dir.cd("config"))
+#endif
+	{
+		QString fn = dir.filePath(fileName);
 		return fn;
 	}
 

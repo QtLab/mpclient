@@ -1,8 +1,7 @@
 #include "RadioPageController.h"
 #include "RadioPage.h"
-#include "TVPage.h"
-#include "TabWidget.h"
 #include "AudioStream.h"
+#include "Path.h"
 
 namespace mp {
 
@@ -12,18 +11,18 @@ RadioPageController::RadioPageController()
 {
 	ReLoadData();
 
-	m_view = new RadioPage(NULL);
+	m_view = new RadioPage(NULL, &m_radioGenres, &m_stations, &m_topSations, &m_lastSations);
 
 	connect(m_view, SIGNAL(PlayRadio(const QString&)), this, SLOT(PlayRadio(const QString&)));
 	connect(m_view, SIGNAL(GenreChanged(const QString&)), this, SLOT(GenreChanged(const QString&)));
 	connect(m_view, SIGNAL(TopStationslUpdated()), this, SLOT(TopStationslUpdated()));
 	connect(m_view, SIGNAL(PauseRadio()), this, SLOT(PauseRadio()));
 
-	TopStationslUpdated();
-	m_view->UpdateCurrentGenreStations(&m_stations);
+	//TopStationslUpdated();
+	//m_view->UpdateCurrentGenreStations(&m_stations);
 	//m_view->UpdateLastStations(&m_lastSations);
-	m_view->GenreModelUpdated(&m_radioGenres);
-	m_view->Init();
+	//m_view->GenreModelUpdated(&m_radioGenres);
+	//m_view->Init();
 	
 	qDebug() << "Radio widget created";
 }
@@ -36,13 +35,8 @@ RadioPageController::~RadioPageController()
 
 void RadioPageController::ReLoadData()
 {
-#ifdef _DEBUG
-	m_radioGenres.Load("..\\radiogenres.json");
-	m_stations.Load("..\\radio.json");
-#else
-	m_radioGenres.Load("config\\radiogenres.json");
-	m_stations.Load("config\\radio.json");
-#endif
+	m_radioGenres.Load(ConfigFilePath("radiogenres.json"));
+	m_stations.Load(ConfigFilePath("radio.json"));
 }
 
 TabPage* RadioPageController::View()
@@ -75,7 +69,7 @@ void RadioPageController::PauseRadio()
 
 void RadioPageController::GenreChanged(const QString& id)
 {
-	m_currentSations.Cleanup();
+	//m_currentSations.Cleanup();
 
 	foreach(ChannelSourcePtr channel, m_stations.Items())
 	{
@@ -109,19 +103,13 @@ void RadioPageController::GenreChanged(const QString& id)
 
 void RadioPageController::TopStationslUpdated()
 {
-	m_topSations.Cleanup();
-
-#ifdef _DEBUG
-	m_topSations.Load("..\\topradio.json");
-#else
-	m_topSations.Load("config\\topradio.json");
-#endif
-
-	m_view->UpdateTopStations(&m_topSations);
+	//m_topSations.Cleanup();
+	//m_view->UpdateTopStations(&m_topSations);
 }
 
 void RadioPageController::LastStationsUpdated(ChannelSourcePtr newchannel)
 {
+	/*
 	int rows = m_lastSations.rowCount();
 	if(rows <= 2)
 	{
@@ -134,6 +122,7 @@ void RadioPageController::LastStationsUpdated(ChannelSourcePtr newchannel)
 	}
 
 	m_view->UpdateLastStations(&m_lastSations);
+	*/
 }
 
 }

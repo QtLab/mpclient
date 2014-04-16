@@ -30,13 +30,21 @@ Rectangle {
 		}
 	}
 
-	ListView {
-		id: channelsList
-		width:parent.width; height: parent.height
-		anchors.fill: parent
-		delegate: channelDelegate
-		model: internalModel
-	}
+	//Column {
+		TextInput { 
+			text: "Hello"; 
+			font.weight: Font.DemiBold 
+		}
+		
+		ListView {
+			anchors.topMargin: 50
+			id: channelsList
+			width:parent.width; height: parent.height
+			anchors.fill: parent
+			delegate: channelDelegate
+			model: internalModel
+		}
+	//}
 }
 
 

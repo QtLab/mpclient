@@ -26,9 +26,9 @@ public slots:
 	void LastStationsUpdated(ChannelSourcePtr newchannel);
 
 private:
-	// All stations channnels
+	// Model for all stations channnels
 	ChannelSourceModel				m_stations;
-	// Statinons of the cureent genre
+	// Statinons of the current genre
 	ChannelSourceModel				m_currentSations;
 	// Last stations
 	ChannelSourceModel				m_lastSations;

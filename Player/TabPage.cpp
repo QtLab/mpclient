@@ -3,10 +3,6 @@
 #include <QDebug>
 #include <QEvent>
 
-//#include <QDeclarativeError>
-//#include <QtDeclarative/QDeclarativeView>
-//#include <QDeclarativeContext>
-
 namespace mp {
 
 TabPage::TabPage(QWidget* parent)

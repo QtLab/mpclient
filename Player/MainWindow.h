@@ -27,7 +27,7 @@ public:
 	Titlebar * TitleBar() const;
 	TabWidget * Tabs() const;
 
-	void AddPage(TabPage * page);
+	void AddTab(TabPage * page);
 
 	void closeEvent(QCloseEvent *evt);
 

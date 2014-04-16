@@ -3,13 +3,7 @@
 
 #include <QWidget>
 
-class QDeclarativeView;
-
 namespace mp {
-
-// Forward declaration
-class ChannelSourceModel;
-class GenreModel;
 
 // Base class for all tabs
 class TabPage : public QWidget

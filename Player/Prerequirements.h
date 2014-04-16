@@ -8,6 +8,7 @@ QT_BEGIN_NAMESPACE
 class QNetworkAccessManager;
 class QNetworkReply;
 class QNetworkRequest;
+class QQuickView;
 QT_END_NAMESPACE
 
 namespace mp {
@@ -26,11 +27,15 @@ class FileToUpdate;
 class UpdateModel;
 class MainWindow;
 class SystemTray;
+class TVPageController;
 class RadioPageController;
 class UpdateController;
 class RequestModel;
 class DownlaodManager;
 class UserIdle;
+class WebView;
+
+typedef TabPage * TabPagePtr;
 
 typedef QSharedPointer<AudioStream> AudioStreamPtr;
 typedef QSharedPointer<ChannelMetadata> ChannelMetadataPtr;

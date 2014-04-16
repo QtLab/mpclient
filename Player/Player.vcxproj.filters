@@ -87,9 +87,6 @@
     <ClCompile Include="TabWidget.cpp">
       <Filter>Views\Widgets</Filter>
     </ClCompile>
-    <ClCompile Include="TabPage.cpp">
-      <Filter>Views\Widgets</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_TabPage.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
@@ -273,15 +270,33 @@
     <ClCompile Include="UserIdle.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_TVPage.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_TVPage.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="TVPage.cpp">
+      <Filter>Views\Pages</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_TVPageController.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_TVPageController.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="TVPageController.cpp">
+      <Filter>Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="TabPage.cpp">
+      <Filter>Views\Pages</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Player.qrc">
       <Filter>Resource Files</Filter>
     </CustomBuild>
     <CustomBuild Include="TabWidget.h">
-      <Filter>Views\Widgets</Filter>
-    </CustomBuild>
-    <CustomBuild Include="TabPage.h">
       <Filter>Views\Widgets</Filter>
     </CustomBuild>
     <CustomBuild Include="Titlebar.h">
@@ -398,6 +413,15 @@
     <CustomBuild Include="UserIdle.h">
       <Filter>Utils</Filter>
     </CustomBuild>
+    <CustomBuild Include="TVPage.h">
+      <Filter>Views\Pages</Filter>
+    </CustomBuild>
+    <CustomBuild Include="TVPageController.h">
+      <Filter>Controllers</Filter>
+    </CustomBuild>
+    <CustomBuild Include="TabPage.h">
+      <Filter>Views\Pages</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Bin\tvgenres.json">
@@ -414,10 +438,5 @@
       <Filter>Generated Files</Filter>
     </ClInclude>
     <ClInclude Include="Prerequirements.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Player.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
   </ItemGroup>
 </Project>

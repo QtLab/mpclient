@@ -31,9 +31,11 @@ private:
 	MainWindow *				m_mainWidow;
 	SystemTray *				m_trayIcon;
 
-	UserIdle *					m_userIdle;
 	RadioPageController *		m_radioPageController;
+	TVPageController *			m_tvPageController;
 	UpdateController *			m_updateController;
+
+	UserIdle *					m_userIdle;
 };
 
 }

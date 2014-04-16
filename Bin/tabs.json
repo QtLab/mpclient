@@ -1,5 +1,0 @@
-[
-	{"id": "radio", "name": "RADIO", "args": "radio.json" },
-	{"id": "tv", "name": "RADIO", "args": "tv.json" },
-	{"id": "webpage", "name": "WEB PAGE", "args": "www.youtube.ru" }
-]

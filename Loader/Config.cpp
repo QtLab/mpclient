@@ -45,11 +45,6 @@ bool Config::ReLoad()
 	if(stream.is_open())
 	{
 		std::string configDocument;
-
-		stream.seekg(0, std::ios::end);   
-		configDocument.reserve(stream.tellg());
-		stream.seekg(0, std::ios::beg);
-
 		configDocument.assign((std::istreambuf_iterator<char>(stream)), 
 								std::istreambuf_iterator<char>());
 

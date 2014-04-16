@@ -2,21 +2,19 @@
 #define MP_RADIO_PAGE_WIDGET_H
 
 #include "TabPage.h"
-
-class QQuickView;
+#include "Prerequirements.h"
 
 namespace mp {
-
-class ChannelSourceModel;
-class GenreModel;
-class ChannelSource;
 
 class RadioPage : public TabPage
 {
 	Q_OBJECT
 
 public:
-	RadioPage(QWidget* parent);
+	RadioPage(QWidget* parent, 
+				GenreModelPtr genres, ChannelSourceModelPtr allStations, 
+				ChannelSourceModelPtr topStations, ChannelSourceModelPtr lastStation);
+
 	virtual ~RadioPage();
 
 	void Init();
@@ -39,10 +37,12 @@ public:
 	QString CurrentGenreId();
 
 
-	Q_INVOKABLE void PlayCurrentRadio();
-	Q_INVOKABLE void PauseCurrentRadio();
-	Q_INVOKABLE void CurrentGenreChanged();
+	Q_INVOKABLE void PlayChannel(const QString& id);
+	Q_INVOKABLE void PauseCurrentChannel();
 
+	//Q_INVOKABLE void CurrentGenreChanged();
+
+/*
 public slots:
 	// Channels model was updated
 	virtual void CurrentChannelChanged(ChannelSource* channel);
@@ -50,16 +50,17 @@ public slots:
 	virtual void GenreModelUpdated(GenreModel* genres);
 	virtual void UpdateTopStations(ChannelSourceModel* channels);
 	virtual void UpdateLastStations(ChannelSourceModel* channels);
+*/
 
 signals:
 	void PlayRadio(const QString& id);
-	void PauseRadio(const QString& id);
+	void PauseCurrentRadio();
 	void GenreChanged(const QString& id);
 	void TopStationslUpdated();
 
 private:
 	// QML view
-	QQuickView *				m_view;
+	QQuickView *				m_quickView;
 };
 
 

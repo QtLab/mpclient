@@ -18,10 +18,10 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
 
 	resize(550, 600);
 
-	NcFramelessHelper* f = new NcFramelessHelper(this);
-	f->setWidgetMovable(true);
-	f->setWidgetResizable(true);
-	f->activateOn(this);
+	//NcFramelessHelper* f = new NcFramelessHelper(this);
+	//f->setWidgetMovable(true);
+	//f->setWidgetResizable(true);
+	//f->activateOn(this);
 
 	QWidget * central = new QWidget(this);
 	setCentralWidget(central);
@@ -61,7 +61,7 @@ TabWidget * MainWindow::Tabs() const
 	return m_tabWidget;
 }
 
-void MainWindow::AddPage(TabPage * page)
+void MainWindow::AddTab(TabPage * page)
 {
 	m_tabWidget->AddPage(page);
 }

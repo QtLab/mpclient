@@ -1,6 +1,7 @@
 #include "AppController.h"
 #include "UpdateController.h"
 #include "RadioPageController.h"
+#include "TVPageController.h"
 
 #include "UserIdle.h"
 #include "MainWindow.h"
@@ -12,11 +13,12 @@ namespace mp {
 
 AppController::AppController(int argc, char *argv[])
 	:QApplication(argc, argv)
+	,m_radioPageController(new RadioPageController())
+	,m_tvPageController(new TVPageController())
 	,m_updateController(new UpdateController())
 	,m_userIdle(new UserIdle())
 {
-	connect(m_updateController, SIGNAL(UpdateFinished(bool)), SLOT(UpdateFinished(bool)));
-	connect(m_userIdle, SIGNAL(IdleStateChanged(bool)), SLOT(UserIdleStateChanged(bool)));
+
 }
 
 AppController::~AppController()
@@ -31,11 +33,8 @@ void AppController::CreateView()
 	m_trayIcon = new SystemTray(m_mainWidow);
 	m_trayIcon->show();
 
-	m_radioPageController = new RadioPageController();
-	m_mainWidow->AddPage(m_radioPageController->View());
-
-	//TabPage * tvPage = TabPagesController::Inst().CreateTabView("TV");
-	//tabs->AddPage(tvPage, tr("TV"));
+	m_mainWidow->AddTab(m_radioPageController->View());
+	m_mainWidow->AddTab(m_tvPageController->View());
 
 	m_mainWidow->show();	
 }
@@ -47,6 +46,9 @@ void AppController::InitSignalsSlots()
 		//m_mainWidow->TitleBar(), SLOT(MetadataUpdated(const ChannelMetadata&)));
 
 	connect(m_trayIcon, SIGNAL(ShowtdownApplicationReuest()), SLOT(Showtdown()));
+
+	connect(m_updateController, SIGNAL(UpdateFinished(bool)), SLOT(UpdateFinished(bool)));
+	connect(m_userIdle, SIGNAL(IdleStateChanged(bool)), SLOT(UserIdleStateChanged(bool)));
 }
 
 AppController& AppController::Inst()
@@ -98,6 +100,14 @@ void AppController::Showtdown()
 
 void AppController::UpdateFinished(bool restartRequired)
 {
+	if(!restartRequired)
+	{
+		m_radioPageController->ReLoadData();
+		m_tvPageController->ReLoadData();
+	}
+	else
+	{
+	}
 }
 
 void AppController::UserIdleStateChanged(bool isIdle)

@@ -1,24 +1,17 @@
 #ifndef MP_TV_PAGE_WIDGET_H
 #define MP_TV_PAGE_WIDGET_H
 
+#include "Prerequirements.h"
 #include "TabPage.h"
 
-
-
-class QDeclarativeView;
-
 namespace mp {
-
-class GenreModel;
-class ChannelSourceModel;
-class WebView;
 
 class TVPage : public TabPage
 {
 	Q_OBJECT
 
 public:
-	TVPage(QWidget* parent, ChannelSourceModel* channels);
+	TVPage(QWidget* parent, ChannelSourceModelPtr channels);
 	virtual ~TVPage();
 
 	// User leave the page

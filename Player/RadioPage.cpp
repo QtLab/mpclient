@@ -13,7 +13,9 @@
 
 namespace mp {
 
-RadioPage::RadioPage(QWidget* parent)
+RadioPage::RadioPage(QWidget* parent, 
+				GenreModelPtr genres, ChannelSourceModelPtr allStations, 
+				ChannelSourceModelPtr topStations, ChannelSourceModelPtr lastStation)
 	:TabPage(parent)
 {
 	setObjectName("RadioPage");
@@ -21,8 +23,20 @@ RadioPage::RadioPage(QWidget* parent)
 	QHBoxLayout *box = new QHBoxLayout(this);
 	box->setContentsMargins(0, 0, 0, 0);
 
-	m_view = new QQuickView();
-	box->addWidget(QWidget::createWindowContainer(m_view, this));
+	m_quickView = new QQuickView();
+	box->addWidget(QWidget::createWindowContainer(m_quickView, this));
+
+	QString localUrl = QUrl::fromLocalFile(QmlFilePath("RadioPageView.qml")).toString();
+
+	qDebug()  << "RadioPage load qml: "<< localUrl;
+
+	m_quickView->setSource(localUrl);
+	m_quickView->setResizeMode(QQuickView::SizeRootObjectToView);
+
+	m_quickView->rootContext()->setContextProperty("radioGenres", genres);
+	m_quickView->rootContext()->setContextProperty("currentStations", allStations);
+	m_quickView->rootContext()->setContextProperty("lastStations", allStations);
+	m_quickView->rootContext()->setContextProperty("topStations", lastStation);
 }
 
 RadioPage::~RadioPage()
@@ -31,16 +45,9 @@ RadioPage::~RadioPage()
 
 void RadioPage::Init()
 {
-	QString path = QmlFilePath("RadioPageView.qml");	
-	qDebug()  << "RadioPage::RadioPage path: "<< path;
-
-	path = QUrl::fromLocalFile(path).toString();
-	m_view->setSource(path);
-	m_view->setResizeMode(QQuickView::SizeRootObjectToView);
-
-	connect(m_view->rootObject(), SIGNAL(playRadio()), this, SLOT(PlayCurrentRadio()));
-	connect(m_view->rootObject(), SIGNAL(pauseRadio()), this, SLOT(PauseCurrentRadio()));
-	connect(m_view->rootObject(), SIGNAL(genreChanged()), this, SLOT(CurrentGenreChanged()));
+	//connect(m_view->rootObject(), SIGNAL(playRadio()), this, SLOT(PlayCurrentRadio()));
+	//connect(m_view->rootObject(), SIGNAL(pauseRadio()), this, SLOT(PauseCurrentRadio()));
+	//connect(m_view->rootObject(), SIGNAL(genreChanged()), this, SLOT(CurrentGenreChanged()));
 }
 
 void RadioPage::Enter()
@@ -61,6 +68,17 @@ QString RadioPage::Name() const
 	return tr("RADIO");
 }
 
+void RadioPage::PlayChannel(const QString& id)
+{
+	emit PlayRadio(id);
+}
+
+void RadioPage::PauseCurrentChannel()
+{
+	emit PauseCurrentRadio();
+}
+
+/*
 void RadioPage::Connect(const char* signal, QObject* reciever, const char* slot)
 {
 	connect(m_view, signal, reciever, slot);
@@ -104,22 +122,11 @@ void RadioPage::UpdateLastStations(ChannelSourceModel* channels)
 	m_view->rootContext()->setContextProperty("lastStations", channels);
 }
 
-void RadioPage::PlayCurrentRadio()
-{
-	QString currentRadioId = m_view->rootContext()->contextProperty("currentRadioId").toString();
-	emit PlayRadio(currentRadioId);
-}
-
-void RadioPage::PauseCurrentRadio()
-{
-	QString currentRadioId = m_view->rootContext()->contextProperty("currentRadioId").toString();
-	emit PauseRadio(currentRadioId);
-}
-
 void RadioPage::CurrentGenreChanged()
 {
 	QString currentRadioId = m_view->rootContext()->contextProperty("currentGenreId").toString();
 	emit PauseRadio(currentRadioId);
 }
+*/
 
 }

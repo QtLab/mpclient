@@ -9,6 +9,9 @@ Rectangle {
 	Component {
 		id: genreDelegate
 		Rectangle {
+			
+			visible: parseInt(Id) < 5 
+			
 			id: wrapper
 			width: genreInfo.paintedWidth + 10;
 			height: genreInfo.height
