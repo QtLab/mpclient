@@ -1,12 +1,100 @@
-#include "Defs.h"
+#include "Process.h"
+#include "Path.h"
 
 #include <windows.h>
 #include <tlhelp32.h>
 #include <process.h>
-#include <winbase.h>
-#include <string.h>
 
 namespace ldr {
+
+Process::Process(const String& exeName, const String& args, const String& parentDir)
+	:m_exeName(exeName)
+	,m_args(args)
+	,m_parentDir(parentDir)
+{
+}
+
+Process::~Process()
+{
+}
+
+DWORD Process::StartAndWait()
+{
+	String exePath;
+
+	if(m_parentDir.empty())
+	{
+		exePath = Path::CurrentPathCombine(m_exeName);
+	}
+	else
+	{
+		exePath = m_parentDir + PATH_SEPARATOR + m_exeName;
+	}
+
+	::SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX);
+	_set_abort_behavior(0,_WRITE_ABORT_MSG);
+
+	PROCESS_INFORMATION processInformation = {0};
+	STARTUPINFO startupInfo                = {0};
+	startupInfo.cb                         = sizeof(startupInfo);
+
+	BOOL result = ::CreateProcess(exePath.c_str(), (LPSTR)m_args.c_str(),
+		NULL, NULL, FALSE, 
+		NULL, NULL, NULL, &startupInfo, &processInformation);
+
+	if(!result)
+	{
+		std::cout << "CreateProcess failed: " << exePath << ", arguments: " << m_args
+					<< ", error: " << GetLastErrorString();
+
+		return -1;
+	}
+	else
+	{
+		// Successfully created the process.  Wait for it to finish.
+		::WaitForSingleObject( processInformation.hProcess, INFINITE );
+
+		DWORD exitCode = 0;
+		BOOL result = ::GetExitCodeProcess(processInformation.hProcess, &exitCode);
+
+		return exitCode;
+	}
+}
+
+void Process::Terminate(const String& processName)
+{
+	HANDLE hSnapShot = ::CreateToolhelp32Snapshot(TH32CS_SNAPALL, NULL);
+	PROCESSENTRY32 pEntry;
+	pEntry.dwSize = sizeof (pEntry);
+	BOOL hRes = ::Process32First(hSnapShot, &pEntry);
+
+	DWORD currentPID = ::GetCurrentProcessId();
+
+	while (hRes)
+	{
+		if(pEntry.th32ProcessID == currentPID)
+			return;
+
+#ifdef _UNICODE
+		if(_wcsicmp(processName.c_str(), pEntry.szExeFile) == 0)
+#else
+		if(_stricmp(processName.c_str(), pEntry.szExeFile) == 0)
+#endif
+		{
+			HANDLE hProcess = OpenProcess(PROCESS_TERMINATE, 0,
+				(DWORD) pEntry.th32ProcessID);
+			if (hProcess != NULL && hProcess != INVALID_HANDLE_VALUE)
+			{
+				::TerminateProcess(hProcess, 9);
+				::CloseHandle(hProcess);
+			}
+		}
+
+		hRes = ::Process32Next(hSnapShot, &pEntry);
+	}
+
+	::CloseHandle(hSnapShot);
+}
 
 /*
 void TerminateProcesse(const String& processName)
@@ -83,35 +171,6 @@ HANDLE GetProcessHandle(TCHAR * processName)
 	CloseHandle( hProcessSnap );
 	return INVALID_HANDLE_VALUE;
 }
-
-HANDLE StartProcess(TCHAR * exeName, TCHAR * args)
-{
-	TCHAR currentPath[MAX_PATH];
-	GetCurrentDirectory(MAX_PATH, currentPath);
-	wsprintf(currentPath, L"%s\\%s", currentPath, exeName);
-
-	SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX);
-	_set_abort_behavior(0,_WRITE_ABORT_MSG);
-
-	PROCESS_INFORMATION processInformation = {0};
-	STARTUPINFO startupInfo                = {0};
-	startupInfo.cb                         = sizeof(startupInfo);
-
-	// Create process
-	BOOL result = CreateProcessW(currentPath, args,
-		NULL, NULL, FALSE, 
-		NULL, NULL, NULL, &startupInfo, &processInformation);
-
-	HANDLE hProcess = processInformation.hProcess;
-
-	if(!result)
-	{
-		hProcess = INVALID_HANDLE_VALUE;
-	}
-
-	return hProcess;
-}
-
 */
 
 }

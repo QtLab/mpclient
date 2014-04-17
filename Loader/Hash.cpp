@@ -1,12 +1,14 @@
 #include "Hash.h"
+
 #include <Windows.h>
+#include <Wincrypt.h>
 
 namespace ldr {
 
 #define BUFSIZE 1024
 #define MD5LEN  16
 
-bool Hash::ComputeFileMD5(const std::string& filePath, std::string& md5)
+bool Hash::ComputeFileMD5(const String& filePath, String& md5)
 {
 	md5.clear();
 
@@ -112,7 +114,7 @@ bool Hash::ComputeFileMD5(const std::string& filePath, std::string& md5)
 	return true; 
 }
 
-bool Hash::ComputeMD5(const std::string& data, std::string& md5)
+bool Hash::ComputeMD5(const String& data, String& md5)
 {
 	DWORD dwStatus = 0;
 	BOOL bResult = FALSE;

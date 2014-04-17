@@ -10,8 +10,8 @@
 namespace ldr {
 
 class FileToUpdate;
-typedef FileToUpdate* FilesToUpdatePtr;
-typedef std::vector<FilesToUpdatePtr> FilesToUpdate;
+typedef FileToUpdate* FileToUpdatePtr;
+typedef std::vector<FileToUpdatePtr> FilesToUpdate;
 
 class FileToUpdate
 {
@@ -30,8 +30,10 @@ public:
 	String AbdoluteDirectory() const;
 	const String& MD5() const;
 
-	static FilesToUpdatePtr CreateFromJsonValue(const Json::Value& value);
-	static bool FillFromJsonValue(FilesToUpdatePtr fileToUpdate, const Json::Value& value);
+	bool Exists() const;
+
+	static FileToUpdatePtr CreateFromJsonValue(const Json::Value& value);
+	static bool FillFromJsonValue(FileToUpdatePtr fileToUpdate, const Json::Value& value);
 private:
 	String		m_domain;
 	String		m_query;

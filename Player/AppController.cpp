@@ -95,7 +95,9 @@ void AppController::Showtdown()
 	m_mainWidow->deleteLater();
 	m_trayIcon->deleteLater();
 
-	quit();
+	exit(777777);
+	//exit(7777777);
+	//quit();
 }
 
 void AppController::UpdateFinished(bool restartRequired)

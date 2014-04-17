@@ -100,39 +100,67 @@ bool HttpApi::GetPakage(const String& userId, FileToUpdate& pakage)
 	return false;
 }
 
-bool HttpApi::DownloadFile(const FileToUpdate& fileToDownlaod)
+bool HttpApi::DownloadFile(FileToUpdatePtr fileToDownlaod)
 {
-	DeleteUrlCacheEntry(fileToDownlaod.Url().c_str());
+	std::cout << "Starting downlaod file: " << fileToDownlaod->AbsolutePath() 
+				<< " from: " << fileToDownlaod->Url() << std::endl;
 
-	std::string directoryPath = Path::DirectoryFromFilePath(fileToDownlaod.AbsolutePath());
+	DeleteUrlCacheEntry(fileToDownlaod->Url().c_str());
+
+	std::string directoryPath = fileToDownlaod->AbdoluteDirectory();
 	if(!Path::DirectoryExists(directoryPath))
 	{
 		Path::Make(directoryPath);
+		std::cout << "Create directory: " << directoryPath << " result: " << GetLastErrorString() << std::endl;
 	}
 
-	String oldFilePath = fileToDownlaod.AbsolutePath() + "old";
+	String oldFilePath = fileToDownlaod->AbsolutePath() + "old";
 
-	if(Path::FileExists(fileToDownlaod.AbsolutePath()))
+	if(Path::FileExists(fileToDownlaod->AbsolutePath()))
 	{
-		MoveFile(fileToDownlaod.AbsolutePath().c_str(), oldFilePath.c_str());
-		DWORD err = GetLastError();
-		std::cout << err;
+		BOOL result = MoveFile(fileToDownlaod->AbsolutePath().c_str(), oldFilePath.c_str());
+
+		if(!result)
+		{
+			std::cout << "Can't move file: " << fileToDownlaod->AbsolutePath()
+						<< " to: " << oldFilePath
+						<< " error: " << GetLastErrorString() << std::endl;
+		}
 	}
 
-	std::ofstream ostream(fileToDownlaod.AbsolutePath(), std::ios::out | std::ios::binary | std::ios::trunc);
-	if(DoGetRequest(fileToDownlaod.Domain(), fileToDownlaod.Query(), ostream))
+	std::ofstream ostream(fileToDownlaod->AbsolutePath(), std::ios::out | std::ios::binary | std::ios::trunc);
+	if(DoGetRequest(fileToDownlaod->Domain(), fileToDownlaod->Query(), ostream))
 	{
-		DeleteFile(oldFilePath.c_str());
+		if(!DeleteFile(oldFilePath.c_str()))
+		{
+			std::cout << "DeleteFile file: " << oldFilePath << " result: " << GetLastErrorString() << std::endl;
+		}
+
+		return true;
 	}
 
-	return true;
+	return false;
 }
 
 bool HttpApi::DoGetRequest(const String& domain, const String& query, std::ostream& ostream)
 {
 	HINTERNET hIntSession = ::InternetOpen(APP_UA, INTERNET_OPEN_TYPE_DIRECT, NULL, NULL, 0);
 
+	if(!hIntSession)
+	{
+		std::cout << "InternetOpen error: " << GetLastErrorString() << std::endl;
+		::InternetCloseHandle(hIntSession);
+		return false;
+	}
+
 	HINTERNET hHttpSession = InternetConnect(hIntSession, domain.c_str(), 80, 0, 0, INTERNET_SERVICE_HTTP, 0, NULL);
+
+	if(!hHttpSession)
+	{
+		std::cout << "InternetConnect error: " << GetLastErrorString() << std::endl;
+		::InternetCloseHandle(hHttpSession);
+		return false;
+	}
 
 	HINTERNET hHttpRequest = HttpOpenRequest(
 		hHttpSession, 
@@ -140,16 +168,31 @@ bool HttpApi::DoGetRequest(const String& domain, const String& query, std::ostre
 		query.c_str(),
 		0, 0, 0, INTERNET_FLAG_RELOAD | INTERNET_FLAG_NO_CACHE_WRITE | INTERNET_FLAG_PRAGMA_NOCACHE, 0);
 
-	if(!HttpSendRequest(hHttpRequest, NULL, 0, NULL, 0))
+	if(!hHttpRequest)
 	{
-		DWORD dwErr = GetLastError();
+		std::cout << "HttpOpenRequest error: " << GetLastErrorString() << std::endl;
+		::InternetCloseHandle(hHttpRequest);
 		return false;
 	}
 
-	CHAR szBuffer[1024];
+	if(!HttpSendRequest(hHttpRequest, NULL, 0, NULL, 0))
+	{
+		std::cout << "HttpSendRequest error: " << GetLastErrorString() << std::endl;
+		::InternetCloseHandle(hHttpRequest);
+		return false;
+	}
+
+	CHAR szBuffer[32768];
 	DWORD dwRead=0;
 	while(::InternetReadFile(hHttpRequest, szBuffer, sizeof(szBuffer), &dwRead) && dwRead)
 	{
+		if(GetLastError() != 0)
+		{
+			std::cout << "InternetReadFile error: " << GetLastErrorString() << std::endl;
+			::InternetCloseHandle(hHttpRequest);
+			return false;
+		}
+
 		ostream.write((const char*)szBuffer, dwRead);
 	}
 

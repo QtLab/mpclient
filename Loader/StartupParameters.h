@@ -1,6 +1,6 @@
 #pragma once
 
-#include <string>
+#include "Defs.h"
 
 namespace ldr {
 
@@ -9,14 +9,17 @@ class StartupParameters
 public:
 	StartupParameters();
 
-	const std::string& Source() const;
+	const String& Source() const;
 
 	bool IsInstall() const;
 
 	bool IsSilent() const;
 
 private:
-	std::string		m_source;
+	void ProcessOption(const String& key, const String& value);
+
+private:
+	String			m_source;
 	bool			m_isInstall;
 	bool			m_isSilent;
 };

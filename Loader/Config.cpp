@@ -27,7 +27,6 @@ String Config::ConfigFilePath()
 			{				
 				// Write to log
 				return false;
-
 			}
 		}
 
@@ -40,10 +39,14 @@ String Config::ConfigFilePath()
 
 bool Config::ReLoad()
 {
-	std::ifstream stream(ConfigFilePath());
+	String configPath = ConfigFilePath();
+
+	std::ifstream stream(configPath);
 
 	if(stream.is_open())
 	{
+		std::cout << "Config: " << configPath << " laoded successfull" << std::endl;
+
 		std::string configDocument;
 		configDocument.assign((std::istreambuf_iterator<char>(stream)), 
 								std::istreambuf_iterator<char>());
@@ -73,10 +76,16 @@ bool Config::Save()
 	root["Source"] = m_source;
 	root["HasSuccessfullInstall"] = m_hasInstallSuccessfull;
 
-	std::ofstream ostream(ConfigFilePath(), std::ios::out | std::ios::binary | std::ios::trunc);
+	String configPath = ConfigFilePath();
+
+	std::ofstream ostream(configPath, std::ios::out | std::ios::binary | std::ios::trunc);
 	ostream << root;
 
-	return ostream.good();
+	bool good = ostream.good();
+
+	std::cout << "Config: " << configPath << " saved successfull" << std::endl;
+
+	return good;
 }
 
 const std::string& Config::UserId() const
@@ -84,7 +93,7 @@ const std::string& Config::UserId() const
 	return m_userId;
 }
 
-void Config::SetUserId(const std::string& id)
+void Config::SetUserId(const String& id)
 {
 	m_userId = id;
 	Save();
@@ -95,7 +104,7 @@ const std::string& Config::Source() const
 	return m_source;
 }
 
-void Config::SetSource(const std::string& source)
+void Config::SetSource(const String& source)
 {
 	m_source = source;
 }
@@ -108,6 +117,7 @@ bool Config::InstallSuccessfull() const
 void Config::SetInstallSuccessfull(bool success)
 {
 	m_hasInstallSuccessfull = success;
+	Save();
 }
 
 }

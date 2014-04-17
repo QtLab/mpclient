@@ -1,5 +1,6 @@
 #include "FileToUpdate.h"
 #include "Path.h"
+#include "Hash.h"
 
 #include <Wininet.h>
 
@@ -82,7 +83,24 @@ const String& FileToUpdate::MD5() const
 	return m_md5;
 }
 
-bool FileToUpdate::FillFromJsonValue(FilesToUpdatePtr fileToUpdate, const Json::Value& value)
+bool FileToUpdate::Exists() const
+{
+	if(Path::FileExists(m_absolutePath))
+	{
+		String lcoalFileMD5;
+		if(Hash::ComputeFileMD5(m_absolutePath, lcoalFileMD5))
+		{
+			if(IsEquals(m_md5, lcoalFileMD5))
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+bool FileToUpdate::FillFromJsonValue(FileToUpdatePtr fileToUpdate, const Json::Value& value)
 {
 	if(value.type() == Json::objectValue)
 	{
@@ -103,7 +121,7 @@ bool FileToUpdate::FillFromJsonValue(FilesToUpdatePtr fileToUpdate, const Json::
 	return false;
 }
 
-FilesToUpdatePtr FileToUpdate::CreateFromJsonValue(const Json::Value& value)
+FileToUpdatePtr FileToUpdate::CreateFromJsonValue(const Json::Value& value)
 {
 	if(value.type() == Json::objectValue)
 	{
@@ -122,7 +140,7 @@ FilesToUpdatePtr FileToUpdate::CreateFromJsonValue(const Json::Value& value)
 		}
 	}
 
-	return FilesToUpdatePtr();
+	return FileToUpdatePtr();
 }
 
 }

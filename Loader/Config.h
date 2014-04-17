@@ -14,10 +14,10 @@ public:
 	bool Save();
 
 	const std::string& UserId() const;
-	void SetUserId(const std::string& id);
+	void SetUserId(const String& id);
 
 	const std::string& Source() const;
-	void SetSource(const std::string& guid);
+	void SetSource(const String& guid);
 
 	bool InstallSuccessfull() const;
 	void SetInstallSuccessfull(bool success);

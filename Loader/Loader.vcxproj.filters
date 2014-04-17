@@ -29,7 +29,8 @@
     <ClCompile Include="minzip\zip.c">
       <Filter>minzip</Filter>
     </ClCompile>
-    <ClCompile Include="Decompress.cpp" />
+    <ClCompile Include="Process.cpp" />
+    <ClCompile Include="Defs.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Config.h" />
@@ -61,6 +62,7 @@
     <ClInclude Include="minzip\zip.h">
       <Filter>minzip</Filter>
     </ClInclude>
+    <ClInclude Include="Process.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="json\json_internalarray.inl">
