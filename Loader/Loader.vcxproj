@@ -97,7 +97,7 @@
     <ClCompile Include="json\json_reader.cpp" />
     <ClCompile Include="json\json_value.cpp" />
     <ClCompile Include="json\json_writer.cpp" />
-    <ClCompile Include="Loader.cpp" />
+    <ClCompile Include="EntryPoint.cpp" />
     <ClCompile Include="minzip\ioapi.c" />
     <ClCompile Include="minzip\iowin32.c" />
     <ClCompile Include="minzip\unzip.c" />

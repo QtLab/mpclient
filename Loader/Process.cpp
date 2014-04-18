@@ -62,7 +62,7 @@ bool Process::Start()
 		m_hProcess = processInformation.hProcess;
 	}
 
-	return result;
+	return (bool)result;
 }
 
 void Process::Wait() const
@@ -96,7 +96,6 @@ void Process::Terminate(const String& processName)
 HANDLE Process::OpenProcess(const String& processName)
 {
 	HANDLE hProcessSnap;
-	HANDLE hProcess;
 	PROCESSENTRY32 pe32;
 
 	// Take a snapshot of all processes in the system.

@@ -11,6 +11,7 @@ namespace ldr {
 
 Config::Config()
 	:m_hasInstallSuccessfull(false)
+	,m_isSilent(true)
 {
 }
 
@@ -19,7 +20,7 @@ String Config::ConfigFilePath()
 	CHAR configPath[MAX_PATH];
 	if (SUCCEEDED(SHGetFolderPathA(NULL, CSIDL_COMMON_APPDATA, NULL, 0, configPath)))
 	{
-		sprintf(configPath, "%s\\%s", configPath, APP_NAME);
+		sprintf_s(configPath, "%s\\%s", configPath, APP_NAME);
 
 		if(!Path::DirectoryExists(configPath))
 		{
@@ -30,7 +31,7 @@ String Config::ConfigFilePath()
 			}
 		}
 
-		sprintf(configPath, "%s\\config.json", configPath, APP_NAME);
+		sprintf_s(configPath, "%s\\config.json", configPath, APP_NAME);
 		return configPath;
 	}
 
@@ -118,6 +119,16 @@ void Config::SetInstallSuccessfull(bool success)
 {
 	m_hasInstallSuccessfull = success;
 	Save();
+}
+
+bool Config::IsSilent() const
+{
+	return m_isSilent;
+}
+
+void Config::SetSilentMode(bool silent)
+{
+	m_isSilent = silent;
 }
 
 }

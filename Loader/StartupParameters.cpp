@@ -66,7 +66,6 @@ bool StartupParameters::IsInstall() const
 	return !m_source.empty();
 }
 
-
 bool StartupParameters::IsSilent() const
 {
 	return m_isSilent;

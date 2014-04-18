@@ -22,10 +22,14 @@ public:
 	bool InstallSuccessfull() const;
 	void SetInstallSuccessfull(bool success);
 
+	bool IsSilent() const;
+	void SetSilentMode(bool silent);
+
 private:
 	String			m_userId;
 	String			m_source;
 	bool			m_hasInstallSuccessfull;
+	bool			m_isSilent;
 };
 
 }
