@@ -45,8 +45,10 @@ void HttpApi::UpdateUser(const String& guid, const String& source)
 	DoGetRequest(Domain(), "/Handlers/RegisterUpdateUser.ashx?UserId=" + guid + "Source=" + source, response);
 }
 
-bool HttpApi::GetUpdate(const std::string& userId, FilesToUpdate& fielsToUpdate)
+bool HttpApi::GetUpdateInfo(const std::string& userId, FilesToUpdate& fielsToUpdate)
 {
+	std::cout << "Get update info started..." << std::endl;
+
 	std::string response;
 	DoGetRequest(Domain(), "/Handlers/GetDataFile.ashx?UserId=" + userId, response);
 
@@ -55,7 +57,9 @@ bool HttpApi::GetUpdate(const std::string& userId, FilesToUpdate& fielsToUpdate)
 
 	if(!reader.parse(response, root))
 	{
-		//TODO: logging
+		std::cout << "Parsing json error: " << reader.getFormatedErrorMessages() << std::endl;
+		std::cout << "json: " << response;
+
 		return false;
 	}
 	
@@ -76,8 +80,10 @@ bool HttpApi::GetUpdate(const std::string& userId, FilesToUpdate& fielsToUpdate)
 	return true;
 }
 
-bool HttpApi::GetPakage(const String& userId, FileToUpdate& pakage)
+bool HttpApi::GetPakageInfo(const String& userId, FileToUpdate& pakage)
 {
+	std::cout << "Get pakage info started..." << std::endl;
+
 	std::string response;
 	DoGetRequest(Domain(), "/Handlers/GetDataFile.ashx?IsZip=true&UserId=" + userId, response);
 
@@ -86,7 +92,9 @@ bool HttpApi::GetPakage(const String& userId, FileToUpdate& pakage)
 
 	if(!reader.parse(response, root))
 	{
-		//TODO: logging
+		std::cout << "Parsing json error: " << reader.getFormatedErrorMessages() << std::endl;
+		std::cout << "json: " << response;
+
 		return false;
 	}
 

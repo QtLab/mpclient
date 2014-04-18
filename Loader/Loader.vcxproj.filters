@@ -30,7 +30,7 @@
       <Filter>minzip</Filter>
     </ClCompile>
     <ClCompile Include="Process.cpp" />
-    <ClCompile Include="Defs.cpp" />
+    <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Config.h" />

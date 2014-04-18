@@ -6,7 +6,7 @@ char** CommandLineToArgvA(char* cmdLine, int* _argc);
 
 StartupParameters::StartupParameters()
 	:m_isSilent(true)
-	,m_isInstall(false)
+	,m_watchPlayer(false)
 {
 	char* cmdLine = GetCommandLineA();
 	int argc = 0;
@@ -17,36 +17,39 @@ StartupParameters::StartupParameters()
 
 	for( i = 1; i <= argc; i++ )
 	{
-		if( *argv[i] == '/' || *argv[i] == '-')
+		if(argv[i])
 		{
-			key = argv[i] + 1;
-			value = strchr(key, ':');
-			if( value != NULL ) 
+			if( *argv[i] == '/' || *argv[i] == '-')
 			{
-				*value++ = 0;
-			}
-		}
-		else
-		{
-			key = argv[i];
-			value = NULL;
-		}
-
-		if(_stricmp(key, "S") == 0)
-		{
-			m_isSilent = true;
-		}
-		else
-		{
-			if(_stricmp(key, "I") == 0)
-			{
-				m_isInstall = true;
+				key = argv[i] + 1;
+				value = strchr(key, ':');
+				if( value != NULL ) 
+				{
+					*value++ = 0;
+				}
 			}
 			else
 			{
-				if(_stricmp(key, "source") == 0)
+				key = argv[i];
+				value = NULL;
+			}
+
+			if(_stricmp(key, "s") == 0)
+			{
+				m_isSilent = true;
+			}
+			else
+			{
+				if(_stricmp(key, "watch") == 0)
 				{
-					m_source = value;
+					m_watchPlayer = true;
+				}
+				else
+				{
+					if(_stricmp(key, "source") == 0)
+					{
+						m_source = value;
+					}
 				}
 			}
 		}
@@ -60,7 +63,7 @@ const String& StartupParameters::Source() const
 
 bool StartupParameters::IsInstall() const
 {
-	return m_isInstall;
+	return !m_source.empty();
 }
 
 
@@ -69,27 +72,9 @@ bool StartupParameters::IsSilent() const
 	return m_isSilent;
 }
 
-void StartupParameters::ProcessOption(const String& key, const String& value)
+bool StartupParameters::WatchPlayer() const
 {
-	if(key == "S" || key == "s")
-	{
-		m_isSilent = true;
-	}
-	else
-	{
-		if(key == "I" || key == "i")
-		{
-			m_isInstall = true;
-		}
-		else
-		{
-			if(IsEquals(key, "source"))
-			{
-				m_source = value;
-			}
-		}
-	}
-
+	return m_watchPlayer;
 }
 
 char** CommandLineToArgvA(char* CmdLine, int* _argc)

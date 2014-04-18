@@ -13,7 +13,7 @@ ${StrLoc}
 !define VERSIONMINOR 1
 !define VERSIONBUILD 2
 
-!define ProductRegistryRoot HKLM
+!define ProductRegistryRoot HKCU
 !define ProductRegistryKey "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}"
 
 Name "${APPNAME}"
@@ -24,10 +24,10 @@ ShowInstDetails nevershow
 ShowUninstDetails nevershow
 RequestExecutionLevel none ;Require admin rights on NT6+ (When UAC is turned on)
 
-OutFile "${APPNAME}Setup.1.exe"
+OutFile "${APPNAME}Setup.1.001.1.exe"
  
  ; ------------------------------------------------------------------------------
-Function GetADV
+Function GetSource
 	Pop $1
 	
 	; cut suffix
@@ -101,11 +101,13 @@ SectionEnd
  Function InstallFinishRun
  
 	Push $EXEFILE
-	Call GetADV
+	Call GetSource
 	Pop $0
 	
+	#MessageBox MB_OK '"$INSTDIR\${LOADER_APP}" /source:$0'
+		
 	SetOutPath $INSTDIR
-	Exec '"$INSTDIR\${LOADER_APP}.exe" /source:$R0'
+	ExecWait '"$INSTDIR\${LOADER_APP}" /source:$0'
 	Pop $0
 FunctionEnd
 
@@ -124,7 +126,8 @@ Function un.KillProcess
 FunctionEnd
 
 Section "uninstall"
-	DeleteRegKey HKLM ${ProductRegistryKey}
+	DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Run"
+	DeleteRegKey ${ProductRegistryRoot} ${ProductRegistryKey}
 	SetShellVarContext current
 	RMDir /r $INSTDIR
 SectionEnd

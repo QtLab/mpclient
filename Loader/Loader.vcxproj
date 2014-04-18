@@ -90,7 +90,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Config.cpp" />
-    <ClCompile Include="Defs.cpp" />
+    <ClCompile Include="Utils.cpp" />
     <ClCompile Include="FileToUpdate.cpp" />
     <ClCompile Include="Hash.cpp" />
     <ClCompile Include="HttpApi.cpp" />

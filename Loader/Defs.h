@@ -45,6 +45,8 @@ namespace ldr {
 	String GetLastErrorString();
 	bool IsEquals(const String& st0, const String& st1);
 	void WaitMinutes(int minutes);
+	const String& BoolToString(bool b);
+	bool IsLoaderAlredyExists();
 }
 
 

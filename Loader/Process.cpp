@@ -12,14 +12,26 @@ Process::Process(const String& exeName, const String& args, const String& parent
 	,m_args(args)
 	,m_parentDir(parentDir)
 {
+	::SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX);
+	::_set_abort_behavior(0,_WRITE_ABORT_MSG);
+
+	m_hProcess = OpenProcess(exeName);
 }
 
 Process::~Process()
 {
+	::CloseHandle(m_hProcess);
 }
 
-DWORD Process::StartAndWait()
+bool Process::Exists() const
 {
+	return m_hProcess != INVALID_HANDLE_VALUE;
+}
+
+bool Process::Start()
+{
+	m_hProcess = INVALID_HANDLE_VALUE;
+
 	String exePath;
 
 	if(m_parentDir.empty())
@@ -30,9 +42,6 @@ DWORD Process::StartAndWait()
 	{
 		exePath = m_parentDir + PATH_SEPARATOR + m_exeName;
 	}
-
-	::SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX);
-	_set_abort_behavior(0,_WRITE_ABORT_MSG);
 
 	PROCESS_INFORMATION processInformation = {0};
 	STARTUPINFO startupInfo                = {0};
@@ -46,96 +55,52 @@ DWORD Process::StartAndWait()
 	{
 		std::cout << "CreateProcess failed: " << exePath << ", arguments: " << m_args
 					<< ", error: " << GetLastErrorString();
-
-		return -1;
 	}
 	else
 	{
-		// Successfully created the process.  Wait for it to finish.
-		::WaitForSingleObject( processInformation.hProcess, INFINITE );
-
-		DWORD exitCode = 0;
-		BOOL result = ::GetExitCodeProcess(processInformation.hProcess, &exitCode);
-
-		return exitCode;
+		// Successfully created the process. 
+		m_hProcess = processInformation.hProcess;
 	}
+
+	return result;
+}
+
+void Process::Wait() const
+{
+	if(Exists())
+	{
+		//  Wait for it to finish.
+		::WaitForSingleObject(m_hProcess, INFINITE );
+	}
+}
+
+DWORD Process::ExitCode() const
+{
+	DWORD exitCode = 0;
+	BOOL result = ::GetExitCodeProcess(m_hProcess, &exitCode);
+
+	return exitCode;
 }
 
 void Process::Terminate(const String& processName)
 {
-	HANDLE hSnapShot = ::CreateToolhelp32Snapshot(TH32CS_SNAPALL, NULL);
-	PROCESSENTRY32 pEntry;
-	pEntry.dwSize = sizeof (pEntry);
-	BOOL hRes = ::Process32First(hSnapShot, &pEntry);
+	HANDLE hProcess = OpenProcess(processName);
 
-	DWORD currentPID = ::GetCurrentProcessId();
-
-	while (hRes)
+	if (hProcess != NULL && hProcess != INVALID_HANDLE_VALUE)
 	{
-		if(pEntry.th32ProcessID == currentPID)
-			return;
-
-#ifdef _UNICODE
-		if(_wcsicmp(processName.c_str(), pEntry.szExeFile) == 0)
-#else
-		if(_stricmp(processName.c_str(), pEntry.szExeFile) == 0)
-#endif
-		{
-			HANDLE hProcess = OpenProcess(PROCESS_TERMINATE, 0,
-				(DWORD) pEntry.th32ProcessID);
-			if (hProcess != NULL && hProcess != INVALID_HANDLE_VALUE)
-			{
-				::TerminateProcess(hProcess, 9);
-				::CloseHandle(hProcess);
-			}
-		}
-
-		hRes = ::Process32Next(hSnapShot, &pEntry);
+		::TerminateProcess(hProcess, 9);
+		::CloseHandle(hProcess);
 	}
-
-	::CloseHandle(hSnapShot);
 }
 
-/*
-void TerminateProcesse(const String& processName)
-{
-	HANDLE hSnapShot = CreateToolhelp32Snapshot(TH32CS_SNAPALL, NULL);
-	PROCESSENTRY32 pEntry;
-	pEntry.dwSize = sizeof (pEntry);
-	BOOL hRes = Process32First(hSnapShot, &pEntry);
-
-	DWORD currentPID = GetCurrentProcessId();
-
-	while (hRes)
-	{
-		if(pEntry.th32ProcessID == currentPID)
-			return;
-
-		if(_wcsicmp(processName.c_str(), pEntry.szExeFile) == 0)
-		{
-			HANDLE hProcess = OpenProcess(PROCESS_TERMINATE, 0,
-				(DWORD) pEntry.th32ProcessID);
-			if (hProcess != NULL && hProcess != INVALID_HANDLE_VALUE)
-			{
-				TerminateProcess(hProcess, 9);
-				CloseHandle(hProcess);
-			}
-		}
-
-		hRes = Process32Next(hSnapShot, &pEntry);
-	}
-
-	CloseHandle(hSnapShot);
-}
-
-HANDLE GetProcessHandle(TCHAR * processName)
+HANDLE Process::OpenProcess(const String& processName)
 {
 	HANDLE hProcessSnap;
 	HANDLE hProcess;
 	PROCESSENTRY32 pe32;
 
 	// Take a snapshot of all processes in the system.
-	hProcessSnap = CreateToolhelp32Snapshot( TH32CS_SNAPPROCESS, 0 );
+	hProcessSnap = ::CreateToolhelp32Snapshot( TH32CS_SNAPPROCESS, 0 );
 	if( hProcessSnap == INVALID_HANDLE_VALUE )
 	{
 		return INVALID_HANDLE_VALUE;
@@ -146,31 +111,39 @@ HANDLE GetProcessHandle(TCHAR * processName)
 
 	// Retrieve information about the first process,
 	// and exit if unsuccessful
-	if( !Process32First( hProcessSnap, &pe32 ) )
+	if( !::Process32First( hProcessSnap, &pe32 ) )
 	{
 		CloseHandle( hProcessSnap );          // clean the snapshot object
 		return INVALID_HANDLE_VALUE;
 	}
 
+	DWORD currentPID = ::GetCurrentProcessId();
+
 	// Now walk the snapshot of processes, and
 	// display information about each process in turn
 	do
 	{
-		hProcess = OpenProcess( PROCESS_ALL_ACCESS, FALSE, pe32.th32ProcessID );
-		if( hProcess != NULL )
+		if(pe32.th32ProcessID == currentPID)
+			continue;
+
+#ifdef _UNICODE
+		if(_wcsicmp(processName.c_str(), pe32.szExeFile) == 0)
+#else
+		if(_stricmp(processName.c_str(), pe32.szExeFile) == 0)
+#endif
 		{
-			if(_wcsicmp(processName, pe32.szExeFile) == 0)
+			HANDLE hProcess = ::OpenProcess(PROCESS_ALL_ACCESS, 0, (DWORD) pe32.th32ProcessID);
+			if (hProcess != NULL && hProcess != INVALID_HANDLE_VALUE)
 			{
-				CloseHandle( hProcessSnap );
+				::CloseHandle(hProcessSnap);
 				return hProcess;
 			}
 		}
 	}
-	while( Process32Next( hProcessSnap, &pe32 ) );
+	while( ::Process32Next( hProcessSnap, &pe32 ) );
 
-	CloseHandle( hProcessSnap );
+	::CloseHandle( hProcessSnap );
 	return INVALID_HANDLE_VALUE;
 }
-*/
 
 }

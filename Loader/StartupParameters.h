@@ -15,13 +15,15 @@ public:
 
 	bool IsSilent() const;
 
+	bool WatchPlayer() const;
+
 private:
 	void ProcessOption(const String& key, const String& value);
 
 private:
 	String			m_source;
-	bool			m_isInstall;
 	bool			m_isSilent;
+	bool			m_watchPlayer;
 };
 
 }

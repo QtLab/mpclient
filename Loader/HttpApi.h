@@ -14,8 +14,8 @@ public:
 	String Domain() const;
 	String CreateNewUser(const String& source);
 	void UpdateUser(const String& guid, const String& source);
-	bool GetUpdate(const String& userId, FilesToUpdate& filesToUpdate);
-	bool GetPakage(const String& userId, FileToUpdate& pakage);
+	bool GetUpdateInfo(const String& userId, FilesToUpdate& filesToUpdate);
+	bool GetPakageInfo(const String& userId, FileToUpdate& pakage);
 	bool DownloadFile(FileToUpdatePtr fileToDownlaod);
 
 private:
