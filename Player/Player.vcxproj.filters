@@ -75,9 +75,6 @@
       <Filter>Generated Files</Filter>
     </ClCompile>
     <ClCompile Include="EntryPoint.cpp" />
-    <ClCompile Include="NcFramelessHelper.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_TabWidget.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
@@ -189,15 +186,6 @@
     <ClCompile Include="GeneratedFiles\Release\moc_RadioPageController.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_RequestModel.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_RequestModel.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="RequestModel.cpp">
-      <Filter>Model</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_SystemTray.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
@@ -291,6 +279,12 @@
     <ClCompile Include="TabPage.cpp">
       <Filter>Views\Pages</Filter>
     </ClCompile>
+    <ClCompile Include="MPRequest.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Config.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Player.qrc">
@@ -306,9 +300,6 @@
       <Filter>Model</Filter>
     </CustomBuild>
     <CustomBuild Include="ChannelMetadataModel.h">
-      <Filter>Model</Filter>
-    </CustomBuild>
-    <CustomBuild Include="GenreModel.h">
       <Filter>Model</Filter>
     </CustomBuild>
     <CustomBuild Include="UpdateModel.h">
@@ -359,9 +350,6 @@
     <CustomBuild Include="WidgetUtils.h">
       <Filter>Utils</Filter>
     </CustomBuild>
-    <CustomBuild Include="NcFramelessHelper.h">
-      <Filter>Utils</Filter>
-    </CustomBuild>
     <CustomBuild Include="..\Bin\radio.json">
       <Filter>ConfigExamples\Debug</Filter>
     </CustomBuild>
@@ -372,9 +360,6 @@
       <Filter>ConfigExamples\Debug</Filter>
     </CustomBuild>
     <CustomBuild Include="BaseListModel.h">
-      <Filter>Model</Filter>
-    </CustomBuild>
-    <CustomBuild Include="RequestModel.h">
       <Filter>Model</Filter>
     </CustomBuild>
     <CustomBuild Include="SystemTray.h">
@@ -422,6 +407,12 @@
     <CustomBuild Include="TabPage.h">
       <Filter>Views\Pages</Filter>
     </CustomBuild>
+    <CustomBuild Include="GenreModel.h">
+      <Filter>Model</Filter>
+    </CustomBuild>
+    <CustomBuild Include="MPRequest.h">
+      <Filter>Network</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Bin\tvgenres.json">
@@ -438,5 +429,8 @@
       <Filter>Generated Files</Filter>
     </ClInclude>
     <ClInclude Include="Prerequirements.h" />
+    <ClInclude Include="Config.h">
+      <Filter>Model</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

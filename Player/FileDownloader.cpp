@@ -40,14 +40,22 @@ void FileDownloader::Do()
 	m_file->setPermissions(QFile::WriteOwner);
     bool opened = m_file->open(QIODevice::WriteOnly);
 
+	if(!opened)
+	{
+		QString renameTo = m_filePath + "old";
+
+		if(QFile::rename(m_filePath, renameTo))
+		{
+			m_file->open(QIODevice::WriteOnly);
+		}
+	}
+
 	QNetworkRequest request(m_url);
     m_reply = m_manager->get(request);
 
 	connect(m_reply, SIGNAL(finished()), this, SLOT(DownloadFinished()));
-
 	// Ignore SSL errors
 	connect(m_reply, SIGNAL(sslErrors(QList<QSslError>)), m_reply, SLOT(ignoreSslErrors()));
-
 	connect(m_reply, SIGNAL(readyRead()), this, SLOT(DownloadReadyRead()));
 	connect(m_reply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(DownloadProgress(qint64,qint64)));
 
@@ -102,7 +110,8 @@ void FileDownloader::DownloadFinished()
 			<< " error: " << m_reply->errorString() 
 			<< " downloaded bytes: " << fileSize;
 
-		emit Error(err);
+		emit Error(m_reply->errorString());
+		emit Finished(QString::null);
 
 		m_file->remove();
 		m_reply->deleteLater();

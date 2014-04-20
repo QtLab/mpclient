@@ -42,7 +42,7 @@ private slots:
 	void ErrorSlot ( QNetworkReply::NetworkError code );
 
 signals:
-	void Error(QNetworkReply::NetworkError error);
+	void Error(const QString& error);
 	void Finished(const QString& filepath);
 	void ProgressChanged(qint64 bytesReceived, qint64 bytesTotal);
 

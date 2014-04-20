@@ -23,7 +23,7 @@ private:
 	bool notify(QObject* receiver, QEvent* even);
 
 private slots:
-	void Showtdown(); 
+	void Showtdown(int exitCode = 0); 
 	void UpdateFinished(bool restartRequired);
 	void UserIdleStateChanged(bool isIdle);
 

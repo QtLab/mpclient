@@ -1,10 +1,13 @@
 #include "AppController.h"
+#include "Config.h"
 #include "Log.h"
 
 #include <QDir>
 
 int main(int argc, char *argv[])
 {
+	mp::Config::Inst();
+
 	mp::AppController app(argc, argv);
 
 	QDir::setCurrent(QCoreApplication::applicationDirPath());

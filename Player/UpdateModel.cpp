@@ -1,4 +1,5 @@
 #include "UpdateModel.h"
+#include "Common.h"
 
 #include <QFile>
 #include <QDir>
@@ -8,6 +9,12 @@
 
 namespace mp {
 
+static const QString PlayerExeName(PLAYER_APP_EXE);
+static const QString FileNameKey("N");
+static const QString FileUrlKey("U");
+static const QString FileMd5Key("M");
+static const QString Zero("0");
+
 FileToUpdate::FileToUpdate()
 {
 }
@@ -16,7 +23,7 @@ FileToUpdate::~FileToUpdate()
 {
 }
 
-QString FileToUpdate::FileName() const 
+const QString& FileToUpdate::FileName() const 
 { 
 	return m_fileName; 
 }
@@ -26,20 +33,26 @@ void FileToUpdate::SetFileName(const QString& fn)
 	m_fileName = fn; 
 }
 
-QString FileToUpdate::MD5() const 
+const QString& FileToUpdate::MD5() const 
 { 
 	return m_md5; 
 }
 
 void FileToUpdate::SetMD5(const QString& m) 
 { 
-	m_fileName = m; 
+	m_md5 = m; 
 }
 
-QString FileToUpdate::Url() const 
+const QString& FileToUpdate::Url() const 
 { 
 	return m_url; 
 
+}
+
+QString FileToUpdate::FullPath() const
+{
+	QString path = QDir::current().filePath(m_fileName);
+	return path;
 }
 
 void FileToUpdate::SetUrl(const QString& u) 
@@ -48,6 +61,7 @@ void FileToUpdate::SetUrl(const QString& u)
 }
 
 UpdateModel::UpdateModel()
+	:m_requiredPlayerUpdate(false)
 {
 }
 
@@ -63,42 +77,49 @@ UpdateModel::~UpdateModel()
 
 void UpdateModel::ParseJson(const QByteArray& json)
 {
-	QJsonDocument d = QJsonDocument::fromJson(json);
-	QList<QVariant> list = d.toVariant().toList();
+	QJsonParseError parseResult;
+	QJsonDocument d = QJsonDocument::fromJson(json, &parseResult);
 
-	const QMetaObject *metaObject = &FileToUpdate::staticMetaObject;
-	int count = metaObject->propertyCount();
-
-	foreach(QVariant record, list) 
+	if(parseResult.error == QJsonParseError::NoError)
 	{
-		QSharedPointer<FileToUpdate> file(new FileToUpdate());
+		QList<QVariant> list = d.toVariant().toMap()["F"].toList();
 
-		QMap<QString, QVariant> map = record.toMap();
+		const QMetaObject *metaObject = &FileToUpdate::staticMetaObject;
+		int count = metaObject->propertyCount();
 
-		for (int i=0; i<count; ++i)
+		foreach(QVariant record, list) 
 		{
-			QMetaProperty property = metaObject->property(i);
-			const char *name = property.name();
-			QVariant value = map[name];
-			file->setProperty(name, value);
-		}
+			QSharedPointer<FileToUpdate> file(new FileToUpdate());
+
+			QMap<QString, QVariant> map = record.toMap();
+
+			file->SetFileName(map[FileNameKey].toString());
+			file->SetUrl(map[FileUrlKey].toString());
+			file->SetMD5(map[FileMd5Key].toString());
 		
-		QString path = QDir::current().filePath(file->FileName());
-		if(file->MD5() == "0")
-		{
-			QFile::remove(path);
-		}
-		else
-		{
-			if(ComputeFileMD5(path) != file->MD5())
+			
+			if(file->MD5() == Zero)
 			{
-				Add(file);
+				QFile::remove(file->FullPath());
+			}
+			else
+			{
+				QString md5 = ComputeFileMD5(file->FullPath());
+				if(md5.compare(file->MD5(), Qt::CaseSensitivity::CaseInsensitive) != 0)
+				{
+					if(file->FileName().compare(PlayerExeName, Qt::CaseSensitivity::CaseInsensitive) == 0)
+					{
+						m_requiredPlayerUpdate = true;
+					}
+
+					Add(file);
+				}
 			}
 		}
-	}
 
-	if(!m_items.empty())
-		emit dataChanged(createIndex(0,0), createIndex(m_items.size(), 0));
+		if(!m_items.empty())
+			emit dataChanged(createIndex(0,0), createIndex(m_items.size(), 0));
+	}
 }
 
 QString UpdateModel::ComputeFileMD5(const QString& filePath)
@@ -128,6 +149,11 @@ void UpdateModel::Remove(FileToUpdatePtr fileInfo)
 	}
 
 	emit dataChanged(createIndex(0,0), createIndex(m_items.size(), 0));
+}
+
+bool UpdateModel::RequiredPlayerUpdate() const
+{
+	return m_requiredPlayerUpdate;
 }
 
 QVariant UpdateModel::data(const QModelIndex & index, int role) const 

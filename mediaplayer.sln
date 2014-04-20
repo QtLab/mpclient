@@ -10,6 +10,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Installer", "Installer", "{
 		Installer\Installer.nsi = Installer\Installer.nsi
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{D41E5129-D5E3-487C-8252-F891151BD1DD}"
+	ProjectSection(SolutionItems) = preProject
+		Common\Common.h = Common\Common.h
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32

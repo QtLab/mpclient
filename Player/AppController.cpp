@@ -2,7 +2,7 @@
 #include "UpdateController.h"
 #include "RadioPageController.h"
 #include "TVPageController.h"
-
+#include "Common.h"
 #include "UserIdle.h"
 #include "MainWindow.h"
 #include "TabWidget.h"
@@ -18,7 +18,6 @@ AppController::AppController(int argc, char *argv[])
 	,m_updateController(new UpdateController())
 	,m_userIdle(new UserIdle())
 {
-
 }
 
 AppController::~AppController()
@@ -36,17 +35,14 @@ void AppController::CreateView()
 	m_mainWidow->AddTab(m_radioPageController->View());
 	m_mainWidow->AddTab(m_tvPageController->View());
 
-	m_mainWidow->show();	
+	m_mainWidow->show();
+
+	m_updateController->Run();
 }
 
 void AppController::InitSignalsSlots()
 {
-	// Metadata
-	//connect(&AudioStreamController::Inst(), SIGNAL(MetadataUpdated(const ChannelMetadata&)), 
-		//m_mainWidow->TitleBar(), SLOT(MetadataUpdated(const ChannelMetadata&)));
-
 	connect(m_trayIcon, SIGNAL(ShowtdownApplicationReuest()), SLOT(Showtdown()));
-
 	connect(m_updateController, SIGNAL(UpdateFinished(bool)), SLOT(UpdateFinished(bool)));
 	connect(m_userIdle, SIGNAL(IdleStateChanged(bool)), SLOT(UserIdleStateChanged(bool)));
 }
@@ -90,14 +86,12 @@ bool AppController::notify(QObject* receiver, QEvent* even)
 	return true;
 }
 
-void AppController::Showtdown()
+void AppController::Showtdown(int exitCode)
 {
 	m_mainWidow->deleteLater();
 	m_trayIcon->deleteLater();
 
-	exit(777777);
-	//exit(7777777);
-	//quit();
+	exit(exitCode);
 }
 
 void AppController::UpdateFinished(bool restartRequired)
@@ -109,6 +103,16 @@ void AppController::UpdateFinished(bool restartRequired)
 	}
 	else
 	{
+		//TODO: try to start loader in watch mode
+		if(m_mainWidow->isHidden())
+		{
+			Showtdown(SILNET_UPDATE_EXIT_CODE);
+		}
+		else
+		{
+			//TODO: message box about restart required
+			Showtdown(UPDATE_EXIT_CODE);
+		}
 	}
 }
 

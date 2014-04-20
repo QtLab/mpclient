@@ -14,25 +14,28 @@
 #include <iostream>
 #include <fstream>
 
-//#define LOG_FILE "output.log"
+#include "Common.h"
+
+#define CONSOLE_TRACE_MODE
+
+#ifdef CONSOLE_TRACE_MODE
+#pragma comment( linker, "/SUBSYSTEM:CONSOLE" )
+#else
+#pragma comment( linker, "/SUBSYSTEM:WINDOWS" )
+#endif
 
 #ifdef _UNICODE
 	#define GET_OPERATION		L"GET"
-	#define APP_NAME			L"mpldr"
-	#define APP_UA				L"mpldr"
+	#define APP_UA				L"loader"
 	#define PATH_SEPARATOR		L"\\"
-	#define PLAYER_APP_EXE		L"Player.exe"
-
 namespace ldr {
 	typedef std::wstring String;
 }
 
 #else
 	#define GET_OPERATION		"GET"
-	#define APP_NAME			"mpldr"
-	#define APP_UA				"mpldr"
+	#define APP_UA				"loader"
 	#define PATH_SEPARATOR		"\\"
-	#define PLAYER_APP_EXE		"Player.exe"
 
 namespace ldr {
 	typedef std::string String;

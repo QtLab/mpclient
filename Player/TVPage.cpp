@@ -13,6 +13,7 @@ namespace mp {
 TVPage::TVPage(QWidget* parent, ChannelSourceModelPtr channels)
 	:TabPage(parent)
 {
+	/*
 	QHBoxLayout *box = new QHBoxLayout(this);
 	box->setContentsMargins(0,0,0,0);
 	m_view = WebView::Create();
@@ -32,6 +33,7 @@ TVPage::TVPage(QWidget* parent, ChannelSourceModelPtr channels)
 	//m_view->setUrl(HtmlilePath("VideoPlayer.html"));
 
 	box->addWidget(m_view);
+	*/
 }
 
 TVPage::~TVPage()

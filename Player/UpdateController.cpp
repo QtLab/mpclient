@@ -1,37 +1,35 @@
 #include "UpdateController.h"
 #include "DownlaodManager.h"
-#include "RequestModel.h"
 #include "UpdateModel.h"
+#include "MPRequest.h"
 
 #include <QDebug>
 #include <QtNetwork/QNetworkReply>
 
 namespace mp {
 
-const int				DefualtUpdateInterval = 1000 * 60 * 60;//1 h
-const QString			PlayerExeName("player.exe");
+const int DefualtUpdateInterval = 1000 * 60 * 60;//1 h
 
 UpdateController::UpdateController()
+	:m_filesToUpdate(0)
 {
 }
 
 bool UpdateController::InProcess() const
 {
-	bool inProcess = m_filesToUpdate.rowCount() > 0;
+	bool inProcess = m_filesToUpdate > 0;
 	return inProcess;
 }
 
-void UpdateController::Run(const QString& updateMd5)
+void UpdateController::Run()
 {
-	qDebug() << "UpdateControler::Run new md5: " << updateMd5 << " last md5: ";
-
 	if(!InProcess())
 	{
-		RequestModel url = RequestModel::CreateUpdateUrl();
+		MPRequest request = MPRequest::CreateUpdateRequest();
 
-		qDebug() << "Download update json: " << url.Url().toString();
+		qDebug() << "Download update json: " << request.Url().toString();
 
-		m_networkAccess.Get(url, this, SLOT(ProcessUpdateReply()));
+		m_networkAccess.Get(request, this, SLOT(ProcessUpdateList()));
 	}
 	else
 	{
@@ -53,30 +51,47 @@ void UpdateController::ProcessUpdateList()
 	{
 		bool restarRequired = false;
 
-		m_filesToUpdate.ParseJson(reply->readAll());
+		// Files to update
+		UpdateModel	updateModel;
 
-		FileToUpdatePtr file;
+		updateModel.ParseJson(reply->readAll());
 
-		foreach (file, m_filesToUpdate.Items())
+#ifndef _DEBUG
+		if(updateModel.RequiredPlayerUpdate())
 		{
-			if(file->FileName().contains(PlayerExeName))
+			//TODO: check to laoder exists
+			emit UpdateFinished(true);
+		}
+		else
+#endif
+		{
+			FileToUpdateList filesToUpdate = updateModel.Items();
+			foreach (FileToUpdatePtr file, filesToUpdate)
 			{
-				emit UpdateFinished(true);
-				break;
+				QString filePath = file->FullPath();
+				qDebug() << "Downlaod file: " << filePath << " from: " << file->Url();
+
+				m_networkAccess.DownloadFile(file->Url(), file->FullPath(), this, SLOT(FileDownloaded(const QString&)));			
 			}
 
-			//m_networkAccess.DownloadFile(file->Url(), file->Url(), 
-			//DownlaodManager::Inst().DownloadFile( 
-				//RequestModel::CreateCurrentDirUrl(file->FileName()).ToUrl(), this, SLOT(ProcessUpdateFileReply(QNetworkReply*)));
-			
+			m_filesToUpdate = filesToUpdate.count();
 		}
 	}
 
 	reply->deleteLater();
 }
 
-void UpdateController::FileDownloaded(/*QNetworkReply* reply*/)
+void UpdateController::FileDownloaded(const QString& path)
 {
+	if(path.isEmpty())
+		qDebug() << "File downlaoded: " << path;
+
+	m_filesToUpdate--;
+
+	if(m_filesToUpdate <= 0)
+	{
+		emit UpdateFinished(false);
+	}
 }
 
 }

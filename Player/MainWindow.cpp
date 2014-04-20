@@ -1,5 +1,4 @@
 #include "MainWindow.h"
-#include "NcFramelessHelper.h"
 #include "TabWidget.h"
 #include "Titlebar.h"
 #include "WidgetUtils.h"
@@ -12,16 +11,13 @@ namespace mp {
 MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
 	: QMainWindow(parent, flags)
 {
+	setWindowFlags( Qt::FramelessWindowHint | Qt::WindowSystemMenuHint | Qt::WindowMinimizeButtonHint );
+
 	WidgetUtils::LoadStyleSheets(this, "Player.qss");
 
 	setWindowIcon(QIcon(":/mp/Resources/Player.ico"));
 
 	resize(550, 600);
-
-	//NcFramelessHelper* f = new NcFramelessHelper(this);
-	//f->setWidgetMovable(true);
-	//f->setWidgetResizable(true);
-	//f->activateOn(this);
 
 	QWidget * central = new QWidget(this);
 	setCentralWidget(central);
@@ -37,6 +33,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
 	m_layout->addWidget(borderTop, 1);
 
 	m_titleBar = new Titlebar(this);
+	m_titleBar->installEventFilter(this);
 	m_layout->addWidget(m_titleBar);
 
 	qDebug() << "Titlebar was created";
@@ -71,6 +68,30 @@ void MainWindow::closeEvent(QCloseEvent *evt)
 	// Hide the window to tray
 	hide();
 	evt->ignore();
+}
+
+bool MainWindow::eventFilter(QObject *object, QEvent *evt)
+{
+	if (object == m_titleBar)
+	{
+		if(evt->type() == QEvent::MouseButtonPress)
+		{
+			m_cursorPosition = static_cast<QMouseEvent *>(evt)->globalPos();
+		}
+		else
+		{
+			if(evt->type() == QEvent::MouseMove)
+			{
+				QMouseEvent* moveEvt = static_cast<QMouseEvent *>(evt);
+
+				const QPoint delta = moveEvt->globalPos() - m_cursorPosition;
+				move(x()+delta.x(), y()+delta.y());
+				m_cursorPosition = moveEvt->globalPos();
+			}
+		}
+	}
+
+	return false;
 }
 
 }

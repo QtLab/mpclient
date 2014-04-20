@@ -30,10 +30,14 @@ public:
 	void AddTab(TabPage * page);
 
 	void closeEvent(QCloseEvent *evt);
+	bool eventFilter(QObject *object, QEvent *evt);
 
 private:
 	QVBoxLayout *			m_layout;
+	
 	Titlebar*				m_titleBar;
+	QPoint					m_cursorPosition;
+
 	TabWidget *				m_tabWidget;
 };
 

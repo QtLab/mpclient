@@ -1,6 +1,7 @@
 #ifndef MP_MEDIA_PREREQUIRMENTS
 #define MP_MEDIA_PREREQUIRMENTS
 
+#include "Common.h"
 #include <QSharedPointer>
 #include <QList>
 
@@ -30,7 +31,7 @@ class SystemTray;
 class TVPageController;
 class RadioPageController;
 class UpdateController;
-class RequestModel;
+class MPRequest;
 class DownlaodManager;
 class UserIdle;
 class WebView;

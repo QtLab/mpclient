@@ -1,6 +1,6 @@
 #include "DownlaodManager.h"
 #include "FileDownloader.h"
-#include "RequestModel.h"
+#include "MPRequest.h"
 
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkRequest>
@@ -24,9 +24,9 @@ void DownlaodManager::DownloadFile(const QString& url, const QString& filePath,
 	downlaoder->Do();
 }
 
-void DownlaodManager::Get(const RequestModel& requestUrl ,QObject* listenerFinish, const char* slot)
+void DownlaodManager::Get(const MPRequest& req ,QObject* listenerFinish, const char* slot)
 {
-	QNetworkRequest request(requestUrl.Url());
+	QNetworkRequest request(req.Url());
 	QNetworkReply* reply = m_manager->get(request);
 	
 	if(listenerFinish == NULL)
@@ -42,12 +42,10 @@ void DownlaodManager::Get(const RequestModel& requestUrl ,QObject* listenerFinis
 	connect(reply, SIGNAL(sslErrors(QList<QSslError>)), reply, SLOT(ignoreSslErrors()));
 }
 	
-void DownlaodManager::Post(const RequestModel& requestUrl ,QObject* listenerFinish, const char* slot)
+void DownlaodManager::Post(const MPRequest& req ,QObject* listenerFinish, const char* slot)
 {
-	QNetworkRequest request(requestUrl.Url());
-
-	QByteArray * data = requestUrl.ReqBodyRef();
-	QNetworkReply* reply = m_manager->post(request, *data);
+	QNetworkRequest request(req.Url());
+	QNetworkReply* reply = m_manager->post(request, req.Body());
 
 	if(listenerFinish == NULL)
 	{

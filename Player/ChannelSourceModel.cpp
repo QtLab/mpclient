@@ -1,11 +1,9 @@
 #include "ChannelSourceModel.h"
-#include "RequestModel.h"
 
 #include <QFile>
 #include <QDir>
 #include <QHash>
 #include <QDebug>
-//#include <QDeclarativeListProperty>
 
 namespace mp {
 
@@ -84,19 +82,6 @@ ChannelSourceModel::ChannelSourceModel()
 ChannelSourceModel::~ChannelSourceModel() 
 {
 }
-
-/*
-DeclarativeChannels ChannelSourceModel::DeclarativeItems() const
-{
-	DeclarativeChannels channelsPointers;
-	foreach(ChannelSourcePtr channel, m_channels)
-	{
-		channelsPointers.append(channel.data());
-	}
-	
-	return DeclarativeChannels();//this, channelsPointers);
-}
-*/
 
 ChannelSourceList ChannelSourceModel::Items() const
 {

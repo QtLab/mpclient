@@ -81,7 +81,7 @@ Section "install"
 	File "${LOADER_APP}"
 	WriteUninstaller "$INSTDIR\uninstall.exe"
 	
-	WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Run" ${APPNAME}" "$\"$INSTDIR\${LOADER_APP}$\" /S"
+	WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Run" ${APPNAME} "$\"$INSTDIR\${LOADER_APP}$\" /S"
 
 	# Registry information for add/remove programs
 	WriteRegStr ${ProductRegistryRoot} ${ProductRegistryKey} "DisplayName" "${APPNAME}"

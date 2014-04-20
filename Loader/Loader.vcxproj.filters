@@ -5,7 +5,6 @@
     <ClCompile Include="FileToUpdate.cpp" />
     <ClCompile Include="Hash.cpp" />
     <ClCompile Include="HttpApi.cpp" />
-    <ClCompile Include="Loader.cpp" />
     <ClCompile Include="Path.cpp" />
     <ClCompile Include="StartupParameters.cpp" />
     <ClCompile Include="json\json_value.cpp">
@@ -31,6 +30,7 @@
     </ClCompile>
     <ClCompile Include="Process.cpp" />
     <ClCompile Include="Utils.cpp" />
+    <ClCompile Include="EntryPoint.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Config.h" />

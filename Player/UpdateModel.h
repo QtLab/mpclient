@@ -9,22 +9,24 @@ namespace mp {
 class FileToUpdate : public QObject
 {
 	Q_OBJECT
-	Q_PROPERTY(QString f READ FileName WRITE SetFileName)
-	Q_PROPERTY(QString m READ MD5 WRITE SetMD5)
-	Q_PROPERTY(QString u READ Url WRITE SetUrl)
+	Q_PROPERTY(QString N READ FileName WRITE SetFileName)
+	Q_PROPERTY(QString M READ MD5 WRITE SetMD5)
+	Q_PROPERTY(QString U READ Url WRITE SetUrl)
 public:
 
 	FileToUpdate();
 	~FileToUpdate();
 
-	QString FileName() const;
+	const QString& FileName() const;
 	void SetFileName(const QString& fn);
 
-	QString MD5() const;
+	const QString& MD5() const;
 	void SetMD5(const QString& m);
 
-	QString Url() const;
+	const QString& Url() const;
 	void SetUrl(const QString& u);
+
+	QString FullPath() const;
 
 private:
 	QString		m_fileName;
@@ -56,16 +58,20 @@ public:
      //}
 	FileToUpdateList Items() const;
 	void Remove(FileToUpdatePtr fileInfo);
+	bool RequiredPlayerUpdate() const;
 
 	QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 	int rowCount(const QModelIndex &parent = QModelIndex()) const;
 	QHash<int, QByteArray>	roleNames() const;
+
 
 private:
 	void ParseJson(const QByteArray& json);
 	QString ComputeFileMD5(const QString& filePath);
 
 private:
+	bool	m_requiredPlayerUpdate;
+
 	friend class UpdateController;
 	Q_DISABLE_COPY(UpdateModel)
 };

@@ -12,7 +12,7 @@
 namespace ldr {
 
 HttpApi::HttpApi()
-	:m_domain("109.120.163.35")
+	:m_domain(DEFAULT_HOST)
 {
 }
 

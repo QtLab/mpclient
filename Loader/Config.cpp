@@ -20,7 +20,7 @@ String Config::ConfigFilePath()
 	CHAR configPath[MAX_PATH];
 	if (SUCCEEDED(SHGetFolderPathA(NULL, CSIDL_COMMON_APPDATA, NULL, 0, configPath)))
 	{
-		sprintf_s(configPath, "%s\\%s", configPath, APP_NAME);
+		sprintf_s(configPath, "%s\\%s", configPath, CONFIG_DIR);
 
 		if(!Path::DirectoryExists(configPath))
 		{
@@ -31,7 +31,7 @@ String Config::ConfigFilePath()
 			}
 		}
 
-		sprintf_s(configPath, "%s\\config.json", configPath, APP_NAME);
+		sprintf_s(configPath, "%s\\config.json", configPath);
 		return configPath;
 	}
 

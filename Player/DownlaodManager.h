@@ -17,10 +17,10 @@ public:
 	void DownloadFile(const QString& url, const QString& filePath, 
 						QObject* listFinish = NULL, const char* slot = NULL);
 
-	void Get(const RequestModel& requestUrl
+	void Get(const MPRequest& request
 		,QObject* listenerFinish = NULL, const char* slot = NULL);
 	
-	void Post(const RequestModel& requestUrl
+	void Post(const MPRequest& request
 		,QObject* listenerFinish = NULL, const char* slot = NULL);
 
 private slots:
