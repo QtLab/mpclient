@@ -17,7 +17,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
 
 	setWindowIcon(QIcon(":/mp/Resources/Player.ico"));
 
-	resize(550, 600);
+	resize(580, 351);
 
 	QWidget * central = new QWidget(this);
 	setCentralWidget(central);

@@ -6,30 +6,30 @@
 
 namespace mp {
 
-class GenreItem : public QObject
+class Category : public QObject
 {
 	Q_OBJECT
-	Q_PROPERTY(QString	id READ Id WRITE SetId)
+	Q_PROPERTY(int	id READ Id WRITE SetId)
 	Q_PROPERTY(QString name READ Name WRITE SetName)
 
 public:
-	GenreItem();
-	~GenreItem();
+	Category();
+	~Category();
 
-	QString Id() const;
-	void SetId(const QString& id);
+	int Id() const;
+	void SetId(int id);
 
 	QString Name() const;
 	void SetName(const QString& name);
 
 private:
-	QString					m_id;
+	int						m_id;
 	QString					m_name;
-	Q_DISABLE_COPY(GenreItem)
+	Q_DISABLE_COPY(Category)
 };
 
 
-class GenreModel : public BaseListModel<GenreItem>
+class CategoriesModel : public BaseListModel<Category>
 {
 	Q_OBJECT
 
@@ -42,22 +42,16 @@ public:
 		Url
 	};
 
-	GenreModel();
-	virtual ~GenreModel();
+	CategoriesModel();
+	virtual ~CategoriesModel();
 
 	// Don't use in prod. It isn't thread-safe
-	GenreItemList Items() const;
-	GenreItemPtr FindById(const QString& id);
+	CategoryList Items() const;
+	CategoryPtr FindById(int id);
 
 	QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 	int rowCount(const QModelIndex &parent = QModelIndex()) const;
 	QHash<int, QByteArray>	roleNames() const;
-
-private:
-	friend class TabPagesController;
-	friend class ChannelSourceModel;
-	friend class RadioCompositeModel;
-	friend class RadioPageController;
 };
 
 

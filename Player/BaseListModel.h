@@ -8,9 +8,13 @@
 #include <QAbstractListModel>
 #include <QReadWriteLock>
 #include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
 #include <QList>
 #include <QDebug>
 #include <QFile>
+#include <QDateTime>
+#include <QSet>
 
 namespace mp {
 
@@ -18,6 +22,8 @@ template<typename T>
 class BaseListModel : public QAbstractListModel
 {
 public:
+	typedef QSet<QString> PropertiesSet;
+
 	BaseListModel(){}
 	virtual ~BaseListModel(){}
 
@@ -34,7 +40,7 @@ public:
 		}
 	}
 
-	virtual  void Load(const QString& filePath)
+	virtual  void Load(const QString& filePath, const PropertiesSet& propertiesToLoad = PropertiesSet())
 	{
 		QFile file(filePath);
 		if(file.open(QIODevice::ReadOnly))
@@ -43,7 +49,7 @@ public:
 	#ifdef _DEBUG
 			QString json = QString::fromUtf8(arr.data(), arr.size());
 	#endif
-			ParseJson(arr);
+			ParseJson(arr, propertiesToLoad);
 		}
 		else
 		{
@@ -52,33 +58,86 @@ public:
 		}
 	}
 
-	virtual void ParseJson(const QByteArray& json)
+	virtual bool Save(const QString& filePath, const PropertiesSet& propertiesToSave = PropertiesSet())
+	{
+		const QMetaObject *metaObject = &T::staticMetaObject;
+		int propertiesCount = metaObject->propertyCount();
+
+		QJsonDocument document;
+		QJsonArray jsonArray;
+
+		ItemList::iterator iter;
+		for (iter = m_items.begin(); iter != m_items.end(); ++iter)
+		{
+			QJsonObject jsonObj;
+			ItemType item = (*iter);
+			for (int i = 0; i < propertiesCount; ++i)
+			{
+				QMetaProperty property = metaObject->property(i);
+				const char *propertyName = property.name();
+
+				if(strcmp("objectName", propertyName) != 0)
+				{
+					if(propertiesToSave.empty() || propertiesToSave.contains(propertyName))
+					{
+						QVariant value = item->property(propertyName);
+#ifdef _DEBUG
+						QString str = value.toString();
+#endif
+						jsonObj.insert(propertyName, QJsonValue::fromVariant(value));
+					}
+				}
+			}
+
+			jsonArray.append(QJsonValue(jsonObj));
+		}
+
+		document.setArray(jsonArray);
+		QByteArray json = document.toJson();
+
+		QFile file(filePath);
+		if(file.open(QIODevice::WriteOnly | QIODevice::Text))
+		{
+			qint64 written = file.write(json);
+			int toWrite = json.size();
+
+			return written == toWrite;
+		}
+
+		return false;
+	}
+
+	virtual void ParseJson(const QByteArray& json, const PropertiesSet& propertiesToLoad = PropertiesSet())
 	{
 		QJsonParseError parseResult;
 		QJsonDocument d = QJsonDocument::fromJson(json, &parseResult);
 
 		if(parseResult.error == QJsonParseError::NoError)
 		{
-			QList<QVariant> list = d.toVariant().toList();
+			QJsonArray list = d.array();
 
 			const QMetaObject *metaObject = &T::staticMetaObject;
 
 			int count = metaObject->propertyCount();
 
-			foreach(QVariant record, list) 
+			foreach(QJsonValue record, list) 
 			{
-				QSharedPointer<T> item(new T());
+				ItemType item(new T());
 
-				QMap<QString, QVariant> map = record.toMap();
+				QJsonObject object = record.toObject();
 
 				for (int i = 0; i < count; ++i)
 				{
 					QMetaProperty property = metaObject->property(i);
-					const char *name = property.name();
-					QVariant value = map[name];
+					const char* propertyName = property.name();
 
-					if(!value.isNull())
-						item->setProperty(name, value);
+					if(propertiesToLoad.empty() || propertiesToLoad.contains(propertyName))
+					{
+						QJsonValue value = object.value(propertyName);
+					
+						if(!value.isNull())
+							item->setProperty(propertyName, value.toVariant());
+					}
 				}
 		
 				Add(item);
@@ -96,12 +155,16 @@ public:
 	
 	void Cleanup()
 	{
+		beginResetModel();
 		m_items.clear();
-		emit dataChanged(createIndex(0, 0),createIndex(0, 0));
+		endResetModel();
 	}
 
 protected:
-	QList<QSharedPointer<T>>				m_items;
+	typedef QSharedPointer<T>	ItemType;
+	typedef QList<ItemType>		ItemList;
+
+	ItemList					m_items;
 };
 
 }

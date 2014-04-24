@@ -1,61 +1,126 @@
 import QtQuick 2.0
 
 Rectangle {
-	id: radioPageViewId;
-	width: 600
-	height: 480
-	color: '#ffffff'	
-
-	//QML types also provide built-in property change 
-	//signals that are emitted whenever a property value changes
-
-	FontLoader { id: openSansLight; source: "txdJ2vM9.ttf"}
-
-	property string currentRadioId:"64"
-	property string currentGenreId:"22"
-	property variant test:"22"
-
-	signal playRadio
+	id: radioPageView;
+	color: '#ffffff'
+	FontLoader { id: openSansLight; source: "txdJ2vM9.ttf" }
 
 	// signals
+	signal genreChanged(int id)
 	signal pauseRadio
-
-	signal genreChanged
-
-	LastStationsView {
-		id: lastStationsView
-		width: 100
-		height: 120
-		anchors.topMargin: 30
-		anchors.leftMargin: 20
-		anchors.left: parent.left
-		anchors.top: genresView.bottom
-		internalModel: lastStations
-	}
-
-	TopStationsView {
-		id: popularStationsView
-		width: 100
-		height: 120
-		anchors.topMargin: 30
-		anchors.leftMargin: 20
-		anchors.left: parent.left
-		anchors.top: lastStationsView.bottom
-		internalModel: topStations
-	}
-
-	StationsView {
-		id: stationsView
-		width: 100
-		height: parent.height - 150
-		anchors.topMargin: 50
-		anchors.right: parent.right
-		anchors.top: genresView.bottom
-		internalModel: currentStations
-	}
-
+	signal playRadio(int id)
+	signal searchFilterChanged(string txt);
+	
 	GenresView {
-		id: genresView
-		anchors.topMargin: 5
+		id: genresView;
+		anchors {
+			top: radioPageView.top
+		}
 	}
+	
+	Rectangle {
+		anchors {
+			left: parent.left
+			right: parent.right
+			top: genresView.bottom
+			bottom: parent.bottom
+		}
+		
+		Loader {
+			id: background
+
+			anchors.fill: parent
+			source: "CurrentCategoryStationsView.qml"
+		}
+	}
+	
+	onSearchFilterChanged: {
+		if(txt.length == 0)
+		{
+			hideSearchResults();
+		}
+		else
+		{
+			showSearchResults();
+		}
+	}
+	
+	function showSearchResults() {
+		background.source = "SearchResultView.qml";
+	}
+	
+	function hideSearchResults() {
+		background.source = "CurrentCategoryStationsView.qml";
+	}
+	
+	/*
+	CurrentGenreStationsView {
+		id: currentGenreStationsView;
+		visible: true;
+		anchors {
+			left: parent.left
+			right: parent.right
+			top: genresView.bottom
+			bottom: parent.bottom
+		}
+	}
+	
+	SearchResultView {
+		id: searchResultView
+		visible: false;
+		anchors {
+			left: parent.left
+			right: parent.right
+			top: genresView.bottom
+			bottom: parent.bottom
+		}
+	}
+
+	function toogleVisible() {
+		if(currentGenreStationsView.visible)
+		{
+			currentGenreStationsView.visible = false;
+			searchResultView.visible = true;
+		}
+		else
+		{
+			currentGenreStationsView.visible = true;
+			searchResultView.visible = false;
+		}
+		
+	}
+	*/
+	
+	/*	
+
+*/
+	/*
+	Rectangle {
+
+		anchors {	
+			left: parent.left
+			right: parent.right
+			top: genresView.bottom
+			bottom: parent.bottom
+		}
+	}
+	*/
+	/*
+	Rectangle {
+		color: 'black'
+		border.width :5;
+		id: testView;
+		
+		anchors {
+			fill: parent;
+			top: genresView.bottom
+		}
+		
+		Text {
+			text: 'asasdasasdasdasd'
+		}
+	}
+	*/
+	
+
 }

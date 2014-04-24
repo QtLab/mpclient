@@ -1,50 +1,26 @@
-import QtQuick 2.0
+import QtQuick 2.2
 
-Rectangle {
-
-	property variant internalModel;
-	
-	//width: 180; height: 200
-	
+Rectangle {	
 	width: parent.width; height: parent.height
 	
-	Component 
-	{
+	Component  {
 		id: channelDelegate
-		Item 
-		{
-			height: 40
-
-			Text  {
-				id: stationText
-				text: ' ' + Name + '  '
-				color: '#a2a2a2'
-				font.pixelSize: 12
-				
-				MouseArea  {
-					anchors.fill: parent
-					hoverEnabled: true
-					cursorShape: Qt.PointingHandCursor
-				}
-			}
+		StationView {
+			width: channelsList.width;
 		}
 	}
-
-	//Column {
-		TextInput { 
-			text: "Hello"; 
-			font.weight: Font.DemiBold 
+	
+	ListView {
+		id: channelsList
+		width:parent.width;
+		
+		anchors {
+			fill: parent;
 		}
 		
-		ListView {
-			anchors.topMargin: 50
-			id: channelsList
-			width:parent.width; height: parent.height
-			anchors.fill: parent
-			delegate: channelDelegate
-			model: internalModel
-		}
-	//}
+		delegate: channelDelegate
+		model: allStations
+	}
 }
 
 

@@ -16,7 +16,7 @@
 
 #include "Common.h"
 
-#define CONSOLE_TRACE_MODE
+//#define CONSOLE_TRACE_MODE
 
 #ifdef CONSOLE_TRACE_MODE
 #pragma comment( linker, "/SUBSYSTEM:CONSOLE" )

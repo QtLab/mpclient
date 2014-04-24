@@ -141,15 +141,6 @@
     <ClCompile Include="GeneratedFiles\Release\moc_ChannelMetadataModel.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="GenreModel.cpp">
-      <Filter>Model</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_GenreModel.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_GenreModel.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
     <ClCompile Include="UpdateModel.cpp">
       <Filter>Model</Filter>
     </ClCompile>
@@ -285,6 +276,24 @@
     <ClCompile Include="Config.cpp">
       <Filter>Model</Filter>
     </ClCompile>
+    <ClCompile Include="ChannelSourceSortFilterProxyModel.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_ChannelSourceSortFilterProxyModel.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_ChannelSourceSortFilterProxyModel.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_CategoriesModel.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_CategoriesModel.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="CategoriesModel.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Player.qrc">
@@ -407,11 +416,14 @@
     <CustomBuild Include="TabPage.h">
       <Filter>Views\Pages</Filter>
     </CustomBuild>
-    <CustomBuild Include="GenreModel.h">
-      <Filter>Model</Filter>
-    </CustomBuild>
     <CustomBuild Include="MPRequest.h">
       <Filter>Network</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ChannelSourceSortFilterProxyModel.h">
+      <Filter>Model</Filter>
+    </CustomBuild>
+    <CustomBuild Include="CategoriesModel.h">
+      <Filter>Model</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>

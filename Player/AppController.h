@@ -38,6 +38,8 @@ private:
 	UserIdle *					m_userIdle;
 };
 
+void NotifyErrorLog(const char* eventName, QObject* receiver);
+
 }
 
 #endif

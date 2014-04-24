@@ -3,7 +3,7 @@
 
 #include "Prerequirements.h"
 #include "ChannelSourceModel.h"
-#include "GenreModel.h"
+#include "CategoriesModel.h"
 
 namespace mp {
 
@@ -35,7 +35,7 @@ private:
 	// Top stations
 	ChannelSourceModel				m_topSations;
 	// All genres
-	GenreModel						m_radioGenres;
+	CategoriesModel					m_categories;
 	// Widget view
 	RadioPage*						m_view;
 	// Audio stream manager

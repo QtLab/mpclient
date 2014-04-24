@@ -1,50 +1,35 @@
-import QtQuick 2.0
+import QtQuick 2.2
 
 Rectangle {
 
 	property variant internalModel;
-
-	Text  {
-		text: 'LAST' //currentChannel.Name
-		color: '#ff7e43'
-		font.pixelSize: 14
-	}
+	height: 100
 
 	Component {
 		id: channelDelegate
-		Item {
-			
-			Rectangle { 
-				width: parent.width; height: parent.height
-				//color: '#ffffff'
-
-				Row {
-					
-					Text  {
-						id: stationText
-						text: '  ' + Name + '  '
-						color: '#a2a2a2'
-						font.pixelSize: 12
-
-						MouseArea  {
-							anchors.fill: parent
-							hoverEnabled: true
-						}
-					}
-				}
-			}
-
-			//width: stationText.paintedWidth; 
-			height: 30
+		StationView {
+			width : 200
 		}
 	}
 
+	Text  {
+		id: lastStationsText
+		text: 'ПОСЛЕДНИЕ'
+		color: '#ff7e43'
+		font.pixelSize: 13
+	}
+	
 	ListView {
 		id: channelsList
-		width:parent.width; height: parent.height
-		anchors.fill: parent
-		anchors.topMargin: 50
+		
+		anchors {
+			fill: parent
+			topMargin: 30
+		}
+		
+		interactive: false
 		delegate: channelDelegate
-		model: internalModel
+		model: lastStations
+		height: 75
 	}
 }

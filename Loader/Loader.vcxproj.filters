@@ -63,6 +63,7 @@
       <Filter>minzip</Filter>
     </ClInclude>
     <ClInclude Include="Process.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="json\json_internalarray.inl">
@@ -82,5 +83,8 @@
     <Filter Include="json">
       <UniqueIdentifier>{13b2350f-232e-4d4d-ac29-346b75b73bf9}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Loader.rc" />
   </ItemGroup>
 </Project>

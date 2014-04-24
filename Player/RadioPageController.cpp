@@ -11,7 +11,7 @@ RadioPageController::RadioPageController()
 {
 	ReLoadData();
 
-	m_view = new RadioPage(NULL, &m_radioGenres, &m_stations, &m_topSations, &m_lastSations);
+	m_view = new RadioPage(NULL, &m_categories, &m_stations, &m_topSations, &m_lastSations);
 
 	connect(m_view, SIGNAL(PlayRadio(const QString&)), this, SLOT(PlayRadio(const QString&)));
 	connect(m_view, SIGNAL(GenreChanged(const QString&)), this, SLOT(GenreChanged(const QString&)));
@@ -29,14 +29,13 @@ RadioPageController::RadioPageController()
 
 RadioPageController::~RadioPageController()
 {
-	
 }
 
 
 void RadioPageController::ReLoadData()
 {
-	m_radioGenres.Load(ConfigFilePath("radiogenres.json"));
-	m_stations.Load(ConfigFilePath("radio.json"));
+	m_categories.Load(ConfigFilePath("radiogenres"));
+	m_stations.LoadWithStats(ConfigFilePath("radio"));
 }
 
 TabPage* RadioPageController::View()
@@ -47,7 +46,7 @@ TabPage* RadioPageController::View()
 
 void RadioPageController::PlayRadio(const QString& id)
 {
-	ChannelSourcePtr channel = m_stations.FindById(id);
+	ChannelSourcePtr channel = m_stations.Find(id.toInt());
 	if(channel)
 	{
 		m_audioStream->SetUrl(channel->Url());
@@ -70,7 +69,7 @@ void RadioPageController::PauseRadio()
 void RadioPageController::GenreChanged(const QString& id)
 {
 	//m_currentSations.Cleanup();
-
+/*
 	foreach(ChannelSourcePtr channel, m_stations.Items())
 	{
 		// Genre id
@@ -97,7 +96,7 @@ void RadioPageController::GenreChanged(const QString& id)
 			}
 		}
 	}
-
+*/
 	//m_view->UpdateCurrentGenreStations(&m_currentSations);
 }
 

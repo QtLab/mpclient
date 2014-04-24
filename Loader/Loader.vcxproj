@@ -122,12 +122,16 @@
     <ClInclude Include="minzip\zip.h" />
     <ClInclude Include="Path.h" />
     <ClInclude Include="Process.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="StartupParameters.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="json\json_internalarray.inl" />
     <None Include="json\json_internalmap.inl" />
     <None Include="json\json_valueiterator.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Loader.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -20,8 +20,8 @@ class AudioStream;
 class TabPage;
 class RadioPage;
 class TVPage;
-class GenreItem;
-class GenreModel;
+class Category;
+class CategoriesModel;
 class ChannelSource;
 class ChannelSourceModel;
 class FileToUpdate;
@@ -35,6 +35,7 @@ class MPRequest;
 class DownlaodManager;
 class UserIdle;
 class WebView;
+class ChannelSourceSortFilterProxyModel;
 
 typedef TabPage * TabPagePtr;
 
@@ -45,9 +46,9 @@ typedef QSharedPointer<ChannelSource> ChannelSourcePtr;
 typedef ChannelSourceModel * ChannelSourceModelPtr;
 typedef QList<ChannelSourcePtr> ChannelSourceList;
 
-typedef QSharedPointer<GenreItem> GenreItemPtr;
-typedef GenreModel * GenreModelPtr;
-typedef QList<GenreItemPtr> GenreItemList;
+typedef QSharedPointer<Category> CategoryPtr;
+typedef CategoriesModel * CategoriesModelPtr;
+typedef QList<CategoryPtr> CategoryList;
 
 typedef QSharedPointer<FileToUpdate> FileToUpdatePtr;
 typedef UpdateModel * UpdateModelPtr;

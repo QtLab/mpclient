@@ -11,8 +11,7 @@ class RadioPage : public TabPage
 	Q_OBJECT
 
 public:
-	RadioPage(QWidget* parent, 
-				GenreModelPtr genres, ChannelSourceModelPtr allStations, 
+	RadioPage(QWidget* parent, CategoriesModelPtr categories, ChannelSourceModelPtr allStations, 
 				ChannelSourceModelPtr topStations, ChannelSourceModelPtr lastStation);
 
 	virtual ~RadioPage();
@@ -52,6 +51,9 @@ public slots:
 	virtual void UpdateLastStations(ChannelSourceModel* channels);
 */
 
+private slots:
+	void GenreChanged(int genreId);
+
 signals:
 	void PlayRadio(const QString& id);
 	void PauseCurrentRadio();
@@ -60,7 +62,10 @@ signals:
 
 private:
 	// QML view
-	QQuickView *				m_quickView;
+	QQuickView *							m_quickView;
+	ChannelSourceSortFilterProxyModel *		m_allStationsProxyModel;
+	ChannelSourceSortFilterProxyModel *		m_lastStationsProxyModel;
+	ChannelSourceSortFilterProxyModel *		m_topStationsProxyModel;
 };
 
 

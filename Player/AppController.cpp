@@ -18,6 +18,7 @@ AppController::AppController(int argc, char *argv[])
 	,m_updateController(new UpdateController())
 	,m_userIdle(new UserIdle())
 {
+	//TODO: QTimer to launch update m_updateController->Run();
 }
 
 AppController::~AppController()
@@ -36,8 +37,6 @@ void AppController::CreateView()
 	m_mainWidow->AddTab(m_tvPageController->View());
 
 	m_mainWidow->show();
-
-	m_updateController->Run();
 }
 
 void AppController::InitSignalsSlots()
@@ -53,12 +52,6 @@ AppController& AppController::Inst()
 	return *inst;
 }
 
-void Log(const char* eventName, QObject* receiver)
-{
-	qDebug("Error <unknown> sending event %s to object %s (%s)", 
-		eventName, qPrintable(receiver->objectName()), typeid(*receiver).name());
-}
-
 bool AppController::notify(QObject* receiver, QEvent* even)
 {
 #ifdef Q_OS_WIN32
@@ -68,7 +61,7 @@ bool AppController::notify(QObject* receiver, QEvent* even)
 	}
 	__except (EXCEPTION_EXECUTE_HANDLER)
 	{
-		Log(typeid(*even).name(), receiver);
+		NotifyErrorLog(typeid(*even).name(), receiver);
 	}
 
 #else
@@ -118,6 +111,12 @@ void AppController::UpdateFinished(bool restartRequired)
 
 void AppController::UserIdleStateChanged(bool isIdle)
 {
+}
+
+void NotifyErrorLog(const char* eventName, QObject* receiver)
+{
+	qDebug("Error <unknown> sending event %s to object %s (%s)", 
+		eventName, qPrintable(receiver->objectName()), typeid(*receiver).name());
 }
 
 }

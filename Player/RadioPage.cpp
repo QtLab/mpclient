@@ -1,6 +1,8 @@
 #include "RadioPage.h"
 #include "Path.h"
+#include "CategoriesModel.h"
 #include "ChannelSourceModel.h"
+#include "ChannelSourceSortFilterProxyModel.h"
 #include "AudioStream.h"
 
 #include <QQuickView>
@@ -9,12 +11,10 @@
 
 #include <QDebug>
 #include <QHBoxLayout>
-#include <QDir>
 
 namespace mp {
 
-RadioPage::RadioPage(QWidget* parent, 
-				GenreModelPtr genres, ChannelSourceModelPtr allStations, 
+RadioPage::RadioPage(QWidget* parent, CategoriesModelPtr categories, ChannelSourceModelPtr allStations, 
 				ChannelSourceModelPtr topStations, ChannelSourceModelPtr lastStation)
 	:TabPage(parent)
 {
@@ -33,10 +33,24 @@ RadioPage::RadioPage(QWidget* parent,
 	m_quickView->setSource(localUrl);
 	m_quickView->setResizeMode(QQuickView::SizeRootObjectToView);
 
-	m_quickView->rootContext()->setContextProperty("radioGenres", genres);
-	m_quickView->rootContext()->setContextProperty("currentStations", allStations);
-	m_quickView->rootContext()->setContextProperty("lastStations", allStations);
-	m_quickView->rootContext()->setContextProperty("topStations", lastStation);
+	m_allStationsProxyModel = new ChannelSourceSortFilterProxyModel(this);
+	m_allStationsProxyModel->setSourceModel(allStations);
+	m_allStationsProxyModel->setDynamicSortFilter(true);
+
+	m_lastStationsProxyModel = new ChannelSourceSortFilterProxyModel(this);
+	m_lastStationsProxyModel->setSourceModel(allStations);
+	m_lastStationsProxyModel->setDynamicSortFilter(true);
+	 
+	m_topStationsProxyModel = new ChannelSourceSortFilterProxyModel(this);
+	m_topStationsProxyModel->setSourceModel(allStations);
+	m_topStationsProxyModel->setDynamicSortFilter(true);
+
+	m_quickView->rootContext()->setContextProperty("radioGenres", categories);
+	m_quickView->rootContext()->setContextProperty("allStations", m_allStationsProxyModel);
+	m_quickView->rootContext()->setContextProperty("lastStations", m_lastStationsProxyModel);
+	m_quickView->rootContext()->setContextProperty("topStations", m_topStationsProxyModel);
+
+	connect(m_quickView->rootObject(), SIGNAL(genreChanged(int)), this, SLOT(GenreChanged(int)));
 }
 
 RadioPage::~RadioPage()
@@ -76,6 +90,13 @@ void RadioPage::PlayChannel(const QString& id)
 void RadioPage::PauseCurrentChannel()
 {
 	emit PauseCurrentRadio();
+}
+
+void RadioPage::GenreChanged(int genreId)
+{
+	m_allStationsProxyModel->SetGenreIdFilter(genreId);
+	m_lastStationsProxyModel->SetGenreIdFilter(genreId);
+	m_topStationsProxyModel->SetGenreIdFilter(genreId);
 }
 
 /*
