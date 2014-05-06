@@ -45,6 +45,30 @@ CategoriesModel::~CategoriesModel()
 {
 }
 
+int CategoriesModel::Length() const
+{
+	return rowCount();
+}
+
+int CategoriesModel::GetId(int row) const
+{
+	const CategoryPtr contact = m_items.at(row);
+
+	if(!contact.isNull())
+		return contact->Id();
+
+	return -1;
+}
+
+QString CategoriesModel::GetName(int row) const
+{
+	const CategoryPtr contact = m_items.at(row);
+	if(!contact.isNull())
+		return contact->Name();
+
+	return QString();
+}
+
 CategoryList CategoriesModel::Items() const
 {
 	return m_items;
@@ -65,8 +89,6 @@ CategoryPtr CategoriesModel::FindById(int id)
 
 QVariant CategoriesModel::data(const QModelIndex & index, int role) const 
 {
-	//QReadLocker locker(&m_lock);
-
 	if (index.row() < 0 || index.row() > m_items.count())
 		return QVariant();
 
@@ -88,13 +110,6 @@ QVariant CategoriesModel::data(const QModelIndex & index, int role) const
 
 int CategoriesModel::rowCount(const QModelIndex &parent) const
 {
-	//if(m_lock.tryLockForRead())
-	{
-		int count = m_items.count();
-		//m_lock.unlock();
-		return count;
-	}
-
 	return m_items.count();
 }
 

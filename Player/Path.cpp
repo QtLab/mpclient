@@ -11,22 +11,13 @@ namespace mp {
 
 QString QmlFilePath(const QString& fileName)
 {
-	/*
-#ifdef _DEBUG
-	static const QString pathTemplate("..\\..\\Player\\Views\\%0");
-	QString path = pathTemplate.arg(fileName);
-	
-#else
-	*/
 	QString path;
 	QDir dir = QDir::current();
 	if(dir.cd("qml"))
 	{
 		path = dir.absoluteFilePath(fileName);
 	}
-//#endif
 
-	//path =  path.replace("//", "\\").replace("/", "\\");
 	return path;
 }
 
@@ -57,19 +48,28 @@ QString HtmlilePath(const QString& fileName)
 QString ConfigFilePath(const QString& fileName)
 {
 	QDir dir = QDir::current();
-	dir.cd("config");
 
-//#ifdef _DEBUG
-//	if(dir.cd(".."))
-//#else
-//	if(dir.cd("config"))
-//#endif
+	if(dir.cd("config"))
 	{
 		QString fn = dir.filePath(fileName);
 		return fn;
 	}
 
 	return QString();
+}
+
+QString HttpCachePath()
+{
+	QDir dir = QDir::current();
+
+	if(!dir.cd("cache"))
+	{
+		dir.mkdir("cache");
+		dir.cd("cache");
+	}
+
+	QString absoluteDirPath = dir.absolutePath();
+	return absoluteDirPath;
 }
 
 }

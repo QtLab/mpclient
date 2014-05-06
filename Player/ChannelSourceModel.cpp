@@ -7,6 +7,13 @@
 
 namespace mp {
 
+static const QString IdKeyName				= "id";
+static const QString NameKeyName			= "name";
+static const QString UrlKeyName				= "url";
+static const QString CategoriesKeyName		= "categories";
+static const QString PlayCountKeyName		= "playcount";
+static const QString LastPlayKeyName		= "lastplay";
+
 ChannelSource::ChannelSource()
 	:m_playCount(0)
 	,m_lastPlayTimestamp(0)
@@ -83,6 +90,16 @@ void ChannelSource::SetLastPlayNow()
 	m_lastPlayTimestamp = dt.toTime_t();
 }
 
+void ChannelSource::AddCategoryId(uint id)
+{
+	m_categories.insert(id);
+}
+
+CategoryIds ChannelSource::Categories() const
+{
+	return m_categories;
+}
+
 ChannelSourceModel::ChannelSourceModel()
 {
 }
@@ -93,10 +110,11 @@ ChannelSourceModel::~ChannelSourceModel()
 
 void ChannelSourceModel::LoadWithStats(const QString& filePath)
 {
-	BaseListModel::Load(filePath, PropertiesSet() << "id" << "name" << "url" << "genreid");
+	QByteArray fileBody = LoadFromFile(filePath);
+	ParseChannelsJson(fileBody);
 
 	ChannelSourceModel channelsStats;
-	channelsStats.Load(filePath + "_stats", PropertiesSet() << "id"  << "playcount" << "lastplay");
+	channelsStats.Load(filePath + "_stats", PropertiesSet() << IdKeyName  << PlayCountKeyName << LastPlayKeyName);
 
 	MergeWithStats(channelsStats);
 }
@@ -160,6 +178,15 @@ QVariant ChannelSourceModel::data(const QModelIndex & index, int role) const
 		case GenreId:
 			result = QVariant(channel->GenreId());
 			break;
+		case Categories:
+			result = QVariant(qVariantFromValue(channel->Categories()));
+			break;
+		case PlayCount:
+			result = QVariant(qVariantFromValue(channel->PlayCount()));
+			break;
+		case LastPlayTimestamp:
+			result = QVariant(qVariantFromValue(channel->LastPlayTimestamp()));
+			break;
 	}
 
 	return result;
@@ -178,8 +205,61 @@ QHash<int, QByteArray>	ChannelSourceModel::roleNames() const
 	roles[Id] = "Id";
 	roles[Url] = "Url";
 	roles[GenreId] = "GenreId";
-	
+	roles[Categories] = "Categories";
+	roles[LastPlayTimestamp] = "LastPlayTimestamp";
+	roles[PlayCount] = "PlayCount";
+		
 	return roles;
+}
+
+void ChannelSourceModel::ParseChannelsJson(const QByteArray& json)
+{
+	QJsonParseError parseResult;
+	QJsonDocument d = QJsonDocument::fromJson(json, &parseResult);
+
+	if(parseResult.error == QJsonParseError::NoError)
+	{
+		QJsonArray list = d.array();
+		foreach(QJsonValue record, list) 
+		{
+			QJsonObject object = record.toObject();
+
+			QJsonValue id = object.value(IdKeyName);
+			QJsonValue name = object.value(NameKeyName);
+			QJsonValue url = object.value(UrlKeyName);
+			QJsonValue categories = object.value(CategoriesKeyName);
+			
+			if(!id.isNull() && !name.isNull() && !url.isNull() && !categories.isNull())
+			{
+				ChannelSourcePtr item(new ChannelSource);
+				
+				QString _id = id.toString();
+
+				item->SetId(id.toInt());
+				item->SetName(name.toString());
+				item->SetUrl(url.toString());
+
+				QJsonArray categoriesJsonArray = categories.toArray();
+				QJsonArray::const_iterator iter = categoriesJsonArray.begin();
+				while(iter != categoriesJsonArray.end())
+				{
+					QJsonValue value = (*iter);
+					int categoryId = value.toInt(); 
+					item->AddCategoryId(categoryId);
+					iter++;
+				}
+
+				Add(item);
+			}
+		}
+
+		if(!m_items.empty())
+			emit dataChanged(createIndex(0,0),createIndex(m_items.size(),0));
+	}
+	else
+	{
+		qDebug() << "ChannelSourceModel json parse error: " << parseResult.errorString();
+	}
 }
 
 }

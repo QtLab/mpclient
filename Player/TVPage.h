@@ -25,6 +25,9 @@ public:
 
 	QString Name() const;
 
+private slots:
+	void ContentLoaded(bool ok);
+
 private:
 	WebView *		m_view;
 };

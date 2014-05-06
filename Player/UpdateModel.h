@@ -50,12 +50,6 @@ public:
 	UpdateModel();
 	~UpdateModel();
 
-	// Don't use in prod. It isn't thread-safe
-    // for (int row = 3; row < qrecap_model->rowCount(); row++)
-    // {
-    // QModelIndex idx = (qrecap_model->index(row, 0));
-	// s = qrecap_model->data(idx).toString();
-     //}
 	FileToUpdateList Items() const;
 	void Remove(FileToUpdatePtr fileInfo);
 	bool RequiredPlayerUpdate() const;
@@ -63,7 +57,6 @@ public:
 	QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 	int rowCount(const QModelIndex &parent = QModelIndex()) const;
 	QHash<int, QByteArray>	roleNames() const;
-
 
 private:
 	void ParseJson(const QByteArray& json);

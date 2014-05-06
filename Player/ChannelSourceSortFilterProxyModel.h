@@ -11,7 +11,7 @@ class ChannelSourceSortFilterProxyModel : public QSortFilterProxyModel
 
 public:
 
-	enum SortType
+	enum SortT
 	{
 		ByName,
 		ByTop,
@@ -20,8 +20,14 @@ public:
 
     ChannelSourceSortFilterProxyModel(QObject *parent = 0);
 
-	int GenreId() const;
-	void SetGenreIdFilter(int genreId);
+	int CategoryIdFilter() const;
+	void SetCategoryIdFilter(int categoryId);
+
+	const QString& NameFilter() const;
+	void SetNameFilter(const QString& nameFilter);
+
+	SortT SortType() const;
+	void SetSortType(SortT sortBy);
 
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const;
@@ -32,8 +38,9 @@ public:
 	Q_DISABLE_COPY(ChannelSourceSortFilterProxyModel)
 
 private:
-	int				m_genreId;
-	SortType		m_sortDirection;
+	int				m_categoryIdFilter;
+	QString			m_nameFilter;
+	SortT			m_sortBy;
 };
 
 }

@@ -18,6 +18,7 @@ protected:
 	void Retranslate();
 
 signals:
+	void UpdateApplication();
 	void CloseApplication();
 };
 

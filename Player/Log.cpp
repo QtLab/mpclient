@@ -6,6 +6,8 @@
 
 #include <QTextStream>
 
+#include <iostream>
+
 namespace mp {
 
 void Log(QtMsgType type, const QMessageLogContext &, const QString & msg)
@@ -31,15 +33,15 @@ void Log(QtMsgType type, const QMessageLogContext &, const QString & msg)
 
 	QDateTime current = QDateTime::currentDateTime();
 	QString logFilePath = logDir + current.toString("dd-MM-yyyy.log");
-
 	QString logMessage = logMessageTemplate.arg(current.toString("hh:mm:ss.zzz"), QString(msg));
 
 	QFile outFile(logFilePath);
 	if(outFile.open(QIODevice::WriteOnly | QIODevice::Append))
 	{
-		QTextStream ts(&outFile);
-		ts << logMessage << endl;
+				QTextStream ts(&outFile);
+				ts << logMessage << endl;
 	}
+
 }
 
 }

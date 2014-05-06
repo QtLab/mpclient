@@ -4,12 +4,18 @@
 #include "Common.h"
 #include <QSharedPointer>
 #include <QList>
+#include <QSet>
 
 QT_BEGIN_NAMESPACE
 class QNetworkAccessManager;
 class QNetworkReply;
 class QNetworkRequest;
 class QQuickView;
+class QWebFrame;
+class QContextMenuEvent;
+class QMenu;
+class QWebSettings;
+class QAbstractListModel;
 QT_END_NAMESPACE
 
 namespace mp {
@@ -49,6 +55,7 @@ typedef QList<ChannelSourcePtr> ChannelSourceList;
 typedef QSharedPointer<Category> CategoryPtr;
 typedef CategoriesModel * CategoriesModelPtr;
 typedef QList<CategoryPtr> CategoryList;
+typedef QSet<uint> CategoryIds; 
 
 typedef QSharedPointer<FileToUpdate> FileToUpdatePtr;
 typedef UpdateModel * UpdateModelPtr;

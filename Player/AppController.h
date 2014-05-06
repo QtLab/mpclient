@@ -14,16 +14,18 @@ public:
 	AppController(int argc, char *argv[]);
 	~AppController();
 
+	void SetLang(const QString& lang);
 	void CreateView();
 	void InitSignalsSlots();
-
+	
 	static AppController& Inst();
 	
 private:
 	bool notify(QObject* receiver, QEvent* even);
 
 private slots:
-	void Showtdown(int exitCode = 0); 
+	void Showtdown(int exitCode = 0);
+	void UpdateStarted();
 	void UpdateFinished(bool restartRequired);
 	void UserIdleStateChanged(bool isIdle);
 

@@ -117,6 +117,9 @@
     <ClCompile Include="GeneratedFiles\Debug\moc_LinkButton.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_NetworkAccessManager.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_RadioPageController.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
@@ -168,6 +171,9 @@
     <ClCompile Include="GeneratedFiles\Release\moc_LinkButton.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_NetworkAccessManager.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_RadioPageController.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
@@ -196,6 +202,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="CategoriesModel.cpp" />
+    <ClCompile Include="NetworkAccessManager.cpp" />
     <ClCompile Include="TVPage.cpp" />
     <ClCompile Include="TVPageController.cpp" />
     <ClCompile Include="UserIdle.cpp" />
@@ -761,6 +768,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Bin\tvgenres.json" />
+    <None Include="Translations\en.ts" />
+    <None Include="Translations\ru.ts" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="SystemTray.h">
@@ -775,7 +784,13 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Resources\centralicon.png" />
+    <Image Include="Resources\closeicon.png" />
+    <Image Include="Resources\minimizeicon.png" />
+    <Image Include="Resources\pauseicon.png" />
     <Image Include="Resources\Player.ico" />
+    <Image Include="Resources\playicon.png" />
+    <Image Include="Resources\searchicon.png" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="SystemTrayContextMenu.h">
@@ -801,6 +816,16 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_WEBKIT_LIB -DQT_WIDGETS_LIB -DQT_WEBKITWIDGETS_LIB -DQT_QML_LIB -DQT_QUICK_LIB "-I.\GeneratedFiles" "-I." "-I$(QTDIR)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtNetwork" "-I$(QTDIR)\include\QtWebKit" "-I$(SolutionDir)\Dependencies\qjson\include" "-I$(SolutionDir)\Dependencies\bass" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtWebkitWidgets" "-I$(QTDIR)\include\QtQml" "-I$(QTDIR)\include\QtQuick" "-I$(SolutionDir)Common"</Command>
     </CustomBuild>
     <ClInclude Include="Config.h" />
+    <CustomBuild Include="NetworkAccessManager.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing NetworkAccessManager.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_WEBKIT_LIB -DQT_WIDGETS_LIB -DQT_WEBKITWIDGETS_LIB -DQT_QML_LIB -DQT_QUICK_LIB "-I.\GeneratedFiles" "-I." "-I$(QTDIR)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtNetwork" "-I$(QTDIR)\include\QtWebKit" "-I$(SolutionDir)\Dependencies\qjson\include" "-I$(SolutionDir)\Dependencies\bass" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtWebkitWidgets" "-I$(QTDIR)\include\QtQml" "-I$(QTDIR)\include\QtQuick" "-I$(SolutionDir)Common"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing NetworkAccessManager.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_WEBKIT_LIB -DQT_WIDGETS_LIB -DQT_WEBKITWIDGETS_LIB -DQT_QML_LIB -DQT_QUICK_LIB "-I.\GeneratedFiles" "-I." "-I$(QTDIR)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtNetwork" "-I$(QTDIR)\include\QtWebKit" "-I$(SolutionDir)\Dependencies\qjson\include" "-I$(SolutionDir)\Dependencies\bass" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtWebkitWidgets" "-I$(QTDIR)\include\QtQml" "-I$(QTDIR)\include\QtQuick" "-I$(SolutionDir)Common"</Command>
+    </CustomBuild>
     <ClInclude Include="Prerequirements.h" />
     <ClInclude Include="resource.h" />
     <CustomBuild Include="TVPageController.h">
@@ -823,6 +848,9 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_WEBKIT_LIB -DQT_WIDGETS_LIB -DQT_WEBKITWIDGETS_LIB -DQT_QML_LIB -DQT_QUICK_LIB  "-I.\GeneratedFiles" "-I." "-I$(QTDIR)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtNetwork" "-I$(QTDIR)\include\QtWebKit" "-I$(SolutionDir)\Dependencies\qjson\include" "-I$(SolutionDir)\Dependencies\bass" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtWebkitWidgets" "-I$(QTDIR)\include\QtQml" "-I$(QTDIR)\include\QtQuick" "-I$(SolutionDir)Common"</Command>
     </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="Resources\txdJ2vM9.ttf" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,6 +1,7 @@
 #include "RadioPageController.h"
 #include "RadioPage.h"
 #include "AudioStream.h"
+#include "ChannelMetadataModel.h"
 #include "Path.h"
 
 namespace mp {
@@ -11,26 +12,37 @@ RadioPageController::RadioPageController()
 {
 	ReLoadData();
 
-	m_view = new RadioPage(NULL, &m_categories, &m_stations, &m_topSations, &m_lastSations);
+	m_updateStateTimer.setInterval(2000); // 2 sec
+	connect(&m_updateStateTimer, SIGNAL(timeout()), SLOT(UpdateViewState()));
+	m_updateStateTimer.start();
 
-	connect(m_view, SIGNAL(PlayRadio(const QString&)), this, SLOT(PlayRadio(const QString&)));
-	connect(m_view, SIGNAL(GenreChanged(const QString&)), this, SLOT(GenreChanged(const QString&)));
-	connect(m_view, SIGNAL(TopStationslUpdated()), this, SLOT(TopStationslUpdated()));
+	m_allStationsProxyModel.setSourceModel(&m_stations);
+	m_allStationsProxyModel.setDynamicSortFilter(true);
+	m_lastStationsProxyModel.setSourceModel(&m_stations);
+	m_lastStationsProxyModel.setDynamicSortFilter(true);
+	m_topStationsProxyModel.setSourceModel(&m_stations);
+	m_topStationsProxyModel.setDynamicSortFilter(true);
+	m_searchStationsProxyModel.setSourceModel(&m_stations);
+	m_searchStationsProxyModel.setDynamicSortFilter(true);
+
+	m_view = new RadioPage(NULL, &m_categories, 
+							&m_allStationsProxyModel, &m_topStationsProxyModel, 
+							&m_lastStationsProxyModel, &m_searchStationsProxyModel);
+
+	connect(m_view, SIGNAL(PlayRadio(int)), this, SLOT(PlayRadio(int)));
 	connect(m_view, SIGNAL(PauseRadio()), this, SLOT(PauseRadio()));
+	connect(m_view, SIGNAL(VolumeChanged(qreal)), this, SLOT(VolumeChanged(qreal)));
+	connect(m_view, SIGNAL(CategoryChanged(int)), this, SLOT(CategoryChanged(int)));
+	connect(m_view, SIGNAL(SearchFilterChanged(QString)), this, SLOT(SearchFilterChanged(QString)));
+	connect(m_audioStream.data(), SIGNAL(MetadataUpdated(const ChannelMetadata&)), SLOT(MetadataUpdated(const ChannelMetadata&)));
 
-	//TopStationslUpdated();
-	//m_view->UpdateCurrentGenreStations(&m_stations);
-	//m_view->UpdateLastStations(&m_lastSations);
-	//m_view->GenreModelUpdated(&m_radioGenres);
-	//m_view->Init();
-	
+	CategoryChanged(m_categories.Items().first()->Id());
 	qDebug() << "Radio widget created";
 }
 
 RadioPageController::~RadioPageController()
 {
 }
-
 
 void RadioPageController::ReLoadData()
 {
@@ -43,21 +55,30 @@ TabPage* RadioPageController::View()
 	return m_view;
 }
 
-
-void RadioPageController::PlayRadio(const QString& id)
+void RadioPageController::PlayRadio(int id)
 {
-	ChannelSourcePtr channel = m_stations.Find(id.toInt());
-	if(channel)
+	if(m_audioStream->State() == AudioStream::ASPaused)
 	{
-		m_audioStream->SetUrl(channel->Url());
-		m_audioStream->Play();
-
-		// Update last staions with new  channel
-		LastStationsUpdated(channel);
+		m_audioStream->Play(true);
 	}
 	else
 	{
-		qDebug() << "PlayRadio: station doesn't found, id: \"" << id << "\"";
+		ChannelSourcePtr channel = m_stations.Find(id);
+		if(channel)
+		{
+			m_currentChannel = channel;
+
+			m_audioStream->SetUrl(channel->Url());
+			m_audioStream->Play(false);
+
+			int newPlayCount = channel->PlayCount() + 1;
+			channel->SetPlayCount(newPlayCount);
+			channel->SetLastPlayNow();
+		}
+		else
+		{
+			qDebug() << "RadioPageController::PlayRadio: station doesn't found, id: \"" << id << "\"";
+		}
 	}
 }
 
@@ -66,62 +87,36 @@ void RadioPageController::PauseRadio()
 	m_audioStream->Pause();
 }
 
-void RadioPageController::GenreChanged(const QString& id)
+void RadioPageController::VolumeChanged(qreal value)
 {
-	//m_currentSations.Cleanup();
-/*
-	foreach(ChannelSourcePtr channel, m_stations.Items())
-	{
-		// Genre id
-		QString currentGenreId = channel->GenreId();//index.data(ChannelSourceModel::GenreId).toString();;
-		if(currentGenreId.isEmpty())
-		{
-			GenreItemPtr genre = m_radioGenres.FindById(id);
-
-			if(!genre.isNull())
-			{
-				currentGenreId = genre->Id();
-			}
-		}
-
-		// Channel id
-		QString channelId = channel->Id();//index.data(ChannelSourceModel::Id).toString();
-
-		if(!currentGenreId.isEmpty() && !channelId.isEmpty())
-		{
-			if(currentGenreId == id)
-			{
-				ChannelSourcePtr channel = m_stations.FindById(channelId);
-				m_currentSations.Add(channel, true);
-			}
-		}
-	}
-*/
-	//m_view->UpdateCurrentGenreStations(&m_currentSations);
+	m_audioStream->SetVolume(value);
 }
 
-void RadioPageController::TopStationslUpdated()
+void RadioPageController::CategoryChanged(int id)
 {
-	//m_topSations.Cleanup();
-	//m_view->UpdateTopStations(&m_topSations);
+	m_allStationsProxyModel.SetCategoryIdFilter(id);
+	m_lastStationsProxyModel.SetCategoryIdFilter(id);
+	m_topStationsProxyModel.SetCategoryIdFilter(id);
 }
 
-void RadioPageController::LastStationsUpdated(ChannelSourcePtr newchannel)
+void RadioPageController::SearchFilterChanged(QString seasrch)
 {
-	/*
-	int rows = m_lastSations.rowCount();
-	if(rows <= 2)
+	m_searchStationsProxyModel.SetNameFilter(seasrch);
+}
+
+void RadioPageController::UpdateViewState()
+{
+	if(!m_currentChannel.isNull())
 	{
-		m_lastSations.Add(newchannel, true);
+		ChannelMetadata metadata;
+		m_audioStream->GetMetaData(metadata);
+		m_view->Update(m_audioStream->IsPlaying(), m_currentChannel->Id(), m_currentChannel->Name(), metadata.ToString());
 	}
 	else
 	{
-		m_lastSations.removeRow(2);
-		m_lastSations.Add(newchannel, true);
+		m_view->Update(false, 0, QString::null, QString::null);
 	}
-
-	m_view->UpdateLastStations(&m_lastSations);
-	*/
+	
 }
 
 }

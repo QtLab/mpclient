@@ -40,22 +40,43 @@ public:
 		}
 	}
 
-	virtual  void Load(const QString& filePath, const PropertiesSet& propertiesToLoad = PropertiesSet())
+	QByteArray LoadFromFile(const QString& filePath)
 	{
 		QFile file(filePath);
 		if(file.open(QIODevice::ReadOnly))
 		{
-			QByteArray arr = file.readAll();
-	#ifdef _DEBUG
-			QString json = QString::fromUtf8(arr.data(), arr.size());
-	#endif
-			ParseJson(arr, propertiesToLoad);
+			QByteArray body = file.readAll();
+			return body;
 		}
 		else
 		{
 			const QMetaObject *metaObject = &T::staticMetaObject;
-			qDebug() << metaObject->className() << " can't open file: " << filePath;
+			qDebug() << metaObject->className() << " Can't open file: " << filePath;
 		}
+
+		return QByteArray();
+	}
+
+	bool SaveToFile(const QString& filePath, const QByteArray& json)
+	{
+		QFile file(filePath);
+		if(file.open(QIODevice::WriteOnly | QIODevice::Text))
+		{
+			qint64 written = file.write(json);
+			int toWrite = json.size();
+
+			return written == toWrite;
+		}
+
+		return false;
+	}
+
+	virtual void Load(const QString& filePath, const PropertiesSet& propertiesToLoad = PropertiesSet())
+	{
+		QByteArray body = LoadFromFile(filePath);
+
+		if(!body.isEmpty())
+			ParseJson(body, propertiesToLoad);
 	}
 
 	virtual bool Save(const QString& filePath, const PropertiesSet& propertiesToSave = PropertiesSet())
@@ -95,16 +116,7 @@ public:
 		document.setArray(jsonArray);
 		QByteArray json = document.toJson();
 
-		QFile file(filePath);
-		if(file.open(QIODevice::WriteOnly | QIODevice::Text))
-		{
-			qint64 written = file.write(json);
-			int toWrite = json.size();
-
-			return written == toWrite;
-		}
-
-		return false;
+		return SaveToFile(filePath, json);
 	}
 
 	virtual void ParseJson(const QByteArray& json, const PropertiesSet& propertiesToLoad = PropertiesSet())

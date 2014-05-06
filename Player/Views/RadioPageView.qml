@@ -3,35 +3,95 @@ import QtQuick 2.0
 Rectangle {
 	id: radioPageView;
 	color: '#ffffff'
-	FontLoader { id: openSansLight; source: "txdJ2vM9.ttf" }
+	FontLoader { id: openSansLight; source: "qrc:///mp/Resources/txdJ2vM9.ttf" }
 
 	// signals
-	signal genreChanged(int id)
-	signal pauseRadio
+	signal categoryChanged(int id)
 	signal playRadio(int id)
+	signal pauseRadio
 	signal searchFilterChanged(string txt);
+	signal volumeChanged(real volume);
 	
-	GenresView {
-		id: genresView;
+	CategoriesView {
+		model: categoriesModel;
+		id: categoriesView;
 		anchors {
 			top: radioPageView.top
 		}
 	}
 	
 	Rectangle {
+		id: currentCategoryStationsView;
+		
 		anchors {
 			left: parent.left
 			right: parent.right
-			top: genresView.bottom
+			top: categoriesView.bottom
 			bottom: parent.bottom
 		}
 		
-		Loader {
-			id: background
-
-			anchors.fill: parent
-			source: "CurrentCategoryStationsView.qml"
+		LastStationsView {
+			id: lastStationsView
+			width: 130
+			model: lastStationsModel;
+			anchors {
+				leftMargin:21
+				topMargin: 20
+				left: parent.left
+				top: parent.top
+			}
 		}
+		
+		TopStationsView {
+			id: topStationsView
+			width: lastStationsView.width
+			model: topStationsModel
+			height: 75
+			anchors {
+				topMargin: 30
+				leftMargin: 20
+				left: parent.left
+				top: lastStationsView.bottom
+			}
+		}
+		
+		StationsView {
+			id: allStationsView
+			width: 130
+			height: parent.height
+			model: allStationsModel
+			anchors {
+				topMargin: 30
+				right: parent.right
+				top: parent.top
+			}
+		}
+
+		PlayStationView {
+			id: playStationView
+			stationName: stationName
+			stationMetadata: stationMetadata
+			anchors {
+				centerIn: parent;
+			}
+		}
+	}
+
+	SearchResultView {
+		id: searchResultView;
+		
+		anchors {
+			left: parent.left
+			right: parent.right
+			top: categoriesView.bottom
+			bottom: parent.bottom
+		}
+		
+		visible: false;
+	}
+	
+	onCategoryChanged: {
+		hideSearchResults();
 	}
 	
 	onSearchFilterChanged: {
@@ -45,82 +105,27 @@ Rectangle {
 		}
 	}
 	
+	onPlayRadio: {
+		hideSearchResults();
+	}
+	
+	function updateViewState(isPlaying, stationId, stationName, stationMetaData) {
+		playStationView.isPlaying = isPlaying;
+		playStationView.currentStationId = stationId;
+		playStationView.stationName = stationName;
+		playStationView.stationMetadata = stationMetaData;
+	}
+	
 	function showSearchResults() {
-		background.source = "SearchResultView.qml";
+		currentCategoryStationsView.visible = false;
+		searchResultView.visible = true;
 	}
 	
 	function hideSearchResults() {
-		background.source = "CurrentCategoryStationsView.qml";
-	}
-	
-	/*
-	CurrentGenreStationsView {
-		id: currentGenreStationsView;
-		visible: true;
-		anchors {
-			left: parent.left
-			right: parent.right
-			top: genresView.bottom
-			bottom: parent.bottom
-		}
-	}
-	
-	SearchResultView {
-		id: searchResultView
-		visible: false;
-		anchors {
-			left: parent.left
-			right: parent.right
-			top: genresView.bottom
-			bottom: parent.bottom
-		}
+		currentCategoryStationsView.visible = true;
+		searchResultView.visible = false;
 	}
 
-	function toogleVisible() {
-		if(currentGenreStationsView.visible)
-		{
-			currentGenreStationsView.visible = false;
-			searchResultView.visible = true;
-		}
-		else
-		{
-			currentGenreStationsView.visible = true;
-			searchResultView.visible = false;
-		}
-		
-	}
-	*/
-	
-	/*	
-
-*/
-	/*
-	Rectangle {
-
-		anchors {	
-			left: parent.left
-			right: parent.right
-			top: genresView.bottom
-			bottom: parent.bottom
-		}
-	}
-	*/
-	/*
-	Rectangle {
-		color: 'black'
-		border.width :5;
-		id: testView;
-		
-		anchors {
-			fill: parent;
-			top: genresView.bottom
-		}
-		
-		Text {
-			text: 'asasdasasdasdasd'
-		}
-	}
-	*/
 	
 
 }

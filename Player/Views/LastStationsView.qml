@@ -1,18 +1,17 @@
-import QtQuick 2.2
+import QtQuick 2.0
 
 Rectangle {
-
-	property variant internalModel;
+	property variant model;
 	height: 100
 
 	Component {
 		id: channelDelegate
 		StationView {
-			width : 200
+			width : 120
 		}
 	}
 
-	Text  {
+	StyledText  {
 		id: lastStationsText
 		text: 'ПОСЛЕДНИЕ'
 		color: '#ff7e43'
@@ -29,7 +28,7 @@ Rectangle {
 		
 		interactive: false
 		delegate: channelDelegate
-		model: lastStations
+		model: parent.model
 		height: 75
 	}
 }

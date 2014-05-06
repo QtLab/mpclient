@@ -1,7 +1,98 @@
 import QtQuick 2.0
+import QtQuick.Controls 1.1
 
 Rectangle {
-    smooth: true;
-    transformOrigin: Item.TopLeft;
-    rotation: 0;
+	property int currentStationId: 0;
+	property bool isPlaying: false;
+	property string stationName;
+	property string stationMetadata;
+	
+	StyledText  {
+		id: stationNameView
+		text: parent.stationName
+		
+		color: '#7A7673'
+		font.pixelSize: 12
+
+		anchors {
+			bottomMargin: 18
+			bottom: centralIcon.top
+			left: centralIcon.left
+		}
+	}
+ 
+	Image 
+	{
+		id: centralIcon
+		anchors {
+			centerIn: parent;
+			rightMargin: 40
+		}
+		
+		source: "qrc:///mp/Resources/centralicon.png"
+		
+		Image 
+		{
+			y: 55; x: 55;
+			id: playStateIcon
+			source: "qrc:///mp/Resources/playicon.png"
+			
+			MouseArea  {
+				anchors.fill: parent
+				hoverEnabled: true
+				cursorShape: Qt.PointingHandCursor
+				onClicked:  {
+					if(isPlaying)
+					{
+						radioPageView.pauseRadio();
+					}
+					else
+					{
+						radioPageView.playRadio(currentStationId);
+					}
+					
+					isPlaying = !isPlaying;
+				}
+			}
+		}
+		
+		Slider {
+			y: 100; x: 40;
+			width: 50;
+			height: 10;
+			maximumValue: 1000
+			minimumValue: 0
+			value: 50
+			stepSize: 1
+			onValueChanged: {
+				var volume = value / 1000;
+				radioPageView.volumeChanged(volume);
+			}
+		}
+	}
+	
+	StyledText  {
+		id: stationMetadataView
+		text: parent.stationMetadata
+		
+		color: '#71C5EA'
+		font.pixelSize: 12
+
+		anchors {
+			topMargin: 18
+			top: centralIcon.bottom
+			left: centralIcon.left
+		}
+	}
+
+	onIsPlayingChanged: {
+		if(isPlaying)
+		{
+			playStateIcon.source = "qrc:///mp/Resources/pauseicon.png";
+		}
+		else
+		{
+			playStateIcon.source = "qrc:///mp/Resources/playicon.png";
+		}
+	}
 }

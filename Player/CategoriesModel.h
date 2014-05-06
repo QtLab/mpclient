@@ -34,16 +34,18 @@ class CategoriesModel : public BaseListModel<Category>
 	Q_OBJECT
 
 public:
-	enum GenreItemRoles
+	enum CategoryRoles
 	{
 		Name = Qt::UserRole + 1,
-		Id,
-		Logo,
-		Url
+		Id
 	};
 
 	CategoriesModel();
 	virtual ~CategoriesModel();
+
+	Q_INVOKABLE int Length() const;
+	Q_INVOKABLE int GetId(int row) const;
+	Q_INVOKABLE QString GetName(int row) const;
 
 	// Don't use in prod. It isn't thread-safe
 	CategoryList Items() const;

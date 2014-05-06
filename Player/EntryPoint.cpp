@@ -1,4 +1,5 @@
 #include "AppController.h"
+#include "WebView.h"
 #include "Config.h"
 #include "Log.h"
 
@@ -6,12 +7,12 @@
 
 int main(int argc, char *argv[])
 {
-	mp::Config::Inst();
+	mp::WebView::SetupGloblaSettings();
 
-//#ifndef _DEBUG
+#ifndef _DEBUG
 	// Write to the log file only in release mode
 	qInstallMessageHandler(mp::Log);
-//#endif
+#endif
 
 	mp::AppController app(argc, argv);
 

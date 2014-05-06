@@ -1,12 +1,13 @@
-import QtQuick 2.2
+import QtQuick 2.0
 
 Rectangle {	
 	width: parent.width; height: parent.height
+	property variant model;
 	
 	Component  {
 		id: channelDelegate
 		StationView {
-			width: channelsList.width;
+			width: 120;
 		}
 	}
 	
@@ -19,7 +20,7 @@ Rectangle {
 		}
 		
 		delegate: channelDelegate
-		model: allStations
+		model: parent.model;
 	}
 }
 

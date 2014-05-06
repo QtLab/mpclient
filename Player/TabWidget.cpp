@@ -7,12 +7,14 @@ namespace mp {
 
 TabWidget::TabWidget(QWidget * parent, const QString& name, const QString& tabBarName)
 	:QTabWidget(parent)
+	,m_lastCurrentTabIndex(-1)
 {
 	setObjectName(name);
 
 	tabBar()->setObjectName(tabBarName);
 	tabBar()->setCursor(Qt::PointingHandCursor);
 
+	connect(this, SIGNAL(currentChanged(int)), SLOT(CurretntTabIndexChanged(int)));
 	setUsesScrollButtons(false);
 }
 
@@ -22,6 +24,12 @@ int TabWidget::AddPage(TabPage * page)
 	m_pages.insert(index, page);
 
 	return index;
+}
+
+TabPage * TabWidget::PageAtIndex(int index)
+{
+	TabPage * page = qobject_cast<TabPage*>(widget(index));
+	return page;
 }
 
 void TabWidget::RetranslateUI()
@@ -42,6 +50,24 @@ void TabWidget::changeEvent(QEvent *event)
 	}
 
 	QWidget::changeEvent(event);
+}
+
+void TabWidget::CurretntTabIndexChanged(int newIdnex)
+{
+	if(m_lastCurrentTabIndex >= 0)
+	{
+		TabPage * page = PageAtIndex(m_lastCurrentTabIndex);
+
+		if(page)
+			page->Leave();
+	}
+
+	TabPage * page = PageAtIndex(newIdnex);
+
+	if(page)
+		page->Enter();
+
+	m_lastCurrentTabIndex = newIdnex;
 }
 
 }

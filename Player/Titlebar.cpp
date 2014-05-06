@@ -35,12 +35,12 @@ Titlebar::Titlebar(QWidget *parent)
 	m_layout->addWidget(new QLabel(), 1);
 
 	m_minimizeLnk = new LinkButton();
-	m_minimizeLnk->setText("_");
+	m_minimizeLnk->setObjectName("minimizeLnk");
 	connect(m_minimizeLnk, SIGNAL(clicked()), this, SLOT(MinimizeClicked()));
 	m_layout->addWidget(m_minimizeLnk);
 
 	m_closeLnk = new LinkButton();
-	m_closeLnk->setText("X");
+	m_closeLnk->setObjectName("closeLnk");
 	connect(m_closeLnk, SIGNAL(clicked()), this, SLOT(CloseClicked()));
 	m_layout->addWidget(m_closeLnk);
 

@@ -16,14 +16,19 @@ class TabWidget : public QTabWidget
 public:
 	TabWidget(QWidget * parent, const QString& name = QString(), const QString& tabBarName = QString());
 	int AddPage(TabPage * page);
+	TabPage * PageAtIndex(int index);
 
 private:
 	void RetranslateUI();
 	void changeEvent(QEvent *event);
 
+private slots:
+	void CurretntTabIndexChanged(int newIdnex);
+
 private:
 	typedef	QMap<int, TabPage*> TabPages;
 	TabPages		m_pages;
+	int				m_lastCurrentTabIndex;
 };
 
 }

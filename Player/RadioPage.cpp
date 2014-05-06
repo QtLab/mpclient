@@ -3,7 +3,6 @@
 #include "CategoriesModel.h"
 #include "ChannelSourceModel.h"
 #include "ChannelSourceSortFilterProxyModel.h"
-#include "AudioStream.h"
 
 #include <QQuickView>
 #include <QQmlContext>
@@ -14,8 +13,8 @@
 
 namespace mp {
 
-RadioPage::RadioPage(QWidget* parent, CategoriesModelPtr categories, ChannelSourceModelPtr allStations, 
-				ChannelSourceModelPtr topStations, ChannelSourceModelPtr lastStation)
+RadioPage::RadioPage(QWidget* parent, QObject* categoriesModel, QObject* allStationsModel, 
+					QObject* topStationsModel, QObject* lastStationsModel, QObject* searchStationsModel)
 	:TabPage(parent)
 {
 	setObjectName("RadioPage");
@@ -33,35 +32,21 @@ RadioPage::RadioPage(QWidget* parent, CategoriesModelPtr categories, ChannelSour
 	m_quickView->setSource(localUrl);
 	m_quickView->setResizeMode(QQuickView::SizeRootObjectToView);
 
-	m_allStationsProxyModel = new ChannelSourceSortFilterProxyModel(this);
-	m_allStationsProxyModel->setSourceModel(allStations);
-	m_allStationsProxyModel->setDynamicSortFilter(true);
+	m_quickView->rootContext()->setContextProperty("categoriesModel", categoriesModel);
+	m_quickView->rootContext()->setContextProperty("allStationsModel", allStationsModel);
+	m_quickView->rootContext()->setContextProperty("lastStationsModel", lastStationsModel);
+	m_quickView->rootContext()->setContextProperty("topStationsModel", topStationsModel);
+	m_quickView->rootContext()->setContextProperty("searchStationsModel", searchStationsModel);
 
-	m_lastStationsProxyModel = new ChannelSourceSortFilterProxyModel(this);
-	m_lastStationsProxyModel->setSourceModel(allStations);
-	m_lastStationsProxyModel->setDynamicSortFilter(true);
-	 
-	m_topStationsProxyModel = new ChannelSourceSortFilterProxyModel(this);
-	m_topStationsProxyModel->setSourceModel(allStations);
-	m_topStationsProxyModel->setDynamicSortFilter(true);
-
-	m_quickView->rootContext()->setContextProperty("radioGenres", categories);
-	m_quickView->rootContext()->setContextProperty("allStations", m_allStationsProxyModel);
-	m_quickView->rootContext()->setContextProperty("lastStations", m_lastStationsProxyModel);
-	m_quickView->rootContext()->setContextProperty("topStations", m_topStationsProxyModel);
-
-	connect(m_quickView->rootObject(), SIGNAL(genreChanged(int)), this, SLOT(GenreChanged(int)));
+	connect(m_quickView->rootObject(), SIGNAL(categoryChanged(int)), this, SIGNAL(CategoryChanged(int)));
+	connect(m_quickView->rootObject(), SIGNAL(playRadio(int)), this, SIGNAL(PlayRadio(int)));
+	connect(m_quickView->rootObject(), SIGNAL(volumeChanged(qreal)), this, SIGNAL(VolumeChanged(qreal)));
+	connect(m_quickView->rootObject(), SIGNAL(pauseRadio()), this, SIGNAL(PauseRadio()));
+	connect(m_quickView->rootObject(), SIGNAL(searchFilterChanged(QString)), this, SIGNAL(SearchFilterChanged(QString)));
 }
 
 RadioPage::~RadioPage()
 {
-}
-
-void RadioPage::Init()
-{
-	//connect(m_view->rootObject(), SIGNAL(playRadio()), this, SLOT(PlayCurrentRadio()));
-	//connect(m_view->rootObject(), SIGNAL(pauseRadio()), this, SLOT(PauseCurrentRadio()));
-	//connect(m_view->rootObject(), SIGNAL(genreChanged()), this, SLOT(CurrentGenreChanged()));
 }
 
 void RadioPage::Enter()
@@ -79,75 +64,16 @@ void RadioPage::RetranslateUI()
 
 QString RadioPage::Name() const
 {
-	return tr("RADIO");
+	return tr("Radio");
 }
 
-void RadioPage::PlayChannel(const QString& id)
+void RadioPage::Update(bool isPlay, int stationId, const QString& stationName, const QString& metadata)
 {
-	emit PlayRadio(id);
-}
+	QQuickItem * item = m_quickView->rootObject();
 
-void RadioPage::PauseCurrentChannel()
-{
-	emit PauseCurrentRadio();
+	QMetaObject::invokeMethod(item, "updateViewState", 
+								Q_ARG(QVariant, isPlay),Q_ARG(QVariant, stationId), 
+								Q_ARG(QVariant, stationName), Q_ARG(QVariant, metadata));
 }
-
-void RadioPage::GenreChanged(int genreId)
-{
-	m_allStationsProxyModel->SetGenreIdFilter(genreId);
-	m_lastStationsProxyModel->SetGenreIdFilter(genreId);
-	m_topStationsProxyModel->SetGenreIdFilter(genreId);
-}
-
-/*
-void RadioPage::Connect(const char* signal, QObject* reciever, const char* slot)
-{
-	connect(m_view, signal, reciever, slot);
-}
-
-QString RadioPage::CurrentRaioChannelId()
-{
-	QString stationId = m_view->rootObject()->property("currentRadioId").toString();
-	return stationId;
-}
-
-QString RadioPage::CurrentGenreId()
-{
-	QString genre = m_view->rootObject()->property("currentGenreId").toString();
-	return genre;
-}
-
-void RadioPage::CurrentChannelChanged(ChannelSource* channel)
-{
-	m_view->rootContext()->setContextProperty("currentChannel", channel);
-}
-
-void RadioPage::GenreModelUpdated(GenreModel* genres)
-{
-	m_view->rootContext()->setContextProperty("radioGenres", genres);
-}
-
-void RadioPage::UpdateTopStations(ChannelSourceModel* channels)
-{
-	m_view->rootContext()->setContextProperty("topStations", channels);
-	QVariant v = m_view->rootContext()->contextProperty("topStations");
-}
-
-void RadioPage::UpdateCurrentGenreStations(ChannelSourceModel* channels)
-{
-	m_view->rootContext()->setContextProperty("currentStations", channels);
-}
-
-void RadioPage::UpdateLastStations(ChannelSourceModel* channels)
-{
-	m_view->rootContext()->setContextProperty("lastStations", channels);
-}
-
-void RadioPage::CurrentGenreChanged()
-{
-	QString currentRadioId = m_view->rootContext()->contextProperty("currentGenreId").toString();
-	emit PauseRadio(currentRadioId);
-}
-*/
 
 }

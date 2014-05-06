@@ -6,6 +6,7 @@
 #include <QFile>
 #include <QVariant>
 #include <QDebug>
+#include <QFontDatabase>
 
 namespace mp {
 
@@ -23,6 +24,10 @@ Config& Config::Inst()
 
 Config::Config()
 {
+	int id = QFontDatabase::addApplicationFont(":/mp/Resources/txdJ2vM9.ttf");
+	QString family = QFontDatabase::applicationFontFamilies(id).at(0);
+	m_defaultFont = QFont(family);
+
 	Load();
 }
 
@@ -60,7 +65,7 @@ void Config::Load()
 			}
 			else
 			{
-				qDebug() << configPath <<  " parse error: " << parseResult.errorString();
+				qDebug() << configPath <<  "Config parse error: " << parseResult.errorString();
 			}
 		}
 		else
@@ -72,6 +77,11 @@ void Config::Load()
 	{
 		qDebug() << "Config::Load() error";
 	}
+}
+
+const QFont& Config::DefaultFont() const
+{
+	return m_defaultFont;
 }
 
 }

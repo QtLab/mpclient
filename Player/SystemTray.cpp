@@ -15,6 +15,7 @@ SystemTray::SystemTray(QMainWindow * parent)
 
 	SystemTrayContextMenu * menu = new SystemTrayContextMenu(m_parent);
 	connect(menu, SIGNAL(CloseApplication()), this, SIGNAL(ShowtdownApplicationReuest()));
+	connect(menu, SIGNAL(UpdateApplication()), this, SIGNAL(UpdateReuest()));
 	setContextMenu(menu);
 
 	connect(this, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),this, SLOT(Activated(QSystemTrayIcon::ActivationReason)));

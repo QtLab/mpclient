@@ -6,24 +6,28 @@ Rectangle {
 	border.color : '#888481'
 	border.width : 1
 	
-	TextEdit {
+	TextField {
+		id: searchField
 		anchors {
-			topMargin: 4
+			topMargin: 2
 			leftMargin: 2
 			top: parent.top
 			left: parent.left
 			right: searchIconSeparator.left
 		}
 		
-		onTextChanged: {
-			radioPageView.searchFilterChanged(text)
+		Keys.onReturnPressed: {
+			radioPageView.searchFilterChanged(searchField.text)
 		}
 		
-		//autoScroll: false;
-		selectByMouse: true;
+		onTextChanged: {
+			radioPageView.searchFilterChanged(searchField.text)
+		}
+		
+		font.pixelSize: 10
+		font.family: openSansLight.name
 		width: 10;
-		text: "Поиск"
-		cursorVisible: false
+		placeholderText: "Поиск"
 	}
 	
 	Line {
@@ -41,47 +45,23 @@ Rectangle {
 	
 	Image {
 		id: searchIcon
-		anchors {  right: parent.right }
-		smooth: true
-		fillMode: Image.PreserveAspectFit
-		source: "searchicon.png"
-	}
-/*
-	color: Qt.rgb(136, 132, 129)
-	
-
-    TextField {
 		anchors {
 			topMargin: 2;
-			bottomMargin: 2;
-			leftMargin: 2;
-			rightMargin: 2;
-			fill: parent
+			top: parent.top
+			right: parent.right 
 		}
+		smooth: true
+		fillMode: Image.PreserveAspectFit
+		source: "qrc:///mp/Resources/searchicon.png"
 		
-		//platformRightMargin: 10;
-		
-		placeholderText: "Поиск"
+		MouseArea  {
+			anchors.fill: parent
+			hoverEnabled: true
+			cursorShape: Qt.PointingHandCursor
 			
-		Line {
-			color: '#473f3c'
-			anchors {
-				right: parent.right
-				top : parent.top
-				rightMargin: 30;
+			onClicked: {
+				radioPageView.searchFilterChanged(searchField.text)
 			}
-
-			width: 1
-			height: parent.height
 		}
-
-		Image {
-			id: searchIcon
-			anchors {  right: parent.right }
-			smooth: true
-			fillMode: Image.PreserveAspectFit
-			source: "searchicon.png"
-		}
-    }
-*/
+	}
 }

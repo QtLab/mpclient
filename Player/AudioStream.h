@@ -18,29 +18,37 @@ class AudioStream : public QObject
 	Q_OBJECT
 
 public:
+	enum ASState
+	{
+		ASPlaying,
+		ASPaused,
+		ASStopped
+	};
+
 	AudioStream();
 	virtual ~AudioStream();
 
-	Q_INVOKABLE void SetUrl(const QString& url);
-	Q_INVOKABLE QString Url() const;
-	Q_INVOKABLE void Play();
-	Q_INVOKABLE void Pause();
+	ASState State() const;
+
+	void SetUrl(const QString& url);
+	QString Url() const;
+	bool IsPlaying() const;
+	void Play(bool resume = false);
+	void Pause();
 	void Stop();
 	void SetVolume(float volume);
-	float GetVolume();
-
-signals:
-	void MetadataUpdated(const ChannelMetadata& metaData);
-
-private slots:
-	void ProcessMeadata();
+	float GetVolume() const;
+	void GetMetaData(ChannelMetadata& meta);
 
 private:
+	ASState								m_state;
 	// BASS library channel
-	HSTREAM								m_bassChannel;
+	HSTREAM								m_hStream;
 	// Current play url
 	QString								m_currentUrl;
-	// Metadata updates on a timer
+	//
+	QString								m_;
+	// 
 	QTimer								m_metadataTimer;
 };
 

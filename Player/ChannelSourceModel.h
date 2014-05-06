@@ -40,6 +40,9 @@ public:
 	void SetLastPlayTimestamp(uint ts);
 	void SetLastPlayNow();
 
+	void AddCategoryId(uint id);
+	CategoryIds Categories() const;
+
 public:
 	int						m_id;
 	QString					m_name;
@@ -48,6 +51,7 @@ public:
 	int						m_playCount;
 	// Unix timestamp
 	uint					m_lastPlayTimestamp;
+	CategoryIds				m_categories;
 
 	Q_DISABLE_COPY(ChannelSource)
 };
@@ -62,7 +66,10 @@ public:
 		Name = Qt::UserRole + 1,
 		Id,
 		Url,
-		GenreId
+		Categories,
+		GenreId,
+		LastPlayTimestamp,
+		PlayCount
 	};
 
 	ChannelSourceModel();
@@ -79,6 +86,9 @@ public:
 	QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 	int rowCount(const QModelIndex &parent = QModelIndex()) const;
 	QHash<int, QByteArray>	roleNames() const;
+
+private:
+	void ParseChannelsJson(const QByteArray& json);
 
 public:
 	friend QAbstractListModel;

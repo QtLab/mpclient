@@ -1,15 +1,16 @@
-import QtQuick 2.2
+import QtQuick 2.0
 
 Rectangle {
-
+	property variant model;
+	
 	Component {
 		id: channelDelegate
 		StationView {
-			width : 200
+			width : 130
 		}
 	}
 
-	Text  {
+	StyledText  {
 		id: topStationsText
 		text: 'ПОПУЛЯРНЫЕ'
 		color: '#ff7e43'
@@ -31,8 +32,8 @@ Rectangle {
 			left: topStationsText.left
 			topMargin: 16
 		}
-		model: topStations
-		delegate: channelDelegate
-		interactive: false
+		model: parent.model;
+		delegate: channelDelegate;
+		interactive: false;
 	}
 }

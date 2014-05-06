@@ -57,11 +57,17 @@
     <Filter Include="Audio">
       <UniqueIdentifier>{90b9e824-c8f5-4ecc-ad36-134c9d501557}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Network">
-      <UniqueIdentifier>{1448e3cb-8bc0-4a3f-9a94-4843486bf460}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Views\Html">
       <UniqueIdentifier>{eebaa700-66c3-4c51-a1dc-e4905e6e4219}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Translations">
+      <UniqueIdentifier>{db74cf91-6654-47ce-a6af-ba4d8e53bc73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Files">
+      <UniqueIdentifier>{4d0f3bfd-427b-4ca7-a235-6603bf6a0ca9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network">
+      <UniqueIdentifier>{1448e3cb-8bc0-4a3f-9a94-4843486bf460}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -294,6 +300,15 @@
     <ClCompile Include="CategoriesModel.cpp">
       <Filter>Model</Filter>
     </ClCompile>
+    <ClCompile Include="NetworkAccessManager.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_NetworkAccessManager.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_NetworkAccessManager.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Player.qrc">
@@ -425,16 +440,20 @@
     <CustomBuild Include="CategoriesModel.h">
       <Filter>Model</Filter>
     </CustomBuild>
+    <CustomBuild Include="NetworkAccessManager.h">
+      <Filter>Network</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Bin\tvgenres.json">
       <Filter>ConfigExamples\Debug</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="Resources\Player.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
+    <None Include="Translations\en.ts">
+      <Filter>Translations</Filter>
+    </None>
+    <None Include="Translations\ru.ts">
+      <Filter>Translations</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -444,5 +463,33 @@
     <ClInclude Include="Config.h">
       <Filter>Model</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\Player.ico">
+      <Filter>Resource Files\Files</Filter>
+    </Image>
+    <Image Include="Resources\centralicon.png">
+      <Filter>Resource Files\Files</Filter>
+    </Image>
+    <Image Include="Resources\closeicon.png">
+      <Filter>Resource Files\Files</Filter>
+    </Image>
+    <Image Include="Resources\minimizeicon.png">
+      <Filter>Resource Files\Files</Filter>
+    </Image>
+    <Image Include="Resources\pauseicon.png">
+      <Filter>Resource Files\Files</Filter>
+    </Image>
+    <Image Include="Resources\playicon.png">
+      <Filter>Resource Files\Files</Filter>
+    </Image>
+    <Image Include="Resources\searchicon.png">
+      <Filter>Resource Files\Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="Resources\txdJ2vM9.ttf">
+      <Filter>Resource Files\Files</Filter>
+    </Font>
   </ItemGroup>
 </Project>

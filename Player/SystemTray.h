@@ -19,6 +19,7 @@ private slots:
 
 signals:
 	void ShowtdownApplicationReuest();
+	void UpdateReuest();
 
 private:
 	QMainWindow *		m_parent;

@@ -1,7 +1,9 @@
 #include "MainWindow.h"
 #include "TabWidget.h"
 #include "Titlebar.h"
+#include "TabPage.h"
 #include "WidgetUtils.h"
+#include "Config.h"
 
 #include <QDebug>
 #include <QVBoxLayout>
@@ -16,8 +18,6 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
 	WidgetUtils::LoadStyleSheets(this, "Player.qss");
 
 	setWindowIcon(QIcon(":/mp/Resources/Player.ico"));
-
-	resize(580, 351);
 
 	QWidget * central = new QWidget(this);
 	setCentralWidget(central);
@@ -39,8 +39,10 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
 	qDebug() << "Titlebar was created";
 
 	m_tabWidget = new TabWidget(NULL, "tabWidget", "taBar");
+	connect(m_tabWidget, SIGNAL(currentChanged(int)), SLOT(CurrentTabChanged(int)));
+	m_tabWidget->setFont(Config::Inst().DefaultFont());
 	m_layout->addWidget(m_tabWidget);
-
+	
 	qDebug() << "TabWidget was created";
 }
 
@@ -92,6 +94,18 @@ bool MainWindow::eventFilter(QObject *object, QEvent *evt)
 	}
 
 	return false;
+}
+
+void MainWindow::CurrentTabChanged(int index)
+{
+	if(index == 0)
+	{
+		setFixedSize(QSize(580, 381));
+	}
+	else
+	{
+		setFixedSize(QSize(750, 630));
+	}
 }
 
 }

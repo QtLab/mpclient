@@ -5,39 +5,74 @@ namespace mp {
 
 ChannelSourceSortFilterProxyModel::ChannelSourceSortFilterProxyModel(QObject *parent)
 	: QSortFilterProxyModel(parent)
-	,m_genreId(-1)
-	,m_sortDirection(ByName)
+	,m_categoryIdFilter(-1)
+	,m_sortBy(ByName)
 {
 }
 
-int ChannelSourceSortFilterProxyModel::GenreId() const
+int ChannelSourceSortFilterProxyModel::CategoryIdFilter() const
 {
-	return m_genreId;
+	return m_categoryIdFilter;
 }
 
-void ChannelSourceSortFilterProxyModel::SetGenreIdFilter(int genreId)
+void ChannelSourceSortFilterProxyModel::SetCategoryIdFilter(int categoryId)
 {
-	if(m_genreId != genreId)
+	if(m_categoryIdFilter != categoryId)
 	{
-		m_genreId = genreId;
+		m_categoryIdFilter = categoryId;
 		invalidateFilter();
 	}
 }
 
+const QString& ChannelSourceSortFilterProxyModel::NameFilter() const
+{
+	return m_nameFilter;
+}
+
+void ChannelSourceSortFilterProxyModel::SetNameFilter(const QString& nameFilter)
+{
+	if(m_nameFilter != nameFilter)
+	{
+		m_nameFilter = nameFilter;
+		invalidateFilter();
+	}
+}
+
+ChannelSourceSortFilterProxyModel::SortT ChannelSourceSortFilterProxyModel::SortType() const
+{
+	return m_sortBy;
+}
+
+void ChannelSourceSortFilterProxyModel::SetSortType(SortT sortBy )
+{
+	m_sortBy = sortBy;
+}
+
 bool ChannelSourceSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
-	if(m_genreId < 0)
+	if(m_categoryIdFilter < 0 && m_nameFilter.isEmpty())
 	{
 		return true;
 	}
 
 	QModelIndex index = sourceModel()->index(sourceRow, 0, sourceParent);
-	
-	int genreId = sourceModel()->data(index, ChannelSourceModel::GenreId).toInt();
 
-	if(genreId != m_genreId)
+	if(!m_nameFilter.isEmpty())
 	{
-		return false;
+		QString channelName = sourceModel()->data(index, ChannelSourceModel::Name).toString();
+
+		if(!channelName.contains(m_nameFilter, Qt::CaseInsensitive))
+			return false;
+	}
+
+	if(m_categoryIdFilter >= 0)
+	{
+		CategoryIds ids = sourceModel()->data(index, ChannelSourceModel::Categories).value<CategoryIds>();
+
+		if(!ids.contains(m_categoryIdFilter))
+		{
+			return false;
+		}
 	}
 
    return true;
@@ -45,10 +80,36 @@ bool ChannelSourceSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QM
 
 bool ChannelSourceSortFilterProxyModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
 {
-	QString nameLeft = left.data(ChannelSourceModel::Name).toString();
-	QString nameRight = right.data(ChannelSourceModel::Name).toString();
+	switch(m_sortBy)
+	{
+		case ByTop:
+		{
+			QString playCountLeft = left.data(ChannelSourceModel::PlayCount).toUInt();
+			QString playCountRight = right.data(ChannelSourceModel::PlayCount).toUInt();
+				
+			return playCountLeft > playCountRight;
+		}
+		break;
+		case ByLastPlayTime:
+		{
+			uint lastPlayTSLeft = left.data(ChannelSourceModel::LastPlayTimestamp).toUInt();
+			uint lastPlayTSRight = right.data(ChannelSourceModel::LastPlayTimestamp).toUInt();
+				
+			return lastPlayTSLeft < lastPlayTSRight;
+		}
+		break;
+		default:
+		case ByName:
+		{
+			QString nameLeft = left.data(ChannelSourceModel::Name).toString();
+			QString nameRight = right.data(ChannelSourceModel::Name).toString();
 
-	return nameLeft > nameRight;
+			return nameLeft > nameRight;
+		}
+		break;
+	};
+
+
 }
 
 }

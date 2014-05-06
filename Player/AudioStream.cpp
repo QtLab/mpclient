@@ -11,20 +11,17 @@
 namespace mp {
 
 AudioStream::AudioStream()
-	:m_bassChannel(0)
+	:m_hStream(0)
+	,m_state(ASStopped)
 {
-	m_metadataTimer.setSingleShot(false);
-	m_metadataTimer.setInterval(2000); // 2 sec
-	connect(&m_metadataTimer, SIGNAL(timeout()), SLOT(ProcessMeadata()));
-
-	if (!BASS_Init(-1,44100,0, 0, NULL)) 
+	if (!BASS_Init(-1,44100, 0, 0, NULL)) 
 	{
 		qDebug() << "BASS_Init: can't initialize device, error code: " << BASS_ErrorGetCode();
 	}
 	else
 	{
-		BASS_SetConfig(BASS_CONFIG_NET_PLAYLIST,1); // enable playlist processing
-		BASS_SetConfig(BASS_CONFIG_NET_PREBUF,0); // minimize automatic pre-buffering, so we can do it (and display it) instead
+		BASS_SetConfig(BASS_CONFIG_NET_PLAYLIST, 1); // enable playlist processing
+		BASS_SetConfig(BASS_CONFIG_NET_PREBUF, 0); // minimize automatic pre-buffering, so we can do it (and display it) instead
 
 		qDebug() << "BASS_Init: success";
 	}
@@ -35,13 +32,135 @@ AudioStream::~AudioStream()
 	BASS_Free();
 }
 
-void AudioStream::ProcessMeadata()
+AudioStream::ASState AudioStream::State() const
 {
-	if(m_bassChannel)
-	{
-		ChannelMetadata metadata;
+	return m_state;
+}
 
-		const char *meta=BASS_ChannelGetTags(m_bassChannel, BASS_TAG_META);
+void CALLBACK StatusProc(const void *buffer, DWORD length, void *user)
+{
+}
+
+void AudioStream::SetUrl(const QString& url)
+{
+	Stop();
+	m_currentUrl = url;
+}
+
+QString AudioStream::Url() const
+{
+	return m_currentUrl;
+}
+
+bool AudioStream::IsPlaying() const
+{
+	return m_state == ASPlaying;
+}
+
+void AudioStream::Play(bool resume)
+{
+	if(m_currentUrl.isEmpty())
+	{
+		qDebug() << "AudioStreamController::Play cuurrent channel is null!";
+		m_state = ASStopped;
+	}
+	else
+	{
+		if(!resume)
+		{
+			std::string url = m_currentUrl.toStdString();
+			BASS_StreamFree(m_hStream);
+			m_hStream = BASS_StreamCreateURL(url.c_str(), 0, BASS_STREAM_BLOCK|BASS_STREAM_STATUS|BASS_STREAM_AUTOFREE, StatusProc, NULL); // open URL
+		}
+
+		if(m_hStream)
+		{
+			BASS_ChannelPlay(m_hStream, FALSE);
+
+			int errCode = BASS_ErrorGetCode();
+
+			if(errCode != 0)
+			{
+				m_state = ASStopped;
+				qDebug() << "AudioStreamController::GetVolume error code: " << errCode;
+			}
+			else
+			{
+				m_state = ASPlaying;
+			}
+		}
+		else
+		{
+			m_state = ASStopped;
+			qDebug() << "BASS_Init: can't initialize device, error code: " << BASS_ErrorGetCode();
+		}
+	}
+}
+
+void AudioStream::Pause()
+{
+	if(m_hStream)
+	{
+		BASS_ChannelPause(m_hStream);
+
+		int errCode = BASS_ErrorGetCode();
+
+		if(errCode != 0)
+		{
+			m_state = ASStopped;
+			qDebug() << "AudioStreamController::Pause error code: " << errCode;
+		}
+		else
+		{
+			m_state = ASPaused;
+		}
+	}
+}
+
+void AudioStream::Stop()
+{
+	BASS_StreamFree(m_hStream);
+
+	int errCode = BASS_ErrorGetCode();
+
+	if(errCode != 0)
+	{
+		qDebug() << "AudioStreamController::Stop error code: " << errCode;
+	}
+
+	m_hStream = 0;
+	m_currentUrl.clear();
+
+	m_state = ASStopped;
+}
+
+void AudioStream::SetVolume(float volume)
+{
+	if(!BASS_SetVolume(volume))
+	{
+		qDebug() << "AudioStreamController::SetVolume error code: " << BASS_ErrorGetCode();
+	}
+}
+
+float AudioStream::GetVolume() const
+{
+	float volume = BASS_GetVolume();
+
+	int errCode = BASS_ErrorGetCode();
+
+	if(errCode != 0)
+	{
+		qDebug() << "AudioStreamController::GetVolume error code: " << errCode;
+	}
+
+	return volume;
+}
+
+void AudioStream::GetMetaData(ChannelMetadata& metadata)
+{
+	if(m_hStream)
+	{
+		const char *meta=BASS_ChannelGetTags(m_hStream, BASS_TAG_META);
 		if (meta) 
 		{ 
 			// got Shoutcast metadata
@@ -60,7 +179,7 @@ void AudioStream::ProcessMeadata()
 		} 
 		else 
 		{ 
-			meta=BASS_ChannelGetTags(m_bassChannel, BASS_TAG_OGG);
+			meta=BASS_ChannelGetTags(m_hStream, BASS_TAG_OGG);
 			if (meta) 
 			{ 
 				// got Icecast/OGG tags
@@ -90,79 +209,7 @@ void AudioStream::ProcessMeadata()
 				metadata.SetUrl(m_currentUrl);
 			}
 		}
-
-		emit MetadataUpdated(metadata);
 	}
-}
-
-void CALLBACK StatusProc(const void *buffer, DWORD length, void *user)
-{
-}
-
-void AudioStream::SetUrl(const QString& url)
-{
-	m_currentUrl = url;
-}
-
-QString AudioStream::Url() const
-{
-	return m_currentUrl;
-}
-
-void AudioStream::Play()
-{
-	if(m_currentUrl.isEmpty())
-	{
-		qDebug() << "AudioStreamController::Play cuurrent channel is null!";
-	}
-	else
-	{
-		std::string url = m_currentUrl.toStdString();
-		BASS_StreamFree(m_bassChannel);
-		m_bassChannel = BASS_StreamCreateURL(url.c_str(), 0, BASS_STREAM_BLOCK|BASS_STREAM_STATUS|BASS_STREAM_AUTOFREE, StatusProc, NULL); // open URL
-
-		if(m_bassChannel)
-		{
-			BASS_ChannelPlay(m_bassChannel,FALSE);
-			ProcessMeadata();
-			m_metadataTimer.start();
-		}
-		else
-		{
-			qDebug() << "BASS_Init: can't initialize device, error code: " << BASS_ErrorGetCode();
-		}
-	}
-}
-
-void AudioStream::Pause()
-{
-	if(m_bassChannel)
-	{
-		m_metadataTimer.stop();
-		BASS_ChannelPause(m_bassChannel);
-	}
-}
-
-void AudioStream::Stop()
-{
-	m_metadataTimer.stop();
-	BASS_StreamFree(m_bassChannel);
-	m_bassChannel = 0;
-	m_currentUrl.clear();
-}
-
-void AudioStream::SetVolume(float volume)
-{
-	if(!BASS_SetVolume(volume))
-	{
-		qDebug() << "AudioStreamController::SetVolume error code: " << BASS_ErrorGetCode();
-	}
-}
-
-float AudioStream::GetVolume()
-{
-	float volume = BASS_GetVolume();
-	return volume;
 }
 
 }

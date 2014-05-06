@@ -32,6 +32,9 @@ public:
 	void closeEvent(QCloseEvent *evt);
 	bool eventFilter(QObject *object, QEvent *evt);
 
+private slots:
+	void CurrentTabChanged(int index);
+
 private:
 	QVBoxLayout *			m_layout;
 	

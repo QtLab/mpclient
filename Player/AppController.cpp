@@ -26,8 +26,20 @@ AppController::~AppController()
 	m_updateController->deleteLater();
 }
 
+void AppController::SetLang(const QString& lang)
+{
+	QTranslator * translator = new QTranslator();
+	bool loaded = translator->load(lang, ":/mp/Translations");
+	if(loaded)
+	{
+		installTranslator(translator);
+	}
+}
+
 void AppController::CreateView()
 {
+	SetLang("ru");
+
 	m_mainWidow = new MainWindow();
 
 	m_trayIcon = new SystemTray(m_mainWidow);
@@ -42,6 +54,8 @@ void AppController::CreateView()
 void AppController::InitSignalsSlots()
 {
 	connect(m_trayIcon, SIGNAL(ShowtdownApplicationReuest()), SLOT(Showtdown()));
+	connect(m_trayIcon, SIGNAL(UpdateReuest()), SLOT(UpdateStarted()));
+	 
 	connect(m_updateController, SIGNAL(UpdateFinished(bool)), SLOT(UpdateFinished(bool)));
 	connect(m_userIdle, SIGNAL(IdleStateChanged(bool)), SLOT(UserIdleStateChanged(bool)));
 }
@@ -85,6 +99,13 @@ void AppController::Showtdown(int exitCode)
 	m_trayIcon->deleteLater();
 
 	exit(exitCode);
+}
+
+void AppController::UpdateStarted()
+{
+#ifndef _DEBUG
+	m_updateController->Run();
+#endif
 }
 
 void AppController::UpdateFinished(bool restartRequired)

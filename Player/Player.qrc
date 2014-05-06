@@ -1,5 +1,15 @@
 <RCC>
     <qresource prefix="/mp">
         <file>Resources/Player.ico</file>
+        <file>Resources/closeicon.png</file>
+        <file>Resources/minimizeicon.png</file>
+        <file>Resources/centralicon.png</file>
+        <file>Resources/searchicon.png</file>
+        <file>Resources/pauseicon.png</file>
+        <file>Resources/playicon.png</file>
+        <file>Translations/en.qm</file>
+        <file>Translations/ru.qm</file>
+        <file>Resources/txdJ2vM9.ttf</file>
+        <file>Resources/arrow.png</file>
     </qresource>
 </RCC>
