@@ -59,11 +59,10 @@ WebView* WebView::Create()
 	return webView;
 }
 
-void WebView::SetupGloblaSettings()
+void WebView::SetupGlobalSettings()
 {
-	//TODO:
-	//QWebSettings* settings = QWebSettings::globalSettings();
-	//SetupSettings(settings);
+	QWebSettings* settings = QWebSettings::globalSettings();
+	SetupSettings(settings);
 }
 
 }

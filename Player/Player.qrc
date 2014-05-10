@@ -11,5 +11,6 @@
         <file>Translations/ru.qm</file>
         <file>Resources/txdJ2vM9.ttf</file>
         <file>Resources/arrow.png</file>
+        <file>Resources/dashedline.png</file>
     </qresource>
 </RCC>

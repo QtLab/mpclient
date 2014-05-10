@@ -8,6 +8,7 @@ ChannelSourceSortFilterProxyModel::ChannelSourceSortFilterProxyModel(QObject *pa
 	,m_categoryIdFilter(-1)
 	,m_sortBy(ByName)
 {
+	setDynamicSortFilter(true);
 }
 
 int ChannelSourceSortFilterProxyModel::CategoryIdFilter() const
@@ -46,6 +47,7 @@ ChannelSourceSortFilterProxyModel::SortT ChannelSourceSortFilterProxyModel::Sort
 void ChannelSourceSortFilterProxyModel::SetSortType(SortT sortBy )
 {
 	m_sortBy = sortBy;
+	invalidateFilter();
 }
 
 bool ChannelSourceSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
@@ -84,8 +86,8 @@ bool ChannelSourceSortFilterProxyModel::lessThan(const QModelIndex &left, const 
 	{
 		case ByTop:
 		{
-			QString playCountLeft = left.data(ChannelSourceModel::PlayCount).toUInt();
-			QString playCountRight = right.data(ChannelSourceModel::PlayCount).toUInt();
+			uint playCountLeft = left.data(ChannelSourceModel::PlayCount).toUInt();
+			uint playCountRight = right.data(ChannelSourceModel::PlayCount).toUInt();
 				
 			return playCountLeft > playCountRight;
 		}
@@ -95,7 +97,7 @@ bool ChannelSourceSortFilterProxyModel::lessThan(const QModelIndex &left, const 
 			uint lastPlayTSLeft = left.data(ChannelSourceModel::LastPlayTimestamp).toUInt();
 			uint lastPlayTSRight = right.data(ChannelSourceModel::LastPlayTimestamp).toUInt();
 				
-			return lastPlayTSLeft < lastPlayTSRight;
+			return lastPlayTSLeft > lastPlayTSRight;
 		}
 		break;
 		default:
@@ -108,8 +110,6 @@ bool ChannelSourceSortFilterProxyModel::lessThan(const QModelIndex &left, const 
 		}
 		break;
 	};
-
-
 }
 
 }

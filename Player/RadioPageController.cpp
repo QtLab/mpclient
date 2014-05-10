@@ -17,13 +17,18 @@ RadioPageController::RadioPageController()
 	m_updateStateTimer.start();
 
 	m_allStationsProxyModel.setSourceModel(&m_stations);
-	m_allStationsProxyModel.setDynamicSortFilter(true);
+	m_allStationsProxyModel.SetSortType(ChannelSourceSortFilterProxyModel::ByName);
+	m_lastStationsProxyModel.sort(0);
+
 	m_lastStationsProxyModel.setSourceModel(&m_stations);
-	m_lastStationsProxyModel.setDynamicSortFilter(true);
+	m_lastStationsProxyModel.SetSortType(ChannelSourceSortFilterProxyModel::ByLastPlayTime);
+	m_lastStationsProxyModel.sort(0);
+
 	m_topStationsProxyModel.setSourceModel(&m_stations);
-	m_topStationsProxyModel.setDynamicSortFilter(true);
+	m_topStationsProxyModel.SetSortType(ChannelSourceSortFilterProxyModel::ByTop);
+	m_topStationsProxyModel.sort(0);
+
 	m_searchStationsProxyModel.setSourceModel(&m_stations);
-	m_searchStationsProxyModel.setDynamicSortFilter(true);
 
 	m_view = new RadioPage(NULL, &m_categories, 
 							&m_allStationsProxyModel, &m_topStationsProxyModel, 
@@ -46,8 +51,8 @@ RadioPageController::~RadioPageController()
 
 void RadioPageController::ReLoadData()
 {
-	m_categories.Load(ConfigFilePath("radiogenres"));
-	m_stations.LoadWithStats(ConfigFilePath("radio"));
+	m_categories.Load(ConfigFilePath("radiocatygories.j"));
+	m_stations.LoadWithStats(ConfigFilePath("radio.j"));
 }
 
 TabPage* RadioPageController::View()
@@ -74,6 +79,13 @@ void RadioPageController::PlayRadio(int id)
 			int newPlayCount = channel->PlayCount() + 1;
 			channel->SetPlayCount(newPlayCount);
 			channel->SetLastPlayNow();
+
+			m_stations.SaveStats(ConfigFilePath("radio.j"));
+
+			m_topStationsProxyModel.invalidate();
+			m_topStationsProxyModel.sort(0);
+			m_lastStationsProxyModel.invalidate();
+			m_lastStationsProxyModel.sort(0);
 		}
 		else
 		{

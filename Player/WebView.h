@@ -15,7 +15,7 @@ public:
 	QUrl DocumentHref();
 
 	static WebView * Create();
-	static void SetupGloblaSettings();
+	static void SetupGlobalSettings();
 
 private:
 	static void SetupSettings(QWebSettings* settings);

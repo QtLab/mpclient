@@ -20,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
 	setWindowIcon(QIcon(":/mp/Resources/Player.ico"));
 
 	QWidget * central = new QWidget(this);
+	central->setObjectName("CentralWidget");
 	setCentralWidget(central);
 
 	qDebug() << "m_centralWidget was created";

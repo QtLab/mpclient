@@ -25,6 +25,8 @@ AudioStream::AudioStream()
 
 		qDebug() << "BASS_Init: success";
 	}
+
+	BASS_SetDevice(2);
 }
 
 AudioStream::~AudioStream()
@@ -136,9 +138,11 @@ void AudioStream::Stop()
 
 void AudioStream::SetVolume(float volume)
 {
-	if(!BASS_SetVolume(volume))
+	BASS_ChannelSetAttribute(m_hStream, BASS_ATTRIB_VOL, volume);
+
+	//if(!BASS_SetVolume(volume))
 	{
-		qDebug() << "AudioStreamController::SetVolume error code: " << BASS_ErrorGetCode();
+		//qDebug() << "AudioStreamController::SetVolume error code: " << BASS_ErrorGetCode();
 	}
 }
 
@@ -172,7 +176,7 @@ void AudioStream::GetMetaData(ChannelMetadata& metadata)
 				{
 					char *t=strdup(p+13);
 					t[p2-(p+13)]=0;
-					metadata.SetTitle(t);
+					metadata.SetTitle(QString::fromLocal8Bit(t));
 					free(t);
 				}
 			}
@@ -195,12 +199,12 @@ void AudioStream::GetMetaData(ChannelMetadata& metadata)
 				{
 					if (artist) 
 					{
-						metadata.SetTitle(title);
-						metadata.SetArtist(artist);
+						metadata.SetTitle(QString::fromLocal8Bit(title));
+						metadata.SetArtist(QString::fromLocal8Bit(artist));
 					}
 					else
 					{
-						metadata.SetTitle(title);
+						metadata.SetTitle(QString::fromLocal8Bit((title)));
 					}	
 				}
 			}

@@ -114,14 +114,14 @@ void ChannelSourceModel::LoadWithStats(const QString& filePath)
 	ParseChannelsJson(fileBody);
 
 	ChannelSourceModel channelsStats;
-	channelsStats.Load(filePath + "_stats", PropertiesSet() << IdKeyName  << PlayCountKeyName << LastPlayKeyName);
+	channelsStats.Load(filePath + "st", PropertiesSet() << IdKeyName  << PlayCountKeyName << LastPlayKeyName);
 
 	MergeWithStats(channelsStats);
 }
 
 bool ChannelSourceModel::SaveStats(const QString& filePath)
 {
-	Save(filePath + "_stats", PropertiesSet() << "id" << "playcount" << "lastplay");
+	Save(filePath + "st", PropertiesSet() << "id" << "playcount" << "lastplay");
 	return true;
 }
 
