@@ -48,7 +48,7 @@ Rectangle {
     ListView {
 		id: categoriesList;
 		orientation: Qt.Horizontal
-		width: 380;
+		width: 430;
 		height: 43;
         model: parent.model
         delegate: contactDelegate
@@ -56,7 +56,7 @@ Rectangle {
         focus: true;
 		keyNavigationWraps: false;
 		highlightMoveDuration: 150 ;
-		
+		clip: true;
 		onCurrentItemChanged: {
 			radioPageView.categoryChanged(currentItem.categoryId);
 		}

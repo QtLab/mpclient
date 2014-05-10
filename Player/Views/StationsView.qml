@@ -18,7 +18,7 @@ Rectangle {
 		anchors {
 			fill: parent;
 		}
-		
+
 		delegate: channelDelegate
 		model: parent.model;
 	}

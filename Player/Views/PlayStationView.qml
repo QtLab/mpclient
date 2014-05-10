@@ -2,15 +2,32 @@ import QtQuick 2.0
 import QtQuick.Controls 1.1
 
 Rectangle {
+	color: 'red'
 	property int currentStationId: 0;
 	property bool isPlaying: false;
 	property string stationName;
 	property string stationMetadata;
 	
+	Image 
+	{
+		id: leftDashedLine
+		x: -130;
+		y: -100;
+		source: "qrc:///mp/Resources/dashedline.png"
+	}
+	
+	Image 
+	{
+		id: rightDashedLine
+		x: 130;
+		y: -100;
+		source: "qrc:///mp/Resources/dashedline.png"
+	}
+	
 	StyledText  {
 		id: stationNameView
 		text: parent.stationName
-		
+		width: centralIcon.width
 		color: '#7A7673'
 		font.pixelSize: 12
 
@@ -74,7 +91,7 @@ Rectangle {
 	StyledText  {
 		id: stationMetadataView
 		text: parent.stationMetadata
-		
+		width: 220
 		color: '#71C5EA'
 		font.pixelSize: 12
 
