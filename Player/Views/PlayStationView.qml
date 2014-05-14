@@ -7,6 +7,7 @@ Rectangle {
 	property bool isPlaying: false;
 	property string stationName;
 	property string stationMetadata;
+	property real volume;
 	
 	Image 
 	{
@@ -65,6 +66,7 @@ Rectangle {
 					}
 					else
 					{
+						//radioPageView.updateStateionName
 						radioPageView.playRadio(currentStationId);
 					}
 					
@@ -74,6 +76,7 @@ Rectangle {
 		}
 		
 		Slider {
+			id: volumeSlider
 			y: 100; x: 40;
 			width: 50;
 			height: 10;
@@ -101,7 +104,7 @@ Rectangle {
 			left: centralIcon.left
 		}
 	}
-
+	
 	onIsPlayingChanged: {
 		if(isPlaying)
 		{
@@ -112,4 +115,9 @@ Rectangle {
 			playStateIcon.source = "qrc:///mp/Resources/playicon.png";
 		}
 	}
+	
+	onVolumeChanged: {
+		volumeSlider.value = volume * 1000;
+	}
+	
 }

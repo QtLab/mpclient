@@ -1,9 +1,8 @@
 import QtQuick 2.0
 
-Rectangle {	
-	width: parent.width; height: parent.height
+Rectangle {
 	property variant model;
-	
+
 	Component  {
 		id: channelDelegate
 		StationView {
@@ -13,12 +12,9 @@ Rectangle {
 	
 	ListView {
 		id: channelsList
-		width:parent.width;
-		
-		anchors {
-			fill: parent;
-		}
-
+		height: 195
+		width: 130
+		clip: false
 		delegate: channelDelegate
 		model: parent.model;
 	}

@@ -125,11 +125,6 @@ bool ChannelSourceModel::SaveStats(const QString& filePath)
 	return true;
 }
 
-ChannelSourceList ChannelSourceModel::Items() const
-{
-	return m_items;
-}
-
 ChannelSourcePtr ChannelSourceModel::Find(int channelId, int genreId) const
 {
 	foreach(ChannelSourcePtr channel, m_items)
@@ -178,6 +173,12 @@ QVariant ChannelSourceModel::data(const QModelIndex & index, int role) const
 		case GenreId:
 			result = QVariant(channel->GenreId());
 			break;
+		case FirstCategoryId:
+			{
+				uint id = (*channel->Categories().begin());
+				result = QVariant(id);
+				break;
+			}
 		case Categories:
 			result = QVariant(qVariantFromValue(channel->Categories()));
 			break;
@@ -205,6 +206,7 @@ QHash<int, QByteArray>	ChannelSourceModel::roleNames() const
 	roles[Id] = "Id";
 	roles[Url] = "Url";
 	roles[GenreId] = "GenreId";
+	roles[FirstCategoryId] = "FirstCategoryId";
 	roles[Categories] = "Categories";
 	roles[LastPlayTimestamp] = "LastPlayTimestamp";
 	roles[PlayCount] = "PlayCount";

@@ -1,5 +1,6 @@
 #include "AudioStream.h"
 #include "ChannelMetadataModel.h"
+#include "Config.h"
 
 #include <QDebug>
 
@@ -26,7 +27,7 @@ AudioStream::AudioStream()
 		qDebug() << "BASS_Init: success";
 	}
 
-	BASS_SetDevice(2);
+	connect(&Config::Inst(), SIGNAL(VolumeChanged(qreal)), SLOT(VolumeChanged(qreal)));
 }
 
 AudioStream::~AudioStream()
@@ -74,6 +75,8 @@ void AudioStream::Play(bool resume)
 			BASS_StreamFree(m_hStream);
 			m_hStream = BASS_StreamCreateURL(url.c_str(), 0, BASS_STREAM_BLOCK|BASS_STREAM_STATUS|BASS_STREAM_AUTOFREE, StatusProc, NULL); // open URL
 		}
+
+		VolumeChanged(Config::Inst().Volume());
 
 		if(m_hStream)
 		{
@@ -136,30 +139,6 @@ void AudioStream::Stop()
 	m_state = ASStopped;
 }
 
-void AudioStream::SetVolume(float volume)
-{
-	BASS_ChannelSetAttribute(m_hStream, BASS_ATTRIB_VOL, volume);
-
-	//if(!BASS_SetVolume(volume))
-	{
-		//qDebug() << "AudioStreamController::SetVolume error code: " << BASS_ErrorGetCode();
-	}
-}
-
-float AudioStream::GetVolume() const
-{
-	float volume = BASS_GetVolume();
-
-	int errCode = BASS_ErrorGetCode();
-
-	if(errCode != 0)
-	{
-		qDebug() << "AudioStreamController::GetVolume error code: " << errCode;
-	}
-
-	return volume;
-}
-
 void AudioStream::GetMetaData(ChannelMetadata& metadata)
 {
 	if(m_hStream)
@@ -214,6 +193,23 @@ void AudioStream::GetMetaData(ChannelMetadata& metadata)
 			}
 		}
 	}
+}
+
+void AudioStream::VolumeChanged(qreal value)
+{
+	if(m_hStream)
+	{
+		if(!BASS_ChannelSetAttribute(m_hStream, BASS_ATTRIB_VOL, value))
+		{
+			int errCode = BASS_ErrorGetCode();
+
+			if(errCode != 0)
+			{
+				qDebug() << "AudioStreamController::GetVolume error code: " << errCode;
+			}
+		}
+	}
+
 }
 
 }

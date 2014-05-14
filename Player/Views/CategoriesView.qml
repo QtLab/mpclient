@@ -72,5 +72,10 @@ Rectangle {
 		height: 24
 		width: 116
 	}
+	
+	function setCategory(id) {		
+		var rowIndex = model.RowIndexById(id);
+		categoriesList.currentIndex = rowIndex;
+	}
 }
 

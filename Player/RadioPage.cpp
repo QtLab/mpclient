@@ -67,13 +67,24 @@ QString RadioPage::Name() const
 	return tr("Radio");
 }
 
-void RadioPage::Update(bool isPlay, int stationId, const QString& stationName, const QString& metadata)
+void RadioPage::SetVolume(qreal val)
 {
-	QQuickItem * item = m_quickView->rootObject();
+	QMetaObject::invokeMethod(m_quickView->rootObject(), "setVolume", Q_ARG(QVariant, val));
+}
 
-	QMetaObject::invokeMethod(item, "updateViewState", 
-								Q_ARG(QVariant, isPlay),Q_ARG(QVariant, stationId), 
-								Q_ARG(QVariant, stationName), Q_ARG(QVariant, metadata));
+void RadioPage::SetPlayingState(bool play)
+{
+	QMetaObject::invokeMethod(m_quickView->rootObject(), "setPlayingState", Q_ARG(QVariant, play));
+}
+
+void RadioPage::UpdateMetadata(const QString& metadata)
+{
+	QMetaObject::invokeMethod(m_quickView->rootObject(), "updateMetadata", Q_ARG(QVariant, metadata));
+}
+
+void RadioPage::SetCategory(int index)
+{
+	QMetaObject::invokeMethod(m_quickView->rootObject(), "setCategory", Q_ARG(QVariant, index));
 }
 
 }

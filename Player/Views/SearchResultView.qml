@@ -28,6 +28,12 @@ Rectangle {
 					cursorShape: Qt.PointingHandCursor
 					
 					onClicked: {
+						playStationView.stationName = Name;
+						playStationView.stationMetadata = Url;
+						playStationView.currentStationId = Id;
+						playStationView.isPlaying = true;
+						categoriesView.setCategory(FirstCategoryId);
+						
 						radioPageView.playRadio(Id);
 					}
 				}

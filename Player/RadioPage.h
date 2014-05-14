@@ -18,16 +18,16 @@ public:
 
 	// User leave the page
 	void Enter();
-
 	// User leave the page
 	bool Leave();
-
 	// Languege changed
 	void RetranslateUI();
-
 	QString Name() const;
 
-	void Update(bool isPlay, int stationId, const QString& stationName, const QString& metadata);
+	void SetVolume(qreal val);
+	void SetPlayingState(bool play);
+	void UpdateMetadata(const QString& metadata);
+	void SetCategory(int index);
 
 signals:
 	void PlayRadio(int id);

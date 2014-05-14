@@ -2,6 +2,7 @@
 #include "RadioPage.h"
 #include "AudioStream.h"
 #include "ChannelMetadataModel.h"
+#include "Config.h"
 #include "Path.h"
 
 namespace mp {
@@ -41,7 +42,9 @@ RadioPageController::RadioPageController()
 	connect(m_view, SIGNAL(SearchFilterChanged(QString)), this, SLOT(SearchFilterChanged(QString)));
 	connect(m_audioStream.data(), SIGNAL(MetadataUpdated(const ChannelMetadata&)), SLOT(MetadataUpdated(const ChannelMetadata&)));
 
-	CategoryChanged(m_categories.Items().first()->Id());
+	CategoryChanged(m_categories.First()->Id());
+	m_view->SetVolume(Config::Inst().Volume());
+
 	qDebug() << "Radio widget created";
 }
 
@@ -83,9 +86,9 @@ void RadioPageController::PlayRadio(int id)
 			m_stations.SaveStats(ConfigFilePath("radio.j"));
 
 			m_topStationsProxyModel.invalidate();
-			m_topStationsProxyModel.sort(0);
+			//m_topStationsProxyModel.sort(0);
 			m_lastStationsProxyModel.invalidate();
-			m_lastStationsProxyModel.sort(0);
+			//m_lastStationsProxyModel.sort(0);
 		}
 		else
 		{
@@ -101,7 +104,7 @@ void RadioPageController::PauseRadio()
 
 void RadioPageController::VolumeChanged(qreal value)
 {
-	m_audioStream->SetVolume(value);
+	Config::Inst().SetVolume(value);
 }
 
 void RadioPageController::CategoryChanged(int id)
@@ -118,15 +121,18 @@ void RadioPageController::SearchFilterChanged(QString seasrch)
 
 void RadioPageController::UpdateViewState()
 {
-	if(!m_currentChannel.isNull())
+	if(m_audioStream->IsPlaying())
 	{
 		ChannelMetadata metadata;
 		m_audioStream->GetMetaData(metadata);
-		m_view->Update(m_audioStream->IsPlaying(), m_currentChannel->Id(), m_currentChannel->Name(), metadata.ToString());
+
+		m_view->UpdateMetadata(metadata.ToString());
+		m_view->SetPlayingState(true);
 	}
 	else
 	{
-		m_view->Update(false, 0, QString::null, QString::null);
+		m_view->UpdateMetadata(QString::null);
+		m_view->SetPlayingState(false);
 	}
 	
 }

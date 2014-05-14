@@ -43,23 +43,14 @@ public:
 	CategoriesModel();
 	virtual ~CategoriesModel();
 
-	Q_INVOKABLE int Length() const;
-	Q_INVOKABLE int GetId(int row) const;
-	Q_INVOKABLE QString GetName(int row) const;
-
-	// Don't use in prod. It isn't thread-safe
-	CategoryList Items() const;
-	CategoryPtr FindById(int id);
+	CategoryPtr First() const;
+	Q_INVOKABLE int RowIndexById(int id) const;
+	CategoryPtr FindById(int id) const;
 
 	QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 	int rowCount(const QModelIndex &parent = QModelIndex()) const;
 	QHash<int, QByteArray>	roleNames() const;
 };
-
-
-//Q_DECLARE_METATYPE(mp::GenreItem);
-//Q_DECLARE_METATYPE(mp::GenreModel);
-
 
 }
 

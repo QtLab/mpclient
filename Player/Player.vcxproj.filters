@@ -36,14 +36,8 @@
     <Filter Include="Views\Widgets">
       <UniqueIdentifier>{2480e685-5562-4c68-8758-922847712336}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ConfigExamples">
-      <UniqueIdentifier>{665bc4aa-4363-4b74-8202-c2230591ca2e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Views\Styles">
       <UniqueIdentifier>{5ebb2516-ef75-41c6-9f1b-a854f165aa2d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ConfigExamples\Debug">
-      <UniqueIdentifier>{577ac111-8dc7-402b-baf5-076162019f45}</UniqueIdentifier>
     </Filter>
     <Filter Include="Views\SystemTray">
       <UniqueIdentifier>{57e35ca6-e664-4b56-85db-787aac19f8ae}</UniqueIdentifier>
@@ -309,6 +303,12 @@
     <ClCompile Include="GeneratedFiles\Release\moc_NetworkAccessManager.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_Config.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_Config.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Player.qrc">
@@ -359,9 +359,6 @@
     <CustomBuild Include="Views\TVPageView.qml">
       <Filter>Views\QML</Filter>
     </CustomBuild>
-    <CustomBuild Include="..\Bin\Debug\Styles\Player.qss">
-      <Filter>Views\Styles</Filter>
-    </CustomBuild>
     <CustomBuild Include="..\Bin\Release\Html\VideoPlayer.html">
       <Filter>Views\Html</Filter>
     </CustomBuild>
@@ -373,15 +370,6 @@
     </CustomBuild>
     <CustomBuild Include="WidgetUtils.h">
       <Filter>Utils</Filter>
-    </CustomBuild>
-    <CustomBuild Include="..\Bin\radio.json">
-      <Filter>ConfigExamples\Debug</Filter>
-    </CustomBuild>
-    <CustomBuild Include="..\Bin\radiogenres.json">
-      <Filter>ConfigExamples\Debug</Filter>
-    </CustomBuild>
-    <CustomBuild Include="..\Bin\tv.json">
-      <Filter>ConfigExamples\Debug</Filter>
     </CustomBuild>
     <CustomBuild Include="BaseListModel.h">
       <Filter>Model</Filter>
@@ -443,16 +431,19 @@
     <CustomBuild Include="NetworkAccessManager.h">
       <Filter>Network</Filter>
     </CustomBuild>
+    <CustomBuild Include="Config.h">
+      <Filter>Model</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Bin\tvgenres.json">
-      <Filter>ConfigExamples\Debug</Filter>
-    </None>
     <None Include="Translations\en.ts">
       <Filter>Translations</Filter>
     </None>
     <None Include="Translations\ru.ts">
       <Filter>Translations</Filter>
+    </None>
+    <None Include="Style\Player.qss">
+      <Filter>Views\Styles</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -460,9 +451,6 @@
       <Filter>Generated Files</Filter>
     </ClInclude>
     <ClInclude Include="Prerequirements.h" />
-    <ClInclude Include="Config.h">
-      <Filter>Model</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\Player.ico">

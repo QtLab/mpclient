@@ -66,6 +66,7 @@ public:
 		Name = Qt::UserRole + 1,
 		Id,
 		Url,
+		FirstCategoryId,
 		Categories,
 		GenreId,
 		LastPlayTimestamp,
@@ -78,7 +79,6 @@ public:
 	void LoadWithStats(const QString& filePath);
 	bool SaveStats(const QString& filePath);
 
-	ChannelSourceList Items() const;
 	ChannelSourcePtr Find(int channelId, int genreId = -1) const;
 	// Merge with items that contains additional information about use it by current user
 	void MergeWithStats(const ChannelSourceModel& channelsWithStats);

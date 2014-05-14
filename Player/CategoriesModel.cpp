@@ -45,36 +45,29 @@ CategoriesModel::~CategoriesModel()
 {
 }
 
-int CategoriesModel::Length() const
+CategoryPtr CategoriesModel::First() const
 {
-	return rowCount();
+	return m_items.first();
 }
 
-int CategoriesModel::GetId(int row) const
+int CategoriesModel::RowIndexById(int id) const
 {
-	const CategoryPtr contact = m_items.at(row);
+	int row = 0;
+	foreach(CategoryPtr category, m_items)
+	{
+		if(category->Id() == id)
+		{
+			int rowIndex = index(row).row();
+			return rowIndex;
+		}
 
-	if(!contact.isNull())
-		return contact->Id();
-
+		row++;
+	}
+	
 	return -1;
 }
 
-QString CategoriesModel::GetName(int row) const
-{
-	const CategoryPtr contact = m_items.at(row);
-	if(!contact.isNull())
-		return contact->Name();
-
-	return QString();
-}
-
-CategoryList CategoriesModel::Items() const
-{
-	return m_items;
-}
-
-CategoryPtr CategoriesModel::FindById(int id)
+CategoryPtr CategoriesModel::FindById(int id) const
 {
 	foreach(CategoryPtr category, m_items)
 	{

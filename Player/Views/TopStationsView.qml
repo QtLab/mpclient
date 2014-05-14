@@ -25,12 +25,12 @@ Rectangle {
 	ListView {
 		id: topChannelsList
 		width:parent.width; 
-		height: 50
+		height: 35
 		
 		anchors {
 			top: topStationsText.bottom
 			left: topStationsText.left
-			topMargin: 16
+			topMargin: 20
 		}
 		model: parent.model;
 		delegate: channelDelegate;

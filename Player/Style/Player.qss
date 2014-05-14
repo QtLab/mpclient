@@ -1,11 +1,17 @@
 QMainWindow {
-	background-color: '#efefeb';
+	background-color: 'white';
 	/*
+	
+	
 	min-height: 351px;
 	min-width: 580px;
 	max-height: 351px;
 	max-width: 580px;
 	*/
+}
+
+QWidget#CentralWidget {
+	background-color: '#efefeb';
 }
 
 QWidget#RadioPage {
@@ -30,6 +36,7 @@ QWidget#titleBar {
 
  QTabWidget::pane {
      border: 6px solid #dbdbdb;
+	 border-top-right-radius: 7;
  }
 
  QTabWidget::tab-bar {

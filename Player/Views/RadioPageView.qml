@@ -13,8 +13,8 @@ Rectangle {
 	signal volumeChanged(real volume);
 	
 	CategoriesView {
-		model: categoriesModel;
 		id: categoriesView;
+		model: categoriesModel;
 		anchors {
 			top: radioPageView.top
 		}
@@ -109,11 +109,16 @@ Rectangle {
 		hideSearchResults();
 	}
 	
-	function updateViewState(isPlaying, stationId, stationName, stationMetaData) {
+	function setPlayingState(isPlaying) {
 		playStationView.isPlaying = isPlaying;
-		playStationView.currentStationId = stationId;
-		playStationView.stationName = stationName;
-		playStationView.stationMetadata = stationMetaData;
+	}
+	
+	function updateMetadata(metaData) {
+		playStationView.stationMetadata = metaData;
+	}
+	
+	function setVolume(value) {
+		playStationView.volume = value;
 	}
 	
 	function showSearchResults() {

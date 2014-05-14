@@ -3,11 +3,14 @@
 
 #include <QString>
 #include <QFont>
+#include <QSettings>
 
 namespace mp {
 
-class Config 
+class Config : public QObject
 {
+	Q_OBJECT
+
 public:
 	static Config& Inst();
 
@@ -16,6 +19,12 @@ public:
 
 	const QFont& DefaultFont() const;
 
+	void SetVolume(qreal value);
+	qreal Volume() const;
+
+signals:
+	void VolumeChanged(qreal value);
+
 private:
 	void Load();
 
@@ -23,6 +32,7 @@ private:
 	Config();
 	static Config*		m_instance;
 
+	QSettings			m_settings;
 	QString				m_userId;
 	QString				m_source;
 	QFont				m_defaultFont;

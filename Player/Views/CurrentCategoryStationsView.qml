@@ -3,7 +3,6 @@ import QtQuick 2.0
 Rectangle {	
 	LastStationsView {
 		id: lastStationsView
-		width: 130
 		anchors {
 			leftMargin:21
 			topMargin: 20
@@ -15,7 +14,6 @@ Rectangle {
 	TopStationsView {
 		id: topStationsView
 		width: lastStationsView.width
-		height: 75
 		anchors {
 			topMargin: 30
 			leftMargin: 20
@@ -26,8 +24,6 @@ Rectangle {
 	
 	StationsView {
 		id: allStationsView
-		width: 130
-		height: parent.height
 		anchors {
 			topMargin: 30
 			right: parent.right

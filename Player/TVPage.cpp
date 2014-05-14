@@ -20,6 +20,8 @@ TVPage::TVPage(QWidget* parent, ChannelSourceModelPtr channels)
 	m_view = WebView::Create();
 	box->addWidget(m_view);
 
+	m_view->load(QUrl("http://google.com"));
+
 	//m_view->setUrl(QUrl("http://www.tvigle.ru/category/men/walking_dead4/?flt=49&video=703175"));
 
 	//m_view->setUrl(QUrl("http://tvigle.ru"));

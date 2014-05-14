@@ -12,6 +12,8 @@ namespace mp {
 
 Config* Config::m_instance = 0;
 
+const QString VolumeKeyName = "volume";
+
 Config& Config::Inst()
 {
 	if(m_instance == nullptr)
@@ -23,6 +25,7 @@ Config& Config::Inst()
 }
 
 Config::Config()
+	:m_settings("mp", "player")
 {
 	int id = QFontDatabase::addApplicationFont(":/mp/Resources/txdJ2vM9.ttf");
 	QString family = QFontDatabase::applicationFontFamilies(id).at(0);
@@ -82,6 +85,19 @@ void Config::Load()
 const QFont& Config::DefaultFont() const
 {
 	return m_defaultFont;
+}
+
+void Config::SetVolume(qreal value)
+{
+	m_settings.setValue(VolumeKeyName, value);
+
+	emit VolumeChanged(value);
+}
+
+qreal Config::Volume() const
+{
+	qreal value = m_settings.value(VolumeKeyName).toReal();
+	return value;
 }
 
 }

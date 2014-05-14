@@ -20,15 +20,16 @@ Rectangle {
 	
 	ListView {
 		id: channelsList
+		height: 55
+		width: 130
 		
 		anchors {
-			fill: parent
-			topMargin: 30
+			top: lastStationsText.bottom
+			topMargin: 20
 		}
 		
 		interactive: false
 		delegate: channelDelegate
 		model: parent.model
-		height: 75
 	}
 }

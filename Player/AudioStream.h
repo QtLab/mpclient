@@ -36,9 +36,10 @@ public:
 	void Play(bool resume = false);
 	void Pause();
 	void Stop();
-	void SetVolume(float volume);
-	float GetVolume() const;
 	void GetMetaData(ChannelMetadata& meta);
+
+private slots:
+	void VolumeChanged(qreal value);
 
 private:
 	ASState								m_state;
@@ -46,10 +47,6 @@ private:
 	HSTREAM								m_hStream;
 	// Current play url
 	QString								m_currentUrl;
-	//
-	QString								m_;
-	// 
-	QTimer								m_metadataTimer;
 };
 
 typedef QSharedPointer<AudioStream> AudioStreamPtr;
