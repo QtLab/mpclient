@@ -3,7 +3,7 @@ import QtQuick 2.0
 Rectangle {
 	width: parent.width
 	height: 43
-	color: '#362F2A'
+	color: '#372F2C'
 	property variant model;
 	
     Component {

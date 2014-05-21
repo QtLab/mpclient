@@ -14,9 +14,9 @@ int main(int argc, char *argv[])
 
 	mp::AppController app(argc, argv);
 
-	mp::WebView::SetupGlobalSettings();
-
 	QDir::setCurrent(QCoreApplication::applicationDirPath());
+
+	mp::WebView::SetupGlobalSettings();
 
 	app.CreateView();
 	app.InitSignalsSlots();

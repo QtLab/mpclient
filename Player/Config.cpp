@@ -13,6 +13,7 @@ namespace mp {
 Config* Config::m_instance = 0;
 
 const QString VolumeKeyName = "volume";
+const QString TVTabSizeKeyName = "tvtabsize";
 
 Config& Config::Inst()
 {
@@ -96,8 +97,24 @@ void Config::SetVolume(qreal value)
 
 qreal Config::Volume() const
 {
-	qreal value = m_settings.value(VolumeKeyName).toReal();
+	qreal value = m_settings.value(VolumeKeyName, 0.5f).toReal();
 	return value;
+}
+
+void Config::SetTVTabWindowSize(const QSize& size)
+{
+	m_settings.setValue(TVTabSizeKeyName, size);
+}
+
+QSize Config::TVTabWindowSize() const
+{
+	QSize size = m_settings.value(TVTabSizeKeyName, QSize(750, 630)).toSize();
+	return size;
+}
+
+QSize Config::RadioTabWindowSize() const
+{
+	return QSize(580, 351);
 }
 
 }

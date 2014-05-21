@@ -3,6 +3,7 @@
 #include "Titlebar.h"
 #include "TabPage.h"
 #include "WidgetUtils.h"
+#include "NcFramelessHelper.h"
 #include "Config.h"
 
 #include <QDebug>
@@ -12,7 +13,12 @@ namespace mp {
 
 MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
 	: QMainWindow(parent, flags)
+	,m_frameLessHelper(new NcFramelessHelper(this))
 {
+	m_frameLessHelper->setWidgetMovable(true);
+	m_frameLessHelper->setWidgetResizable(false);
+	m_frameLessHelper->activateOn(this);
+
 	setWindowFlags( Qt::FramelessWindowHint | Qt::WindowSystemMenuHint | Qt::WindowMinimizeButtonHint );
 
 	WidgetUtils::LoadStyleSheets(this, "Player.qss");
@@ -20,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
 	setWindowIcon(QIcon(":/mp/Resources/Player.ico"));
 
 	QWidget * central = new QWidget(this);
-	central->setObjectName("CentralWidget");
+	central->setObjectName("centralWidget");
 	setCentralWidget(central);
 
 	qDebug() << "m_centralWidget was created";
@@ -34,13 +40,13 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
 	m_layout->addWidget(borderTop, 1);
 
 	m_titleBar = new Titlebar(this);
-	m_titleBar->installEventFilter(this);
 	m_layout->addWidget(m_titleBar);
 
 	qDebug() << "Titlebar was created";
 
 	m_tabWidget = new TabWidget(NULL, "tabWidget", "taBar");
-	connect(m_tabWidget, SIGNAL(currentChanged(int)), SLOT(CurrentTabChanged(int)));
+	connect(m_tabWidget, SIGNAL(currentChanged(int)), SIGNAL(CurrentTabChanged(int)));
+	m_tabWidget->tabBar()->setFont(Config::Inst().DefaultFont());
 	m_tabWidget->setFont(Config::Inst().DefaultFont());
 	m_layout->addWidget(m_tabWidget);
 	
@@ -61,9 +67,24 @@ TabWidget * MainWindow::Tabs() const
 	return m_tabWidget;
 }
 
-void MainWindow::AddTab(TabPage * page)
+int MainWindow::AddTab(TabPage * page)
 {
-	m_tabWidget->AddPage(page);
+	return m_tabWidget->AddPage(page);
+}
+
+void MainWindow::SetResizable(bool resizable)
+{
+	m_frameLessHelper->setWidgetResizable(resizable);
+}
+
+QSize MainWindow::Size() const
+{
+	return size();
+}
+
+void MainWindow::SetSize(const QSize& size)
+{
+	resize(size);
 }
 
 void MainWindow::closeEvent(QCloseEvent *evt)
@@ -73,40 +94,5 @@ void MainWindow::closeEvent(QCloseEvent *evt)
 	evt->ignore();
 }
 
-bool MainWindow::eventFilter(QObject *object, QEvent *evt)
-{
-	if (object == m_titleBar)
-	{
-		if(evt->type() == QEvent::MouseButtonPress)
-		{
-			m_cursorPosition = static_cast<QMouseEvent *>(evt)->globalPos();
-		}
-		else
-		{
-			if(evt->type() == QEvent::MouseMove)
-			{
-				QMouseEvent* moveEvt = static_cast<QMouseEvent *>(evt);
-
-				const QPoint delta = moveEvt->globalPos() - m_cursorPosition;
-				move(x()+delta.x(), y()+delta.y());
-				m_cursorPosition = moveEvt->globalPos();
-			}
-		}
-	}
-
-	return false;
-}
-
-void MainWindow::CurrentTabChanged(int index)
-{
-	if(index == 0)
-	{
-		setFixedSize(QSize(580, 381));
-	}
-	else
-	{
-		setFixedSize(QSize(750, 630));
-	}
-}
 
 }

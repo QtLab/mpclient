@@ -208,6 +208,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="CategoriesModel.cpp" />
+    <ClCompile Include="NcFramelessHelper.cpp" />
     <ClCompile Include="NetworkAccessManager.cpp" />
     <ClCompile Include="TVPage.cpp" />
     <ClCompile Include="TVPageController.cpp" />
@@ -709,9 +710,9 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Style\Player.qss" />
     <None Include="Translations\en.ts" />
     <None Include="Translations\ru.ts" />
+    <None Include="Views\Player.qss" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="SystemTray.h">
@@ -777,6 +778,7 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_WEBKIT_LIB -DQT_WIDGETS_LIB -DQT_WEBKITWIDGETS_LIB -DQT_QML_LIB -DQT_QUICK_LIB -DQT_XML_LIB  "-I.\GeneratedFiles" "-I." "-I$(QTDIR)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtNetwork" "-I$(QTDIR)\include\QtWebKit" "-I$(SolutionDir)\Dependencies\qjson\include" "-I$(SolutionDir)\Dependencies\bass" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtWebkitWidgets" "-I$(QTDIR)\include\QtQml" "-I$(QTDIR)\include\QtQuick" "-I$(SolutionDir)Common" "-I$(QTDIR)\include\QtXml"</Command>
     </CustomBuild>
+    <ClInclude Include="NcFramelessHelper.h" />
     <ClInclude Include="Prerequirements.h" />
     <ClInclude Include="resource.h" />
     <CustomBuild Include="TVPageController.h">

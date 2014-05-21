@@ -2,7 +2,7 @@ import QtQuick 2.0
 
 Item 
 {
-	height: 25
+	height: 22
 	
 	StyledText  {
 		id: stationText

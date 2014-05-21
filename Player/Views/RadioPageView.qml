@@ -34,9 +34,10 @@ Rectangle {
 			id: lastStationsView
 			width: 130
 			model: lastStationsModel;
+			
 			anchors {
-				leftMargin:21
-				topMargin: 20
+				leftMargin:20
+				topMargin: 15
 				left: parent.left
 				top: parent.top
 			}
@@ -44,14 +45,23 @@ Rectangle {
 		
 		TopStationsView {
 			id: topStationsView
-			width: lastStationsView.width
+			width: 130
 			model: topStationsModel
-			height: 75
+			
 			anchors {
-				topMargin: 30
 				leftMargin: 20
+				bottomMargin: 20
 				left: parent.left
-				top: lastStationsView.bottom
+				bottom: parent.bottom
+			}
+		}
+		
+		PlayStationView {
+			id: playStationView
+			stationName: stationName
+			stationMetadata: stationMetadata
+			anchors {
+				centerIn: parent;
 			}
 		}
 		
@@ -64,15 +74,6 @@ Rectangle {
 				topMargin: 30
 				right: parent.right
 				top: parent.top
-			}
-		}
-
-		PlayStationView {
-			id: playStationView
-			stationName: stationName
-			stationMetadata: stationMetadata
-			anchors {
-				centerIn: parent;
 			}
 		}
 	}

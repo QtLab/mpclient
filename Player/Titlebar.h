@@ -4,8 +4,10 @@
 #include <QWidget>
 #include <QLabel>
 
+QT_BEGIN_NAMESPACE
 class QHBoxLayout;
 class QMouseEvent;
+QT_END_NAMESPACE
 
 namespace mp {
 
@@ -24,7 +26,6 @@ private:
 	void RetranslateUI();
 	
 	void changeEvent(QEvent *event);
-	void mouseMoveEvent(QMouseEvent *evt);
 
 private slots:
 	void CloseClicked();

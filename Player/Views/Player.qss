@@ -1,0 +1,78 @@
+QMainWindow {
+	background-color: 'white';
+}
+
+QWidget#centralWidget {
+	background-color: '#efefeb';
+	margin-top: 2px;
+	margin-right: 3px;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+
+/* Titlebar */
+QWidget#titleBar {
+	background-color: '#efefeb';
+	min-height: 16px;
+	max-height: 16px;
+	margin-top: 2px;
+	margin-right: 4px;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+
+QLabel#minimizeLnk {
+	background-image: url(:/mp/Resources/minimizeicon.png);
+	background-repeat: no-repeat;
+	margin-top: 10px;
+	margin-right: 10px;
+	min-width: 10px;
+	max-width: 10px;
+}
+
+QLabel#closeLnk {
+	color : white;
+	background-image: url(:/mp/Resources/closeicon.png);
+	background-repeat: no-repeat;
+	margin-top: 10px;
+	margin-right: 12px;
+	min-width: 10px;
+	max-width: 10px;
+}
+
+QTabWidget#tabWidget::pane {
+	border: 6px solid #dbdbdb;
+	border-top-right-radius: 7;
+	border-bottom-left-radius: 7;
+	border-bottom-right-radius: 7;
+	margin-bottom: 1px;
+}
+
+QTabBar::tab {
+	font: 11pt;
+	background-color: '#efefeb';
+	border: 0px solid #C4C4C3;
+	padding-left: 18px;
+	padding-right: 18px;
+	border-top-left-radius: 3px;
+	border-top-right-radius: 3px;
+	min-width: 100px;
+	min-height: 43px;
+}
+
+QTabBar::tab:selected {
+	background-color: '#dbdbdb';
+}
+
+QTabBar::tab:!selected {
+	background-color: '#efefeb';
+}
+
+
+
+
+
+
+
+
+

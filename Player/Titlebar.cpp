@@ -14,15 +14,15 @@ Titlebar::Titlebar(QWidget *parent)
 	: m_parent( parent )
 {
 	m_layout = new QHBoxLayout(this);
+	m_layout->setSpacing(0);
+	m_layout->setMargin(0);
 	setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Fixed);
 
 	setObjectName("titleBar");
-	//setAttribute(Qt::WA_StyledBackground);
-	setStyleSheet("background-color: '#efefeb'");
+	setAttribute(Qt::WA_StyledBackground);
 	qDebug() << "Titlebar layouts created";
 
 	m_logo = new QLabel(this);
-	//m_logo->setText("MP");
 	connect(m_logo, SIGNAL(clicked()), this, SLOT(ShowMenuSlot()));
 	m_layout->addWidget(m_logo, 0);
 
@@ -59,14 +59,6 @@ void Titlebar::changeEvent(QEvent *event)
 
 void Titlebar::RetranslateUI()
 {
-}
-
-void Titlebar::mouseMoveEvent(QMouseEvent *evt)
-{
-	if(!m_parent->isMaximized())
-	{
-		QWidget::mouseMoveEvent(evt);
-	}
 }
 
 void Titlebar::CloseClicked()

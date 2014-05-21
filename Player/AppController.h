@@ -19,28 +19,31 @@ public:
 	void InitSignalsSlots();
 	
 	static AppController& Inst();
-	
-private:
-	bool notify(QObject* receiver, QEvent* even);
 
 private slots:
 	void Showtdown(int exitCode = 0);
 	void UpdateStarted();
 	void UpdateFinished(bool restartRequired);
 	void UserIdleStateChanged(bool isIdle);
+	void CurrentTabChanged(int tabIndex);
+
+private:
+	bool notify(QObject* receiver, QEvent* even);
 
 private:
 	MainWindow *				m_mainWidow;
 	SystemTray *				m_trayIcon;
 
 	RadioPageController *		m_radioPageController;
+	int							m_radioPageIndex;
+
 	TVPageController *			m_tvPageController;
+	int							m_tvPageIndex;
+
 	UpdateController *			m_updateController;
 
 	UserIdle *					m_userIdle;
 };
-
-void NotifyErrorLog(const char* eventName, QObject* receiver);
 
 }
 

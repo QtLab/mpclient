@@ -2,6 +2,7 @@ import QtQuick 2.0
 
 Rectangle {
 	property variant model;
+	height: 65;
 	
 	Component {
 		id: channelDelegate
@@ -9,11 +10,11 @@ Rectangle {
 			width : 130
 		}
 	}
-
+	
 	StyledText  {
 		id: topStationsText
 		text: 'ПОПУЛЯРНЫЕ'
-		color: '#ff7e43'
+		color: '#FF702A'
 		font.pixelSize: 13
 		
 		anchors {
@@ -25,15 +26,16 @@ Rectangle {
 	ListView {
 		id: topChannelsList
 		width:parent.width; 
-		height: 35
+		height: 40;
 		
-		anchors {
-			top: topStationsText.bottom
-			left: topStationsText.left
-			topMargin: 20
-		}
 		model: parent.model;
 		delegate: channelDelegate;
 		interactive: false;
+		clip: true;
+		anchors {
+			top: parent.top
+			topMargin: 30
+			left: topStationsText.left
+		}
 	}
 }

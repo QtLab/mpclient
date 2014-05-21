@@ -33,9 +33,6 @@
     <Filter Include="Utils">
       <UniqueIdentifier>{4283fae7-ac46-462c-9d7c-ad42869ab8d3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Views\Widgets">
-      <UniqueIdentifier>{2480e685-5562-4c68-8758-922847712336}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Views\Styles">
       <UniqueIdentifier>{5ebb2516-ef75-41c6-9f1b-a854f165aa2d}</UniqueIdentifier>
     </Filter>
@@ -62,6 +59,9 @@
     </Filter>
     <Filter Include="Network">
       <UniqueIdentifier>{1448e3cb-8bc0-4a3f-9a94-4843486bf460}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Views\Widgets">
+      <UniqueIdentifier>{2480e685-5562-4c68-8758-922847712336}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -309,6 +309,9 @@
     <ClCompile Include="GeneratedFiles\Release\moc_Config.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="NcFramelessHelper.cpp">
+      <Filter>Views</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Player.qrc">
@@ -442,7 +445,7 @@
     <None Include="Translations\ru.ts">
       <Filter>Translations</Filter>
     </None>
-    <None Include="Style\Player.qss">
+    <None Include="Views\Player.qss">
       <Filter>Views\Styles</Filter>
     </None>
   </ItemGroup>
@@ -451,6 +454,9 @@
       <Filter>Generated Files</Filter>
     </ClInclude>
     <ClInclude Include="Prerequirements.h" />
+    <ClInclude Include="NcFramelessHelper.h">
+      <Filter>Views</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\Player.ico">

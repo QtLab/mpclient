@@ -2,34 +2,39 @@ import QtQuick 2.0
 
 Rectangle {
 	property variant model;
-	height: 100
 
 	Component {
 		id: channelDelegate
 		StationView {
-			width : 120
+			width : 130
 		}
 	}
 
 	StyledText  {
 		id: lastStationsText
 		text: 'ПОСЛЕДНИЕ'
-		color: '#ff7e43'
+		color: '#FF702A'
 		font.pixelSize: 13
+		
+		anchors {
+			top: parent.top
+			left: parent.left
+		}
 	}
 	
 	ListView {
 		id: channelsList
-		height: 55
+		height: 70
 		width: 130
 		
 		anchors {
 			top: lastStationsText.bottom
-			topMargin: 20
+			topMargin: 12
 		}
 		
-		interactive: false
 		delegate: channelDelegate
+		interactive: false
+		clip: true;
 		model: parent.model
 	}
 }

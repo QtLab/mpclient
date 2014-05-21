@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QFont>
+#include <QSize>
 #include <QSettings>
 
 namespace mp {
@@ -21,6 +22,10 @@ public:
 
 	void SetVolume(qreal value);
 	qreal Volume() const;
+
+	void SetTVTabWindowSize(const QSize& size);
+	QSize TVTabWindowSize() const;
+	QSize RadioTabWindowSize() const;
 
 signals:
 	void VolumeChanged(qreal value);
