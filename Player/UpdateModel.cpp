@@ -1,11 +1,12 @@
 #include "UpdateModel.h"
 #include "Common.h"
+#include "FileUtils.h"
 
 #include <QFile>
 #include <QDir>
 #include <QHash>
 #include <QDebug>
-#include <QCryptographicHash>
+
 
 namespace mp {
 
@@ -61,7 +62,7 @@ void FileToUpdate::SetUrl(const QString& u)
 }
 
 UpdateModel::UpdateModel()
-	:m_requiredPlayerUpdate(false)
+	:m_requirePlayerUpdate(false)
 {
 }
 
@@ -104,56 +105,43 @@ void UpdateModel::ParseJson(const QByteArray& json)
 			}
 			else
 			{
-				QString md5 = ComputeFileMD5(file->FullPath());
+				QString md5 = FileUtils::ComputeFileMD5(file->FullPath());
 				if(md5.compare(file->MD5(), Qt::CaseSensitivity::CaseInsensitive) != 0)
 				{
 					if(file->FileName().compare(PlayerExeName, Qt::CaseSensitivity::CaseInsensitive) == 0)
 					{
-						m_requiredPlayerUpdate = true;
+						m_requirePlayerUpdate = true;
 					}
 
 					Add(file);
 				}
 			}
 		}
-
-		if(!m_items.empty())
-			emit dataChanged(createIndex(0,0), createIndex(m_items.size(), 0));
 	}
 }
 
-QString UpdateModel::ComputeFileMD5(const QString& filePath)
+FileToUpdatePtr UpdateModel::PopBack()
 {
-	QFile file(filePath);
-	if (file.open(QIODevice::ReadOnly))
+	if(m_items.count() > 0)
 	{
-		QByteArray hashData = QCryptographicHash::hash(file.readAll(), QCryptographicHash::Md5);
-		QString hash(hashData.toHex());
-		return hash;
+		FileToUpdatePtr fileToUpdate = m_items.last();
+		m_items.pop_back();
+
+		return fileToUpdate;
 	}
 
-	return QString::null;
+	return FileToUpdatePtr();
 }
 
-FileToUpdateList UpdateModel::Items() const
+bool UpdateModel::RequirePlayerUpdate() const
 {
-	return m_items;
+	return m_requirePlayerUpdate;
 }
 
-void UpdateModel::Remove(FileToUpdatePtr fileInfo)
+void UpdateModel::Cleanup()
 {
-	int index = m_items.indexOf(fileInfo);
-	if(index > -1)
-	{
-		m_items.removeAt(index);
-	}
-
-	emit dataChanged(createIndex(0,0), createIndex(m_items.size(), 0));
-}
-
-bool UpdateModel::RequiredPlayerUpdate() const
-{
-	return m_requiredPlayerUpdate;
+	m_requirePlayerUpdate = false;
+	BaseListModel<FileToUpdate>::Cleanup();
 }
 
 QVariant UpdateModel::data(const QModelIndex & index, int role) const 
@@ -165,16 +153,17 @@ QVariant UpdateModel::data(const QModelIndex & index, int role) const
 	
 	QVariant result;
 
-	switch (role) {
-	case FileName:
-		result = QVariant(item->FileName());
-		break;
-	case MD5:
-		result = QVariant(item->MD5());
-		break;
-	case Url:
-		result = QVariant(item->Url());
-		break;
+	switch (role) 
+	{
+		case FileName:
+			result = QVariant(item->FileName());
+			break;
+		case MD5:
+			result = QVariant(item->MD5());
+			break;
+		case Url:
+			result = QVariant(item->Url());
+			break;
 	}
 
 	return result;
@@ -182,11 +171,10 @@ QVariant UpdateModel::data(const QModelIndex & index, int role) const
 
 int UpdateModel::rowCount(const QModelIndex &parent) const
 {
-	//files to update
 	return m_items.count();
 }
 
-QHash<int, QByteArray>	UpdateModel::roleNames() const
+QHash<int, QByteArray> UpdateModel::roleNames() const
 {
 	QHash<int, QByteArray> roles;
 	roles[FileName] = "FileName";

@@ -6,8 +6,7 @@
 namespace mp {
 
 TVPageController::TVPageController()
-	:m_channels(new ChannelSourceModel())
-	,m_view(new TVPage(NULL, m_channels))
+	:m_view(new TVPage(NULL, ChannelSourceModelPtr()))
 {
 	ReLoadData();
 
@@ -35,7 +34,7 @@ TVPageController::~TVPageController()
 
 void TVPageController::ReLoadData()
 {
-	m_channels->Load(ConfigFilePath("tv.json"));
+	//m_channels->Load(ConfigFilePath("tv.json"));
 }
 
 TabPage* TVPageController::View()

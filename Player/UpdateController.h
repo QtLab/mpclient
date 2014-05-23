@@ -5,6 +5,8 @@
 #include "UpdateModel.h"
 #include "DownlaodManager.h"
 
+#include <QTimer>
+
 namespace mp {
 
 // takes a list of files in the format of the file name-file לה5
@@ -19,19 +21,29 @@ class UpdateController : public QObject
 
 public:
 	UpdateController();
-
-signals:
-	void UpdateFinished(bool restartRequired);
-
-public slots:
 	bool InProcess() const;
-	void Run();
+	
+public slots:
+	void CheckForUpdate();
+
+private slots:
 	void ProcessUpdateList();
 	void FileDownloaded(const QString& path);
 
 private:
-	// Last update md5
-	int								m_filesToUpdate;
+	bool ProcessNextFile();
+	void Cleanup();
+
+signals:
+	void UpdateFinished(bool restartRequired);
+
+private:
+	// Timer for update
+	QTimer							n_updateTimer;
+	// Processing files count
+	int								m_filesInProcess;
+	// Files to update
+	UpdateModel						m_updateModel;
 	// Netwrok access manager
 	DownlaodManager					m_networkAccess;
 };

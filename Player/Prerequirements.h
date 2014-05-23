@@ -12,10 +12,12 @@ class QNetworkReply;
 class QNetworkRequest;
 class QQuickView;
 class QWebFrame;
+class QWebPage;
 class QContextMenuEvent;
 class QMenu;
 class QWebSettings;
 class QAbstractListModel;
+class QHBoxLayout;
 QT_END_NAMESPACE
 
 namespace mp {
@@ -41,6 +43,7 @@ class MPRequest;
 class DownlaodManager;
 class UserIdle;
 class WebView;
+class FlashUtils;
 class ChannelSourceSortFilterProxyModel;
 
 typedef TabPage * TabPagePtr;

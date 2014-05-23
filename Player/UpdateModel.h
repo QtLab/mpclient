@@ -50,9 +50,9 @@ public:
 	UpdateModel();
 	~UpdateModel();
 
-	FileToUpdateList Items() const;
-	void Remove(FileToUpdatePtr fileInfo);
-	bool RequiredPlayerUpdate() const;
+	FileToUpdatePtr PopBack();
+	bool RequirePlayerUpdate() const;
+	void Cleanup();
 
 	QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 	int rowCount(const QModelIndex &parent = QModelIndex()) const;
@@ -60,10 +60,9 @@ public:
 
 private:
 	void ParseJson(const QByteArray& json);
-	QString ComputeFileMD5(const QString& filePath);
 
 private:
-	bool	m_requiredPlayerUpdate;
+	bool	m_requirePlayerUpdate;
 
 	friend class UpdateController;
 	Q_DISABLE_COPY(UpdateModel)

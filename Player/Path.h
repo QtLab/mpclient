@@ -10,6 +10,7 @@ QString CssFilePath(const QString& fileName);
 QString HtmlilePath(const QString& fileName);
 QString ConfigFilePath(const QString& fileName);
 QString HttpCachePath();
+QString FlashMSIPath();
 
 }
 

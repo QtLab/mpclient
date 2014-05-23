@@ -6,8 +6,8 @@ QWidget#centralWidget {
 	background-color: '#efefeb';
 	margin-top: 2px;
 	margin-right: 3px;
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
 }
 
 /* Titlebar */
@@ -16,15 +16,15 @@ QWidget#titleBar {
 	min-height: 16px;
 	max-height: 16px;
 	margin-top: 2px;
-	margin-right: 4px;
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
+	margin-right: 3px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
 }
 
 QLabel#minimizeLnk {
 	background-image: url(:/mp/Resources/minimizeicon.png);
 	background-repeat: no-repeat;
-	margin-top: 10px;
+	margin-top: 8px;
 	margin-right: 10px;
 	min-width: 10px;
 	max-width: 10px;
@@ -34,7 +34,7 @@ QLabel#closeLnk {
 	color : white;
 	background-image: url(:/mp/Resources/closeicon.png);
 	background-repeat: no-repeat;
-	margin-top: 10px;
+	margin-top: 8px;
 	margin-right: 12px;
 	min-width: 10px;
 	max-width: 10px;

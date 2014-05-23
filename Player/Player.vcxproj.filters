@@ -54,14 +54,17 @@
     <Filter Include="Translations">
       <UniqueIdentifier>{db74cf91-6654-47ce-a6af-ba4d8e53bc73}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\Files">
-      <UniqueIdentifier>{4d0f3bfd-427b-4ca7-a235-6603bf6a0ca9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Network">
       <UniqueIdentifier>{1448e3cb-8bc0-4a3f-9a94-4843486bf460}</UniqueIdentifier>
     </Filter>
     <Filter Include="Views\Widgets">
       <UniqueIdentifier>{2480e685-5562-4c68-8758-922847712336}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Images">
+      <UniqueIdentifier>{4d0f3bfd-427b-4ca7-a235-6603bf6a0ca9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Html">
+      <UniqueIdentifier>{0a2012aa-183c-44f2-8ac7-c860bcce11df}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -312,6 +315,18 @@
     <ClCompile Include="NcFramelessHelper.cpp">
       <Filter>Views</Filter>
     </ClCompile>
+    <ClCompile Include="FileUtils.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_FlashUtils.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_FlashUtils.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="FlashUtils.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Player.qrc">
@@ -437,6 +452,9 @@
     <CustomBuild Include="Config.h">
       <Filter>Model</Filter>
     </CustomBuild>
+    <CustomBuild Include="FlashUtils.h">
+      <Filter>Utils</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <None Include="Translations\en.ts">
@@ -448,6 +466,12 @@
     <None Include="Views\Player.qss">
       <Filter>Views\Styles</Filter>
     </None>
+    <None Include="Resources\CheckFlashInstalled.html">
+      <Filter>Resource Files\Html</Filter>
+    </None>
+    <None Include="Resources\FlashInstall.html">
+      <Filter>Resource Files\Html</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -457,33 +481,39 @@
     <ClInclude Include="NcFramelessHelper.h">
       <Filter>Views</Filter>
     </ClInclude>
+    <ClInclude Include="FileUtils.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\Player.ico">
-      <Filter>Resource Files\Files</Filter>
+      <Filter>Resource Files\Images</Filter>
     </Image>
     <Image Include="Resources\centralicon.png">
-      <Filter>Resource Files\Files</Filter>
+      <Filter>Resource Files\Images</Filter>
     </Image>
     <Image Include="Resources\closeicon.png">
-      <Filter>Resource Files\Files</Filter>
+      <Filter>Resource Files\Images</Filter>
     </Image>
     <Image Include="Resources\minimizeicon.png">
-      <Filter>Resource Files\Files</Filter>
+      <Filter>Resource Files\Images</Filter>
     </Image>
     <Image Include="Resources\pauseicon.png">
-      <Filter>Resource Files\Files</Filter>
+      <Filter>Resource Files\Images</Filter>
     </Image>
     <Image Include="Resources\playicon.png">
-      <Filter>Resource Files\Files</Filter>
+      <Filter>Resource Files\Images</Filter>
     </Image>
     <Image Include="Resources\searchicon.png">
-      <Filter>Resource Files\Files</Filter>
+      <Filter>Resource Files\Images</Filter>
+    </Image>
+    <Image Include="Resources\flashlogo.png">
+      <Filter>Resource Files\Images</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
     <Font Include="Resources\txdJ2vM9.ttf">
-      <Filter>Resource Files\Files</Filter>
+      <Filter>Resource Files\Images</Filter>
     </Font>
   </ItemGroup>
 </Project>

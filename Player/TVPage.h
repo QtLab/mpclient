@@ -27,9 +27,13 @@ public:
 
 private slots:
 	void ContentLoaded(bool ok);
-
+	void FlashInstallStarted();
+	void FlashInstallProgressChanged(int percent);
+	void FlashInstalled(bool);
+	
 private:
-	WebView *		m_view;
+	QHBoxLayout	*		m_layout;
+	WebView *			m_view;
 };
 
 

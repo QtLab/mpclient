@@ -38,7 +38,6 @@ private:
 };
 
 typedef QSharedPointer<ChannelMetadata> ChannelMetadataPtr;
-Q_DECLARE_METATYPE(ChannelMetadataPtr);
 
 }
 

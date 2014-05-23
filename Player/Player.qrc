@@ -12,5 +12,10 @@
         <file>Resources/txdJ2vM9.ttf</file>
         <file>Resources/arrow.png</file>
         <file>Resources/dashedline.png</file>
+        <file>Resources/HelloWorld.swf</file>
+        <file>Resources/swfobject.js</file>
+        <file>Resources/CheckFlashInstalled.html</file>
+        <file>Resources/flashlogo.png</file>
+        <file>Resources/FlashInstall.html</file>
     </qresource>
 </RCC>

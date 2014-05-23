@@ -110,18 +110,21 @@ ChannelSourceModel::~ChannelSourceModel()
 
 void ChannelSourceModel::LoadWithStats(const QString& filePath)
 {
-	QByteArray fileBody = LoadFromFile(filePath);
-	ParseChannelsJson(fileBody);
+	QByteArray fileBody;
+	if(FileUtils::LoadFileToByteArray(filePath, fileBody))
+	{
+		ParseChannelsJson(fileBody);
 
-	ChannelSourceModel channelsStats;
-	channelsStats.Load(filePath + "st", PropertiesSet() << IdKeyName  << PlayCountKeyName << LastPlayKeyName);
+		ChannelSourceModel channelsStats;
+		channelsStats.Load(filePath + "st", PropertiesSet() << IdKeyName  << PlayCountKeyName << LastPlayKeyName);
 
-	MergeWithStats(channelsStats);
+		MergeWithStats(channelsStats);
+	}
 }
 
 bool ChannelSourceModel::SaveStats(const QString& filePath)
 {
-	Save(filePath + "st", PropertiesSet() << "id" << "playcount" << "lastplay");
+	Save(filePath + "st", PropertiesSet() << IdKeyName << PlayCountKeyName << LastPlayKeyName);
 	return true;
 }
 

@@ -17,7 +17,6 @@ AppController::AppController(int argc, char *argv[])
 	,m_updateController(new UpdateController())
 	,m_userIdle(new UserIdle())
 {
-	//TODO: QTimer to launch update m_updateController->Run();
 }
 
 AppController::~AppController()
@@ -80,7 +79,7 @@ void AppController::Showtdown(int exitCode)
 void AppController::UpdateStarted()
 {
 #ifndef _DEBUG
-	m_updateController->Run();
+	m_updateController->CheckForUpdate();
 #endif
 }
 

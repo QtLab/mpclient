@@ -1,6 +1,5 @@
 #include "WidgetUtils.h"
 
-#include <QMutexLocker>
 #include <QPixmap>
 #include <QIcon>
 #include <QPushButton>
@@ -14,13 +13,6 @@
 #include <QFileInfo>
 
 namespace mp {
-
-QMap<QString, QString> WidgetUtils::m_cachedStyles = QMap<QString, QString>();
-
-void WidgetUtils::OnpenLinskInDefaultBrowser(const QString& url)
-{
-
-}
 
 void WidgetUtils::SetButtonImage(QPushButton* btn, const QString& imgSrc, bool borderNone, int dx, int dy)
 {
@@ -51,15 +43,11 @@ void WidgetUtils::LoadStyleSheets(QWidget* widget, const QString& qss)
 		filePath =  QFileInfo(qss).absoluteFilePath();
 	}
 
-	QMap<QString, QString>::const_iterator iter;
-	iter = m_cachedStyles.find(filePath);
-
 	QFile file(filePath);
 	if(file.open(QIODevice::ReadOnly | QIODevice::Text))
 	{
 		QString styleSheet = file.readAll();
 		widget->setStyleSheet(styleSheet);	
-		m_cachedStyles.insert(filePath, styleSheet);
 	}
 	else
 	{

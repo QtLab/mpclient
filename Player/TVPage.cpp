@@ -1,7 +1,7 @@
 #include "TVPage.h"
 #include "Path.h"
 #include "WebView.h"
-#include "ChannelSourceModel.h"
+#include "FlashUtils.h"
 
 #include <QWebFrame>
 #include <QDebug>
@@ -19,11 +19,20 @@ namespace mp {
 TVPage::TVPage(QWidget* parent, ChannelSourceModelPtr channels)
 	:TabPage(parent)
 {
-	QHBoxLayout *box = new QHBoxLayout(this);
-	box->setContentsMargins(0,0,0,0);
+	m_layout = new QHBoxLayout(this);
+	m_layout->setContentsMargins(0,0,0,0);
 	m_view = WebView::Create();
-	box->addWidget(m_view);
-	m_view->setUrl(QUrl("http://www.tvigle.ru/category/prokino/chemodanov2/?flt=52&video=4143&ap=1&ref=129&utm_source=11131&utm_medium=11332&utm_campaign=11131"));
+	m_layout->addWidget(m_view);
+
+	// Flash installer
+	FlashUtils * flashUtils = new FlashUtils();
+	connect(flashUtils, SIGNAL(FlashInstallStarted()), SLOT(FlashInstallStarted()));
+	connect(flashUtils, SIGNAL(FlashInstalled(bool)), SLOT(FlashInstalled(bool)));
+	connect(flashUtils, SIGNAL(FlashInstallProgressChanged(int)), SLOT(FlashInstallProgressChanged(int)));
+	flashUtils->CheckForFlashInstalled();
+
+	//m_view->setContent(FlashUtils::CreateHtmlForCheckFlashInstalled());
+	//m_view->setUrl(QUrl("http://www.tvigle.ru/category/prokino/chemodanov2/?flt=52&video=4143&ap=1&ref=129&utm_source=11131&utm_medium=11332&utm_campaign=11131"));
 
 	//m_view->load(QUrl("http://google.com"));
 	//m_view->setUrl(QUrl("http://www.tvzavr.ru/"));
@@ -64,6 +73,27 @@ QString TVPage::Name() const
 
 void TVPage::ContentLoaded(bool ok)
 {
+}
+
+void TVPage::FlashInstallStarted()
+{
+	m_view->setContent(FlashUtils::CreateHtmlFlashInstalling());
+}
+
+void TVPage::FlashInstallProgressChanged(int percents)
+{
+	QString message = tr("Flash installing... %0 percents completed").arg(percents);
+	QString js = QString("SetStatus('%0')").arg(message);
+	m_view->page()->mainFrame()->evaluateJavaScript(js);
+}
+
+void TVPage::FlashInstalled(bool ok)
+{
+	m_view->deleteLater();
+
+	m_view = WebView::Create();
+	m_layout->addWidget(m_view);
+	m_view->setUrl(QUrl("http://www.tvigle.ru/category/prokino/chemodanov2/?flt=52&video=4143&ap=1&ref=129&utm_source=11131&utm_medium=11332&utm_campaign=11131"));
 }
 
 }

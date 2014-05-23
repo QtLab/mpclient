@@ -155,7 +155,7 @@ void AudioStream::GetMetaData(ChannelMetadata& metadata)
 				{
 					char *t=strdup(p+13);
 					t[p2-(p+13)]=0;
-					metadata.SetTitle(QString::fromLocal8Bit(t));
+					metadata.SetTitle(QString::fromLatin1(t));
 					free(t);
 				}
 			}
@@ -178,12 +178,12 @@ void AudioStream::GetMetaData(ChannelMetadata& metadata)
 				{
 					if (artist) 
 					{
-						metadata.SetTitle(QString::fromLocal8Bit(title));
-						metadata.SetArtist(QString::fromLocal8Bit(artist));
+						metadata.SetTitle(QString::fromLatin1(title));
+						metadata.SetArtist(QString::fromLatin1(artist));
 					}
 					else
 					{
-						metadata.SetTitle(QString::fromLocal8Bit((title)));
+						metadata.SetTitle(QString::fromLatin1((title)));
 					}	
 				}
 			}

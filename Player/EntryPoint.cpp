@@ -1,4 +1,5 @@
 #include "AppController.h"
+#include "FileUtils.h"
 #include "WebView.h"
 #include "Config.h"
 #include "Log.h"
@@ -13,8 +14,11 @@ int main(int argc, char *argv[])
 #endif
 
 	mp::AppController app(argc, argv);
-
+	
 	QDir::setCurrent(QCoreApplication::applicationDirPath());
+
+	//Delete old files that could not be removed after the update
+	mp::FileUtils::Delete("*old");
 
 	mp::WebView::SetupGlobalSettings();
 

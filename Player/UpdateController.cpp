@@ -8,20 +8,24 @@
 
 namespace mp {
 
-const int DefualtUpdateInterval = 1000 * 60 * 60;//1 h
+const int DefualtUpdateInterval = 1000 * 60 * 60 * 5; //5 h
+const int ParallelFilesUpdating = 4;
 
 UpdateController::UpdateController()
-	:m_filesToUpdate(0)
+	:m_filesInProcess(0)
 {
+	n_updateTimer.setInterval(DefualtUpdateInterval);
+	connect(&n_updateTimer, SIGNAL(timeout()), SLOT(CheckForUpdate()));
+	n_updateTimer.start();
 }
 
 bool UpdateController::InProcess() const
 {
-	bool inProcess = m_filesToUpdate > 0;
+	bool inProcess = m_updateModel.rowCount() > 0 || m_filesInProcess > 0;
 	return inProcess;
 }
 
-void UpdateController::Run()
+void UpdateController::CheckForUpdate()
 {
 	if(!InProcess())
 	{
@@ -51,30 +55,20 @@ void UpdateController::ProcessUpdateList()
 	{
 		bool restarRequired = false;
 
-		// Files to update
-		UpdateModel	updateModel;
+		Cleanup();
 
-		updateModel.ParseJson(reply->readAll());
+		m_updateModel.ParseJson(reply->readAll());
 
-#ifndef _DEBUG
-		if(updateModel.RequiredPlayerUpdate())
+		while(m_updateModel.rowCount() > 0 && m_filesInProcess < ParallelFilesUpdating)
 		{
-			//TODO: check to laoder exists
-			emit UpdateFinished(true);
+			ProcessNextFile();
+			m_filesInProcess++;
 		}
-		else
-#endif
+
+		if(m_filesInProcess == 0)
 		{
-			FileToUpdateList filesToUpdate = updateModel.Items();
-			foreach (FileToUpdatePtr file, filesToUpdate)
-			{
-				QString filePath = file->FullPath();
-				qDebug() << "Downlaod file: " << filePath << " from: " << file->Url();
-
-				m_networkAccess.DownloadFile(file->Url(), file->FullPath(), this, SLOT(FileDownloaded(const QString&)));			
-			}
-
-			m_filesToUpdate = filesToUpdate.count();
+			emit UpdateFinished(false);
+			Cleanup();
 		}
 	}
 
@@ -83,15 +77,34 @@ void UpdateController::ProcessUpdateList()
 
 void UpdateController::FileDownloaded(const QString& path)
 {
-	if(path.isEmpty())
-		qDebug() << "File downlaoded: " << path;
+	m_filesInProcess--;
 
-	m_filesToUpdate--;
-
-	if(m_filesToUpdate <= 0)
+	if(!ProcessNextFile())
 	{
-		emit UpdateFinished(false);
+		emit UpdateFinished(m_updateModel.RequirePlayerUpdate());
+		Cleanup();
 	}
+}
+
+bool UpdateController::ProcessNextFile()
+{
+	FileToUpdatePtr fileToUpdate = m_updateModel.PopBack();
+
+	if(!fileToUpdate.isNull())
+	{
+		QString filePath = fileToUpdate->FullPath();
+		m_networkAccess.DownloadFile(fileToUpdate->Url(), filePath, this, SLOT(FileDownloaded(const QString&)));
+		m_filesInProcess++;
+		return true;
+	}
+
+	return false;
+}
+
+void UpdateController::Cleanup()
+{
+	m_filesInProcess = 0;
+	m_updateModel.Cleanup();
 }
 
 }

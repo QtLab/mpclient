@@ -65,7 +65,7 @@ TabPage* RadioPageController::View()
 
 void RadioPageController::PlayRadio(int id)
 {
-	if(m_audioStream->State() == AudioStream::ASPaused)
+	if(m_audioStream->State() == AudioStream::ASPaused && m_currentChannel->Id() == id)
 	{
 		m_audioStream->Play(true);
 	}
@@ -86,9 +86,7 @@ void RadioPageController::PlayRadio(int id)
 			m_stations.SaveStats(ConfigFilePath("radio.j"));
 
 			m_topStationsProxyModel.invalidate();
-			//m_topStationsProxyModel.sort(0);
 			m_lastStationsProxyModel.invalidate();
-			//m_lastStationsProxyModel.sort(0);
 		}
 		else
 		{

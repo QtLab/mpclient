@@ -6,15 +6,15 @@
 #include <QMetaProperty>
 #include <QSharedPointer>
 #include <QAbstractListModel>
-#include <QReadWriteLock>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QList>
 #include <QDebug>
-#include <QFile>
 #include <QDateTime>
 #include <QSet>
+
+#include "FileUtils.h"
 
 namespace mp {
 
@@ -40,43 +40,15 @@ public:
 		}
 	}
 
-	QByteArray LoadFromFile(const QString& filePath)
-	{
-		QFile file(filePath);
-		if(file.open(QIODevice::ReadOnly))
-		{
-			QByteArray body = file.readAll();
-			return body;
-		}
-		else
-		{
-			const QMetaObject *metaObject = &T::staticMetaObject;
-			qDebug() << metaObject->className() << " Can't open file: " << filePath;
-		}
-
-		return QByteArray();
-	}
-
-	bool SaveToFile(const QString& filePath, const QByteArray& json)
-	{
-		QFile file(filePath);
-		if(file.open(QIODevice::WriteOnly | QIODevice::Text))
-		{
-			qint64 written = file.write(json);
-			int toWrite = json.size();
-
-			return written == toWrite;
-		}
-
-		return false;
-	}
-
 	virtual void Load(const QString& filePath, const PropertiesSet& propertiesToLoad = PropertiesSet())
 	{
-		QByteArray body = LoadFromFile(filePath);
+		QByteArray fileBody;
 
-		if(!body.isEmpty())
-			ParseJson(body, propertiesToLoad);
+		if(FileUtils::LoadFileToByteArray(filePath, fileBody))
+		{
+			if(!fileBody.isEmpty())
+				ParseJson(fileBody, propertiesToLoad);
+		}
 	}
 
 	virtual bool Save(const QString& filePath, const PropertiesSet& propertiesToSave = PropertiesSet())
@@ -102,9 +74,6 @@ public:
 					if(propertiesToSave.empty() || propertiesToSave.contains(propertyName))
 					{
 						QVariant value = item->property(propertyName);
-#ifdef _DEBUG
-						QString str = value.toString();
-#endif
 						jsonObj.insert(propertyName, QJsonValue::fromVariant(value));
 					}
 				}
@@ -116,7 +85,7 @@ public:
 		document.setArray(jsonArray);
 		QByteArray json = document.toJson();
 
-		return SaveToFile(filePath, json);
+		return FileUtils::SaveByteArrayToFile(filePath, json);
 	}
 
 	virtual void ParseJson(const QByteArray& json, const PropertiesSet& propertiesToLoad = PropertiesSet())
@@ -165,7 +134,7 @@ public:
 		}
 	}
 	
-	void Cleanup()
+	virtual void Cleanup()
 	{
 		beginResetModel();
 		m_items.clear();

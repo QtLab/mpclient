@@ -19,8 +19,6 @@ public:
 public slots:
 
 private:
-	// Model - tv channnels
-	ChannelSourceModelPtr				m_channels;
 	// Widget view
 	TabPagePtr							m_view;
 };

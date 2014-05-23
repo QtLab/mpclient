@@ -1,7 +1,6 @@
 #include "MainWindow.h"
 #include "TabWidget.h"
 #include "Titlebar.h"
-#include "TabPage.h"
 #include "WidgetUtils.h"
 #include "NcFramelessHelper.h"
 #include "Config.h"
@@ -25,23 +24,16 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
 
 	setWindowIcon(QIcon(":/mp/Resources/Player.ico"));
 
-	QWidget * central = new QWidget(this);
+	QWidget * central = new QWidget();
 	central->setObjectName("centralWidget");
 	setCentralWidget(central);
-
-	qDebug() << "m_centralWidget was created";
 
 	m_layout = new QVBoxLayout(central);
 	m_layout->setContentsMargins(0, 0, 0, 0);
 	m_layout->setSpacing(0);
 
-	QWidget * borderTop = new  QWidget();
-	borderTop->setObjectName("borderTop");
-	m_layout->addWidget(borderTop, 1);
-
 	m_titleBar = new Titlebar(this);
 	m_layout->addWidget(m_titleBar);
-
 	qDebug() << "Titlebar was created";
 
 	m_tabWidget = new TabWidget(NULL, "tabWidget", "taBar");
@@ -49,7 +41,6 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
 	m_tabWidget->tabBar()->setFont(Config::Inst().DefaultFont());
 	m_tabWidget->setFont(Config::Inst().DefaultFont());
 	m_layout->addWidget(m_tabWidget);
-	
 	qDebug() << "TabWidget was created";
 }
 
