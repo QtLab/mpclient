@@ -1,8 +1,9 @@
 #pragma once
 
-#include "Defs.h"
+#include "Common.h"
+#include <windows.h>
 
-namespace ldr {
+namespace cmn {
 
 class Process
 {

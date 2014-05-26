@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Defs.h"
+#include "Common.h"
 #include <string>
 
-namespace ldr {
+namespace cmn {
 
 class Path
 {

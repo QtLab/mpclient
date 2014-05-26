@@ -9,6 +9,8 @@
 
 namespace ldr {
 
+using namespace cmn;
+
 Config::Config()
 	:m_hasInstallSuccessfull(false)
 	,m_isSilent(true)

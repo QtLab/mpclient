@@ -11,6 +11,8 @@ namespace ldr {
 
 const int SizeBuffer = 32768;
 
+using namespace cmn;
+
 bool Unzip(const String& pakagePath)
 {
 	std::cout << "Unzip pakage: " << pakagePath << std::endl;
@@ -41,7 +43,7 @@ bool Unzip(const String& pakagePath)
 				continue;
 			}
 
-			String filePath = Path::CurrentPathCombine(dosFileName);
+			String filePath = cmn::Path::CurrentPathCombine(dosFileName);
 
 			std::cout << "Unzip file: " << dosFileName << " to: "<< filePath << std::endl;
 
@@ -182,23 +184,33 @@ const String& BoolToString(bool b)
 	return b ? _TRUE : _FALSE;
 }
 
+#define LoaderMutexName "{C0A20390-C055-496D-9EB0-50C726E6A2B7}"
+
+HANDLE hSignleMutex = INVALID_HANDLE_VALUE;
+
 bool IsLoaderAlredyExists()
 {
-	const static char * MUTEX_NAME = "{C0A20390-C055-496D-9EB0-50C726E6A2B2}";
+    // Try to open the mutex.
+    hSignleMutex = OpenMutexA(MUTEX_ALL_ACCESS, 0, LoaderMutexName);
 
-	HANDLE mutex = OpenMutexA(MUTEX_ALL_ACCESS, TRUE, MUTEX_NAME);
-	if(mutex != INVALID_HANDLE_VALUE)
+    if (hSignleMutex == INVALID_HANDLE_VALUE)
 	{
-		WaitForSingleObject((HANDLE *)mutex, 5000);
+		hSignleMutex = CreateMutexA(0, 0, LoaderMutexName);
+		return false;
 	}
-
-	mutex = CreateMutexA(NULL, FALSE, MUTEX_NAME);
-	if (GetLastError() == ERROR_ALREADY_EXISTS)
+    else
 	{
-		return true;
+      // The mutex exists so this is the
+      // the second instance so return.
+      return true;
 	}
-
-	return false;
 }
+
+void FreeSingleInstanceMutex()
+{
+	HANDLE hMutex = OpenMutexA(MUTEX_ALL_ACCESS, 0, LoaderMutexName);
+	CloseHandle(hMutex);
+}
+
 }
 

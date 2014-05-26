@@ -1,11 +1,12 @@
 #include "StartupParameters.h"
+#include <Windows.h>
 
-namespace ldr {
+namespace cmn {
 
 char** CommandLineToArgvA(char* cmdLine, int* _argc);
 
 StartupParameters::StartupParameters()
-	:m_isSilent(true)
+	:m_isSilent(false)
 	,m_watchPlayer(false)
 {
 	char* cmdLine = GetCommandLineA();
@@ -15,7 +16,7 @@ StartupParameters::StartupParameters()
 	int i;
 	char *key, *value;
 
-	for( i = 1; i <= argc; i++ )
+	for( i = 0; i <= argc; i++ )
 	{
 		if(argv[i])
 		{

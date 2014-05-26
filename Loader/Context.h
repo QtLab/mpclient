@@ -8,9 +8,9 @@ namespace ldr {
 
 struct Contex
 {
-	Config				Cfg;
-	HttpApi				Api;
-	StartupParameters	StartupParams;	
+	Config					Cfg;
+	HttpApi					Api;
+	cmn::StartupParameters	StartupParams;	
 
 };
 

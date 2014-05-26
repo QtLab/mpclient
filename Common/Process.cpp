@@ -4,17 +4,17 @@
 #include <windows.h>
 #include <tlhelp32.h>
 #include <process.h>
+#include <iostream>
 
-namespace ldr {
+namespace cmn {
+
+String GetLastErrorString();
 
 Process::Process(const String& exeName, const String& args, const String& parentDir)
 	:m_exeName(exeName)
 	,m_args(args)
 	,m_parentDir(parentDir)
 {
-	::SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX);
-	::_set_abort_behavior(0,_WRITE_ABORT_MSG);
-
 	m_hProcess = OpenProcess(exeName);
 }
 
@@ -43,6 +43,9 @@ bool Process::Start()
 		exePath = m_parentDir + PATH_SEPARATOR + m_exeName;
 	}
 
+	::SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX);
+	::_set_abort_behavior(0,_WRITE_ABORT_MSG);
+
 	PROCESS_INFORMATION processInformation = {0};
 	STARTUPINFO startupInfo                = {0};
 	startupInfo.cb                         = sizeof(startupInfo);
@@ -54,7 +57,7 @@ bool Process::Start()
 	if(!result)
 	{
 		std::cout << "CreateProcess failed: " << exePath << ", arguments: " << m_args
-					<< ", error: " << GetLastErrorString();
+			<< ", error: " << GetLastErrorString();
 	}
 	else
 	{
@@ -84,13 +87,19 @@ DWORD Process::ExitCode() const
 
 void Process::Terminate(const String& processName)
 {
-	HANDLE hProcess = OpenProcess(processName);
+	HANDLE hProcess = NULL;
 
-	if (hProcess != NULL && hProcess != INVALID_HANDLE_VALUE)
+	do
 	{
-		::TerminateProcess(hProcess, 9);
-		::CloseHandle(hProcess);
+		hProcess = OpenProcess(processName);
+
+		if (hProcess != NULL && hProcess != INVALID_HANDLE_VALUE)
+		{
+			::TerminateProcess(hProcess, 9);
+			::CloseHandle(hProcess);
+		}
 	}
+	while(hProcess != NULL && hProcess != INVALID_HANDLE_VALUE);
 }
 
 HANDLE Process::OpenProcess(const String& processName)
@@ -143,6 +152,36 @@ HANDLE Process::OpenProcess(const String& processName)
 
 	::CloseHandle( hProcessSnap );
 	return INVALID_HANDLE_VALUE;
+}
+
+// Create a string with last error message
+String GetLastErrorString()
+{
+	DWORD error = GetLastError();
+	if (error)
+	{
+		LPVOID lpMsgBuf;
+		DWORD bufLen = FormatMessage(
+			FORMAT_MESSAGE_ALLOCATE_BUFFER | 
+			FORMAT_MESSAGE_FROM_SYSTEM |
+			FORMAT_MESSAGE_IGNORE_INSERTS,
+			NULL,
+			error,
+			MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US),
+			(LPTSTR) &lpMsgBuf,
+			0, NULL );
+		if (bufLen)
+		{
+			LPCSTR lpMsgStr = (LPCSTR)lpMsgBuf;
+			std::string result(lpMsgStr, lpMsgStr+bufLen);
+      
+			LocalFree(lpMsgBuf);
+
+			return result;
+		}
+	}
+
+	return "Success";
 }
 
 }

@@ -327,6 +327,18 @@
     <ClCompile Include="FlashUtils.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="CommandLine.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="SingleApplication.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_SingleApplication.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_SingleApplication.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Player.qrc">
@@ -455,6 +467,9 @@
     <CustomBuild Include="FlashUtils.h">
       <Filter>Utils</Filter>
     </CustomBuild>
+    <CustomBuild Include="SingleApplication.h">
+      <Filter>Utils</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <None Include="Translations\en.ts">
@@ -482,6 +497,9 @@
       <Filter>Views</Filter>
     </ClInclude>
     <ClInclude Include="FileUtils.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandLine.h">
       <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>

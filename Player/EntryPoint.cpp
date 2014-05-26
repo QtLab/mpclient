@@ -4,6 +4,7 @@
 #include "Config.h"
 #include "Log.h"
 
+#include <QProcess>
 #include <QDir>
 
 int main(int argc, char *argv[])
@@ -15,7 +16,17 @@ int main(int argc, char *argv[])
 
 	mp::AppController app(argc, argv);
 	
-	QDir::setCurrent(QCoreApplication::applicationDirPath());
+	if(app.IsRunningAnotherInstance())
+	{
+		app.SendMessage("show");
+		return 0;
+	}
+
+#ifdef Q_OS_WIN32
+#ifndef _DEBUG
+	QProcess::startDetached("Launcher.exe /watch");
+#endif
+#endif
 
 	//Delete old files that could not be removed after the update
 	mp::FileUtils::Delete("*old");

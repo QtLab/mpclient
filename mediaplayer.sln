@@ -13,7 +13,15 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{D41E5129-D5E3-487C-8252-F891151BD1DD}"
 	ProjectSection(SolutionItems) = preProject
 		Common\Common.h = Common\Common.h
+		Common\Path.cpp = Common\Path.cpp
+		Common\Path.h = Common\Path.h
+		Common\Process.cpp = Common\Process.cpp
+		Common\Process.h = Common\Process.h
+		Common\StartupParameters.cpp = Common\StartupParameters.cpp
+		Common\StartupParameters.h = Common\StartupParameters.h
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Launcher", "Launcher\Launcher.vcxproj", "{1A5290A1-B957-4B29-997A-07FA8C6AD5F5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +37,10 @@ Global
 		{6750839E-77E4-4235-B029-709186D1D337}.Debug|Win32.Build.0 = Debug|Win32
 		{6750839E-77E4-4235-B029-709186D1D337}.Release|Win32.ActiveCfg = Release|Win32
 		{6750839E-77E4-4235-B029-709186D1D337}.Release|Win32.Build.0 = Release|Win32
+		{1A5290A1-B957-4B29-997A-07FA8C6AD5F5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1A5290A1-B957-4B29-997A-07FA8C6AD5F5}.Debug|Win32.Build.0 = Debug|Win32
+		{1A5290A1-B957-4B29-997A-07FA8C6AD5F5}.Release|Win32.ActiveCfg = Release|Win32
+		{1A5290A1-B957-4B29-997A-07FA8C6AD5F5}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

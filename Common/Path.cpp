@@ -1,7 +1,8 @@
 #include "Path.h"
 #include <Windows.h>
+#include <tchar.h>
 
-namespace ldr {
+namespace cmn {
 
 String ReplaceInStringWith(String& text, const String& s, const String& d)
 {
@@ -12,7 +13,6 @@ String ReplaceInStringWith(String& text, const String& s, const String& d)
 	}
 	return text;
 }
-
 
 void Path::SetupCurrentDirectoryPath()
 { 

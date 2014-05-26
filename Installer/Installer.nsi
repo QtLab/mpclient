@@ -1,5 +1,8 @@
 !include StrFunc.nsh
 !include FileFunc.nsh
+!include "MUI2.nsh"
+
+Unicode True
 
 ${StrLoc}
 
@@ -8,6 +11,8 @@ ${StrLoc}
 !define COMPANYNAME "Unisonbox"
 !define DESCRIPTION "Unisonbox"
 !define LOADER_APP "Loader.exe"
+!define LAUNCHER_APP "Launcher.exe"
+!define PLAYER_APP "Player.exe"
 
 !define VERSIONMAJOR 0
 !define VERSIONMINOR 1
@@ -17,15 +22,33 @@ ${StrLoc}
 !define ProductRegistryKey "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}"
 
 Name "${APPNAME}"
-InstallDir "C:\ProgramData\Loader"
-#InstallDir "$LOCALAPPDATA\${APPNAME}"
+;InstallDir "C:\ProgramData\Loader"
+InstallDir "$LOCALAPPDATA\${APPNAME}"
 BrandingText " "
 ShowInstDetails nevershow
 ShowUninstDetails nevershow
 RequestExecutionLevel none ;Require admin rights on NT6+ (When UAC is turned on)
-
 OutFile "${APPNAME}Setup.1.001.1.exe"
- 
+
+;------------------------------------------------------------------------------
+!insertmacro MUI_PAGE_WELCOME
+!insertmacro MUI_PAGE_LICENSE $(LicenseText)
+!insertmacro MUI_PAGE_INSTFILES
+
+!define MUI_FINISHPAGE_RUN
+!define MUI_FINISHPAGE_RUN_FUNCTION InstallFinish
+!define MUI_FINISHPAGE_RUN_TEXT "${APPNAME}"
+!define MUI_FINISHPAGE_NOREBOOTSUPPORT
+!insertmacro MUI_PAGE_FINISH
+
+!insertmacro MUI_LANGUAGE "English"
+!insertmacro MUI_LANGUAGE "Russian"
+
+; english
+LicenseLangString LicenseText ${LANG_ENGLISH} "license_en.txt"
+; russian
+LicenseLangString LicenseText ${LANG_RUSSIAN} "license_ru.txt"
+
  ; ------------------------------------------------------------------------------
 Function GetSource
 	Pop $1
@@ -69,19 +92,24 @@ FunctionEnd
 
 Function .onInit
 	SetShellVarContext all
+	Push "${LAUNCHER_APP}"
+	Call KillProcess
 	Push "${LOADER_APP}"
-	Call KillProcess  
+	Call KillProcess 
+	Push "${PLAYER_APP}"
+	Call KillProcess
 FunctionEnd
 	
 Section "install"
 	SetOverwrite on
 	
 	SetOutPath $INSTDIR
-	#AccessControl::GrantOnFile "$INSTDIR" "(S-1-1-0)" "FullAccess"
+	AccessControl::GrantOnFile "$INSTDIR" "(S-1-1-0)" "FullAccess"
 	File "${LOADER_APP}"
+	File "${LAUNCHER_APP}"
 	WriteUninstaller "$INSTDIR\uninstall.exe"
 	
-	WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Run" ${APPNAME} "$\"$INSTDIR\${LOADER_APP}$\" /S"
+	WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Run" ${APPNAME} "$\"$INSTDIR\${LAUNCHER_APP}$\" /S"
 
 	# Registry information for add/remove programs
 	WriteRegStr ${ProductRegistryRoot} ${ProductRegistryKey} "DisplayName" "${APPNAME}"
@@ -95,27 +123,54 @@ Section "install"
 	WriteRegDWORD ${ProductRegistryRoot} ${ProductRegistryKey} "NoModify" 1
 	WriteRegDWORD ${ProductRegistryRoot} ${ProductRegistryKey} "NoRepair" 1
 
-	Call InstallFinishRun
+	Call Installing
 SectionEnd
  
- Function InstallFinishRun
- 
-	Push $EXEFILE
+ Function Installing
+
+	DetailPrint "this message will show on the installation window"
+	
+ 	Push $EXEFILE
 	Call GetSource
 	Pop $0
 	
-	#MessageBox MB_OK '"$INSTDIR\${LOADER_APP}" /source:$0'
-		
 	SetOutPath $INSTDIR
 	ExecWait '"$INSTDIR\${LOADER_APP}" /source:$0'
 	Pop $0
+	
+	IfSilent launchSilent
+	Goto exit
+launchSilent:
+	Call InstallFinish
+exit:
 FunctionEnd
 
-# Uninstaller
- 
+Function InstallFinish
+
+	;MessageBox MB_OK '"$INSTDIR\${LOADER_APP}" /source:$0'
+	
+	SetOutPath $INSTDIR
+	
+	IfSilent launchSilent
+	Exec '"$INSTDIR\${LAUNCHER_APP}"'
+	Pop $0
+	Goto exit
+
+launchSilent:
+	Exec '"$INSTDIR\${LAUNCHER_APP}" /watch'
+	Pop $0
+exit:
+FunctionEnd
+
+; Uninstaller
+;------------------------------------------------------------------------------
 Function un.onInit
 	SetShellVarContext all
+	Push "${LAUNCHER_APP}"
+	Call un.KillProcess
 	Push "${LOADER_APP}"
+	Call un.KillProcess 
+	Push "${PLAYER_APP}"
 	Call un.KillProcess
 FunctionEnd
  

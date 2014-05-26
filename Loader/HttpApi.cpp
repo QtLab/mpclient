@@ -11,6 +11,8 @@
 
 namespace ldr {
 
+using namespace cmn;
+
 HttpApi::HttpApi()
 	:m_domain(DEFAULT_HOST)
 {

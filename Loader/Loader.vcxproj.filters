@@ -5,32 +5,38 @@
     <ClCompile Include="FileToUpdate.cpp" />
     <ClCompile Include="Hash.cpp" />
     <ClCompile Include="HttpApi.cpp" />
-    <ClCompile Include="Path.cpp" />
-    <ClCompile Include="StartupParameters.cpp" />
     <ClCompile Include="json\json_value.cpp">
-      <Filter>json</Filter>
+      <Filter>Json</Filter>
     </ClCompile>
     <ClCompile Include="json\json_reader.cpp">
-      <Filter>json</Filter>
+      <Filter>Json</Filter>
     </ClCompile>
     <ClCompile Include="json\json_writer.cpp">
-      <Filter>json</Filter>
+      <Filter>Json</Filter>
     </ClCompile>
     <ClCompile Include="minzip\ioapi.c">
-      <Filter>minzip</Filter>
+      <Filter>Minzip</Filter>
     </ClCompile>
     <ClCompile Include="minzip\iowin32.c">
-      <Filter>minzip</Filter>
+      <Filter>Minzip</Filter>
     </ClCompile>
     <ClCompile Include="minzip\unzip.c">
-      <Filter>minzip</Filter>
+      <Filter>Minzip</Filter>
     </ClCompile>
     <ClCompile Include="minzip\zip.c">
-      <Filter>minzip</Filter>
+      <Filter>Minzip</Filter>
     </ClCompile>
-    <ClCompile Include="Process.cpp" />
     <ClCompile Include="Utils.cpp" />
-    <ClCompile Include="EntryPoint.cpp" />
+    <ClCompile Include="..\Common\Path.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Process.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\StartupParameters.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Loader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Config.h" />
@@ -39,49 +45,49 @@
     <ClInclude Include="FileToUpdate.h" />
     <ClInclude Include="Hash.h" />
     <ClInclude Include="HttpApi.h" />
-    <ClInclude Include="Path.h" />
-    <ClInclude Include="StartupParameters.h" />
     <ClInclude Include="json\json_batchallocator.h">
-      <Filter>json</Filter>
+      <Filter>Json</Filter>
     </ClInclude>
     <ClInclude Include="minzip\crypt.h">
-      <Filter>minzip</Filter>
+      <Filter>Minzip</Filter>
     </ClInclude>
     <ClInclude Include="minzip\ioapi.h">
-      <Filter>minzip</Filter>
+      <Filter>Minzip</Filter>
     </ClInclude>
     <ClInclude Include="minzip\iowin32.h">
-      <Filter>minzip</Filter>
+      <Filter>Minzip</Filter>
     </ClInclude>
     <ClInclude Include="minzip\mztools.h">
-      <Filter>minzip</Filter>
+      <Filter>Minzip</Filter>
     </ClInclude>
     <ClInclude Include="minzip\unzip.h">
-      <Filter>minzip</Filter>
+      <Filter>Minzip</Filter>
     </ClInclude>
     <ClInclude Include="minzip\zip.h">
-      <Filter>minzip</Filter>
+      <Filter>Minzip</Filter>
     </ClInclude>
-    <ClInclude Include="Process.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="json\json_internalarray.inl">
-      <Filter>json</Filter>
+      <Filter>Json</Filter>
     </None>
     <None Include="json\json_internalmap.inl">
-      <Filter>json</Filter>
+      <Filter>Json</Filter>
     </None>
     <None Include="json\json_valueiterator.inl">
-      <Filter>json</Filter>
+      <Filter>Json</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="minzip">
+    <Filter Include="Json">
+      <UniqueIdentifier>{13b2350f-232e-4d4d-ac29-346b75b73bf9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Minzip">
       <UniqueIdentifier>{c148c325-6f18-4c46-9c6d-3e2567fab8d5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="json">
-      <UniqueIdentifier>{13b2350f-232e-4d4d-ac29-346b75b73bf9}</UniqueIdentifier>
+    <Filter Include="Common">
+      <UniqueIdentifier>{6b608fe5-f532-4d6e-8c14-376c92fe36fc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

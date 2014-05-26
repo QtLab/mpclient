@@ -2,6 +2,21 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="ru_RU">
 <context>
+    <name>mp::AppController</name>
+    <message>
+        <source>Update</source>
+        <translation type="obsolete">Обновить</translation>
+    </message>
+    <message>
+        <source>Found a new version</source>
+        <translation>Найдена новая версия</translation>
+    </message>
+    <message>
+        <source>Updating</source>
+        <translation>Обновление</translation>
+    </message>
+</context>
+<context>
     <name>mp::RadioPage</name>
     <message>
         <source>Radio</source>
@@ -24,6 +39,10 @@
     <message>
         <source>TV</source>
         <translation>Телевидение</translation>
+    </message>
+    <message>
+        <source>Flash installing... %0 percents completed</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

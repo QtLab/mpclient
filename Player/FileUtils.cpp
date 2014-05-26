@@ -43,7 +43,8 @@ bool FileUtils::LoadFileToByteArray(const QString& filePath, QByteArray& fileBod
 	}
 	else
 	{
-		qDebug() << "FileUtils::LoadByteArray can't open file: " << filePath;
+		qDebug() << "FileUtils::LoadByteArray can't open file: " << filePath
+					<< " reason: " << file.errorString();
 	}
 
 	return false;
@@ -57,9 +58,14 @@ bool FileUtils::SaveByteArrayToFile(const QString& filePath, const QByteArray& f
 		qint64 written = file.write(fileBody);
 		int toWrite = fileBody.size();
 
-		return written == toWrite;
+		if(written == toWrite)
+		{
+			return true;
+		}
 	}
 
+	qDebug() << "FileUtils::SaveByteArrayToFile can't save file: " << filePath 
+				<< " reason: " << file.errorString();
 	return false;
 }
 

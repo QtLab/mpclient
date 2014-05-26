@@ -11,9 +11,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{6750839E-77E4-4235-B029-709186D1D337}</ProjectGuid>
+    <ProjectGuid>{1A5290A1-B957-4B29-997A-07FA8C6AD5F5}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>Loader</RootNamespace>
+    <RootNamespace>Launcher</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -53,7 +53,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile />
       <PrecompiledHeaderOutputFile />
-      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\zlib;$(ProjectDir)minzip;$(ProjectDir)json;$(SolutionDir)Common</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Common</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -74,11 +74,11 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile />
       <PrecompiledHeaderOutputFile />
-      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\zlib;$(ProjectDir)minzip;$(ProjectDir)json;$(SolutionDir)Common</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Common</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
@@ -92,43 +92,7 @@
     <ClCompile Include="..\Common\Path.cpp" />
     <ClCompile Include="..\Common\Process.cpp" />
     <ClCompile Include="..\Common\StartupParameters.cpp" />
-    <ClCompile Include="Config.cpp" />
-    <ClCompile Include="Utils.cpp" />
-    <ClCompile Include="FileToUpdate.cpp" />
-    <ClCompile Include="Hash.cpp" />
-    <ClCompile Include="HttpApi.cpp" />
-    <ClCompile Include="json\json_reader.cpp" />
-    <ClCompile Include="json\json_value.cpp" />
-    <ClCompile Include="json\json_writer.cpp" />
-    <ClCompile Include="Loader.cpp" />
-    <ClCompile Include="minzip\ioapi.c" />
-    <ClCompile Include="minzip\iowin32.c" />
-    <ClCompile Include="minzip\unzip.c" />
-    <ClCompile Include="minzip\zip.c" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Config.h" />
-    <ClInclude Include="Context.h" />
-    <ClInclude Include="Defs.h" />
-    <ClInclude Include="FileToUpdate.h" />
-    <ClInclude Include="Hash.h" />
-    <ClInclude Include="HttpApi.h" />
-    <ClInclude Include="json\json_batchallocator.h" />
-    <ClInclude Include="minzip\crypt.h" />
-    <ClInclude Include="minzip\ioapi.h" />
-    <ClInclude Include="minzip\iowin32.h" />
-    <ClInclude Include="minzip\mztools.h" />
-    <ClInclude Include="minzip\unzip.h" />
-    <ClInclude Include="minzip\zip.h" />
-    <ClInclude Include="resource.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="json\json_internalarray.inl" />
-    <None Include="json\json_internalmap.inl" />
-    <None Include="json\json_valueiterator.inl" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Loader.rc" />
+    <ClCompile Include="Launcher.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

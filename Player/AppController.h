@@ -2,11 +2,11 @@
 #define MP_APP_CONTROLLER_H
 
 #include "Prerequirements.h"
-#include <QApplication>
+#include "SingleApplication.h"
 
 namespace mp {
 
-class AppController : public QApplication
+class AppController : public SingleApplication
 {
 	Q_OBJECT
 
@@ -28,6 +28,7 @@ private slots:
 	void CurrentTabChanged(int tabIndex);
 
 private:
+	void HandleMssageFromAnotherInst(const QString& message);
 	bool notify(QObject* receiver, QEvent* even);
 
 private:

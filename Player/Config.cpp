@@ -26,7 +26,7 @@ Config& Config::Inst()
 }
 
 Config::Config()
-	:m_settings("mp", "player")
+	:m_settings("Unisonbox", "Player")
 {
 	int id = QFontDatabase::addApplicationFont(":/mp/Resources/txdJ2vM9.ttf");
 	QString family = QFontDatabase::applicationFontFamilies(id).at(0);

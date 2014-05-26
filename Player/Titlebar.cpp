@@ -2,6 +2,8 @@
 #include "ChannelMetadataModel.h"
 #include "LinkButton.h"
 
+#include <Windows.h>
+
 #include <QHBoxLayout>
 #include <QMouseEvent>
 #include <QSpacerItem>
@@ -68,7 +70,11 @@ void Titlebar::CloseClicked()
 
 void Titlebar::MinimizeClicked()
 {
-	m_parent->showMinimized();
+#ifdef Q_OS_WIN32
+		::ShowWindow((HWND)m_parent->winId(), SW_MINIMIZE);
+#else
+		m_parent->showMinimized();
+#endif
 }
 
 void Titlebar::MetadataUpdated(const ChannelMetadata& metadata)

@@ -6,6 +6,8 @@
 
 namespace ldr {
 
+using namespace cmn;
+
 bool CrackUrl(const String& url, String& domain, String& query)
 {
 	URL_COMPONENTS uc = {};
