@@ -85,6 +85,27 @@ const String& FileToUpdate::MD5() const
 	return m_md5;
 }
 
+bool FileToUpdate::IsZip() const
+{
+	try
+	{
+		std::size_t lastindex = m_relativePath.find_last_of(STR".");
+
+		if(lastindex != cmn::String::npos)
+		{
+			cmn::String extension = m_relativePath.substr(lastindex, m_relativePath.size() - lastindex);
+
+			std::transform(extension.begin(), extension.end(), extension.begin(), ::towlower);
+			return extension == STR".zip";
+		}
+	}
+	catch(...)
+	{
+	}
+
+	return false;
+}
+
 bool FileToUpdate::Exists() const
 {
 	if(Path::FileExists(m_absolutePath))
@@ -100,6 +121,11 @@ bool FileToUpdate::Exists() const
 	}
 
 	return false;
+}
+
+bool FileToUpdate::Delete()
+{
+	return (bool)DeleteFile(m_absolutePath.c_str());
 }
 
 bool FileToUpdate::FillFromJsonValue(FileToUpdatePtr fileToUpdate, const Json::Value& value)

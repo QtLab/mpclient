@@ -18,6 +18,8 @@ public:
 	RadioPageController();
 	~RadioPageController();
 
+	bool IsRadioPlaying();
+
 	void ReLoadData();
 	TabPage* View();
 

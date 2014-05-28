@@ -38,7 +38,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 	{
 		cmn::Path::SetupCurrentDirectoryPath();
 
-		std::ofstream out("launcher.log");
+		std::ofstream out("launcher.log", std::ofstream::out | std::ofstream::app);
 		std::cout.rdbuf(out.rdbuf()); //redirect std::cout to LOG_FILE
 		RunLauncher();
 	}
@@ -56,7 +56,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 void RunLauncher()
 {
 	HANDLE hSingleInstanceMutexHandle = CreateMutex( NULL, TRUE, "{7A7D49E8-5DB8-4173-B9B0-3BB6190BBACE}" );
-	if( ERROR_ALREADY_EXISTS == GetLastError() )
+	if( ERROR_ALREADY_EXISTS == GetLastError())
 	{
 		std::cout << "Launcher process already exists..." << std::endl;
 		return;
@@ -122,7 +122,7 @@ void WaitMinutes(int minutes)
 void RunPlayer(const cmn::StartupParameters& startupParams)
 {
 	int exitCode = 0;
-	
+
 	bool silentMode = startupParams.IsSilent();
 
 	do
@@ -150,17 +150,32 @@ void RunPlayer(const cmn::StartupParameters& startupParams)
 
 			std::cout << PLAYER_APP_EXE << " exit code: "  << exitCode << std::endl;
 
-			if(exitCode != 0)
+			switch(exitCode)
 			{
-				if(exitCode == UPDATE_EXIT_CODE || exitCode == SILENT_UPDATE_EXIT_CODE)
-				{
-					silentMode = exitCode == SILENT_UPDATE_EXIT_CODE;
-
-					std::cout	<< PLAYER_APP_EXE << " exit with code: " << UPDATE_EXIT_CODE
-								<< " try to update and restart" << std::endl;			
-				}
-				else
-				{
+				case RESTART_EXIT_CODE:
+					silentMode = false;
+					continue;
+					break;
+				case SILENT_RESTART_EXIT_CODE:
+					silentMode = true;
+					continue;
+					break;
+				case UPDATE_EXIT_CODE:
+					std ::cout << " Update and restart" << std::endl;
+					cmn::Process::Terminate(LAODER_APP_EXE);
+					RunLoader(startupParams);
+					break;
+				case SILENT_UPDATE_EXIT_CODE:
+					silentMode = true;
+					std ::cout << " Update and restart in silent mode" << std::endl;
+					cmn::Process::Terminate(LAODER_APP_EXE);
+					RunLoader(startupParams);
+					break;
+				case DEFAULT_EXIT_CODE:
+					std::cout << "Launcher showtdown..." << std::endl;
+					break;
+				// Carshes
+				default:
 					silentMode = true;
 
 					std::cout	<< "Wait " << RESTART_AFTER_CRASH_TIMEOUT_MINS 
@@ -168,15 +183,10 @@ void RunPlayer(const cmn::StartupParameters& startupParams)
 								<< PLAYER_APP_EXE << " again" << std::endl;
 
 					WaitMinutes(RESTART_AFTER_CRASH_TIMEOUT_MINS);
-				}
-
-				cmn::Process::Terminate(LAODER_APP_EXE);
-				RunLoader(startupParams);
-			}
-			else
-			{
-				std::cout << "Launcher showtdown..." << std::endl;
-			}
+					cmn::Process::Terminate(LAODER_APP_EXE);
+					RunLoader(startupParams);
+					break;
+			};
 		}
 	}
 	while(exitCode != 0);

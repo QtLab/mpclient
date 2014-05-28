@@ -25,7 +25,13 @@ void SystemTrayContextMenu::changeEvent(QEvent *event)
 void SystemTrayContextMenu::Retranslate()
 {
 	clear();
+	addSeparator();
+	addAction(tr("Update2"), this, SIGNAL(UpdateApplication()));
+	addSeparator();
 	addAction(tr("Update"), this, SIGNAL(UpdateApplication()));
+	addSeparator();
+	addAction(tr("About"), this, SIGNAL(About()));
+	addSeparator();
 	addAction(tr("Close"), this, SIGNAL(CloseApplication()));
 }
 

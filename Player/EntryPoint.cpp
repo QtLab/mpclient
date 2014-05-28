@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
 #endif
 
 	//Delete old files that could not be removed after the update
-	mp::FileUtils::Delete("*old");
+	mp::FileUtils::Delete(QStringList() << "*tmp" << "*old");
 
 	mp::WebView::SetupGlobalSettings();
 

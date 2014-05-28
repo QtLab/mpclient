@@ -15,10 +15,10 @@ public:
 
 	// Stop/start the process of defining user inactivity
 	void SetCompleted(bool completed);
-	// Time after which a user is inactive
+	// Time after which a user is idle
 	void SetUserIdleTimeout(int secs);
 	// Current idle state
-	bool State();
+	bool IsIdle();
 
 signals:
 	void IdleStateChanged(bool);

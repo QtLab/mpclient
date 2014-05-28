@@ -52,8 +52,17 @@ RadioPageController::~RadioPageController()
 {
 }
 
+bool RadioPageController::IsRadioPlaying()
+{
+	bool playing = m_audioStream->State() == AudioStream::ASPlaying;
+	return playing;
+}
+
 void RadioPageController::ReLoadData()
 {
+	m_categories.Cleanup();
+	m_stations.Cleanup();
+
 	m_categories.Load(ConfigFilePath("radiocatygories.j"));
 	m_stations.LoadWithStats(ConfigFilePath("radio.j"));
 }

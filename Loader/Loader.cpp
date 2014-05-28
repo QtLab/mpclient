@@ -33,7 +33,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 {
 	try
 	{
-		std::ofstream out("loader.log");
+		std::ofstream out("loader.log", std::ofstream::out | std::ofstream::app);
 		std::cout.rdbuf(out.rdbuf()); //redirect std::cout to LOG_FILE
 		RunLoader();
 	}
@@ -109,14 +109,12 @@ bool Install(ldr::Contex& ctx)
 		{
 			std::cout << "Pakage: " << pakage.AbsolutePath() << " don't exists, try to download..." << std::endl;
 
-			bool pakageDownlaoded = ctx.Api.DownloadFile(&pakage);
+			pakageReadyForInstallation = ctx.Api.DownloadFile(&pakage);
 
-			if(!pakageDownlaoded)
+			if(!pakageReadyForInstallation)
 			{
-				pakageDownlaoded = ctx.Api.DownloadFile(&pakage);
+				pakageReadyForInstallation = ctx.Api.DownloadFile(&pakage);
 			}
-
-			pakageReadyForInstallation = pakage.Exists();
 		}
 		else
 		{
@@ -125,7 +123,7 @@ bool Install(ldr::Contex& ctx)
 	}
 	else
 	{
-		std::cout << "Can't get info about pakage" << std::endl;
+		std::cout << "Can't get info about install pakage" << std::endl;
 	}
 
 	bool unzipResult = false;

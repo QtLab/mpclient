@@ -17,7 +17,7 @@ public:
 	void SetLang(const QString& lang);
 	void CreateView();
 	void InitSignalsSlots();
-	
+
 	static AppController& Inst();
 
 private slots:
@@ -26,6 +26,7 @@ private slots:
 	void UpdateFinished(bool restartRequired);
 	void UserIdleStateChanged(bool isIdle);
 	void CurrentTabChanged(int tabIndex);
+	void FlashInstalled();
 
 private:
 	void HandleMssageFromAnotherInst(const QString& message);
@@ -42,6 +43,8 @@ private:
 	int							m_tvPageIndex;
 
 	UpdateController *			m_updateController;
+
+	PluginManager * 			m_pluginManager;
 
 	UserIdle *					m_userIdle;
 };

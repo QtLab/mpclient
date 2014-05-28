@@ -11,6 +11,8 @@ QString HtmlilePath(const QString& fileName);
 QString ConfigFilePath(const QString& fileName);
 QString HttpCachePath();
 QString FlashMSIPath();
+// Name - without extension
+QString PluginPath(const QString& name);
 
 }
 

@@ -1,7 +1,7 @@
 #include "HttpApi.h"
 #include "Defs.h"
 #include "Path.h"
-
+#include "Hash.h"
 #include "json/json.h"
 
 #include <Windows.h>
@@ -72,9 +72,18 @@ bool HttpApi::GetUpdateInfo(const std::string& userId, FilesToUpdate& fielsToUpd
 		for( Json::ValueIterator itr = files.begin() ; itr != files.end() ; itr++ ) 
 		{
 			FileToUpdate * fileData = FileToUpdate::CreateFromJsonValue((*itr));
+
 			if(fileData)
 			{
-				fielsToUpdate.push_back(fileData);
+				if(fileData->MD5() == STR"0")
+				{
+					fileData->Delete();
+					delete fileData;
+				}
+				else
+				{
+					fielsToUpdate.push_back(fileData);
+				}
 			}
 		}
 	}
@@ -124,29 +133,48 @@ bool HttpApi::DownloadFile(FileToUpdatePtr fileToDownlaod)
 		std::cout << "Create directory: " << directoryPath << " result: " << GetLastErrorString() << std::endl;
 	}
 
-	String oldFilePath = fileToDownlaod->AbsolutePath() + "old";
+	String tmpFilePath = fileToDownlaod->AbsolutePath() + "tmp";
 
-	if(Path::FileExists(fileToDownlaod->AbsolutePath()))
-	{
-		BOOL result = MoveFile(fileToDownlaod->AbsolutePath().c_str(), oldFilePath.c_str());
-
-		if(!result)
-		{
-			std::cout << "Can't move file: " << fileToDownlaod->AbsolutePath()
-						<< " to: " << oldFilePath
-						<< " error: " << GetLastErrorString() << std::endl;
-		}
-	}
-
-	std::ofstream ostream(fileToDownlaod->AbsolutePath(), std::ios::out | std::ios::binary | std::ios::trunc);
+	std::ofstream ostream(tmpFilePath, std::ios::out | std::ios::binary | std::ios::trunc);
 	if(DoGetRequest(fileToDownlaod->Domain(), fileToDownlaod->Query(), ostream))
 	{
-		if(!DeleteFile(oldFilePath.c_str()))
-		{
-			std::cout << "DeleteFile file: " << oldFilePath << " result: " << GetLastErrorString() << std::endl;
-		}
+		ostream.flush();
+		ostream.close();
 
-		return true;
+		String md5;
+		if(Hash::ComputeFileMD5(tmpFilePath, md5))
+		{
+			if(IsEquals(md5, fileToDownlaod->MD5()))
+			{
+				if(!DeleteFile(fileToDownlaod->AbsolutePath().c_str()))
+				{
+					MoveFile(fileToDownlaod->AbsolutePath().c_str(), (fileToDownlaod->AbsolutePath() + STR"old").c_str());
+				}
+
+				BOOL result = MoveFile(tmpFilePath.c_str(), fileToDownlaod->AbsolutePath().c_str());
+
+				if(!result)
+				{
+					std::cout << "Can't move file: " << tmpFilePath
+								<< " to: " << fileToDownlaod->AbsolutePath()
+								<< " error: " << GetLastErrorString() << std::endl;
+				}
+				else
+				{
+					return true;
+				}
+			}
+			else
+			{
+				std::cout << tmpFilePath  << " md5: " << md5 
+							<< fileToDownlaod->AbsolutePath() << " md5: " << fileToDownlaod->MD5() 
+							<< std::endl;
+			}
+		}
+		else
+		{
+			std::cout << "Can't compute md5 for: " << tmpFilePath << std::endl;
+		}
 	}
 
 	return false;
@@ -182,6 +210,8 @@ bool HttpApi::DoGetRequest(const String& domain, const String& query, std::ostre
 	{
 		std::cout << "HttpOpenRequest error: " << GetLastErrorString() << std::endl;
 		::InternetCloseHandle(hHttpRequest);
+		::InternetCloseHandle(hHttpSession);
+		::InternetCloseHandle(hIntSession);
 		return false;
 	}
 
@@ -189,10 +219,12 @@ bool HttpApi::DoGetRequest(const String& domain, const String& query, std::ostre
 	{
 		std::cout << "HttpSendRequest error: " << GetLastErrorString() << std::endl;
 		::InternetCloseHandle(hHttpRequest);
+		::InternetCloseHandle(hHttpSession);
+		::InternetCloseHandle(hIntSession);
 		return false;
 	}
 
-	CHAR szBuffer[32768];
+	char szBuffer[32768];
 	DWORD dwRead=0;
 	while(::InternetReadFile(hHttpRequest, szBuffer, sizeof(szBuffer), &dwRead) && dwRead)
 	{
@@ -200,6 +232,8 @@ bool HttpApi::DoGetRequest(const String& domain, const String& query, std::ostre
 		{
 			std::cout << "InternetReadFile error: " << GetLastErrorString() << std::endl;
 			::InternetCloseHandle(hHttpRequest);
+			::InternetCloseHandle(hHttpSession);
+			::InternetCloseHandle(hIntSession);
 			return false;
 		}
 

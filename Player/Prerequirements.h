@@ -39,6 +39,7 @@ class SystemTray;
 class TVPageController;
 class RadioPageController;
 class UpdateController;
+class PluginManager;
 class MPRequest;
 class DownlaodManager;
 class UserIdle;

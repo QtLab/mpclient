@@ -79,4 +79,23 @@ QString FlashMSIPath()
 	return path;
 }
 
+#ifdef Q_OS_WIN32
+	const QString LibExtension(".dll");
+#else
+	const QString LibExtension(".dynlib");
+#endif
+
+QString PluginPath(const QString& name)
+{
+	QDir dir = QDir::current();
+
+	if(!dir.cd("plugins"))
+	{
+		QString path = dir.filePath(name + LibExtension);
+		return path;
+	}
+
+	return QString::null;
+}
+
 }

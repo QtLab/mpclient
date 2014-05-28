@@ -53,11 +53,13 @@ void UpdateController::ProcessUpdateList()
 	}
 	else
 	{
-		bool restarRequired = false;
-
 		Cleanup();
 
+		qDebug() << "Update started, RequirePlayerUpdate is:: " << m_updateModel.RequirePlayerUpdate();
+		
 		m_updateModel.ParseJson(reply->readAll());
+
+		qDebug() << "Update mode parsing, RequirePlayerUpdate is: " << m_updateModel.RequirePlayerUpdate();
 
 		while(m_updateModel.rowCount() > 0 && m_filesInProcess < ParallelFilesUpdating)
 		{
@@ -81,6 +83,8 @@ void UpdateController::FileDownloaded(const QString& path)
 
 	if(!ProcessNextFile())
 	{
+		qDebug() << "Update finished, RequirePlayerUpdate is: " << m_updateModel.RequirePlayerUpdate();
+
 		emit UpdateFinished(m_updateModel.RequirePlayerUpdate());
 		Cleanup();
 	}

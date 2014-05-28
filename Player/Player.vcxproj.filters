@@ -66,6 +66,9 @@
     <Filter Include="Resource Files\Html">
       <UniqueIdentifier>{0a2012aa-183c-44f2-8ac7-c860bcce11df}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Plugins">
+      <UniqueIdentifier>{ce17c983-8c58-421d-8fe0-ba3c669b7e33}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GeneratedFiles\Debug\moc_MainWindow.cpp">
@@ -339,6 +342,15 @@
     <ClCompile Include="GeneratedFiles\Release\moc_SingleApplication.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_PluginManager.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_PluginManager.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="PluginManager.cpp">
+      <Filter>Plugins</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Player.qrc">
@@ -469,6 +481,9 @@
     </CustomBuild>
     <CustomBuild Include="SingleApplication.h">
       <Filter>Utils</Filter>
+    </CustomBuild>
+    <CustomBuild Include="PluginManager.h">
+      <Filter>Plugins</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>

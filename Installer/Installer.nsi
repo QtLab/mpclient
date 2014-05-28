@@ -6,13 +6,13 @@ Unicode True
 
 ${StrLoc}
 
-!define APPNAME "Unisonbox"
-!define APPID "Unisonbox"
-!define COMPANYNAME "Unisonbox"
-!define DESCRIPTION "Unisonbox"
-!define LOADER_APP "Loader.exe"
-!define LAUNCHER_APP "Launcher.exe"
-!define PLAYER_APP "Player.exe"
+!define APPNAME 		"Unisonbox"
+!define APPID 			"Unisonbox"
+!define COMPANYNAME 	"Unisonbox"
+!define DESCRIPTION 	"Unisonbox"
+!define LOADER_APP 		"Loader.exe"
+!define LAUNCHER_APP 	"Launcher.exe"
+!define PLAYER_APP 		"Player.exe"
 
 !define VERSIONMAJOR 0
 !define VERSIONMINOR 1
@@ -22,7 +22,6 @@ ${StrLoc}
 !define ProductRegistryKey "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}"
 
 Name "${APPNAME}"
-;InstallDir "C:\ProgramData\Loader"
 InstallDir "$LOCALAPPDATA\${APPNAME}"
 BrandingText " "
 ShowInstDetails nevershow
@@ -49,7 +48,7 @@ LicenseLangString LicenseText ${LANG_ENGLISH} "license_en.txt"
 ; russian
 LicenseLangString LicenseText ${LANG_RUSSIAN} "license_ru.txt"
 
- ; ------------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 Function GetSource
 	Pop $1
 	
@@ -83,7 +82,8 @@ returnLastSection:
 
 exit:
 FunctionEnd
-; ------------------------------------------------------------------------------
+
+;------------------------------------------------------------------------------
 Function KillProcess
 	Pop $0
 	nsExec::ExecToStack 'taskkill.exe /f /im "$0"'

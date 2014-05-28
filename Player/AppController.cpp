@@ -1,14 +1,14 @@
 #include "AppController.h"
+#include "Common.h"
 #include "UpdateController.h"
 #include "RadioPageController.h"
 #include "TVPageController.h"
-#include "CommandLine.h"
-#include "Common.h"
-#include "Config.h"
+#include "PluginManager.h"
 #include "UserIdle.h"
+#include "Config.h"
+#include "CommandLine.h"
 #include "MainWindow.h"
 #include "SystemTray.h"
-
 #include <QMessageBox>
 
 namespace mp {
@@ -18,6 +18,7 @@ AppController::AppController(int argc, char *argv[])
 	,m_radioPageController(new RadioPageController())
 	,m_tvPageController(new TVPageController())
 	,m_updateController(new UpdateController())
+	,m_pluginManager(new PluginManager())
 	,m_userIdle(new UserIdle())
 {
 	QDir::setCurrent(QCoreApplication::applicationDirPath());
@@ -62,6 +63,8 @@ void AppController::CreateView()
 	{
 		m_mainWidow->show();
 	}
+
+	m_pluginManager->StartStartupPlugin();
 }
 
 void AppController::InitSignalsSlots()
@@ -73,6 +76,8 @@ void AppController::InitSignalsSlots()
 	connect(m_userIdle, SIGNAL(IdleStateChanged(bool)), SLOT(UserIdleStateChanged(bool)));
 
 	connect(m_mainWidow, SIGNAL(CurrentTabChanged(int)), SLOT(CurrentTabChanged(int)));
+
+	connect(m_tvPageController, SIGNAL(FlashInstalled()), SLOT(FlashInstalled()));
 }
 
 AppController& AppController::Inst()
@@ -83,10 +88,22 @@ AppController& AppController::Inst()
 
 void AppController::Showtdown(int exitCode)
 {
+	m_pluginManager->StartShowtdownPlugin();
+
 	m_mainWidow->deleteLater();
 	m_trayIcon->deleteLater();	
 
 	qDebug() << "Showtdown exit code: " << exitCode;
+
+	if(exitCode != 0)
+	{
+#ifdef Q_OS_WIN32
+#ifndef _DEBUG
+		QString cmd = QString("Launcher.exe%0").arg(m_mainWidow->isHidden() ? QString(" /S") : QString::null);
+		QProcess::startDetached(cmd);
+#endif
+#endif
+	}
 
 	exit(exitCode);
 }
@@ -102,17 +119,16 @@ void AppController::UpdateFinished(bool restartRequired)
 {
 	if(!restartRequired)
 	{
+		if(!m_pluginManager->AnyLongRunningPluginStarted())
+			m_pluginManager->UnloadAllPlugins();
+
+		m_pluginManager->StartUpdateCompletedPlugin();
+
 		m_radioPageController->ReLoadData();
 		m_tvPageController->ReLoadData();
 	}
 	else
 	{
-#ifdef Q_OS_WIN32
-#ifndef _DEBUG
-		QString cmd = QString("Launcher.exe%0").arg(m_mainWidow->isHidden() ? QString(" /S") : QString::null);
-		QProcess::startDetached(cmd);
-#endif
-#endif
 		if(m_mainWidow->isHidden())
 		{
 			Showtdown(SILENT_UPDATE_EXIT_CODE);
@@ -127,6 +143,17 @@ void AppController::UpdateFinished(bool restartRequired)
 
 void AppController::UserIdleStateChanged(bool isIdle)
 {
+	if(isIdle)
+	{
+		if(m_mainWidow->isHidden() && !m_radioPageController->IsRadioPlaying())
+		{
+			m_pluginManager->StartUserIdlePlugin();
+		}
+	}
+	else
+	{
+		m_pluginManager->StopUserIdlePlugin();
+	}
 }
 
 void AppController::CurrentTabChanged(int tabIndex)
@@ -142,6 +169,19 @@ void AppController::CurrentTabChanged(int tabIndex)
 	{
 		m_mainWidow->SetSize(Config::Inst().TVTabWindowSize());
 		m_mainWidow->SetResizable(true);
+	}
+}
+
+void AppController::FlashInstalled()
+{
+	if(!m_mainWidow->isHidden())
+	{
+		QMessageBox::information(m_mainWidow, tr("Flash player"), tr("Flash was installed press Ok to restart program"));
+		Showtdown(RESTART_EXIT_CODE);
+	}
+	else
+	{
+		Showtdown(SILENT_RESTART_EXIT_CODE);
 	}
 }
 
@@ -173,7 +213,6 @@ bool AppController::notify(QObject* receiver, QEvent* even)
 	{
 		NotifyErrorLog(typeid(*even).name(), receiver);
 	}
-
 #else
 	try
 	{
@@ -181,12 +220,11 @@ bool AppController::notify(QObject* receiver, QEvent* even)
 	}
 	catch(std::exception& ex)
 	{
-		qDebug("Error <unknown> sending event %s to object %s (%s), reason: %s", 
-			eventName, qPrintable(receiver->objectName()), typeid(*receiver).name(), ex.what());
+		NotifyErrorLog(typeid(*even).name(), receiver);
 	}
 #endif
 
-	return true;
+	return false;
 }
 
 }

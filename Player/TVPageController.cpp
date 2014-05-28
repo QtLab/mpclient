@@ -10,20 +10,7 @@ TVPageController::TVPageController()
 {
 	ReLoadData();
 
-	/*
-	connect(m_view, SIGNAL(PlayRadio(const QString&)), this, SLOT(PlayRadio(const QString&)));
-	connect(m_view, SIGNAL(GenreChanged(const QString&)), this, SLOT(GenreChanged(const QString&)));
-	connect(m_view, SIGNAL(TopStationslUpdated()), this, SLOT(TopStationslUpdated()));
-	connect(m_view, SIGNAL(PauseRadio()), this, SLOT(PauseRadio()));
-
-	TopStationslUpdated();
-	m_view->UpdateCurrentGenreStations(&m_stations);
-	//m_view->UpdateLastStations(&m_lastSations);
-	m_view->GenreModelUpdated(&m_radioGenres);
-	m_view->Init();
-	
-	qDebug() << "Radio widget created";
-	*/
+	connect(m_view, SIGNAL(FlashInstalled()), SIGNAL(FlashInstalled()));
 }
 
 TVPageController::~TVPageController()
@@ -31,10 +18,8 @@ TVPageController::~TVPageController()
 	
 }
 
-
 void TVPageController::ReLoadData()
 {
-	//m_channels->Load(ConfigFilePath("tv.json"));
 }
 
 TabPage* TVPageController::View()

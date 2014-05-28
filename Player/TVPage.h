@@ -31,6 +31,9 @@ private slots:
 	void FlashInstallProgressChanged(int percent);
 	void FlashInstalled(bool);
 	
+signals:
+	void FlashInstalled();
+
 private:
 	QHBoxLayout	*		m_layout;
 	WebView *			m_view;

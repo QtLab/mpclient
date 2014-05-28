@@ -14,24 +14,11 @@
 
 #include "Common.h"
 
-#ifdef _UNICODE
-	#define GET_OPERATION		L"GET"
-	#define APP_UA				L"loader"
-namespace ldr {
-	typedef std::wstring String;
-}
-
-#else
-	#define GET_OPERATION		"GET"
-	#define APP_UA				"loader"
+#define GET_OPERATION		STR"GET"
+#define APP_UA				STR"loader"
 
 namespace ldr {
-	typedef std::string String;
-}
-
-#endif
-
-namespace ldr {
+	using namespace cmn;
 	bool Unzip(const String& pakage);
 	String GetLastErrorString();
 	bool IsEquals(const String& st0, const String& st1);

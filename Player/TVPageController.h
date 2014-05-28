@@ -16,7 +16,8 @@ public:
 	void ReLoadData();
 	TabPage* View();
 
-public slots:
+signals:
+	void FlashInstalled();
 
 private:
 	// Widget view

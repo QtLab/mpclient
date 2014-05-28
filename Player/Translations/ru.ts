@@ -15,6 +15,14 @@
         <source>Updating</source>
         <translation>Обновление</translation>
     </message>
+    <message>
+        <source>Flash player</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Flash was installed press Ok to restart program</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>mp::RadioPage</name>
@@ -32,6 +40,10 @@
     <message>
         <source>Update</source>
         <translation>Обновить</translation>
+    </message>
+    <message>
+        <source>About</source>
+        <translation>О программе</translation>
     </message>
 </context>
 <context>

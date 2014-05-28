@@ -12,8 +12,10 @@ namespace mp {
 
 Config* Config::m_instance = 0;
 
-const QString VolumeKeyName = "volume";
-const QString TVTabSizeKeyName = "tvtabsize";
+const QString VolumeKeyName			= "volume";
+const QString TVTabSizeKeyName		= "tvtabsize";
+const QString SourceKeyName			= "source";
+const QString UserIdKeyName			= "userid";
 
 Config& Config::Inst()
 {
@@ -35,52 +37,14 @@ Config::Config()
 	Load();
 }
 
-const QString& Config::UserId() const
+QString Config::UserId() const
 {
-	return m_userId;
+	return m_settings.value(UserIdKeyName).toString();
 }
 
-const QString& Config::Source() const
+QString Config::Source() const
 {
-	return m_source;
-}
-
-void Config::Load()
-{
-	CHAR configPath[MAX_PATH];
-	if (SUCCEEDED(SHGetFolderPathA(NULL, CSIDL_COMMON_APPDATA, NULL, 0, configPath)))
-	{
-		sprintf_s(configPath, "%s\\%s", configPath, CONFIG_DIR);
-		sprintf_s(configPath, "%s\\config.json", configPath);
-
-		QFile file(configPath);
-		if(file.open(QIODevice::ReadOnly))
-		{
-			QByteArray json = file.readAll();
-
-			QJsonParseError parseResult;
-			QJsonDocument d = QJsonDocument::fromJson(json, &parseResult);
-			
-			if(parseResult.error == QJsonParseError::NoError)
-			{
-				QVariantMap settingsMap = d.toVariant().toMap();
-				m_userId = settingsMap["UserId"].toString();
-				m_source = settingsMap["Source"].toString();
-			}
-			else
-			{
-				qDebug() << configPath <<  "Config parse error: " << parseResult.errorString();
-			}
-		}
-		else
-		{
-			qDebug() << "Can't load: " << configPath;
-		}
-	}
-	else
-	{
-		qDebug() << "Config::Load() error";
-	}
+	return m_settings.value(SourceKeyName).toString();
 }
 
 const QFont& Config::DefaultFont() const
@@ -116,5 +80,54 @@ QSize Config::RadioTabWindowSize() const
 {
 	return QSize(580, 351);
 }
+
+void Config::Load()
+{
+	CHAR configPath[MAX_PATH];
+	if (SUCCEEDED(SHGetFolderPathA(NULL, CSIDL_COMMON_APPDATA, NULL, 0, configPath)))
+	{
+		sprintf_s(configPath, "%s\\%s", configPath, CONFIG_DIR);
+		sprintf_s(configPath, "%s\\config.json", configPath);
+
+		QFile file(configPath);
+		if(file.open(QIODevice::ReadOnly))
+		{
+			QByteArray json = file.readAll();
+
+			QJsonParseError parseResult;
+			QJsonDocument d = QJsonDocument::fromJson(json, &parseResult);
+			
+			if(parseResult.error == QJsonParseError::NoError)
+			{
+				QVariantMap settingsMap = d.toVariant().toMap();
+				QString userId = settingsMap["UserId"].toString();
+				QString source = settingsMap["Source"].toString();
+
+				if(!userId.isEmpty() && userId != m_settings.value(UserIdKeyName).toString())
+				{
+					m_settings.setValue(UserIdKeyName, userId);
+				}
+
+				if(source.isEmpty() && source != m_settings.value(SourceKeyName).toString())
+				{
+					m_settings.setValue(SourceKeyName, source);
+				}
+			}
+			else
+			{
+				qDebug() << configPath <<  "Config parse error: " << parseResult.errorString();
+			}
+		}
+		else
+		{
+			qDebug() << "Can't load: " << configPath;
+		}
+	}
+	else
+	{
+		qDebug() << "Config::Load() error";
+	}
+}
+
 
 }

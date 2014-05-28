@@ -19,6 +19,7 @@ protected:
 
 signals:
 	void UpdateApplication();
+	void AboutApplication();
 	void CloseApplication();
 };
 

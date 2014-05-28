@@ -89,6 +89,8 @@ void TVPage::FlashInstallProgressChanged(int percents)
 
 void TVPage::FlashInstalled(bool ok)
 {
+	//emit FlashInstalled();
+
 	m_view->deleteLater();
 
 	m_view = WebView::Create();

@@ -7,7 +7,7 @@
 namespace mp {
 
 UserIdle::UserIdle()
-	:m_completed(true)
+	:m_completed(false)
 	,m_lastIdleState(false)
 
 #ifdef TEST_IDLE_TIMEOUT
@@ -19,6 +19,7 @@ UserIdle::UserIdle()
 	m_userIdleTimer.setSingleShot(true);
 	m_userIdleTimer.setInterval(1000); // 1 sec
 	connect(&m_userIdleTimer, SIGNAL(timeout()), SLOT(ProcessIdleInput()));
+	m_userIdleTimer.start();
 }
 
 void UserIdle::SetCompleted(bool completed)
@@ -38,7 +39,7 @@ void UserIdle::SetUserIdleTimeout(int secs)
 	m_userIdleTimeout = secs;
 }
 
-bool UserIdle::State()
+bool UserIdle::IsIdle()
 {
 	ProcessIdleInput();
 	return m_lastIdleState;

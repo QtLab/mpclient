@@ -30,7 +30,9 @@ public:
 	String AbdoluteDirectory() const;
 	const String& MD5() const;
 
+	bool IsZip() const;
 	bool Exists() const;
+	bool Delete();
 
 	static FileToUpdatePtr CreateFromJsonValue(const Json::Value& value);
 	static bool FillFromJsonValue(FileToUpdatePtr fileToUpdate, const Json::Value& value);

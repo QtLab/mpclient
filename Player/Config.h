@@ -15,8 +15,8 @@ class Config : public QObject
 public:
 	static Config& Inst();
 
-	const QString& UserId() const;
-	const QString& Source() const;
+	QString UserId() const;
+	QString Source() const;
 
 	const QFont& DefaultFont() const;
 
@@ -38,8 +38,6 @@ private:
 	static Config*		m_instance;
 
 	QSettings			m_settings;
-	QString				m_userId;
-	QString				m_source;
 	QFont				m_defaultFont;
 };
 

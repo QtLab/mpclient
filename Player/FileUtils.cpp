@@ -8,9 +8,9 @@
 
 namespace mp {
 
-void FileUtils::Delete(const QString& filter)
+void FileUtils::Delete(const QStringList& filters)
 {
-	QFileInfoList files = QDir::current().entryInfoList(QStringList() << filter);
+	QFileInfoList files = QDir::current().entryInfoList(filters);
 	QFileInfoList::Iterator iter(files.begin());
 
 	while(iter != files.end())
