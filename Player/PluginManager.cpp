@@ -18,38 +18,42 @@ public:
 		m_library.load();
 	}
 
-	bool IsLoaded() const 
+	~Plugin()
 	{
-		return m_library.isLoaded();
+		m_library.unload();
 	}
 
 	void Start()
 	{
-		StartPlugin startPlugin = (StartPlugin)m_library.resolve("StartPlugin");
-		if(startPlugin)
+		if(m_library.isLoaded() || m_library.load())
 		{
-			startPlugin();
-		}	
+			StartPlugin startPlugin = (StartPlugin)m_library.resolve("StartPlugin");
+			if(startPlugin)
+			{
+				startPlugin();
+			}
+		}
 	}
 
 	void Stop()
 	{
-		StopPlugin stopPlugin = (StopPlugin)m_library.resolve("StopPlugin");
-		if(stopPlugin)
-			stopPlugin();	
+		if(m_library.isLoaded() || m_library.load())
+		{
+			StopPlugin stopPlugin = (StopPlugin)m_library.resolve("StopPlugin");
+			if(stopPlugin)
+				stopPlugin();
+		}
 	}
 
 	bool IsRunning()
 	{
-		if(!m_library.isLoaded())
+		if(m_library.isLoaded() || m_library.load())
 		{
-			return false;
+			IsPluginRunning isRunning = (IsPluginRunning)m_library.resolve("IsPluginRunning");
+
+			if(isRunning)
+				return isRunning();
 		}
-
-		IsPluginRunning isRunning = (IsPluginRunning)m_library.resolve("IsPluginRunning");
-
-		if(isRunning)
-			return isRunning();
 
 		return false;
 	}
@@ -153,7 +157,8 @@ void PluginManager::Cleanup()
 	QListIterator<Plugin*> i(plugins);
 	while (i.hasNext())
 	{
-		delete i.next();
+		Plugin * plugin = i.next();
+		delete plugin;
 	}
 }
 

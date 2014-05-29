@@ -27,6 +27,7 @@ bool UpdateController::InProcess() const
 
 void UpdateController::CheckForUpdate()
 {
+#ifndef _DEBUG
 	if(!InProcess())
 	{
 		MPRequest request = MPRequest::CreateUpdateRequest();
@@ -39,6 +40,7 @@ void UpdateController::CheckForUpdate()
 	{
 		qDebug() << "Update already in process";
 	}
+#endif
 }
 
 void UpdateController::ProcessUpdateList()

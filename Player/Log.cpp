@@ -38,10 +38,9 @@ void Log(QtMsgType type, const QMessageLogContext &, const QString & msg)
 	QFile outFile(logFilePath);
 	if(outFile.open(QIODevice::WriteOnly | QIODevice::Append))
 	{
-				QTextStream ts(&outFile);
-				ts << logMessage << endl;
+		QTextStream ts(&outFile);
+		ts << logMessage << endl;
 	}
-
 }
 
 }

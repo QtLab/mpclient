@@ -110,9 +110,7 @@ void AppController::Showtdown(int exitCode)
 
 void AppController::UpdateStarted()
 {
-#ifndef _DEBUG
 	m_updateController->CheckForUpdate();
-#endif
 }
 
 void AppController::UpdateFinished(bool restartRequired)
