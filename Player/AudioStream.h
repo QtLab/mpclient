@@ -1,10 +1,8 @@
-#ifndef MP_MEDIA_CONTROLLER_H
-#define MP_MEDIA_CONTROLLER_H
+#ifndef MP_AUDIO_STREAM_H
+#define MP_AUDIO_STREAM_H
 
 #include <QObject>
-#include <QTimer>
-#include <QSharedPointer>
-#include "bass.h"
+#include "AudioStreamAsyncStarter.h"
 
 namespace mp {
 
@@ -18,8 +16,10 @@ class AudioStream : public QObject
 	Q_OBJECT
 
 public:
+	Q_ENUMS(ASState)
 	enum ASState
 	{
+		ASStarting,
 		ASPlaying,
 		ASPaused,
 		ASStopped
@@ -30,26 +30,41 @@ public:
 
 	ASState State() const;
 
-	void SetUrl(const QString& url);
-	QString Url() const;
 	bool IsPlaying() const;
-	void Play(bool resume = false);
+	void Play(const QString& url);
+	void Resume();
 	void Pause();
 	void Stop();
-	void GetMetaData(ChannelMetadata& meta);
-
-private slots:
-	void VolumeChanged(qreal value);
 
 private:
+	static void __stdcall ProcessMetaCallback(HSYNC handle, DWORD channel, DWORD data, void *user); 
+	static void __stdcall ProcessStreamStalled(HSYNC handle, DWORD channel, DWORD data, void *user); 
+
+private slots:
+	void EmitStateChanged(AudioStream::ASState newState);
+	void ProcessMeta();
+	void CleanupStream();
+	void VolumeChanged(qreal value);
+	void StreadStarted(HSTREAM stream, int errorCode);
+
+signals:
+	void StateChanged(AudioStream::ASState newState);
+	void MetadataUpdated(const ChannelMetadata& meta);
+	void StreamSarted(HSTREAM stream, int errorCode);
+
+private:
+	// Async stream starter
+	AudioStreamAsyncStarter				m_streamStarter;
+	// Current state
 	ASState								m_state;
 	// BASS library channel
 	HSTREAM								m_hStream;
-	// Current play url
-	QString								m_currentUrl;
+	// Url that will be playing
+	QString								m_urlToPlay;
 };
 
-typedef QSharedPointer<AudioStream> AudioStreamPtr;
+Q_DECLARE_METATYPE(AudioStream::ASState)
+Q_DECLARE_METATYPE(HSTREAM)
 
 }
 

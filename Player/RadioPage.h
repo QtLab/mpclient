@@ -26,11 +26,12 @@ public:
 
 	void SetVolume(qreal val);
 	void SetPlayingState(bool play);
-	void UpdateMetadata(const QString& metadata);
+	void SetMetadata(const QString& metadata);
 	void SetCategory(int index);
 
 signals:
 	void PlayRadio(int id);
+	void ResumeRadio();
 	void PauseRadio();
 	void VolumeChanged(qreal value);
 	void PauseCurrentRadio();

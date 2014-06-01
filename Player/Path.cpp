@@ -74,7 +74,7 @@ QString HttpCachePath()
 
 QString FlashMSIPath()
 {
-	QString path = QDir::temp().filePath("flashinstaller.msi");
+	QString path = QDir::current().filePath("flashinstaller.msi");
 	path.replace("/", "\\");
 	return path;
 }

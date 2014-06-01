@@ -69,6 +69,9 @@
     <Filter Include="Plugins">
       <UniqueIdentifier>{ce17c983-8c58-421d-8fe0-ba3c669b7e33}</UniqueIdentifier>
     </Filter>
+    <Filter Include="FileSystem">
+      <UniqueIdentifier>{e21a3440-95db-477b-9684-03a8f9568c62}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GeneratedFiles\Debug\moc_MainWindow.cpp">
@@ -155,9 +158,6 @@
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_UpdateModel.cpp">
       <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="Path.cpp">
-      <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="LinkButton.cpp">
       <Filter>Views\Widgets</Filter>
@@ -318,9 +318,6 @@
     <ClCompile Include="NcFramelessHelper.cpp">
       <Filter>Views</Filter>
     </ClCompile>
-    <ClCompile Include="FileUtils.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_FlashUtils.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
@@ -350,6 +347,24 @@
     </ClCompile>
     <ClCompile Include="PluginManager.cpp">
       <Filter>Plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="FileUtils.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Path.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioStreamAsyncStarter.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_AudioStreamAsyncStarter.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_AudioStreamAsyncStarter.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="ThreadUtils.cpp">
+      <Filter>Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -405,9 +420,6 @@
       <Filter>Views\Html</Filter>
     </CustomBuild>
     <CustomBuild Include="Log.h">
-      <Filter>Utils</Filter>
-    </CustomBuild>
-    <CustomBuild Include="Path.h">
       <Filter>Utils</Filter>
     </CustomBuild>
     <CustomBuild Include="WidgetUtils.h">
@@ -485,6 +497,12 @@
     <CustomBuild Include="PluginManager.h">
       <Filter>Plugins</Filter>
     </CustomBuild>
+    <CustomBuild Include="Path.h">
+      <Filter>FileSystem</Filter>
+    </CustomBuild>
+    <CustomBuild Include="AudioStreamAsyncStarter.h">
+      <Filter>Audio</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <None Include="Translations\en.ts">
@@ -511,10 +529,13 @@
     <ClInclude Include="NcFramelessHelper.h">
       <Filter>Views</Filter>
     </ClInclude>
-    <ClInclude Include="FileUtils.h">
+    <ClInclude Include="CommandLine.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="CommandLine.h">
+    <ClInclude Include="FileUtils.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ThreadUtils.h">
       <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>

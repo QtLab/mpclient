@@ -30,14 +30,9 @@ void ChannelMetadata::SetArtist(const QString& artist)
 	m_artist = artist;
 }
 
-const QString& ChannelMetadata::Url() const
+bool ChannelMetadata::IsEmpty() const
 {
-	return m_url;
-}
-
-void ChannelMetadata::SetUrl(const QString& url)
-{
-	m_url = url;
+	return m_artist.isEmpty() || m_artist.isEmpty();
 }
 
 QString ChannelMetadata::ToString() const

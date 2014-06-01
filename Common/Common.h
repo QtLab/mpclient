@@ -35,6 +35,8 @@ namespace cmn {
 
 #endif
 
+#define VERSION				0.1
+
 #define PLAYER_APP_EXE		STR"Player.exe"
 #define LAODER_APP_EXE		STR"Loader.exe"
 //#define DEFAULT_HOST		STR"127.0.0.1"

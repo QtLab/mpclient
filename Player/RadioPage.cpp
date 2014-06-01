@@ -39,6 +39,7 @@ RadioPage::RadioPage(QWidget* parent, QObject* categoriesModel, QObject* allStat
 	m_quickView->rootContext()->setContextProperty("searchStationsModel", searchStationsModel);
 
 	connect(m_quickView->rootObject(), SIGNAL(categoryChanged(int)), this, SIGNAL(CategoryChanged(int)));
+	connect(m_quickView->rootObject(), SIGNAL(resumeRadio()), this, SIGNAL(ResumeRadio()));
 	connect(m_quickView->rootObject(), SIGNAL(playRadio(int)), this, SIGNAL(PlayRadio(int)));
 	connect(m_quickView->rootObject(), SIGNAL(volumeChanged(qreal)), this, SIGNAL(VolumeChanged(qreal)));
 	connect(m_quickView->rootObject(), SIGNAL(pauseRadio()), this, SIGNAL(PauseRadio()));
@@ -77,7 +78,7 @@ void RadioPage::SetPlayingState(bool play)
 	QMetaObject::invokeMethod(m_quickView->rootObject(), "setPlayingState", Q_ARG(QVariant, play));
 }
 
-void RadioPage::UpdateMetadata(const QString& metadata)
+void RadioPage::SetMetadata(const QString& metadata)
 {
 	QMetaObject::invokeMethod(m_quickView->rootObject(), "updateMetadata", Q_ARG(QVariant, metadata));
 }

@@ -11,12 +11,23 @@ const static QString Dot(".");
 
 FileDownloader::FileDownloader(const QUrl& url, const QString& filePath, bool autoDelete)
 	:m_aborted(false)
+	,m_continueDownload(false)
 	,m_url(url)
 	,m_filePath(filePath)
 	,m_manager(NULL)
 	,m_reply(0)
 	,m_autoDelete(autoDelete)
 {
+}
+
+bool FileDownloader::ContinueDownload() const
+{
+	return m_continueDownload;
+}
+
+void FileDownloader::SetContinueDownload(bool contiueDownload)
+{
+	m_continueDownload = contiueDownload;
 }
 
 void FileDownloader::SetNetworkAccessManager(QNetworkAccessManager* manager)
@@ -38,7 +49,8 @@ void FileDownloader::Do()
 	// Creates file
 	m_file = new QFile(m_filePath);
 	m_file->setPermissions(QFile::WriteOwner);
-    bool opened = m_file->open(QIODevice::WriteOnly);
+
+	bool opened = m_file->open(m_continueDownload ? QIODevice::Append : QIODevice::WriteOnly);
 
 	if(!opened)
 	{
@@ -46,20 +58,33 @@ void FileDownloader::Do()
 
 		if(QFile::rename(m_filePath, renameTo))
 		{
-			m_file->open(QIODevice::WriteOnly);
+			opened = m_file->open(m_continueDownload ? QIODevice::Append : QIODevice::WriteOnly);
 		}
 	}
 
-	QNetworkRequest request(m_url);
-    m_reply = m_manager->get(request);
+	if(opened)
+	{
+		QNetworkRequest request(m_url);
 
-	connect(m_reply, SIGNAL(finished()), this, SLOT(DownloadFinished()));
-	// Ignore SSL errors
-	connect(m_reply, SIGNAL(sslErrors(QList<QSslError>)), m_reply, SLOT(ignoreSslErrors()));
-	connect(m_reply, SIGNAL(readyRead()), this, SLOT(DownloadReadyRead()));
-	connect(m_reply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(DownloadProgress(qint64,qint64)));
+		if(m_continueDownload)
+		{
+			QString bytesData("bytes=" + QString::number(m_file->size()) + "-");
+			request.setRawHeader("Range", bytesData.toLatin1());
+		}
 
-	m_aborted = false;
+		m_reply = m_manager->get(request);
+		connect(m_reply, SIGNAL(finished()), this, SLOT(DownloadFinished()));
+		// Ignore SSL errors
+		connect(m_reply, SIGNAL(sslErrors(QList<QSslError>)), m_reply, SLOT(ignoreSslErrors()));
+		connect(m_reply, SIGNAL(readyRead()), this, SLOT(DownloadReadyRead()));
+		connect(m_reply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(DownloadProgress(qint64,qint64)));
+
+		m_aborted = false;
+	}
+	else
+	{
+		qDebug() << "Cant open file to write: " << m_filePath << " reason: " << m_file->errorString();
+	}
 }
 
 void FileDownloader::Abort()
@@ -71,13 +96,18 @@ void FileDownloader::Abort()
 		if(m_reply) 
 		{
 			m_reply->abort();
-			m_reply->deleteLater();
 			m_file->remove();
-			m_file->deleteLater();
-			m_reply = NULL;
-			m_file = NULL;
+			Cleanup();
 		}
 	}
+}
+
+void FileDownloader::Cleanup()
+{
+	m_reply->deleteLater();
+	m_file->deleteLater();
+	m_reply = NULL;
+	m_file = NULL;
 }
 
 void FileDownloader::DownloadFinished()
@@ -96,10 +126,7 @@ void FileDownloader::DownloadFinished()
 
 		m_file->flush();
 		m_file->close();
-		m_reply->deleteLater();
-		m_file->deleteLater();
-		m_reply = NULL;
-		m_file = NULL;
+		Cleanup();
 
 		emit Finished(m_filePath);
 	}
@@ -114,10 +141,7 @@ void FileDownloader::DownloadFinished()
 		emit Finished(QString::null);
 
 		m_file->remove();
-		m_reply->deleteLater();
-		m_file->deleteLater();
-		m_reply = NULL;
-		m_file = NULL;
+		Cleanup();
 	}
 
 	if(m_autoDelete)
@@ -139,6 +163,7 @@ void FileDownloader::DownloadReadyRead()
 	{
 		QByteArray bytes = m_reply->readAll();
 		m_file->write(bytes);
+		m_file->flush();
 	}	
 }
 

@@ -19,7 +19,6 @@ Item
 			onClicked: {
 				playStationView.stationName = Name;
 				playStationView.stationMetadata = Url;
-				playStationView.currentStationId = Id;
 				playStationView.isPlaying = true;
 				radioPageView.playRadio(Id);
 			}

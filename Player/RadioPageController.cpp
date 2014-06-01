@@ -9,7 +9,6 @@ namespace mp {
 
 RadioPageController::RadioPageController()
 	:m_view(NULL)
-	,m_audioStream(new AudioStream())
 {
 	ReLoadData();
 
@@ -36,11 +35,14 @@ RadioPageController::RadioPageController()
 							&m_lastStationsProxyModel, &m_searchStationsProxyModel);
 
 	connect(m_view, SIGNAL(PlayRadio(int)), this, SLOT(PlayRadio(int)));
+	connect(m_view, SIGNAL(ResumeRadio()), this, SLOT(ResumeRadio()));
 	connect(m_view, SIGNAL(PauseRadio()), this, SLOT(PauseRadio()));
 	connect(m_view, SIGNAL(VolumeChanged(qreal)), this, SLOT(VolumeChanged(qreal)));
 	connect(m_view, SIGNAL(CategoryChanged(int)), this, SLOT(CategoryChanged(int)));
 	connect(m_view, SIGNAL(SearchFilterChanged(QString)), this, SLOT(SearchFilterChanged(QString)));
-	connect(m_audioStream.data(), SIGNAL(MetadataUpdated(const ChannelMetadata&)), SLOT(MetadataUpdated(const ChannelMetadata&)));
+
+	connect(&m_audioStream, SIGNAL(MetadataUpdated(const ChannelMetadata&)), SLOT(MetadataUpdated(const ChannelMetadata&)) , Qt::DirectConnection );
+	connect(&m_audioStream, SIGNAL(StateChanged(AudioStream::ASState)), SLOT(AudioStreamStateChanged(AudioStream::ASState)), Qt::DirectConnection );
 
 	CategoryChanged(m_categories.First()->Id());
 	m_view->SetVolume(Config::Inst().Volume());
@@ -54,7 +56,7 @@ RadioPageController::~RadioPageController()
 
 bool RadioPageController::IsRadioPlaying()
 {
-	bool playing = m_audioStream->State() == AudioStream::ASPlaying;
+	bool playing = m_audioStream.State() == AudioStream::ASPlaying;
 	return playing;
 }
 
@@ -74,39 +76,42 @@ TabPage* RadioPageController::View()
 
 void RadioPageController::PlayRadio(int id)
 {
-	if(m_audioStream->State() == AudioStream::ASPaused && m_currentChannel->Id() == id)
+	ChannelSourcePtr channel = m_stations.Find(id);
+	if(channel)
 	{
-		m_audioStream->Play(true);
+		m_currentChannel = channel;
+		m_audioStream.Play(channel->Url());
+
+		int newPlayCount = channel->PlayCount() + 1;
+		channel->SetPlayCount(newPlayCount);
+		channel->SetLastPlayNow();
+
+		m_stations.SaveStats(ConfigFilePath("radio.j"));
+
+		m_topStationsProxyModel.invalidate();
+		m_lastStationsProxyModel.invalidate();
 	}
 	else
 	{
-		ChannelSourcePtr channel = m_stations.Find(id);
-		if(channel)
-		{
-			m_currentChannel = channel;
+		qDebug() << "RadioPageController::PlayRadio: station doesn't found, id: \"" << id << "\"";
+	}
+}
 
-			m_audioStream->SetUrl(channel->Url());
-			m_audioStream->Play(false);
-
-			int newPlayCount = channel->PlayCount() + 1;
-			channel->SetPlayCount(newPlayCount);
-			channel->SetLastPlayNow();
-
-			m_stations.SaveStats(ConfigFilePath("radio.j"));
-
-			m_topStationsProxyModel.invalidate();
-			m_lastStationsProxyModel.invalidate();
-		}
-		else
-		{
-			qDebug() << "RadioPageController::PlayRadio: station doesn't found, id: \"" << id << "\"";
-		}
+void RadioPageController::ResumeRadio()
+{
+	if(m_audioStream.State() == AudioStream::ASPaused)
+	{
+		m_audioStream.Resume();
+	}
+	else
+	{
+		m_audioStream.Play(m_currentChannel->Url());
 	}
 }
 
 void RadioPageController::PauseRadio()
 {
-	m_audioStream->Pause();
+	m_audioStream.Pause();
 }
 
 void RadioPageController::VolumeChanged(qreal value)
@@ -126,22 +131,29 @@ void RadioPageController::SearchFilterChanged(QString seasrch)
 	m_searchStationsProxyModel.SetNameFilter(seasrch);
 }
 
-void RadioPageController::UpdateViewState()
+void RadioPageController::MetadataUpdated(const ChannelMetadata& metadata)
 {
-	if(m_audioStream->IsPlaying())
-	{
-		ChannelMetadata metadata;
-		m_audioStream->GetMetaData(metadata);
+	m_view->SetMetadata(metadata.ToString());
+}
 
-		m_view->UpdateMetadata(metadata.ToString());
-		m_view->SetPlayingState(true);
-	}
-	else
+void RadioPageController::AudioStreamStateChanged(AudioStream::ASState newState)
+{
+	switch(newState)
 	{
-		m_view->UpdateMetadata(QString::null);
-		m_view->SetPlayingState(false);
-	}
-	
+		case AudioStream::ASStarting:
+			m_view->SetMetadata(m_currentChannel->Url());
+			m_view->SetPlayingState(true);
+			break;
+		case AudioStream::ASPaused:
+			m_view->SetPlayingState(false);
+			break;
+		case AudioStream::ASPlaying:
+			m_view->SetPlayingState(true);
+			break;
+		case AudioStream::ASStopped:
+			m_view->SetPlayingState(false);
+			break;
+	};
 }
 
 }

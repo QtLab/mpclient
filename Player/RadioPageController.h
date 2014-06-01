@@ -2,8 +2,9 @@
 #define MP_RADIO_PAGE_CONTROLLER_H
 
 #include "Prerequirements.h"
-#include "ChannelSourceModel.h"
+#include "AudioStream.h"
 #include "CategoriesModel.h"
+#include "ChannelSourceModel.h"
 #include "ChannelSourceSortFilterProxyModel.h"
 
 #include <QTimer>
@@ -23,13 +24,15 @@ public:
 	void ReLoadData();
 	TabPage* View();
 
-public slots:
+private slots:
 	void PlayRadio(int id);
+	void ResumeRadio();
 	void PauseRadio();
 	void VolumeChanged(qreal value);
 	void CategoryChanged(int id);
 	void SearchFilterChanged(QString seasrch);
-	void UpdateViewState();
+	void MetadataUpdated(const ChannelMetadata& meta);
+	void AudioStreamStateChanged(AudioStream::ASState newState);
 
 private:
 	// Current playing channel
@@ -45,7 +48,7 @@ private:
 	// Widget view
 	RadioPage*							m_view;
 	// Audio stream manager
-	AudioStreamPtr						m_audioStream;
+	AudioStream							m_audioStream;
 	QTimer								m_updateStateTimer;
 };
 

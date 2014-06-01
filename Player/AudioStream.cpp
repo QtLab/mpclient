@@ -1,9 +1,11 @@
 #include "AudioStream.h"
 #include "ChannelMetadataModel.h"
+#include "ThreadUtils.h"
 #include "Config.h"
 
 #include <QDebug>
 #include <QTextCodec>
+#include <QCoreApplication>
 
 #ifdef Q_OS_WIN32
 	#include <windows.h>
@@ -16,6 +18,9 @@ AudioStream::AudioStream()
 	:m_hStream(0)
 	,m_state(ASStopped)
 {
+	qRegisterMetaType<AudioStream::ASState>("AudioStream::ASState");
+	qRegisterMetaType<HSTREAM>("HSTREAM");
+	
 	if (!BASS_Init(-1,44100, 0, 0, NULL)) 
 	{
 		qDebug() << "BASS_Init: can't initialize device, error code: " << BASS_ErrorGetCode();
@@ -30,6 +35,7 @@ AudioStream::AudioStream()
 	}
 
 	connect(&Config::Inst(), SIGNAL(VolumeChanged(qreal)), SLOT(VolumeChanged(qreal)));
+	connect(&m_streamStarter, SIGNAL(Ready(HSTREAM, int)), SLOT(StreadStarted(HSTREAM, int)), Qt::DirectConnection);
 }
 
 AudioStream::~AudioStream()
@@ -42,66 +48,67 @@ AudioStream::ASState AudioStream::State() const
 	return m_state;
 }
 
-void CALLBACK StatusProc(const void *buffer, DWORD length, void *user)
-{
-}
-
-void AudioStream::SetUrl(const QString& url)
-{
-	Stop();
-	m_currentUrl = url;
-}
-
-QString AudioStream::Url() const
-{
-	return m_currentUrl;
-}
-
 bool AudioStream::IsPlaying() const
 {
 	return m_state == ASPlaying;
 }
 
-void AudioStream::Play(bool resume)
+void AudioStream::Play(const QString& url)
 {
-	if(m_currentUrl.isEmpty())
+	m_streamStarter.SetUrl(url);
+
+	if(!m_streamStarter.IsRunning())
 	{
-		qDebug() << "AudioStreamController::Play cuurrent channel is null!";
-		m_state = ASStopped;
+		EmitStateChanged(AudioStream::ASStarting);
+		CleanupStream();
+		QThreadPool::globalInstance()->start(&m_streamStarter, 0);
 	}
-	else
+}
+
+void AudioStream::StreadStarted(HSTREAM stream, int errorCode)
+{
+	if(ThreadUtils::IsGuiThread())
 	{
-		if(!resume)
+		if(stream != 0 && errorCode == 0)
 		{
-			std::string url = m_currentUrl.toStdString();
-			BASS_StreamFree(m_hStream);
-			m_hStream = BASS_StreamCreateURL(url.c_str(), 0, BASS_STREAM_BLOCK|BASS_STREAM_STATUS|BASS_STREAM_AUTOFREE|BASS_UNICODE, StatusProc, NULL); // open URL
-		}
+			m_hStream = stream;
+			BASS_ChannelSetSync(m_hStream, BASS_SYNC_META, 0, &AudioStream::ProcessMetaCallback, this); // Shoutcast
+			BASS_ChannelSetSync(m_hStream, BASS_SYNC_OGG_CHANGE, 0, &AudioStream::ProcessMetaCallback, this); // Icecast/OGG
+			BASS_ChannelSetSync(m_hStream, BASS_SYNC_STALL | BASS_SYNC_MIXTIME, 0, &AudioStream::ProcessStreamStalled, this);
 
-		VolumeChanged(Config::Inst().Volume());
-
-		if(m_hStream)
-		{
-			BASS_ChannelPlay(m_hStream, FALSE);
-
-			int errCode = BASS_ErrorGetCode();
-
-			if(errCode != 0)
-			{
-				m_state = ASStopped;
-				qDebug() << "AudioStreamController::GetVolume error code: " << errCode;
-			}
-			else
-			{
-				m_state = ASPlaying;
-			}
+			VolumeChanged(Config::Inst().Volume());
+			EmitStateChanged(AudioStream::ASPlaying);
 		}
 		else
 		{
-			m_state = ASStopped;
-			qDebug() << "BASS_StreamCreateURL error code: " << BASS_ErrorGetCode();
+			qDebug() << "AudioStreamController::Play error code: " << errorCode;
+
+			EmitStateChanged(AudioStream::ASStopped);
 		}
 	}
+	else
+	{
+		QMetaObject::invokeMethod(this, "StreadStarted", Qt::QueuedConnection, 
+									Q_ARG(HSTREAM, stream), Q_ARG(int, errorCode));
+	}
+}
+
+void AudioStream::Resume()
+{
+	VolumeChanged(Config::Inst().Volume());
+	BASS_ChannelPlay(m_hStream, TRUE);
+
+	int errCode = BASS_ErrorGetCode();
+
+	ASState newState = ASPlaying;
+
+	if(errCode != 0)
+	{
+		newState = ASStopped;
+		qDebug() << "AudioStreamController::Resume error code: " << errCode;
+	}
+
+	EmitStateChanged(newState);
 }
 
 void AudioStream::Pause()
@@ -112,21 +119,21 @@ void AudioStream::Pause()
 
 		int errCode = BASS_ErrorGetCode();
 
+		ASState newState = ASPaused;
+
 		if(errCode != 0)
 		{
-			m_state = ASStopped;
+			newState = ASStopped;
 			qDebug() << "AudioStreamController::Pause error code: " << errCode;
 		}
-		else
-		{
-			m_state = ASPaused;
-		}
+
+		EmitStateChanged(newState);
 	}
 }
 
 void AudioStream::Stop()
 {
-	BASS_StreamFree(m_hStream);
+	CleanupStream();
 
 	int errCode = BASS_ErrorGetCode();
 
@@ -135,10 +142,29 @@ void AudioStream::Stop()
 		qDebug() << "AudioStreamController::Stop error code: " << errCode;
 	}
 
-	m_hStream = 0;
-	m_currentUrl.clear();
+	EmitStateChanged(ASStopped);
+}
 
-	m_state = ASStopped;
+void AudioStream::VolumeChanged(qreal value)
+{
+	if(m_hStream)
+	{
+		if(!BASS_ChannelSetAttribute(m_hStream, BASS_ATTRIB_VOL, value))
+		{
+			int errCode = BASS_ErrorGetCode();
+
+			if(errCode != 0)
+			{
+				qDebug() << "AudioStreamController::GetVolume error code: " << errCode;
+			}
+		}
+	}
+}
+
+void AudioStream::EmitStateChanged(ASState newState)
+{
+	m_state = newState;
+	emit StateChanged(m_state);
 }
 
 QString ToUnicode(const char * input)
@@ -155,10 +181,12 @@ QString ToUnicode(const char * input)
 	return meta;
 }
 
-void AudioStream::GetMetaData(ChannelMetadata& metadata)
+void AudioStream::ProcessMeta()
 {
 	if(m_hStream)
 	{
+		ChannelMetadata metadata;
+
 		QString meta = ToUnicode(BASS_ChannelGetTags(m_hStream, BASS_TAG_META));
 
 		if (!meta.isEmpty()) 
@@ -177,42 +205,31 @@ void AudioStream::GetMetaData(ChannelMetadata& metadata)
 			if (!meta.isEmpty()) 
 			{
 				//TODO: parse artist, title
-
-				// got Icecast/OGG tags
-				//const char *artist=NULL,*title=NULL,*p=meta;
-				//for (;*p;p+=strlen(p)+1) 
-				//{
-				//	if (!strnicmp(p,"artist=",7)) // found the artist
-				//		artist=p+7;
-				//	if (!strnicmp(p,"title=",6)) // found the title
-				//		title=p+6;
-				//}
-
 				metadata.SetTitle(meta);
 			}
-			else
-			{
-				metadata.SetUrl(m_currentUrl);
-			}
 		}
+
+		emit MetadataUpdated(metadata);
 	}
 }
 
-void AudioStream::VolumeChanged(qreal value)
+void AudioStream::CleanupStream()
 {
-	if(m_hStream)
-	{
-		if(!BASS_ChannelSetAttribute(m_hStream, BASS_ATTRIB_VOL, value))
-		{
-			int errCode = BASS_ErrorGetCode();
+	BASS_StreamFree(m_hStream);
+	m_hStream = 0;
+}
 
-			if(errCode != 0)
-			{
-				qDebug() << "AudioStreamController::GetVolume error code: " << errCode;
-			}
-		}
-	}
+void AudioStream::ProcessMetaCallback(HSYNC handle, DWORD channel, DWORD data, void *user)
+{
+	AudioStream * stream =  reinterpret_cast<AudioStream*>(user);
+	QMetaObject::invokeMethod( stream, "ProcessMeta", Qt::QueuedConnection);
+}
 
+void AudioStream::ProcessStreamStalled(HSYNC handle, DWORD channel, DWORD data, void *user)
+{
+	AudioStream * stream =  reinterpret_cast<AudioStream*>(user);
+	QMetaObject::invokeMethod( stream, "EmitStateChanged", Qt::QueuedConnection,
+							   Q_ARG( AudioStream::ASState, ASStopped ) );
 }
 
 }

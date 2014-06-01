@@ -8,6 +8,7 @@ Rectangle {
 	// signals
 	signal categoryChanged(int id)
 	signal playRadio(int id)
+	signal resumeRadio
 	signal pauseRadio
 	signal searchFilterChanged(string txt);
 	signal volumeChanged(real volume);
@@ -111,6 +112,7 @@ Rectangle {
 	}
 	
 	function setPlayingState(isPlaying) {
+		console.log("isPlaying:", isPlaying);
 		playStationView.isPlaying = isPlaying;
 	}
 	

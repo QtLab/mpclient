@@ -23,6 +23,9 @@ public:
 	// и файл будет сохранен на диск по сигналу полного завершения скачивания
 	FileDownloader(const QUrl& url, const QString& filePath, bool autoDelete = true);
 
+	bool ContinueDownload() const;
+	void SetContinueDownload(bool contiueDownload);
+
 	void SetNetworkAccessManager(QNetworkAccessManager* manager);
 	void SetData0(const QVariant& data) { m_data0 = data; }
 	const QVariant& Data0() { return m_data0; }
@@ -32,8 +35,8 @@ public:
 	void Do();
 	void Abort();
 
-protected:
-	void run() { Do(); }
+private:
+	void Cleanup();
 
 private slots:
 	void DownloadFinished();
@@ -47,6 +50,7 @@ signals:
 	void ProgressChanged(qint64 bytesReceived, qint64 bytesTotal);
 
 private:
+	bool						m_continueDownload;
 	bool						m_aborted;
 	bool						m_autoDelete;
 	QUrl						m_url;

@@ -3,7 +3,6 @@ import QtQuick.Controls 1.1
 
 Rectangle {
 	color: 'red'
-	property int currentStationId: 0;
 	property bool isPlaying: false;
 	property string stationName;
 	property string stationMetadata;
@@ -66,11 +65,8 @@ Rectangle {
 					}
 					else
 					{
-						//radioPageView.updateStateionName
-						radioPageView.playRadio(currentStationId);
+						radioPageView.resumeRadio();
 					}
-					
-					isPlaying = !isPlaying;
 				}
 			}
 		}
@@ -106,6 +102,8 @@ Rectangle {
 	}
 	
 	onIsPlayingChanged: {
+		console.log("onIsPlayingChanged:", isPlaying);
+		
 		if(isPlaying)
 		{
 			playStateIcon.source = "qrc:///mp/Resources/pauseicon.png";

@@ -66,6 +66,7 @@ void FlashUtils::StartDownload()
 	QUrl url("http://download.macromedia.com/get/flashplayer/current/licensing/win/install_flash_player_11_plugin.msi");
 
 	FileDownloader * downloader = new FileDownloader(url, FlashMSIPath());
+	downloader->SetContinueDownload(true);
 	connect(downloader, SIGNAL(Finished(const QString&)), SLOT(Install(const QString&)));
 	connect(downloader, SIGNAL(ProgressChanged(qint64, qint64)), SLOT(DownlaodProgressChanged(qint64, qint64)));
 	downloader->Do();
