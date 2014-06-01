@@ -1,80 +1,84 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="zlib">
-      <UniqueIdentifier>{b3b1e819-abbd-42c3-894d-2d2e6ad32062}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="json">
-      <UniqueIdentifier>{3907f49e-cd3d-4ad7-a48c-2fbf8db56820}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
+    <ClCompile Include="Config.cpp" />
+    <ClCompile Include="FileToUpdate.cpp" />
+    <ClCompile Include="Hash.cpp" />
+    <ClCompile Include="HttpApi.cpp" />
     <ClCompile Include="Loader.cpp" />
-    <ClCompile Include="UI.cpp" />
-    <ClCompile Include="zlib\zip.c">
-      <Filter>zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="zlib\unzip.c">
-      <Filter>zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="zlib\mztools.c">
-      <Filter>zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="zlib\minizip.c">
-      <Filter>zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="zlib\iowin32.c">
-      <Filter>zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="zlib\ioapi.c">
-      <Filter>zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="json\json_writer.cpp">
-      <Filter>json</Filter>
-    </ClCompile>
+    <ClCompile Include="Path.cpp" />
+    <ClCompile Include="StartupParameters.cpp" />
     <ClCompile Include="json\json_value.cpp">
       <Filter>json</Filter>
     </ClCompile>
     <ClCompile Include="json\json_reader.cpp">
       <Filter>json</Filter>
     </ClCompile>
+    <ClCompile Include="json\json_writer.cpp">
+      <Filter>json</Filter>
+    </ClCompile>
+    <ClCompile Include="minzip\ioapi.c">
+      <Filter>minzip</Filter>
+    </ClCompile>
+    <ClCompile Include="minzip\iowin32.c">
+      <Filter>minzip</Filter>
+    </ClCompile>
+    <ClCompile Include="minzip\unzip.c">
+      <Filter>minzip</Filter>
+    </ClCompile>
+    <ClCompile Include="minzip\zip.c">
+      <Filter>minzip</Filter>
+    </ClCompile>
+    <ClCompile Include="Decompress.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="zlib\iowin32.h">
-      <Filter>zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="zlib\ioapi.h">
-      <Filter>zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="zlib\crypt.h">
-      <Filter>zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="zlib\zip.h">
-      <Filter>zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="zlib\unzip.h">
-      <Filter>zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="zlib\mztools.h">
-      <Filter>zlib</Filter>
-    </ClInclude>
+    <ClInclude Include="Config.h" />
+    <ClInclude Include="Context.h" />
+    <ClInclude Include="Defs.h" />
+    <ClInclude Include="FileToUpdate.h" />
+    <ClInclude Include="Hash.h" />
+    <ClInclude Include="HttpApi.h" />
+    <ClInclude Include="Path.h" />
+    <ClInclude Include="StartupParameters.h" />
     <ClInclude Include="json\json_batchallocator.h">
       <Filter>json</Filter>
+    </ClInclude>
+    <ClInclude Include="minzip\crypt.h">
+      <Filter>minzip</Filter>
+    </ClInclude>
+    <ClInclude Include="minzip\ioapi.h">
+      <Filter>minzip</Filter>
+    </ClInclude>
+    <ClInclude Include="minzip\iowin32.h">
+      <Filter>minzip</Filter>
+    </ClInclude>
+    <ClInclude Include="minzip\mztools.h">
+      <Filter>minzip</Filter>
+    </ClInclude>
+    <ClInclude Include="minzip\unzip.h">
+      <Filter>minzip</Filter>
+    </ClInclude>
+    <ClInclude Include="minzip\zip.h">
+      <Filter>minzip</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="json\json_internalarray.inl">
       <Filter>json</Filter>
     </None>
-    <None Include="json\json_valueiterator.inl">
-      <Filter>json</Filter>
-    </None>
     <None Include="json\json_internalmap.inl">
       <Filter>json</Filter>
     </None>
+    <None Include="json\json_valueiterator.inl">
+      <Filter>json</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="minzip">
+      <UniqueIdentifier>{c148c325-6f18-4c46-9c6d-3e2567fab8d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="json">
+      <UniqueIdentifier>{13b2350f-232e-4d4d-ac29-346b75b73bf9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

@@ -11,24 +11,23 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{DED1D91F-F5D6-4EF9-AB8D-2AE4662434B7}</ProjectGuid>
+    <ProjectGuid>{6750839E-77E4-4235-B029-709186D1D337}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Loader</RootNamespace>
-    <ProjectName>Loader</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -52,71 +51,76 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeaderFile>
-      </PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>
-      </PrecompiledHeaderOutputFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)Common;$(SolutionDir)Dependencies\zlib;$(ProjectDir)zlib</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile />
+      <PrecompiledHeaderOutputFile />
+      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\zlib;$(ProjectDir)minzip;$(ProjectDir)json</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <OutputFile>$(SolutionDir)bin\$(ConfigurationName)\$(ProjectName).exe</OutputFile>
       <ProgramDatabaseFile>$(SolutionDir)bin\pdb\$(ConfigurationName)\$(ProjectName).pdb</ProgramDatabaseFile>
-      <AdditionalDependencies>Wininet.lib;Common_d.lib;zlib-static-mt-debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(SolutionDir)bin\$(ConfigurationName)\$(ProjectName).exe</OutputFile>
       <AdditionalLibraryDirectories>$(SolutionDir)libs;$(SolutionDir)Dependencies\zlib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Wininet.lib;Dbghelp.lib;zlib-static-mt-debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <Optimization>MinSpace</Optimization>
+      <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeaderFile />
+      <PrecompiledHeaderOutputFile />
+      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\zlib;$(ProjectDir)minzip;$(ProjectDir)json</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <PrecompiledHeaderFile>
-      </PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>
-      </PrecompiledHeaderOutputFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)Common;$(SolutionDir)Dependencies\zlib;$(ProjectDir)zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <OutputFile>$(SolutionDir)bin\$(ConfigurationName)\$(ProjectName).exe</OutputFile>
       <ProgramDatabaseFile>$(SolutionDir)bin\pdb\$(ConfigurationName)\$(ProjectName).pdb</ProgramDatabaseFile>
-      <AdditionalDependencies>Wininet.lib;Common.lib;zlib-static-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(SolutionDir)bin\$(ConfigurationName)\$(ProjectName).exe</OutputFile>
       <AdditionalLibraryDirectories>$(SolutionDir)libs;$(SolutionDir)Dependencies\zlib</AdditionalLibraryDirectories>
-      <IgnoreSpecificDefaultLibraries>
-      </IgnoreSpecificDefaultLibraries>
-      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
+      <AdditionalDependencies>Wininet.lib;zlib-static-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Config.cpp" />
+    <ClCompile Include="FileToUpdate.cpp" />
+    <ClCompile Include="Hash.cpp" />
+    <ClCompile Include="HttpApi.cpp" />
     <ClCompile Include="json\json_reader.cpp" />
     <ClCompile Include="json\json_value.cpp" />
     <ClCompile Include="json\json_writer.cpp" />
     <ClCompile Include="Loader.cpp" />
-    <ClCompile Include="UI.cpp" />
-    <ClCompile Include="zlib\ioapi.c" />
-    <ClCompile Include="zlib\iowin32.c" />
-    <ClCompile Include="zlib\minizip.c" />
-    <ClCompile Include="zlib\mztools.c" />
-    <ClCompile Include="zlib\unzip.c" />
-    <ClCompile Include="zlib\zip.c" />
+    <ClCompile Include="minzip\ioapi.c" />
+    <ClCompile Include="minzip\iowin32.c" />
+    <ClCompile Include="minzip\unzip.c" />
+    <ClCompile Include="minzip\zip.c" />
+    <ClCompile Include="Path.cpp" />
+    <ClCompile Include="StartupParameters.cpp" />
+    <ClCompile Include="Decompress.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Config.h" />
+    <ClInclude Include="Context.h" />
+    <ClInclude Include="Defs.h" />
+    <ClInclude Include="FileToUpdate.h" />
+    <ClInclude Include="Hash.h" />
+    <ClInclude Include="HttpApi.h" />
     <ClInclude Include="json\json_batchallocator.h" />
-    <ClInclude Include="zlib\crypt.h" />
-    <ClInclude Include="zlib\ioapi.h" />
-    <ClInclude Include="zlib\iowin32.h" />
-    <ClInclude Include="zlib\mztools.h" />
-    <ClInclude Include="zlib\unzip.h" />
-    <ClInclude Include="zlib\zip.h" />
+    <ClInclude Include="minzip\crypt.h" />
+    <ClInclude Include="minzip\ioapi.h" />
+    <ClInclude Include="minzip\iowin32.h" />
+    <ClInclude Include="minzip\mztools.h" />
+    <ClInclude Include="minzip\unzip.h" />
+    <ClInclude Include="minzip\zip.h" />
+    <ClInclude Include="Path.h" />
+    <ClInclude Include="StartupParameters.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="json\json_internalarray.inl" />
