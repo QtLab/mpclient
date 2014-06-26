@@ -8,15 +8,13 @@ namespace mp {
 
 class ChannelMetadata;
 
-// Play http radio stations, or local file
-// "file://c:\\1.mp3" - path for play lcoal file
-
 class AudioStream : public QObject
 {
 	Q_OBJECT
 
 public:
 	Q_ENUMS(ASState)
+
 	enum ASState
 	{
 		ASStarting,
@@ -25,26 +23,33 @@ public:
 		ASStopped
 	};
 
-	AudioStream();
+	AudioStream(const  QString& streamName);
 	virtual ~AudioStream();
 
+	static void InitGlobal();
+
+	ASState RefreshState();
 	ASState State() const;
+	const QString& Name() const;
 
 	bool IsPlaying() const;
 	void Play(const QString& url);
 	void Resume();
 	void Pause();
 	void Stop();
+	long GetCurrentPos() const;
+	long GetLength() const;
+	void SetCurrentPos(long currentPos);
 
 private:
-	static void __stdcall ProcessMetaCallback(HSYNC handle, DWORD channel, DWORD data, void *user); 
-	static void __stdcall ProcessStreamStalled(HSYNC handle, DWORD channel, DWORD data, void *user); 
-
+	static void CALLBACK ProcessMetaCallback(HSYNC handle, DWORD channel, DWORD data, void *user); 
+	static void CALLBACK ProcessStreamStalled(HSYNC handle, DWORD channel, DWORD data, void *user);
+	
 private slots:
 	void EmitStateChanged(AudioStream::ASState newState);
 	void ProcessMeta();
 	void CleanupStream();
-	void VolumeChanged(qreal value);
+	void VolumeChanged(qreal value, const QString& streamName);
 	void StreadStarted(HSTREAM stream, int errorCode);
 
 signals:
@@ -53,6 +58,7 @@ signals:
 	void StreamSarted(HSTREAM stream, int errorCode);
 
 private:
+	QString								m_streamName;
 	// Async stream starter
 	AudioStreamAsyncStarter				m_streamStarter;
 	// Current state

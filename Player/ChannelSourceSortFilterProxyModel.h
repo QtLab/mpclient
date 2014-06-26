@@ -4,6 +4,7 @@
 #include <QSortFilterProxyModel>
 
 namespace mp {
+namespace model {
 
 class ChannelSourceSortFilterProxyModel : public QSortFilterProxyModel
 {
@@ -43,8 +44,9 @@ private:
 	SortT			m_sortBy;
 };
 
-}
+} //End namespace model
+} //End namespace mp
 
-Q_DECLARE_METATYPE(mp::ChannelSourceSortFilterProxyModel);
+Q_DECLARE_METATYPE(mp::model::ChannelSourceSortFilterProxyModel);
 
 #endif

@@ -1,5 +1,5 @@
 #include "FlashUtils.h"
-#include "FileDownloader.h"
+#include "DownlaodManager.h"
 #include "Path.h"
 
 #include <QProcess>
@@ -63,21 +63,22 @@ void FlashUtils::PageLoaded(bool ok)
 
 void FlashUtils::StartDownload()
 {
-	QUrl url("http://download.macromedia.com/get/flashplayer/current/licensing/win/install_flash_player_11_plugin.msi");
+	m_flashMsiPath = Path::FlashMSI();
 
-	FileDownloader * downloader = new FileDownloader(url, FlashMSIPath());
-	downloader->SetContinueDownload(true);
-	connect(downloader, SIGNAL(Finished(const QString&)), SLOT(Install(const QString&)));
-	connect(downloader, SIGNAL(ProgressChanged(qint64, qint64)), SLOT(DownlaodProgressChanged(qint64, qint64)));
-	downloader->Do();
+	QString url("http://download.macromedia.com/get/flashplayer/current/licensing/win/install_flash_player_11_plugin.msi");
+
+	DownlaodManager::Global().DownloadFile(url, m_flashMsiPath, 
+										true, QVariant(),
+										this, SLOT(Install()),
+										this, SLOT(DownlaodProgressChanged(qint64, qint64)));
 }
 
-void FlashUtils::Install(const QString& path)
+void FlashUtils::Install()
 {
 	static const QString silentCmdTemplate("msiexec.exe /qn /norestart /i \"%0\" /L installflash.log");
 	static const QString cmdTemplate("msiexec.exe /norestart /i \"%0\" /L installflash.log");
 	
-	QString cmd = m_silent ? silentCmdTemplate.arg(path) : cmdTemplate.arg(path);
+	QString cmd = m_silent ? silentCmdTemplate.arg(m_flashMsiPath) : cmdTemplate.arg(m_flashMsiPath);
 
 	qDebug() << "Start process with arguments: "<< cmd;
 
@@ -97,7 +98,7 @@ void FlashUtils::InstallaFinished(int exitCode, QProcess::ExitStatus exitStatus)
 		if(m_silent)
 		{
 			m_silent = false;
-			Install(FlashMSIPath());
+			Install();
 		}
 	}
 	else

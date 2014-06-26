@@ -24,7 +24,7 @@ SingleApplication::SingleApplication(int &argc, char *argv[], const QString uniq
 
 		// create local server and listen to incomming messages from other instances.
 		m_localServer = new QLocalServer(this);
-		connect(m_localServer, SIGNAL(newConnection()), this, SLOT(ReceiveMessage()));
+		connect(m_localServer, SIGNAL(newConnection()), this, SLOT(ReceiveMessageFromAnotherInstance()));
 		m_localServer->listen(m_uniqueKey);
 	}
 }
@@ -33,7 +33,7 @@ SingleApplication::~SingleApplication()
 {
 }
 
-void SingleApplication::ReceiveMessage()
+void SingleApplication::ReceiveMessageFromAnotherInstance()
 {
 	QLocalSocket *localSocket = m_localServer->nextPendingConnection();
 	if (!localSocket->waitForReadyRead(timeout))
@@ -55,7 +55,7 @@ bool SingleApplication::IsRunningAnotherInstance()
 	return m_isRunning;
 }
 
-bool SingleApplication::SendMessage(const QString &message)
+bool SingleApplication::SendMessageToAnotherInstance(const QString &message)
 {
 	if (!m_isRunning)
 		return false;

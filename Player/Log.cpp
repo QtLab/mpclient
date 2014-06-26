@@ -3,8 +3,11 @@
 #include <QDir>
 #include <QFile>
 #include <QDateTime>
-
 #include <QTextStream>
+
+#ifdef Q_OS_WIN32
+#include <Windows.h>
+#endif
 
 #include <iostream>
 
@@ -41,6 +44,11 @@ void Log(QtMsgType type, const QMessageLogContext &, const QString & msg)
 		QTextStream ts(&outFile);
 		ts << logMessage << endl;
 	}
+
+#ifdef Q_OS_WIN32
+	OutputDebugString(logMessage.utf16());
+#endif
+	
 }
 
 }

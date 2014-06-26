@@ -6,6 +6,8 @@ Rectangle {
 	border.color : '#888481'
 	border.width : 1
 	
+	property string filter: "";
+	
 	TextField {
 		id: searchField
 		anchors {
@@ -27,6 +29,7 @@ Rectangle {
 		font.pixelSize: 10
 		font.family: openSansLight.name
 		width: 10;
+		text: parent.filter;
 		placeholderText: "Поиск"
 	}
 	

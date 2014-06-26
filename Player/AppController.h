@@ -5,6 +5,7 @@
 #include "SingleApplication.h"
 
 namespace mp {
+namespace controller {
 
 class AppController : public SingleApplication
 {
@@ -15,7 +16,8 @@ public:
 	~AppController();
 
 	void SetLang(const QString& lang);
-	void CreateView();
+	void CreateChildControllers();
+	void CreateView(bool silent);
 	void InitSignalsSlots();
 
 	static AppController& Inst();
@@ -25,30 +27,29 @@ private slots:
 	void UpdateStarted();
 	void UpdateFinished(bool restartRequired);
 	void UserIdleStateChanged(bool isIdle);
-	void CurrentTabChanged(int tabIndex);
+	void CurrentPageChanged(view::TabPage * newPages, view::TabPage * oldPage);
 	void FlashInstalled();
+	void SearchTracks(QString filter);
 
 private:
 	void HandleMssageFromAnotherInst(const QString& message);
 	bool notify(QObject* receiver, QEvent* even);
 
 private:
-	MainWindow *				m_mainWidow;
-	SystemTray *				m_trayIcon;
+	view::MainWindow *			m_mainWidow;
+	view::SystemTray *			m_trayIcon;
 
-	RadioPageController *		m_radioPageController;
-	int							m_radioPageIndex;
-
-	TVPageController *			m_tvPageController;
-	int							m_tvPageIndex;
+	// Page controllers
+	IPageControllerPtr			m_radioPageController;
+	IPageControllerPtr			m_playerPageController;
+	IPageControllerPtr			m_tvPageController;
 
 	UpdateController *			m_updateController;
-
 	PluginManager * 			m_pluginManager;
-
 	UserIdle *					m_userIdle;
 };
 
+}
 }
 
 #endif

@@ -7,8 +7,8 @@
 #include <QHash>
 #include <QDebug>
 
-
 namespace mp {
+namespace model {
 
 static const QString PlayerExeName(PLAYER_APP_EXE);
 static const QString FileNameKey("N");
@@ -184,4 +184,5 @@ QHash<int, QByteArray> UpdateModel::roleNames() const
 	return roles;
 }
 
-}
+} //End namespace model
+} //End namespace mp

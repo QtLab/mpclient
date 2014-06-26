@@ -5,6 +5,7 @@
 #include <QEvent>
 
 namespace mp {
+namespace view {
 
 class SystemTrayContextMenu : public QMenu
 {
@@ -23,6 +24,7 @@ signals:
 	void CloseApplication();
 };
 
+}
 }
 
 #endif //MP_POPUP_MENU_H

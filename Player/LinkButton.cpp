@@ -1,6 +1,8 @@
 #include "LinkButton.h"
 
 namespace  mp {
+namespace view {
+
 LinkButton::LinkButton(QWidget *parent, const QString& name) 
 	: QLabel(parent)
 {
@@ -28,5 +30,7 @@ void LinkButton::mouseReleaseEvent(QMouseEvent *e)
 	{
 		emit clicked();
 	}
+}
+
 }
 }

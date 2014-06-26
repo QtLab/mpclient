@@ -3,10 +3,13 @@
 
 #include <QObject>
 #include <QMap>
+#include <QSharedPointer>
 
 namespace mp {
 
 class Plugin;
+typedef QSharedPointer<Plugin> PluginPtr;
+
 class PluginManager : public QObject
 {
 	Q_OBJECT
@@ -28,12 +31,12 @@ public:
 	void UnloadAllPlugins();
 	
 private:
-	Plugin * CreatePlugin(const QString& pluginName);
-	Plugin * GetPlugin(const QString& pluginName) const;
+	PluginPtr CreatePlugin(const QString& pluginName);
+	PluginPtr GetPlugin(const QString& pluginName) const;
 	void Cleanup();	
 
 private:
-	typedef			QMap<QString, Plugin *>	PluginsMap;
+	typedef			QMap<QString, PluginPtr>	PluginsMap;
 	PluginsMap		m_pluginsMap;
 };
 

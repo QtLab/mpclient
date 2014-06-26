@@ -6,31 +6,29 @@
 #include "Path.h"
 
 namespace mp {
+namespace controller {
 
 RadioPageController::RadioPageController()
 	:m_view(NULL)
+	,m_audioStream("radio")
 {
 	ReLoadData();
 
-	m_updateStateTimer.setInterval(2000); // 2 sec
-	connect(&m_updateStateTimer, SIGNAL(timeout()), SLOT(UpdateViewState()));
-	m_updateStateTimer.start();
-
 	m_allStationsProxyModel.setSourceModel(&m_stations);
-	m_allStationsProxyModel.SetSortType(ChannelSourceSortFilterProxyModel::ByName);
+	m_allStationsProxyModel.SetSortType(model::ChannelSourceSortFilterProxyModel::ByName);
 	m_lastStationsProxyModel.sort(0);
 
 	m_lastStationsProxyModel.setSourceModel(&m_stations);
-	m_lastStationsProxyModel.SetSortType(ChannelSourceSortFilterProxyModel::ByLastPlayTime);
+	m_lastStationsProxyModel.SetSortType(model::ChannelSourceSortFilterProxyModel::ByLastPlayTime);
 	m_lastStationsProxyModel.sort(0);
 
 	m_topStationsProxyModel.setSourceModel(&m_stations);
-	m_topStationsProxyModel.SetSortType(ChannelSourceSortFilterProxyModel::ByTop);
+	m_topStationsProxyModel.SetSortType(model::ChannelSourceSortFilterProxyModel::ByTop);
 	m_topStationsProxyModel.sort(0);
 
 	m_searchStationsProxyModel.setSourceModel(&m_stations);
 
-	m_view = new RadioPage(NULL, &m_categories, 
+	m_view = new view::RadioPage(NULL, &m_categories, 
 							&m_allStationsProxyModel, &m_topStationsProxyModel, 
 							&m_lastStationsProxyModel, &m_searchStationsProxyModel);
 
@@ -40,24 +38,33 @@ RadioPageController::RadioPageController()
 	connect(m_view, SIGNAL(VolumeChanged(qreal)), this, SLOT(VolumeChanged(qreal)));
 	connect(m_view, SIGNAL(CategoryChanged(int)), this, SLOT(CategoryChanged(int)));
 	connect(m_view, SIGNAL(SearchFilterChanged(QString)), this, SLOT(SearchFilterChanged(QString)));
+	connect(m_view, SIGNAL(SearchTracks(QString)), this, SIGNAL(SearchTracks(QString)));
 
-	connect(&m_audioStream, SIGNAL(MetadataUpdated(const ChannelMetadata&)), SLOT(MetadataUpdated(const ChannelMetadata&)) , Qt::DirectConnection );
-	connect(&m_audioStream, SIGNAL(StateChanged(AudioStream::ASState)), SLOT(AudioStreamStateChanged(AudioStream::ASState)), Qt::DirectConnection );
+	connect(&m_audioStream, SIGNAL(MetadataUpdated(const ChannelMetadata&)), SLOT(MetadataUpdated(const ChannelMetadata&)));
+	connect(&m_audioStream, SIGNAL(StateChanged(AudioStream::ASState)), SLOT(AudioStreamStateChanged(AudioStream::ASState)));
 
-	CategoryChanged(m_categories.First()->Id());
-	m_view->SetVolume(Config::Inst().Volume());
+	m_currentCategory = m_categories.First();
+
+	if(!m_currentCategory.isNull())
+	{
+		SetCategoryFilter(m_currentCategory->Id());
+		m_view->SetCategory(m_currentCategory->Id());
+	}
+
+	m_view->SetVolume(Config::Inst().Volume(m_audioStream.Name()));
 
 	qDebug() << "Radio widget created";
 }
 
-RadioPageController::~RadioPageController()
-{
-}
-
-bool RadioPageController::IsRadioPlaying()
+bool RadioPageController::IsActive() const
 {
 	bool playing = m_audioStream.State() == AudioStream::ASPlaying;
 	return playing;
+}
+
+view::TabPage* RadioPageController::View() const
+{
+	return m_view;
 }
 
 void RadioPageController::ReLoadData()
@@ -65,18 +72,39 @@ void RadioPageController::ReLoadData()
 	m_categories.Cleanup();
 	m_stations.Cleanup();
 
-	m_categories.Load(ConfigFilePath("radiocatygories.j"));
-	m_stations.LoadWithStats(ConfigFilePath("radio.j"));
+	m_categories.Load(Path::ConfigFile("radiocatygories.j"));
+	m_stations.LoadWithStats(Path::ConfigFile("radio.j"));
+
+	if(!m_currentCategory.isNull())
+	{
+		m_view->SetCategory(m_currentCategory->Id());
+		SetCategoryFilter(m_currentCategory->Id());
+	}
 }
 
-TabPage* RadioPageController::View()
+void RadioPageController::Search(const QString& filter)
 {
-	return m_view;
+}
+
+void RadioPageController::Stop()
+{
+	m_audioStream.Stop();
+}
+
+void RadioPageController::SetCategoryFilter(int categoryId)
+{
+	m_allStationsProxyModel.SetCategoryIdFilter(categoryId);
+	m_lastStationsProxyModel.SetCategoryIdFilter(categoryId);
+	m_topStationsProxyModel.SetCategoryIdFilter(categoryId);
+
+	m_allStationsProxyModel.invalidate();
+	m_lastStationsProxyModel.invalidate();
+	m_topStationsProxyModel.invalidate();
 }
 
 void RadioPageController::PlayRadio(int id)
 {
-	ChannelSourcePtr channel = m_stations.Find(id);
+	model::ChannelSourcePtr channel = m_stations.Find(id);
 	if(channel)
 	{
 		m_currentChannel = channel;
@@ -86,7 +114,7 @@ void RadioPageController::PlayRadio(int id)
 		channel->SetPlayCount(newPlayCount);
 		channel->SetLastPlayNow();
 
-		m_stations.SaveStats(ConfigFilePath("radio.j"));
+		m_stations.SaveStats(Path::ConfigFile("radio.j"));
 
 		m_topStationsProxyModel.invalidate();
 		m_lastStationsProxyModel.invalidate();
@@ -105,7 +133,15 @@ void RadioPageController::ResumeRadio()
 	}
 	else
 	{
-		m_audioStream.Play(m_currentChannel->Url());
+		if(m_currentChannel.isNull())
+		{
+			m_currentChannel = m_stations.Random();
+		}
+
+		if(!m_currentChannel.isNull())
+		{
+			m_audioStream.Play(m_currentChannel->Url());
+		}
 	}
 }
 
@@ -116,19 +152,18 @@ void RadioPageController::PauseRadio()
 
 void RadioPageController::VolumeChanged(qreal value)
 {
-	Config::Inst().SetVolume(value);
+	Config::Inst().SetVolume(value, m_audioStream.Name());
 }
 
 void RadioPageController::CategoryChanged(int id)
 {
-	m_allStationsProxyModel.SetCategoryIdFilter(id);
-	m_lastStationsProxyModel.SetCategoryIdFilter(id);
-	m_topStationsProxyModel.SetCategoryIdFilter(id);
+	m_currentCategory = m_categories.FindById(id);
+	SetCategoryFilter(id);
 }
 
-void RadioPageController::SearchFilterChanged(QString seasrch)
+void RadioPageController::SearchFilterChanged(QString filter)
 {
-	m_searchStationsProxyModel.SetNameFilter(seasrch);
+	m_searchStationsProxyModel.SetNameFilter(filter);
 }
 
 void RadioPageController::MetadataUpdated(const ChannelMetadata& metadata)
@@ -138,17 +173,23 @@ void RadioPageController::MetadataUpdated(const ChannelMetadata& metadata)
 
 void RadioPageController::AudioStreamStateChanged(AudioStream::ASState newState)
 {
+	if(!m_currentChannel.isNull())
+	{
+		m_view->SetPlayStationName(m_currentChannel->Name());
+	}
+
 	switch(newState)
 	{
 		case AudioStream::ASStarting:
 			m_view->SetMetadata(m_currentChannel->Url());
 			m_view->SetPlayingState(true);
 			break;
+		case AudioStream::ASPlaying:
+			m_view->SetMetadata(QString::null);
+			m_view->SetPlayingState(true);
+			break;
 		case AudioStream::ASPaused:
 			m_view->SetPlayingState(false);
-			break;
-		case AudioStream::ASPlaying:
-			m_view->SetPlayingState(true);
 			break;
 		case AudioStream::ASStopped:
 			m_view->SetPlayingState(false);
@@ -156,4 +197,5 @@ void RadioPageController::AudioStreamStateChanged(AudioStream::ASState newState)
 	};
 }
 
+}
 }

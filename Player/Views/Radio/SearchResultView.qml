@@ -82,4 +82,8 @@ Rectangle {
 		model: searchStationsModel
 		delegate: searchResultDelegate
 	}
+	
+	VerticalScrollBar {
+		flickable: searchResultGrid
+	}
 }

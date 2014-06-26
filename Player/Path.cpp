@@ -1,3 +1,5 @@
+#include "Path.h"
+#include "Config.h"
 #include "Log.h"
 
 #include <QDir>
@@ -9,7 +11,12 @@
 
 namespace mp {
 
-QString QmlFilePath(const QString& fileName)
+bool Path::Exists(const QString& path)
+{
+	return QFile::exists(path);
+}
+
+QString Path::QmlFile(const QString& fileName)
 {
 	QString path;
 	QDir dir = QDir::current();
@@ -21,7 +28,7 @@ QString QmlFilePath(const QString& fileName)
 	return path;
 }
 
-QString CssFilePath(const QString& fileName)
+QString Path::CssFile(const QString& fileName)
 {
 	QDir dir = QDir::current();
 	if(dir.cd("styles"))
@@ -33,7 +40,7 @@ QString CssFilePath(const QString& fileName)
 	return QString();
 }
 
-QString HtmlilePath(const QString& fileName)
+QString Path::HtmlFile(const QString& fileName)
 {
 	QDir dir = QDir::current();
 	if(dir.cd("html"))
@@ -45,7 +52,7 @@ QString HtmlilePath(const QString& fileName)
 	return QString();
 }
 
-QString ConfigFilePath(const QString& fileName)
+QString Path::ConfigFile(const QString& fileName)
 {
 	QDir dir = QDir::current();
 
@@ -58,7 +65,7 @@ QString ConfigFilePath(const QString& fileName)
 	return QString();
 }
 
-QString HttpCachePath()
+QString Path::HttpCache()
 {
 	QDir dir = QDir::current();
 
@@ -72,7 +79,7 @@ QString HttpCachePath()
 	return absoluteDirPath;
 }
 
-QString FlashMSIPath()
+QString Path::FlashMSI()
 {
 	QString path = QDir::current().filePath("flashinstaller.msi");
 	path.replace("/", "\\");
@@ -85,17 +92,34 @@ QString FlashMSIPath()
 	const QString LibExtension(".dynlib");
 #endif
 
-QString PluginPath(const QString& name)
+QString Path::PluginFile(const QString& name)
 {
 	QDir dir = QDir::current();
 
-	if(!dir.cd("plugins"))
+	if(dir.cd("plugins"))
 	{
 		QString path = dir.filePath(name + LibExtension);
 		return path;
 	}
 
 	return QString::null;
+}
+
+QString Path::TrackFile(const QString& trackName)
+{
+	QString fileName = trackName;
+	fileName.replace("/", "").replace("/", "");
+	fileName = fileName.mid(0, 20) + ".mp3";
+
+	QDir dir(Config::Inst().PathToSaveTracks());
+
+	if(!dir.cd("plugins"))
+	{
+		dir.mkpath(".");
+	}
+
+	QString path = dir.filePath(fileName);
+	return path;
 }
 
 }

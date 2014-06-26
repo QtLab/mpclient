@@ -1,18 +1,11 @@
 #ifndef MP_TITLE_BAR_WIDGET_H
 #define MP_TITLE_BAR_WIDGET_H
 
+#include "Prerequirements.h"
 #include <QWidget>
-#include <QLabel>
-
-QT_BEGIN_NAMESPACE
-class QHBoxLayout;
-class QMouseEvent;
-QT_END_NAMESPACE
 
 namespace mp {
-
-class ChannelMetadata;
-class LinkButton;
+namespace view {
 
 class Titlebar : public QWidget
 {
@@ -42,6 +35,7 @@ private:
 	LinkButton *					m_closeLnk;
 };
 
+}
 }
 
 #endif // MP_TITLE_BAR_WIDGET_H

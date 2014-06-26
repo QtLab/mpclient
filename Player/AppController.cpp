@@ -1,25 +1,20 @@
 #include "AppController.h"
 #include "Common.h"
 #include "UpdateController.h"
-#include "RadioPageController.h"
-#include "TVPageController.h"
+#include "IPageController.h"
 #include "PluginManager.h"
 #include "UserIdle.h"
 #include "Config.h"
-#include "CommandLine.h"
 #include "MainWindow.h"
 #include "SystemTray.h"
+#include "TabPage.h"
 #include <QMessageBox>
 
 namespace mp {
+namespace controller {
 
 AppController::AppController(int argc, char *argv[])
 	:SingleApplication(argc, argv, "{5D8D9A8F-31A1-49E7-B730-E8396556366A}")
-	,m_radioPageController(new RadioPageController())
-	,m_tvPageController(new TVPageController())
-	,m_updateController(new UpdateController())
-	,m_pluginManager(new PluginManager())
-	,m_userIdle(new UserIdle())
 {
 	QDir::setCurrent(QCoreApplication::applicationDirPath());
 }
@@ -35,27 +30,34 @@ void AppController::SetLang(const QString& lang)
 	bool loaded = translator->load(lang, ":/mp/Translations");
 	if(loaded)
 	{
-		installTranslator(translator);
+		qDebug() << "AppController::SetLang:" << lang << " result: " << installTranslator(translator);
 	}
 }
 
-void AppController::CreateView()
+void AppController::CreateChildControllers()
 {
-	SetLang("ru");
+	m_radioPageController = CreatePageController("radio");
+	m_playerPageController = CreatePageController("palyer");
+	m_tvPageController = CreatePageController("tv");
+	m_updateController = new UpdateController();
+	m_pluginManager = new PluginManager();
+	m_userIdle = new UserIdle();
+}
 
-	m_mainWidow = new MainWindow();
+void AppController::CreateView(bool silent)
+{
+	m_mainWidow = new view::MainWindow();
 
-	m_trayIcon = new SystemTray(m_mainWidow);
+	m_trayIcon = new view::SystemTray(m_mainWidow);
 	m_trayIcon->show();
 
-	m_radioPageIndex = m_mainWidow->AddTab(m_radioPageController->View());
-	m_tvPageIndex = m_mainWidow->AddTab(m_tvPageController->View());
-	
-	CurrentTabChanged(m_radioPageIndex);
+	m_mainWidow->AddTab(m_radioPageController->View());
+	m_mainWidow->AddTab(m_playerPageController->View());
+	m_mainWidow->AddTab(m_tvPageController->View());
 
-	CommandLine cmd;
+	CurrentPageChanged(m_radioPageController->View(), NULL);
 
-	if(cmd.IsSilent())
+	if(silent)
 	{
 		m_mainWidow->hide();
 	}
@@ -71,13 +73,11 @@ void AppController::InitSignalsSlots()
 {
 	connect(m_trayIcon, SIGNAL(ShowtdownApplicationReuest()), SLOT(Showtdown()));
 	connect(m_trayIcon, SIGNAL(UpdateReuest()), SLOT(UpdateStarted()));
-	 
+	connect(m_radioPageController, SIGNAL(SearchTracks(QString)), this, SLOT(SearchTracks(QString)));
+	connect(m_tvPageController, SIGNAL(FlashInstalled()), SLOT(FlashInstalled()));
 	connect(m_updateController, SIGNAL(UpdateFinished(bool)), SLOT(UpdateFinished(bool)));
 	connect(m_userIdle, SIGNAL(IdleStateChanged(bool)), SLOT(UserIdleStateChanged(bool)));
-
-	connect(m_mainWidow, SIGNAL(CurrentTabChanged(int)), SLOT(CurrentTabChanged(int)));
-
-	connect(m_tvPageController, SIGNAL(FlashInstalled()), SLOT(FlashInstalled()));
+	connect(m_mainWidow, SIGNAL(CurrentPageChanged(view::TabPage *, view::TabPage *)), SLOT(CurrentPageChanged(view::TabPage *, view::TabPage *)));
 }
 
 AppController& AppController::Inst()
@@ -97,11 +97,9 @@ void AppController::Showtdown(int exitCode)
 
 	if(exitCode != 0)
 	{
-#ifdef Q_OS_WIN32
-#ifndef _DEBUG
-		QString cmd = QString("Launcher.exe%0").arg(m_mainWidow->isHidden() ? QString(" /S") : QString::null);
+#if defined(Q_OS_WIN32) && !defined(_DEBUG)
+		QString cmd = QString(QString(LAUCNHER_APP_EXE) + "%0").arg(m_mainWidow->isHidden() ? QString(" /S") : QString::null);
 		QProcess::startDetached(cmd);
-#endif
 #endif
 	}
 
@@ -143,7 +141,10 @@ void AppController::UserIdleStateChanged(bool isIdle)
 {
 	if(isIdle)
 	{
-		if(m_mainWidow->isHidden() && !m_radioPageController->IsRadioPlaying())
+		if(m_mainWidow->isHidden() 
+			&& !m_radioPageController->IsActive() 
+			&& !m_playerPageController->IsActive()
+			&& !m_tvPageController->IsActive())
 		{
 			m_pluginManager->StartUserIdlePlugin();
 		}
@@ -154,19 +155,17 @@ void AppController::UserIdleStateChanged(bool isIdle)
 	}
 }
 
-void AppController::CurrentTabChanged(int tabIndex)
+void AppController::CurrentPageChanged(view::TabPage * newPage, view::TabPage * previewsPage)
 {
-	if(tabIndex == m_radioPageIndex)
+	if(previewsPage)
 	{
-		Config::Inst().SetTVTabWindowSize(m_mainWidow->Size());
-
-		m_mainWidow->SetSize(Config::Inst().RadioTabWindowSize());
-		m_mainWidow->SetResizable(false);
+		previewsPage->SaveSize(m_mainWidow->Size());
 	}
-	else
+
+	if(newPage)
 	{
-		m_mainWidow->SetSize(Config::Inst().TVTabWindowSize());
-		m_mainWidow->SetResizable(true);
+		m_mainWidow->SetSize(newPage->RestoreSize());
+		m_mainWidow->SetResizable(newPage->Resizable());
 	}
 }
 
@@ -183,6 +182,12 @@ void AppController::FlashInstalled()
 	}
 }
 
+void AppController::SearchTracks(QString filter)
+{
+	m_playerPageController->Search(filter);
+	m_mainWidow->SetCurrentTabIndex(m_playerPageController->View()->TabIndex());
+}
+
 void AppController::HandleMssageFromAnotherInst(const QString& message)
 {
 	if(message.compare("show") == 0)
@@ -194,10 +199,10 @@ void AppController::HandleMssageFromAnotherInst(const QString& message)
 	}
 }
 
-void NotifyErrorLog(const char* eventName, QObject* receiver)
+void NotifyErrorLog(QObject* receiver, QEvent* even)
 {
 	qDebug("Error <unknown> sending event %s to object %s (%s)", 
-		eventName, qPrintable(receiver->objectName()), typeid(*receiver).name());
+		typeid(*even).name(), qPrintable(receiver->objectName()), typeid(*receiver).name());
 }
 
 bool AppController::notify(QObject* receiver, QEvent* even)
@@ -209,7 +214,7 @@ bool AppController::notify(QObject* receiver, QEvent* even)
 	}
 	__except (EXCEPTION_EXECUTE_HANDLER)
 	{
-		NotifyErrorLog(typeid(*even).name(), receiver);
+		NotifyErrorLog(receiver, even);
 	}
 #else
 	try
@@ -225,4 +230,5 @@ bool AppController::notify(QObject* receiver, QEvent* even)
 	return false;
 }
 
+}
 }

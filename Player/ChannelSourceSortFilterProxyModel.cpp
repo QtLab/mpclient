@@ -2,6 +2,7 @@
 #include "ChannelSourceModel.h"
 
 namespace mp {
+namespace model {
 
 ChannelSourceSortFilterProxyModel::ChannelSourceSortFilterProxyModel(QObject *parent)
 	: QSortFilterProxyModel(parent)
@@ -18,11 +19,7 @@ int ChannelSourceSortFilterProxyModel::CategoryIdFilter() const
 
 void ChannelSourceSortFilterProxyModel::SetCategoryIdFilter(int categoryId)
 {
-	if(m_categoryIdFilter != categoryId)
-	{
-		m_categoryIdFilter = categoryId;
-		invalidateFilter();
-	}
+	m_categoryIdFilter = categoryId;
 }
 
 const QString& ChannelSourceSortFilterProxyModel::NameFilter() const
@@ -112,4 +109,5 @@ bool ChannelSourceSortFilterProxyModel::lessThan(const QModelIndex &left, const 
 	};
 }
 
-}
+} //End namespace model
+} //End namespace mp

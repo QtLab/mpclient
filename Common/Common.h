@@ -35,14 +35,13 @@ namespace cmn {
 
 #endif
 
-#define VERSION				0.1
-
-#define PLAYER_APP_EXE		STR"Player.exe"
-#define LAODER_APP_EXE		STR"Loader.exe"
-//#define DEFAULT_HOST		STR"127.0.0.1"
-#define DEFAULT_HOST		STR"109.120.163.35"
-#define CONFIG_DIR			STR"loader"
-#define PATH_SEPARATOR		STR"\\"
+#define PLAYER_APP_EXE			STR"UboxPlayer.exe"
+#define LAODER_APP_EXE			STR"UboxLoader.exe"
+#define LAUCNHER_APP_EXE		STR"UboxLauncher.exe"
+#define DEFAULT_HOST			STR"127.0.0.1"
+//#define DEFAULT_HOST			STR"109.120.163.35"
+#define CONFIG_DIR				STR"UboxData"
+#define PATH_SEPARATOR			STR"\\"
 
 const int DEFAULT_EXIT_CODE						= 0x0;
 const int UPDATE_EXIT_CODE						= 0xBDE32;

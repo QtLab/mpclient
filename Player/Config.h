@@ -18,17 +18,22 @@ public:
 	QString UserId() const;
 	QString Source() const;
 
+	QString Version() const;
+	void SetVersion(const QString& version);
+
 	const QFont& DefaultFont() const;
 
-	void SetVolume(qreal value);
-	qreal Volume() const;
+	void SetVolume(qreal value, const QString& streamName);
+	qreal Volume(const QString& streamName) const;
 
-	void SetTVTabWindowSize(const QSize& size);
-	QSize TVTabWindowSize() const;
-	QSize RadioTabWindowSize() const;
+	QSize TabSize(const QString& name, const QSize& defaultSize = QSize(580, 351)) const;
+	void SetTabSize(const QString& name, const QSize& size);
+
+	QString PathToSaveTracks() const;
+	void SetPathToSaveTracks(const QString& path);
 
 signals:
-	void VolumeChanged(qreal value);
+	void VolumeChanged(qreal value, const QString& streamName);
 
 private:
 	void Load();

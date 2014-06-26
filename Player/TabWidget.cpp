@@ -4,6 +4,7 @@
 #include <QEvent>
 
 namespace mp {
+namespace view {
 
 TabWidget::TabWidget(QWidget * parent, const QString& name, const QString& tabBarName)
 	:QTabWidget(parent)
@@ -22,6 +23,8 @@ int TabWidget::AddPage(TabPage * page)
 {
 	int index = addTab(page, page->Name());
 	m_pages.insert(index, page);
+
+	page->SetTabIndex(index);
 
 	return index;
 }
@@ -54,20 +57,25 @@ void TabWidget::changeEvent(QEvent *event)
 
 void TabWidget::CurretntTabIndexChanged(int newIdnex)
 {
+	TabPage * oldPage = NULL;
+
 	if(m_lastCurrentTabIndex >= 0)
 	{
-		TabPage * page = PageAtIndex(m_lastCurrentTabIndex);
+		 oldPage = PageAtIndex(m_lastCurrentTabIndex);
 
-		if(page)
-			page->Leave();
+		if(oldPage)
+			oldPage->Leave();
 	}
 
-	TabPage * page = PageAtIndex(newIdnex);
+	TabPage * newPage = PageAtIndex(newIdnex);
 
-	if(page)
-		page->Enter();
+	if(newPage)
+		newPage->Enter();
+
+	emit CurrentPageChanged(newPage, oldPage);
 
 	m_lastCurrentTabIndex = newIdnex;
 }
 
+}
 }

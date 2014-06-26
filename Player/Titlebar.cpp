@@ -11,6 +11,7 @@
 #include <QCoreApplication>
 
 namespace mp {
+namespace view {
 
 Titlebar::Titlebar(QWidget *parent)
 	: m_parent( parent )
@@ -82,4 +83,5 @@ void Titlebar::MetadataUpdated(const ChannelMetadata& metadata)
 	m_logo->setText(metadata.ToString());
 }
 
+}
 }

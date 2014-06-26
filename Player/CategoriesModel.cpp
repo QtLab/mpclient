@@ -8,6 +8,7 @@
 #include <QMetaProperty>
 
 namespace mp {
+namespace model {
 
 Category::Category()
 {
@@ -43,11 +44,6 @@ CategoriesModel::CategoriesModel()
 
 CategoriesModel::~CategoriesModel() 
 {
-}
-
-CategoryPtr CategoriesModel::First() const
-{
-	return m_items.first();
 }
 
 int CategoriesModel::RowIndexById(int id) const
@@ -115,4 +111,5 @@ QHash<int, QByteArray>	CategoriesModel::roleNames() const
 	return roles;
 }
 
-}
+} //End namespace model
+} //End namespace mp

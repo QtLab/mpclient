@@ -6,18 +6,20 @@
 
 namespace mp {
 
+#define TEST_IDLE_TIMEOUT
+
 UserIdle::UserIdle()
 	:m_completed(false)
 	,m_lastIdleState(false)
 
 #ifdef TEST_IDLE_TIMEOUT
-	,m_userIdleTimeout(10 * 60) // 10 minutes
-#else
 	,m_userIdleTimeout(10) // 10 seconds
+#else
+	,m_userIdleTimeout(10 * 60) // 10 minutes
 #endif
 {
 	m_userIdleTimer.setSingleShot(true);
-	m_userIdleTimer.setInterval(1000); // 1 sec
+	m_userIdleTimer.setInterval(500); // 0.5 sec
 	connect(&m_userIdleTimer, SIGNAL(timeout()), SLOT(ProcessIdleInput()));
 	m_userIdleTimer.start();
 }

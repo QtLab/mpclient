@@ -58,6 +58,11 @@ public:
 		return false;
 	}
 
+	bool IsLoaded() const
+	{
+		bool loaded = m_library.isLoaded();
+		return loaded;
+	}
 private:
 	QLibrary	m_library;
 };
@@ -88,7 +93,7 @@ void PluginManager::StartUserIdlePlugin()
 
 void PluginManager::StopUserIdlePlugin()
 {
-	Plugin* plugin = GetPlugin(UserIdlePluginName);
+	PluginPtr plugin = GetPlugin(UserIdlePluginName);
 
 	if(plugin)
 	{
@@ -108,7 +113,7 @@ void PluginManager::StartShowtdownPlugin()
 
 bool PluginManager::AnyLongRunningPluginStarted() const
 {
-	Plugin* plugin = GetPlugin(UserIdlePluginName);
+	PluginPtr plugin = GetPlugin(UserIdlePluginName);
 
 	if(plugin)
 	{
@@ -123,20 +128,24 @@ void PluginManager::UnloadAllPlugins()
 	Cleanup();
 }
 
-Plugin * PluginManager::CreatePlugin(const QString& pluginName)
+PluginPtr PluginManager::CreatePlugin(const QString& pluginName)
 {
-	Plugin * plugin = GetPlugin(pluginName);
+	PluginPtr plugin = GetPlugin(pluginName);
 
 	if(plugin == NULL)
 	{
-		plugin = new Plugin(PluginPath(pluginName));
-		m_pluginsMap.insert(pluginName, plugin);
+		plugin = PluginPtr(new Plugin(Path::PluginFile(pluginName)));
+
+		if(plugin->IsLoaded())
+		{
+			m_pluginsMap.insert(pluginName, plugin);
+		}
 	}
 
 	return plugin;
 }
 
-Plugin * PluginManager::GetPlugin(const QString& pluginName) const
+PluginPtr PluginManager::GetPlugin(const QString& pluginName) const
 {
 	PluginsMap::const_iterator i = m_pluginsMap.find(pluginName);
 
@@ -145,21 +154,12 @@ Plugin * PluginManager::GetPlugin(const QString& pluginName) const
 		return i.value();
 	}
 
-	return NULL;
+	return PluginPtr();
 }
 
 void PluginManager::Cleanup()
 {
-	QList<Plugin*> plugins = m_pluginsMap.values();
-
 	m_pluginsMap.clear();
-
-	QListIterator<Plugin*> i(plugins);
-	while (i.hasNext())
-	{
-		Plugin * plugin = i.next();
-		delete plugin;
-	}
 }
 
 }

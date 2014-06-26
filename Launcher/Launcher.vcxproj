@@ -59,7 +59,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(SolutionDir)bin\pdb\$(ConfigurationName)\$(ProjectName).pdb</ProgramDatabaseFile>
-      <OutputFile>$(SolutionDir)bin\$(ConfigurationName)\$(ProjectName).exe</OutputFile>
+      <OutputFile>$(SolutionDir)bin\$(ConfigurationName)\UboxLauncher.exe</OutputFile>
       <AdditionalLibraryDirectories>$(SolutionDir)libs;$(SolutionDir)Dependencies\zlib</AdditionalLibraryDirectories>
       <AdditionalDependencies>Wininet.lib;Dbghelp.lib;zlib-static-mt-debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
@@ -83,7 +83,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <ProgramDatabaseFile>$(SolutionDir)bin\pdb\$(ConfigurationName)\$(ProjectName).pdb</ProgramDatabaseFile>
-      <OutputFile>$(SolutionDir)bin\$(ConfigurationName)\$(ProjectName).exe</OutputFile>
+      <OutputFile>$(SolutionDir)bin\$(ConfigurationName)\UboxLauncher.exe</OutputFile>
       <AdditionalLibraryDirectories>$(SolutionDir)libs;$(SolutionDir)Dependencies\zlib</AdditionalLibraryDirectories>
       <AdditionalDependencies>Wininet.lib;zlib-static-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>

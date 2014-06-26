@@ -66,8 +66,7 @@ void RunLoader()
 	{
 		std::cout << "User id doesn't found, register new user" << std::endl;
 
-		std::string userId = ctx.Api.CreateNewUser(ctx.StartupParams.IsInstall() ? 
-											ctx.StartupParams.Source() : ctx.Cfg.Source());
+		std::string userId = ctx.Api.CreateNewUser();
 
 		if(!userId.empty())
 		{
@@ -75,15 +74,10 @@ void RunLoader()
 			ctx.Cfg.SetUserId(userId);
 		}
 	}
-	else
-	{
-		if(ctx.StartupParams.IsInstall())
-		{
-			std::cout << "Update user id: " << ctx.Cfg.UserId() << " with source: " <<  ctx.StartupParams.Source() << std::endl;
 
-			ctx.Cfg.SetSource(ctx.StartupParams.Source());
-			ctx.Api.UpdateUser(ctx.Cfg.UserId(), ctx.Cfg.Source());
-		}
+	if(ctx.StartupParams.IsInstall())
+	{
+		ctx.Cfg.SetSource(ctx.StartupParams.Source());
 	}
 
 	if(ctx.StartupParams.IsInstall() || !ctx.Cfg.InstallSuccessfull())

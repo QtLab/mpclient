@@ -4,9 +4,10 @@
 #include "Path.h"
 
 namespace mp {
+namespace controller {
 
 TVPageController::TVPageController()
-	:m_view(new TVPage(NULL, ChannelSourceModelPtr()))
+	:m_view(new view::TVPage(NULL, model::ChannelSourceModelPtr()))
 {
 	ReLoadData();
 
@@ -18,13 +19,28 @@ TVPageController::~TVPageController()
 	
 }
 
-void TVPageController::ReLoadData()
+bool TVPageController::IsActive() const
 {
+	return false;
 }
 
-TabPage* TVPageController::View()
+view::TabPage* TVPageController::View() const
 {
 	return m_view;
 }
 
+void TVPageController::ReLoadData()
+{
+}
+
+void TVPageController::Search(const QString& filter)
+{
+}
+
+void TVPageController::Stop()
+{
+}
+
+
+}
 }

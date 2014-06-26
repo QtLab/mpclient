@@ -25,7 +25,6 @@ Rectangle {
 	}
 	
 	StyledText  {
-		id: stationNameView
 		text: parent.stationName
 		width: centralIcon.width
 		color: '#7A7673'
@@ -35,6 +34,14 @@ Rectangle {
 			bottomMargin: 18
 			bottom: centralIcon.top
 			left: centralIcon.left
+		}
+		
+		MouseArea  {
+			anchors.fill: parent
+			cursorShape: Qt.PointingHandCursor
+			onClicked:  {
+				radioPageView.searchTracks(parent.text);
+			}
 		}
 	}
  
@@ -88,7 +95,6 @@ Rectangle {
 	}
 	
 	StyledText  {
-		id: stationMetadataView
 		text: parent.stationMetadata
 		width: 220
 		color: '#71C5EA'
@@ -98,6 +104,14 @@ Rectangle {
 			topMargin: 18
 			top: centralIcon.bottom
 			left: centralIcon.left
+		}
+		
+		MouseArea  {
+			anchors.fill: parent
+			cursorShape: Qt.PointingHandCursor
+			onClicked:  {
+				radioPageView.searchTracks(parent.text);
+			}
 		}
 	}
 	

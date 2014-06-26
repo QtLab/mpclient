@@ -1,11 +1,12 @@
 #ifndef MP_TV_PAGE_CONTROLLER_H
 #define MP_TV_PAGE_CONTROLLER_H
 
-#include "Prerequirements.h"
+#include "IPageController.h"
 
 namespace mp {
+namespace controller {
 
-class TVPageController : public QObject
+class TVPageController : public IPageController
 {
 	Q_OBJECT
 
@@ -13,17 +14,21 @@ public:
 	TVPageController();
 	~TVPageController();
 
+	bool IsActive() const;
+	view::TabPage* View() const;
 	void ReLoadData();
-	TabPage* View();
+	void Search(const QString& filter);
+	void Stop();
 
 signals:
 	void FlashInstalled();
 
 private:
 	// Widget view
-	TabPagePtr							m_view;
+	view::TabPagePtr		m_view;
 };
 
+}
 }
 
 #endif

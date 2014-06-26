@@ -75,7 +75,7 @@ void FileDownloader::Do()
 		m_reply = m_manager->get(request);
 		connect(m_reply, SIGNAL(finished()), this, SLOT(DownloadFinished()));
 		// Ignore SSL errors
-		connect(m_reply, SIGNAL(sslErrors(QList<QSslError>)), m_reply, SLOT(ignoreSslErrors()));
+		m_reply->ignoreSslErrors();
 		connect(m_reply, SIGNAL(readyRead()), this, SLOT(DownloadReadyRead()));
 		connect(m_reply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(DownloadProgress(qint64,qint64)));
 
@@ -84,6 +84,8 @@ void FileDownloader::Do()
 	else
 	{
 		qDebug() << "Cant open file to write: " << m_filePath << " reason: " << m_file->errorString();
+		m_errorString =  m_file->errorString();
+		emit Finished();
 	}
 }
 
@@ -128,7 +130,7 @@ void FileDownloader::DownloadFinished()
 		m_file->close();
 		Cleanup();
 
-		emit Finished(m_filePath);
+		emit Finished();
 	}
 	else
 	{
@@ -137,11 +139,11 @@ void FileDownloader::DownloadFinished()
 			<< " error: " << m_reply->errorString() 
 			<< " downloaded bytes: " << fileSize;
 
-		emit Error(m_reply->errorString());
-		emit Finished(QString::null);
-
 		m_file->remove();
 		Cleanup();
+
+		m_errorString = m_reply->errorString();
+		emit Finished();
 	}
 
 	if(m_autoDelete)

@@ -4,6 +4,7 @@
 #include <QEvent>
 
 namespace mp {
+namespace view {
 
 TabPage::TabPage(QWidget* parent)
 	:QWidget(parent)
@@ -44,4 +45,15 @@ QMargins TabPage::Margins()
 	return QMargins(1, 0, 1, 0);
 }
 
+int TabPage::TabIndex() const
+{
+	return m_tabIndex;
+}
+
+void TabPage::SetTabIndex(int index)
+{
+	m_tabIndex = index;
+}
+
+}
 }

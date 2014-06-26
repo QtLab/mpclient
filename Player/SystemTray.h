@@ -6,6 +6,7 @@
 class QMainWindow;
 
 namespace mp {
+namespace view {
 
 class SystemTray : public QSystemTrayIcon
 {
@@ -25,6 +26,7 @@ private:
 	QMainWindow *		m_parent;
 };
 
+}
 }
 
 #endif // MP_SYSTEM_TRAY_H

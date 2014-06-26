@@ -11,6 +11,7 @@ Rectangle {
 	signal resumeRadio
 	signal pauseRadio
 	signal searchFilterChanged(string txt);
+	signal searchTracks(string txt);
 	signal volumeChanged(real volume);
 	
 	CategoriesView {
@@ -72,7 +73,7 @@ Rectangle {
 			height: parent.height
 			model: allStationsModel
 			anchors {
-				topMargin: 30
+				topMargin: 15
 				right: parent.right
 				top: parent.top
 			}
@@ -111,9 +112,14 @@ Rectangle {
 		hideSearchResults();
 	}
 	
+	function setPlayStationName(name) {
+		playStationView.stationName = name;
+		console.log("playStationView.stationName", playStationView.stationName);
+	}
+	
 	function setPlayingState(isPlaying) {
-		console.log("isPlaying:", isPlaying);
 		playStationView.isPlaying = isPlaying;
+		console.log("setPlayingState:", isPlaying);
 	}
 	
 	function updateMetadata(metaData) {
@@ -134,6 +140,8 @@ Rectangle {
 		searchResultView.visible = false;
 	}
 
-	
+	function setCategory(id) {
+		categoriesView.setCategory(id);
+	}
 
 }

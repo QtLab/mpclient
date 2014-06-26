@@ -5,14 +5,20 @@
 
 namespace mp {
 
-QString QmlFilePath(const QString& fileName);
-QString CssFilePath(const QString& fileName);
-QString HtmlilePath(const QString& fileName);
-QString ConfigFilePath(const QString& fileName);
-QString HttpCachePath();
-QString FlashMSIPath();
-// Name - without extension
-QString PluginPath(const QString& name);
+class Path
+{
+public:
+	static bool Exists(const QString& path);
+	static QString QmlFile(const QString& fileName);
+	static QString CssFile(const QString& fileName);
+	static QString HtmlFile(const QString& fileName);
+	static QString ConfigFile(const QString& fileName);
+	static QString HttpCache();
+	static QString FlashMSI();
+	// Name - without extension
+	static QString PluginFile(const QString& name);
+	static QString TrackFile(const QString& trackName);
+};
 
 }
 

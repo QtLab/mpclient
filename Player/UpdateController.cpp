@@ -1,12 +1,14 @@
 #include "UpdateController.h"
 #include "DownlaodManager.h"
 #include "UpdateModel.h"
-#include "MPRequest.h"
+#include "UrlBuilder.h"
+#include "Config.h"
 
 #include <QDebug>
 #include <QtNetwork/QNetworkReply>
 
 namespace mp {
+namespace controller {
 
 const int DefualtUpdateInterval = 1000 * 60 * 60 * 5; //5 h
 const int ParallelFilesUpdating = 4;
@@ -30,11 +32,11 @@ void UpdateController::CheckForUpdate()
 #ifndef _DEBUG
 	if(!InProcess())
 	{
-		MPRequest request = MPRequest::CreateUpdateRequest();
+		QUrl url = UrlBuilder::CreateUpdate(Config::Inst().UserId());
 
-		qDebug() << "Download update json: " << request.Url().toString();
+		qDebug() << "Download update json from: " << url.toString();
 
-		m_networkAccess.Get(request, this, SLOT(ProcessUpdateList()));
+		DownlaodManager::Global().Get(url, this, SLOT(ProcessUpdateList()));
 	}
 	else
 	{
@@ -56,12 +58,10 @@ void UpdateController::ProcessUpdateList()
 	else
 	{
 		Cleanup();
-
-		qDebug() << "Update started, RequirePlayerUpdate is:: " << m_updateModel.RequirePlayerUpdate();
 		
 		m_updateModel.ParseJson(reply->readAll());
 
-		qDebug() << "Update mode parsing, RequirePlayerUpdate is: " << m_updateModel.RequirePlayerUpdate();
+		qDebug() << "Processed update models, RequirePlayerUpdate is: " << m_updateModel.RequirePlayerUpdate();
 
 		while(m_updateModel.rowCount() > 0 && m_filesInProcess < ParallelFilesUpdating)
 		{
@@ -79,27 +79,32 @@ void UpdateController::ProcessUpdateList()
 	reply->deleteLater();
 }
 
-void UpdateController::FileDownloaded(const QString& path)
+void UpdateController::FileDownloaded()
 {
-	m_filesInProcess--;
-
-	if(!ProcessNextFile())
+	if(m_filesInProcess > 0 && !ProcessNextFile())
 	{
 		qDebug() << "Update finished, RequirePlayerUpdate is: " << m_updateModel.RequirePlayerUpdate();
 
 		emit UpdateFinished(m_updateModel.RequirePlayerUpdate());
 		Cleanup();
 	}
+	else
+	{
+		m_filesInProcess--;
+	}
 }
 
 bool UpdateController::ProcessNextFile()
 {
-	FileToUpdatePtr fileToUpdate = m_updateModel.PopBack();
+	model::FileToUpdatePtr fileToUpdate = m_updateModel.PopBack();
 
 	if(!fileToUpdate.isNull())
 	{
 		QString filePath = fileToUpdate->FullPath();
-		m_networkAccess.DownloadFile(fileToUpdate->Url(), filePath, this, SLOT(FileDownloaded(const QString&)));
+
+		DownlaodManager::Global().DownloadFile(fileToUpdate->Url(), filePath, 
+									false, QVariant(), 
+									this, SLOT(FileDownloaded()));
 		m_filesInProcess++;
 		return true;
 	}
@@ -113,4 +118,5 @@ void UpdateController::Cleanup()
 	m_updateModel.Cleanup();
 }
 
+}
 }

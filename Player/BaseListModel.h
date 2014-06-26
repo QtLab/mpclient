@@ -17,12 +17,15 @@
 #include "FileUtils.h"
 
 namespace mp {
+namespace model {
 
 template<typename T>
 class BaseListModel : public QAbstractListModel
 {
 public:
-	typedef QSet<QString> PropertiesSet;
+	typedef QSet<QString>		PropertiesSet;
+	typedef QSharedPointer<T>	ItemType;
+	typedef QList<ItemType>		ItemList;
 
 	BaseListModel(){}
 	virtual ~BaseListModel(){}
@@ -134,6 +137,11 @@ public:
 		}
 	}
 	
+	virtual void EmitDataChanged()
+	{
+		emit dataChanged(createIndex(0,0),createIndex(m_items.size(),0));
+	}
+
 	virtual void Cleanup()
 	{
 		beginResetModel();
@@ -141,13 +149,40 @@ public:
 		endResetModel();
 	}
 
-protected:
-	typedef QSharedPointer<T>	ItemType;
-	typedef QList<ItemType>		ItemList;
+	ItemType First() const
+	{
+		if(m_items.count() > 0)
+			return m_items.first();
 
+		return ItemType();
+	}
+
+	ItemType Random() const
+	{
+		if(m_items.count() > 0)
+		{
+			int max = m_items.count() - 1;
+
+			int min = 0;
+
+			int index =  qrand() % ((max + 1) - min) + min;
+
+			return m_items[index];
+		}
+
+		return ItemType();
+	}
+
+	virtual int rowCount(const QModelIndex &parent = QModelIndex()) const
+	{
+		return m_items.count();
+	}
+
+protected:
 	ItemList					m_items;
 };
 
-}
+} //End namespace model
+} //End namespace mp
 
 #endif

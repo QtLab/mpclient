@@ -23,7 +23,7 @@ public:
 private slots:
 	void PageLoaded(bool ok); 
 	void StartDownload();
-	void Install(const QString& path);
+	void Install();
 	void InstallaFinished(int exitCode, QProcess::ExitStatus exitStatus);
 	void DownlaodProgressChanged(qint64 bytesReceived, qint64 bytesTotal);
 
@@ -33,6 +33,7 @@ signals:
 	void FlashInstalled(bool success);
 
 private:
+	QString				m_flashMsiPath;
 	bool				m_silent;
 	QProcess *			m_process;
 

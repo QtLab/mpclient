@@ -22,7 +22,7 @@ signals:
     void Ready(HSTREAM stream, int errorCode);
 
 private:
-	mutable QMutex			m_mutex;
+	QMutex					m_mutex;
 	volatile bool			m_running;
 	QString					m_url;
 };

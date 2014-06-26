@@ -15,10 +15,10 @@ public:
 	virtual ~SingleApplication();
 
 	bool IsRunningAnotherInstance();
-	bool SendMessage(const QString &message);
+	bool SendMessageToAnotherInstance(const QString &message);
 
 public slots:
-	void ReceiveMessage();
+	void ReceiveMessageFromAnotherInstance();
 
 protected:
 	virtual void HandleMssageFromAnotherInst(const QString& message) = 0;

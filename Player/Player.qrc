@@ -17,5 +17,15 @@
         <file>Resources/CheckFlashInstalled.html</file>
         <file>Resources/flashlogo.png</file>
         <file>Resources/FlashInstall.html</file>
+        <file>Resources/playnexticon.png</file>
+        <file>Resources/playprevicon.png</file>
+        <file>Resources/arrow_left.png</file>
+        <file>Resources/arrow_right.png</file>
+        <file>Resources/ajax-loader.gif</file>
+        <file>Resources/addtofavorits.png</file>
+        <file>Resources/favoritesremove.png</file>
+        <file>Resources/w128h1281338911586folder.png</file>
+        <file>Resources/w128h1281338911632musicfolder.png</file>
+        <file>Resources/w128h1281338911632mu.png</file>
     </qresource>
 </RCC>

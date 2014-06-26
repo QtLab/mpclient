@@ -14,9 +14,14 @@ Rectangle {
 		id: channelsList
 		height: 195
 		width: 130
-		clip: false
+		clip: true
 		delegate: channelDelegate
 		model: parent.model;
+		maximumFlickVelocity: 900;
+	}
+	
+	VerticalScrollBar  {
+		flickable: channelsList;
 	}
 }
 

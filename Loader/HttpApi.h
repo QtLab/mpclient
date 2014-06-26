@@ -12,8 +12,7 @@ class HttpApi
 public:
 	HttpApi();
 	String Domain() const;
-	String CreateNewUser(const String& source);
-	void UpdateUser(const String& guid, const String& source);
+	String CreateNewUser();
 	bool GetUpdateInfo(const String& userId, FilesToUpdate& filesToUpdate);
 	bool GetPakageInfo(const String& userId, FileToUpdate& pakage);
 	bool DownloadFile(FileToUpdatePtr fileToDownlaod);

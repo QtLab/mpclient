@@ -5,6 +5,7 @@
 #include "Prerequirements.h"
 
 namespace mp {
+namespace model {
 
 class FileToUpdate : public QObject
 {
@@ -53,13 +54,11 @@ public:
 	FileToUpdatePtr PopBack();
 	bool RequirePlayerUpdate() const;
 	void Cleanup();
+	void ParseJson(const QByteArray& json);
 
 	QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 	int rowCount(const QModelIndex &parent = QModelIndex()) const;
 	QHash<int, QByteArray>	roleNames() const;
-
-private:
-	void ParseJson(const QByteArray& json);
 
 private:
 	bool	m_requirePlayerUpdate;
@@ -68,6 +67,7 @@ private:
 	Q_DISABLE_COPY(UpdateModel)
 };
 
-}
+} //End namespace model
+} //End namespace mp
 
 #endif

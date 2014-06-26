@@ -2,7 +2,7 @@
 #include "Process.h"
 #include "Path.h"
 #include "StartupParameters.h"
-
+#include "SingleMutexHandle.h"
 #include <Windows.h>
 #include <tchar.h>
 
@@ -16,6 +16,7 @@ int main()
 {
 	try
 	{
+		cmn::Process::Terminate(LAUCNHER_APP_EXE);
 		cmn::Path::SetupCurrentDirectoryPath();
 		RunLauncher();
 	}
@@ -36,6 +37,8 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 {
 	try
 	{
+
+		cmn::Process::Terminate(LAUCNHER_APP_EXE);
 		cmn::Path::SetupCurrentDirectoryPath();
 
 		std::ofstream out("launcher.log", std::ofstream::out | std::ofstream::app);
@@ -55,13 +58,6 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 
 void RunLauncher()
 {
-	HANDLE hSingleInstanceMutexHandle = CreateMutex( NULL, TRUE, "{7A7D49E8-5DB8-4173-B9B0-3BB6190BBACE}" );
-	if( ERROR_ALREADY_EXISTS == GetLastError())
-	{
-		std::cout << "Launcher process already exists..." << std::endl;
-		return;
-	}
-
 	try
 	{
 		cmn::StartupParameters startupParams;
@@ -82,15 +78,9 @@ void RunLauncher()
 
 			RunPlayer(startupParams);
 		}
-
-		ReleaseMutex( hSingleInstanceMutexHandle ); // Explicitly release mutex
-		CloseHandle( hSingleInstanceMutexHandle ); // close handle before terminating
 	}
 	catch(std::exception& ex)
 	{
-		ReleaseMutex( hSingleInstanceMutexHandle ); // Explicitly release mutex
-		CloseHandle( hSingleInstanceMutexHandle ); // close handle before terminating
-
 		throw ex;
 	}
 }
@@ -101,7 +91,7 @@ void RunLoader(const cmn::StartupParameters& startupParams)
 
 	if(!startupParams.Source().empty())
 	{
-		args = cmn::String("/source:") + startupParams.Source();
+		args = cmn::String(STR"/source:") + startupParams.Source();
 	}
 
 	cmn::Process laoderProcess(LAODER_APP_EXE, args);
@@ -124,10 +114,22 @@ void RunPlayer(const cmn::StartupParameters& startupParams)
 	int exitCode = 0;
 
 	bool silentMode = startupParams.IsSilent();
+	bool isInstall = startupParams.IsInstall();
 
 	do
 	{
-		cmn::String args = silentMode ? "-s" : cmn::String();
+		cmn::String args;
+		
+		if(silentMode)
+		{
+			args += STR"-s";
+		}
+
+		if(isInstall)
+		{
+			args += STR" -i";
+		}
+
 		cmn::Process process(PLAYER_APP_EXE, args);
 
 		if(process.Exists())

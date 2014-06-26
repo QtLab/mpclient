@@ -1,28 +1,30 @@
 #ifndef MP_RADIO_PAGE_CONTROLLER_H
 #define MP_RADIO_PAGE_CONTROLLER_H
 
-#include "Prerequirements.h"
+#include "IPageController.h"
 #include "AudioStream.h"
 #include "CategoriesModel.h"
 #include "ChannelSourceModel.h"
 #include "ChannelSourceSortFilterProxyModel.h"
 
-#include <QTimer>
-
 namespace mp {
+namespace controller {
 
-class RadioPageController : public QObject
+class RadioPageController : public IPageController
 {
 	Q_OBJECT
 
 public:	
 	RadioPageController();
-	~RadioPageController();
 
-	bool IsRadioPlaying();
-
+	bool IsActive() const;
+	view::TabPage* View() const;
 	void ReLoadData();
-	TabPage* View();
+	void Search(const QString& filter);
+	void Stop();
+
+private:
+	void SetCategoryFilter(int categoryId);
 
 private slots:
 	void PlayRadio(int id);
@@ -33,25 +35,29 @@ private slots:
 	void SearchFilterChanged(QString seasrch);
 	void MetadataUpdated(const ChannelMetadata& meta);
 	void AudioStreamStateChanged(AudioStream::ASState newState);
+	
+signals:
+	void SearchTracks(QString filter);
 
 private:
 	// Current playing channel
-	ChannelSourcePtr					m_currentChannel;
+	model::ChannelSourcePtr						m_currentChannel;
+	model::CategoryPtr							m_currentCategory;
 	// Model for all stations channnels
-	ChannelSourceModel					m_stations;
-	ChannelSourceSortFilterProxyModel	m_searchStationsProxyModel;
-	ChannelSourceSortFilterProxyModel	m_allStationsProxyModel;
-	ChannelSourceSortFilterProxyModel	m_topStationsProxyModel;
-	ChannelSourceSortFilterProxyModel	m_lastStationsProxyModel;
+	model::ChannelSourceModel					m_stations;
+	model::ChannelSourceSortFilterProxyModel	m_searchStationsProxyModel;
+	model::ChannelSourceSortFilterProxyModel	m_allStationsProxyModel;
+	model::ChannelSourceSortFilterProxyModel	m_topStationsProxyModel;
+	model::ChannelSourceSortFilterProxyModel	m_lastStationsProxyModel;
 	// All genres
-	CategoriesModel						m_categories;
+	model::CategoriesModel						m_categories;
 	// Widget view
-	RadioPage*							m_view;
+	view::RadioPage*							m_view;
 	// Audio stream manager
-	AudioStream							m_audioStream;
-	QTimer								m_updateStateTimer;
+	AudioStream									m_audioStream;
 };
 
+}
 }
 
 #endif

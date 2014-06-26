@@ -5,6 +5,7 @@
 #include <QMouseEvent>
 
 namespace mp {
+namespace view {
 
 class LinkButton : public QLabel
 {
@@ -26,6 +27,7 @@ private:
 	QVariant m_tag;
 };
 
+}
 }
 
 #endif

@@ -4,11 +4,14 @@
 #include "WidgetUtils.h"
 #include "NcFramelessHelper.h"
 #include "Config.h"
+#include "TabPage.h"
 
 #include <QDebug>
 #include <QVBoxLayout>
+#include <QStatusBar>
 
 namespace mp {
+namespace view {
 
 MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
 	: QMainWindow(parent, flags)
@@ -37,7 +40,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
 	qDebug() << "Titlebar was created";
 
 	m_tabWidget = new TabWidget(NULL, "tabWidget", "taBar");
-	connect(m_tabWidget, SIGNAL(currentChanged(int)), SIGNAL(CurrentTabChanged(int)));
+	connect(m_tabWidget, SIGNAL(CurrentPageChanged(view::TabPage*,view::TabPage*)), SIGNAL(CurrentPageChanged(view::TabPage*,view::TabPage*)));
 	m_tabWidget->tabBar()->setFont(Config::Inst().DefaultFont());
 	m_tabWidget->setFont(Config::Inst().DefaultFont());
 	m_layout->addWidget(m_tabWidget);
@@ -63,6 +66,17 @@ int MainWindow::AddTab(TabPage * page)
 	return m_tabWidget->AddPage(page);
 }
 
+int MainWindow::CurrentTabIndex() const
+{
+	int currentIdex = m_tabWidget->currentIndex();
+	return currentIdex;
+}
+
+void MainWindow::SetCurrentTabIndex(int index)
+{
+	m_tabWidget->setCurrentIndex(index);
+}
+
 void MainWindow::SetResizable(bool resizable)
 {
 	m_frameLessHelper->setWidgetResizable(resizable);
@@ -85,5 +99,14 @@ void MainWindow::closeEvent(QCloseEvent *evt)
 	evt->ignore();
 }
 
+void MainWindow::resizeEvent(QResizeEvent *evt)
+{
+	//TabPagePtr page = m_tabWidget->PageAtIndex(m_tabWidget->CurrentPageIndex());
+	//if(page && page->Resizable())
+	//{
+	//	page->SaveSize(evt->size());
+	//}
+}
 
+}
 }

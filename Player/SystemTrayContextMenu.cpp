@@ -2,11 +2,11 @@
 #include "WidgetUtils.h"
 
 namespace mp {
+namespace view {
 
 SystemTrayContextMenu::SystemTrayContextMenu(QWidget * parent)
 	:QMenu(parent)
 {
-	//WidgetUtils::LoadStyleSheets(this, "ZaxarMenu.qss");
 	Retranslate();
 }
 
@@ -33,4 +33,5 @@ void SystemTrayContextMenu::Retranslate()
 	addAction(tr("Close"), this, SIGNAL(CloseApplication()));
 }
 
+}
 }

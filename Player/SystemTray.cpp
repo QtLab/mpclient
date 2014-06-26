@@ -6,6 +6,7 @@
 #include <QApplication>
 
 namespace mp {
+namespace view {
 
 SystemTray::SystemTray(QMainWindow * parent)
 	:QSystemTrayIcon(parent)
@@ -48,4 +49,5 @@ void SystemTray::Activated(QSystemTrayIcon::ActivationReason reason)
 	}
 }
 
+}
 }

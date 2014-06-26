@@ -2,19 +2,12 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QGraphicsObject>
 #include <QtGui>
 
-// Forward declaration
-
-QT_BEGIN_NAMESPACE
-class QVBoxLayout;
-class QDeclarativeView;
-QT_END_NAMESPACE
-
-class NcFramelessHelper;
+#include "Prerequirements.h"
 
 namespace mp {
+namespace view {
 
 // Forward declaration
 class Titlebar;
@@ -33,14 +26,19 @@ public:
 	TabWidget * Tabs() const;
 
 	int AddTab(TabPage * page);
+	int CurrentTabIndex() const;
+	void SetCurrentTabIndex(int index);
+	
 	void SetResizable(bool resizable);
 	QSize Size() const;
 	void SetSize(const QSize& size);
 
+private:
 	void closeEvent(QCloseEvent *evt);
+	void resizeEvent(QResizeEvent *evt);
 
 signals:
-	void CurrentTabChanged(int index);
+	void CurrentPageChanged(view::TabPage * newPage, view::TabPage * oldPage);
 
 private:
 	QVBoxLayout *			m_layout;
@@ -53,6 +51,7 @@ private:
 	TabWidget *				m_tabWidget;
 };
 
+}
 }
 
 #endif // MAINWINDOW_H

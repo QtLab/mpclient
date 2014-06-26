@@ -5,25 +5,30 @@
 #include "TabPage.h"
 
 namespace mp {
+namespace view {
 
 class TVPage : public TabPage
 {
 	Q_OBJECT
 
 public:
-	TVPage(QWidget* parent, ChannelSourceModelPtr channels);
+	TVPage(QWidget* parent, model::ChannelSourceModelPtr channels);
 	virtual ~TVPage();
 
 	// User leave the page
-	virtual void Enter();
+	void Enter();
 
 	// User leave the page
-	virtual bool Leave();
+	bool Leave();
 
 	// Languege changed
-	virtual void RetranslateUI();
+	void RetranslateUI();
 
 	QString Name() const;
+
+	bool Resizable() const;
+	QSize RestoreSize() const;
+	void SaveSize(const QSize& size);
 
 private slots:
 	void ContentLoaded(bool ok);
@@ -39,7 +44,7 @@ private:
 	WebView *			m_view;
 };
 
-
+}
 }
 
 #endif

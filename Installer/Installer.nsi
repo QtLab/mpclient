@@ -6,27 +6,38 @@ Unicode True
 
 ${StrLoc}
 
-!define APPNAME 		"Unisonbox"
-!define APPID 			"Unisonbox"
-!define COMPANYNAME 	"Unisonbox"
-!define DESCRIPTION 	"Unisonbox"
-!define LOADER_APP 		"Loader.exe"
-!define LAUNCHER_APP 	"Launcher.exe"
-!define PLAYER_APP 		"Player.exe"
+!define					LOCAL_DEBUG
 
-!define VERSIONMAJOR 0
-!define VERSIONMINOR 1
-!define VERSIONBUILD 2
+!define APPNAME			"UnisonBox"
+!define APPID			"UnisonBox"
+!define COMPANYNAME		"UnisonBox"
+!define DESCRIPTION		"UnisonBox"
+!define LOADER_APP		"UBoxLoader.exe"
+!define LAUNCHER_APP	"UBoxLauncher.exe"
+!define PLAYER_APP		"UBoxPlayer.exe"
+
+!ifdef LOCAL_DEBUG
+!define HOST			"127.0.0.1"
+!else
+!define HOST			"109.120.163.35"
+!endif
+
+!define VERSIONMAJOR	0
+!define VERSIONMINOR	1
+!define VERSIONBUILD	2
 
 !define ProductRegistryRoot HKCU
 !define ProductRegistryKey "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}"
+!define PlayerRegistryRoot HKCU
+!define PlayerRegistryKey "Software\Unisonbox\Player"
 
 Name "${APPNAME}"
-InstallDir "$LOCALAPPDATA\${APPNAME}"
+
+InstallDir "$LOCALAPPDATA\UBox"
 BrandingText " "
 ShowInstDetails nevershow
 ShowUninstDetails nevershow
-RequestExecutionLevel none ;Require admin rights on NT6+ (When UAC is turned on)
+RequestExecutionLevel user ;Require admin rights on NT6+ (When UAC is turned on)
 OutFile "${APPNAME}Setup.1.001.1.exe"
 
 ;------------------------------------------------------------------------------
@@ -36,18 +47,20 @@ OutFile "${APPNAME}Setup.1.001.1.exe"
 
 !define MUI_FINISHPAGE_RUN
 !define MUI_FINISHPAGE_RUN_FUNCTION InstallFinish
-!define MUI_FINISHPAGE_RUN_TEXT " Запустить ${APPNAME}"
+!define MUI_FINISHPAGE_RUN_TEXT "${PLAYER_APP}"
 !define MUI_FINISHPAGE_NOREBOOTSUPPORT
 !insertmacro MUI_PAGE_FINISH
-
+;------------------------------------------------------------------------------
 !insertmacro MUI_LANGUAGE "English"
 !insertmacro MUI_LANGUAGE "Russian"
 
+;------------------------------------------------------------------------------
 ; english
+LangString LAUNCH_STRING ${LANG_ENGLISH} "Launch"
 LicenseLangString LicenseText ${LANG_ENGLISH} "license_en.txt"
 ; russian
+LangString LAUNCH_STRING ${LANG_RUSSIAN} "Запустить"
 LicenseLangString LicenseText ${LANG_RUSSIAN} "license_ru.txt"
-
 ;------------------------------------------------------------------------------
 Function GetSource
 	Pop $1
@@ -125,17 +138,16 @@ Section "install"
 
 	Call Installing
 SectionEnd
- 
+
+Var Source
  Function Installing
 
-	DetailPrint "this message will show on the installation window"
-	
  	Push $EXEFILE
 	Call GetSource
-	Pop $0
+	Pop $Source
 	
 	SetOutPath $INSTDIR
-	ExecWait '"$INSTDIR\${LOADER_APP}" /source:$0'
+	ExecWait '"$INSTDIR\${LOADER_APP}" /source:$Source'
 	Pop $0
 	
 	IfSilent launchSilent
@@ -146,18 +158,18 @@ exit:
 FunctionEnd
 
 Function InstallFinish
-
-	;MessageBox MB_OK '"$INSTDIR\${LOADER_APP}" /source:$0'
 	
 	SetOutPath $INSTDIR
 	
 	IfSilent launchSilent
-	Exec '"$INSTDIR\${LAUNCHER_APP}"'
+	MessageBox MB_OK '"$INSTDIR\${LAUNCHER_APP}" /source:$Source'
+	Exec '"$INSTDIR\${LAUNCHER_APP}" /source:$Source'
 	Pop $0
 	Goto exit
 
 launchSilent:
-	Exec '"$INSTDIR\${LAUNCHER_APP}" /watch'
+	MessageBox MB_OK '"$INSTDIR\${LAUNCHER_APP}" /s /source:$Source'
+	Exec '"$INSTDIR\${LAUNCHER_APP}" /s /source:$Source'
 	Pop $0
 exit:
 FunctionEnd
@@ -174,6 +186,16 @@ Function un.onInit
 	Call un.KillProcess
 FunctionEnd
  
+Var UserId
+Var DeinstallUrl
+
+Function un.SendUnistallRequest
+	ReadRegStr $UserId ${PlayerRegistryRoot} ${PlayerRegistryKey} "userid" 
+	StrCpy $DeinstallUrl "http://${HOST}/Handlers/SetUserInfo.ashx?UserId=$UserId&UserSetInstalled=false"
+	nsisdl::download_quiet $DeinstallUrl
+	Pop $0
+FunctionEnd
+
 Function un.KillProcess
 	Pop $0
 	nsExec::ExecToStack 'taskkill.exe /f /im "$0"'
@@ -181,6 +203,7 @@ Function un.KillProcess
 FunctionEnd
 
 Section "uninstall"
+	Call un.SendUnistallRequest
 	DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Run"
 	DeleteRegKey ${ProductRegistryRoot} ${ProductRegistryKey}
 	SetShellVarContext current

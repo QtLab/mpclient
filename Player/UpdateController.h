@@ -3,11 +3,11 @@
 
 #include "Prerequirements.h"
 #include "UpdateModel.h"
-#include "DownlaodManager.h"
 
 #include <QTimer>
 
 namespace mp {
+namespace controller {
 
 // takes a list of files in the format of the file name-file לה5
 // compares the hashes with current files
@@ -28,7 +28,7 @@ public slots:
 
 private slots:
 	void ProcessUpdateList();
-	void FileDownloaded(const QString& path);
+	void FileDownloaded();
 
 private:
 	bool ProcessNextFile();
@@ -43,11 +43,10 @@ private:
 	// Processing files count
 	int								m_filesInProcess;
 	// Files to update
-	UpdateModel						m_updateModel;
-	// Netwrok access manager
-	DownlaodManager					m_networkAccess;
+	model::UpdateModel				m_updateModel;
 };
 
+}
 }
 
 #endif

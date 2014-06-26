@@ -23,10 +23,10 @@ String HttpApi::Domain() const
 	return m_domain;
 }
 
-String HttpApi::CreateNewUser(const String& source)
+String HttpApi::CreateNewUser()
 {
 	std::string response;
-	DoGetRequest(Domain(), "/Handlers/RegisterUpdateUser.ashx?Source=" + source, response);
+	DoGetRequest(Domain(), "/Handlers/RegisterNewUser.ashx", response);
 
 	Json::Value root;
 	Json::Reader reader;
@@ -41,18 +41,13 @@ String HttpApi::CreateNewUser(const String& source)
 	return guid;
 }
 
-void HttpApi::UpdateUser(const String& guid, const String& source)
-{
-	std::string response;
-	DoGetRequest(Domain(), "/Handlers/RegisterUpdateUser.ashx?UserId=" + guid + "Source=" + source, response);
-}
 
 bool HttpApi::GetUpdateInfo(const std::string& userId, FilesToUpdate& fielsToUpdate)
 {
 	std::cout << "Get update info started..." << std::endl;
 
 	std::string response;
-	DoGetRequest(Domain(), "/Handlers/GetDataFile.ashx?UserId=" + userId, response);
+	DoGetRequest(Domain(), STR"/Handlers/GetDataFile.ashx?UserId=" + userId, response);
 
 	Json::Value root;
 	Json::Reader reader;
@@ -96,7 +91,7 @@ bool HttpApi::GetPakageInfo(const String& userId, FileToUpdate& pakage)
 	std::cout << "Get pakage info started..." << std::endl;
 
 	std::string response;
-	DoGetRequest(Domain(), "/Handlers/GetDataFile.ashx?IsZip=true&UserId=" + userId, response);
+	DoGetRequest(Domain(), STR"/Handlers/GetDataFile.ashx?IsZip=true&UserId=" + userId, response);
 
 	Json::Value root;
 	Json::Reader reader;
@@ -133,7 +128,7 @@ bool HttpApi::DownloadFile(FileToUpdatePtr fileToDownlaod)
 		std::cout << "Create directory: " << directoryPath << " result: " << GetLastErrorString() << std::endl;
 	}
 
-	String tmpFilePath = fileToDownlaod->AbsolutePath() + "tmp";
+	String tmpFilePath = fileToDownlaod->AbsolutePath() + STR"tmp";
 
 	std::ofstream ostream(tmpFilePath, std::ios::out | std::ios::binary | std::ios::trunc);
 	if(DoGetRequest(fileToDownlaod->Domain(), fileToDownlaod->Query(), ostream))

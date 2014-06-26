@@ -5,6 +5,7 @@
 #include "BaseListModel.h"
 
 namespace mp {
+namespace model {
 
 class ChannelSource : public QObject
 {
@@ -18,7 +19,7 @@ class ChannelSource : public QObject
 
 public:
 	ChannelSource();
-	~ChannelSource();
+	virtual ~ChannelSource();
 
 	int Id() const;
 	void SetId(int id);
@@ -63,8 +64,8 @@ class ChannelSourceModel : public BaseListModel<ChannelSource>
 public:
 	enum ChannelSourceRoles
 	{
-		Name = Qt::UserRole + 1,
-		Id,
+		Id = Qt::UserRole + 1,
+		Name,
 		Url,
 		FirstCategoryId,
 		Categories,
@@ -80,6 +81,7 @@ public:
 	bool SaveStats(const QString& filePath);
 
 	ChannelSourcePtr Find(int channelId, int genreId = -1) const;
+
 	// Merge with items that contains additional information about use it by current user
 	void MergeWithStats(const ChannelSourceModel& channelsWithStats);
 
@@ -95,9 +97,10 @@ public:
 	Q_DISABLE_COPY(ChannelSourceModel)
 };
 
-}
+} //End namespace model
+} //End namespace mp
 
-Q_DECLARE_METATYPE(mp::ChannelSource);
-Q_DECLARE_METATYPE(mp::ChannelSourceModel);
+Q_DECLARE_METATYPE(mp::model::ChannelSource);
+Q_DECLARE_METATYPE(mp::model::ChannelSourceModel);
 
 #endif

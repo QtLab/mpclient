@@ -6,6 +6,7 @@
 #include <QDebug>
 
 namespace mp {
+namespace model {
 
 static const QString IdKeyName				= "id";
 static const QString NameKeyName			= "name";
@@ -205,8 +206,8 @@ int ChannelSourceModel::rowCount(const QModelIndex &parent) const
 QHash<int, QByteArray>	ChannelSourceModel::roleNames() const
 {
 	QHash<int, QByteArray> roles;
-	roles[Name] = "Name";
 	roles[Id] = "Id";
+	roles[Name] = "Name";
 	roles[Url] = "Url";
 	roles[GenreId] = "GenreId";
 	roles[FirstCategoryId] = "FirstCategoryId";
@@ -267,4 +268,5 @@ void ChannelSourceModel::ParseChannelsJson(const QByteArray& json)
 	}
 }
 
-}
+} //End namespace model
+} //End namespace mp

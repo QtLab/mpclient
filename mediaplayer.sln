@@ -17,11 +17,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{D41E51
 		Common\Path.h = Common\Path.h
 		Common\Process.cpp = Common\Process.cpp
 		Common\Process.h = Common\Process.h
+		Common\SingleMutexHandle.h = Common\SingleMutexHandle.h
 		Common\StartupParameters.cpp = Common\StartupParameters.cpp
 		Common\StartupParameters.h = Common\StartupParameters.h
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Launcher", "Launcher\Launcher.vcxproj", "{1A5290A1-B957-4B29-997A-07FA8C6AD5F5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{3AA36FA0-A6E7-4898-B481-9AE05104C73E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FrodPlugin", "Plugins\FrodPlugin\FrodPlugin.vcxproj", "{B12702AD-ABFB-343A-A199-8E24837244A3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,9 +46,16 @@ Global
 		{1A5290A1-B957-4B29-997A-07FA8C6AD5F5}.Debug|Win32.Build.0 = Debug|Win32
 		{1A5290A1-B957-4B29-997A-07FA8C6AD5F5}.Release|Win32.ActiveCfg = Release|Win32
 		{1A5290A1-B957-4B29-997A-07FA8C6AD5F5}.Release|Win32.Build.0 = Release|Win32
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Debug|Win32.Build.0 = Debug|Win32
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Release|Win32.ActiveCfg = Release|Win32
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B12702AD-ABFB-343A-A199-8E24837244A3} = {3AA36FA0-A6E7-4898-B481-9AE05104C73E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		Qt5Version = msvc2010

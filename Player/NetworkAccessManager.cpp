@@ -12,7 +12,7 @@ NetworkAccessManager::NetworkAccessManager(QObject* parent)
 	:QNetworkAccessManager(parent)
 {
 	QNetworkDiskCache *diskCache = new QNetworkDiskCache(this);
-	diskCache->setCacheDirectory(HttpCachePath());
+	diskCache->setCacheDirectory(Path::HttpCache());
 	setCache(diskCache);
 
 	connect(this, SIGNAL(sslErrors(QNetworkReply*, const QList<QSslError> & )), this, SLOT(HandleSslErrors(QNetworkReply*, const QList<QSslError> & )));

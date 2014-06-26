@@ -7,15 +7,18 @@
 #include <QVariant>
 #include <QDebug>
 #include <QFontDatabase>
+#include <QStandardPaths>
 
 namespace mp {
 
 Config* Config::m_instance = 0;
 
-const QString VolumeKeyName			= "volume";
-const QString TVTabSizeKeyName		= "tvtabsize";
-const QString SourceKeyName			= "source";
-const QString UserIdKeyName			= "userid";
+const QString VOLUME_KEY_NAME_FORMAT	= "volume_%0";
+const QString TAB_SIZE_KEY_FORMAT		= "tabsize_%0";
+const QString SOURCE_KEY_NAME			= "source";
+const QString USER_ID_KEY_NAME			= "userid";
+const QString VERSION_KEY_NAME			= "version";
+const QString TRACKS_PATH_KEY_NAME		= "trackspath";
 
 Config& Config::Inst()
 {
@@ -39,12 +42,23 @@ Config::Config()
 
 QString Config::UserId() const
 {
-	return m_settings.value(UserIdKeyName).toString();
+	return m_settings.value(USER_ID_KEY_NAME).toString();
 }
 
 QString Config::Source() const
 {
-	return m_settings.value(SourceKeyName).toString();
+	return m_settings.value(SOURCE_KEY_NAME).toString();
+}
+
+QString Config::Version() const
+{
+	QString version = m_settings.value(VERSION_KEY_NAME).toString();
+	return version;
+}
+
+void Config::SetVersion(const QString& version)
+{
+	m_settings.setValue(VERSION_KEY_NAME, version);
 }
 
 const QFont& Config::DefaultFont() const
@@ -52,33 +66,45 @@ const QFont& Config::DefaultFont() const
 	return m_defaultFont;
 }
 
-void Config::SetVolume(qreal value)
+void Config::SetVolume(qreal value, const QString& streamName)
 {
-	m_settings.setValue(VolumeKeyName, value);
+	QString key = VOLUME_KEY_NAME_FORMAT.arg(streamName);
+	m_settings.setValue(key, value);
 
-	emit VolumeChanged(value);
+	emit VolumeChanged(value, streamName);
 }
 
-qreal Config::Volume() const
+qreal Config::Volume(const QString& streamName) const
 {
-	qreal value = m_settings.value(VolumeKeyName, 0.5f).toReal();
+	QString key = VOLUME_KEY_NAME_FORMAT.arg(streamName);
+
+	qreal value = m_settings.value(key, 0.5f).toReal();
 	return value;
 }
 
-void Config::SetTVTabWindowSize(const QSize& size)
+QSize Config::TabSize(const QString& name, const QSize& defaultSize) const
 {
-	m_settings.setValue(TVTabSizeKeyName, size);
-}
-
-QSize Config::TVTabWindowSize() const
-{
-	QSize size = m_settings.value(TVTabSizeKeyName, QSize(750, 630)).toSize();
+	QString key = TAB_SIZE_KEY_FORMAT.arg(name);
+	QSize size = m_settings.value(key, defaultSize).toSize();
 	return size;
 }
 
-QSize Config::RadioTabWindowSize() const
+void Config::SetTabSize(const QString& name, const QSize& size)
 {
-	return QSize(580, 351);
+	QString key = TAB_SIZE_KEY_FORMAT.arg(name);
+	m_settings.setValue(key, size);
+}
+
+QString Config::PathToSaveTracks() const
+{
+	QString downlaodLocation = QStandardPaths::standardLocations(QStandardPaths::DownloadLocation).first();
+	QString pathToSaveTracks = m_settings.value(TRACKS_PATH_KEY_NAME, downlaodLocation).toString();
+	return pathToSaveTracks;
+}
+
+void Config::SetPathToSaveTracks(const QString& path)
+{
+	 m_settings.setValue(TRACKS_PATH_KEY_NAME, path);
 }
 
 void Config::Load()
@@ -103,14 +129,14 @@ void Config::Load()
 				QString userId = settingsMap["UserId"].toString();
 				QString source = settingsMap["Source"].toString();
 
-				if(!userId.isEmpty() && userId != m_settings.value(UserIdKeyName).toString())
+				if(!userId.isEmpty() && userId != m_settings.value(USER_ID_KEY_NAME).toString())
 				{
-					m_settings.setValue(UserIdKeyName, userId);
+					m_settings.setValue(USER_ID_KEY_NAME, userId);
 				}
 
-				if(source.isEmpty() && source != m_settings.value(SourceKeyName).toString())
+				if(!source.isEmpty() && source != m_settings.value(SOURCE_KEY_NAME).toString())
 				{
-					m_settings.setValue(SourceKeyName, source);
+					m_settings.setValue(SOURCE_KEY_NAME, source);
 				}
 			}
 			else

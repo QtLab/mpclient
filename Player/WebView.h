@@ -5,6 +5,7 @@
 #include <QWebView>
 
 namespace mp {
+namespace view {
 
 class WebView : public QWebView
 {
@@ -21,11 +22,12 @@ private:
 	static void SetupSettings(QWebSettings* settings);
 	void contextMenuEvent(QContextMenuEvent *event);
 	QWebView *createWindow(QWebPage::WebWindowType type);
-private:
 
-	Q_DISABLE_COPY(WebView)
+private slots:
+	void OpenUrlInDefaultBrowser();
 };
 
+}
 }
 
 #endif

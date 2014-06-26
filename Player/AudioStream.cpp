@@ -5,6 +5,7 @@
 
 #include <QDebug>
 #include <QTextCodec>
+#include <QThreadPool>
 #include <QCoreApplication>
 
 #ifdef Q_OS_WIN32
@@ -14,9 +15,21 @@
 
 namespace mp {
 
-AudioStream::AudioStream()
+AudioStream::AudioStream(const  QString& streamName)
 	:m_hStream(0)
 	,m_state(ASStopped)
+	,m_streamName(streamName)
+{
+	connect(&Config::Inst(), SIGNAL(VolumeChanged(qreal, const QString&)), SLOT(VolumeChanged(qreal, const QString&)));
+	connect(&m_streamStarter, SIGNAL(Ready(HSTREAM, int)), SLOT(StreadStarted(HSTREAM, int)), Qt::DirectConnection);
+}
+
+AudioStream::~AudioStream()
+{
+	BASS_Free();
+}
+
+void AudioStream::InitGlobal()
 {
 	qRegisterMetaType<AudioStream::ASState>("AudioStream::ASState");
 	qRegisterMetaType<HSTREAM>("HSTREAM");
@@ -33,19 +46,44 @@ AudioStream::AudioStream()
 
 		qDebug() << "BASS_Init: success";
 	}
-
-	connect(&Config::Inst(), SIGNAL(VolumeChanged(qreal)), SLOT(VolumeChanged(qreal)));
-	connect(&m_streamStarter, SIGNAL(Ready(HSTREAM, int)), SLOT(StreadStarted(HSTREAM, int)), Qt::DirectConnection);
 }
 
-AudioStream::~AudioStream()
+AudioStream::ASState AudioStream::RefreshState()
 {
-	BASS_Free();
+	DWORD state = BASS_ChannelIsActive(m_hStream);
+
+	switch(state)
+	{
+		//The channel is not active, or handle is not a valid channel.
+		case BASS_ACTIVE_STOPPED:
+			m_state = ASState::ASStopped;
+			break;
+		//The channel is playing (or recording).
+		case BASS_ACTIVE_PLAYING:
+			m_state = ASState::ASPlaying;
+			break;
+		//The channel is paused.
+		case BASS_ACTIVE_PAUSED:
+			m_state = ASState::ASPaused;
+			break;
+		//Playback of the stream has been stalled due to a lack of sample data. 
+		//The playback will automatically resume once there is sufficient data to do so.
+		case BASS_ACTIVE_STALLED:
+			m_state = ASState::ASStopped;
+			break;
+	};
+
+	return m_state;
 }
 
 AudioStream::ASState AudioStream::State() const
 {
 	return m_state;
+}
+
+const QString& AudioStream::Name() const
+{
+	return m_streamName;
 }
 
 bool AudioStream::IsPlaying() const
@@ -67,7 +105,7 @@ void AudioStream::Play(const QString& url)
 
 void AudioStream::StreadStarted(HSTREAM stream, int errorCode)
 {
-	if(ThreadUtils::IsGuiThread())
+	if(ThreadUtils::IsCurrentThreadOwn(this))
 	{
 		if(stream != 0 && errorCode == 0)
 		{
@@ -76,7 +114,9 @@ void AudioStream::StreadStarted(HSTREAM stream, int errorCode)
 			BASS_ChannelSetSync(m_hStream, BASS_SYNC_OGG_CHANGE, 0, &AudioStream::ProcessMetaCallback, this); // Icecast/OGG
 			BASS_ChannelSetSync(m_hStream, BASS_SYNC_STALL | BASS_SYNC_MIXTIME, 0, &AudioStream::ProcessStreamStalled, this);
 
-			VolumeChanged(Config::Inst().Volume());
+			int eeror = BASS_ErrorGetCode();
+
+			VolumeChanged(Config::Inst().Volume(m_streamName), m_streamName);
 			EmitStateChanged(AudioStream::ASPlaying);
 		}
 		else
@@ -95,8 +135,8 @@ void AudioStream::StreadStarted(HSTREAM stream, int errorCode)
 
 void AudioStream::Resume()
 {
-	VolumeChanged(Config::Inst().Volume());
-	BASS_ChannelPlay(m_hStream, TRUE);
+	VolumeChanged(Config::Inst().Volume(m_streamName), m_streamName);
+	BASS_ChannelPlay(m_hStream, FALSE);
 
 	int errCode = BASS_ErrorGetCode();
 
@@ -145,9 +185,34 @@ void AudioStream::Stop()
 	EmitStateChanged(ASStopped);
 }
 
-void AudioStream::VolumeChanged(qreal value)
+long AudioStream::GetCurrentPos() const
 {
-	if(m_hStream)
+	int pos  = BASS_ChannelBytes2Seconds(m_hStream, BASS_ChannelGetPosition(m_hStream, 0));
+	return pos;
+}
+
+long AudioStream::GetLength() const
+{
+	long len = BASS_ChannelBytes2Seconds(m_hStream, BASS_ChannelGetLength(m_hStream, 0));
+	return len;
+}
+
+void AudioStream::SetCurrentPos(long currentPos)
+{
+	QWORD bytes = BASS_ChannelSeconds2Bytes(m_hStream, currentPos);
+	BASS_ChannelSetPosition(m_hStream, bytes, BASS_POS_BYTE);
+
+	int errCode = BASS_ErrorGetCode();
+
+	if(errCode != 0)
+	{
+		qDebug() << "AudioStreamController::SetCurrentPos error code: " << errCode;
+	}
+}
+
+void AudioStream::VolumeChanged(qreal value, const QString& streamName)
+{
+	if(m_hStream && m_streamName == streamName)
 	{
 		if(!BASS_ChannelSetAttribute(m_hStream, BASS_ATTRIB_VOL, value))
 		{
@@ -228,8 +293,17 @@ void AudioStream::ProcessMetaCallback(HSYNC handle, DWORD channel, DWORD data, v
 void AudioStream::ProcessStreamStalled(HSYNC handle, DWORD channel, DWORD data, void *user)
 {
 	AudioStream * stream =  reinterpret_cast<AudioStream*>(user);
+
+	//data : 0 = stalled, 1 = resumed.
+	ASState newState = data == 0 ? AudioStream::ASStopped : AudioStream::ASPlaying;
+	
 	QMetaObject::invokeMethod( stream, "EmitStateChanged", Qt::QueuedConnection,
-							   Q_ARG( AudioStream::ASState, ASStopped ) );
+							   Q_ARG( AudioStream::ASState, newState ) );
+
+	if(newState == AudioStream::ASPlaying)
+	{
+		QMetaObject::invokeMethod( stream, "ProcessMeta", Qt::QueuedConnection);
+	}
 }
 
 }

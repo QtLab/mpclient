@@ -48,9 +48,6 @@
     <Filter Include="Audio">
       <UniqueIdentifier>{90b9e824-c8f5-4ecc-ad36-134c9d501557}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Views\Html">
-      <UniqueIdentifier>{eebaa700-66c3-4c51-a1dc-e4905e6e4219}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Translations">
       <UniqueIdentifier>{db74cf91-6654-47ce-a6af-ba4d8e53bc73}</UniqueIdentifier>
     </Filter>
@@ -71,6 +68,12 @@
     </Filter>
     <Filter Include="FileSystem">
       <UniqueIdentifier>{e21a3440-95db-477b-9684-03a8f9568c62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Controllers\ViewControllers">
+      <UniqueIdentifier>{d9539d26-41a5-4d57-aad7-a22d1a233bad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network\NetCommands">
+      <UniqueIdentifier>{8f186179-e49d-4398-be28-2a20fe30221d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -243,9 +246,6 @@
     <ClCompile Include="RadioPage.cpp">
       <Filter>Views\Pages</Filter>
     </ClCompile>
-    <ClCompile Include="RadioPageController.cpp">
-      <Filter>Controllers</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_UserIdle.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
@@ -270,14 +270,8 @@
     <ClCompile Include="GeneratedFiles\Release\moc_TVPageController.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="TVPageController.cpp">
-      <Filter>Controllers</Filter>
-    </ClCompile>
     <ClCompile Include="TabPage.cpp">
       <Filter>Views\Pages</Filter>
-    </ClCompile>
-    <ClCompile Include="MPRequest.cpp">
-      <Filter>Network</Filter>
     </ClCompile>
     <ClCompile Include="Config.cpp">
       <Filter>Model</Filter>
@@ -314,9 +308,6 @@
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_Config.cpp">
       <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="NcFramelessHelper.cpp">
-      <Filter>Views</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_FlashUtils.cpp">
       <Filter>Generated Files\Debug</Filter>
@@ -365,6 +356,81 @@
     </ClCompile>
     <ClCompile Include="ThreadUtils.cpp">
       <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerPage.cpp">
+      <Filter>Views\Pages</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_PlayerPage.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_PlayerPage.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_PlayerPageController.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_PlayerPageController.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_TrackModel.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_TrackModel.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="TrackModel.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="TrackModelDataAccessor.cpp">
+      <Filter>Network\NetCommands</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_TrackModelDataAccessor.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_TrackModelDataAccessor.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="NcFramelessHelper.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerPageController.cpp">
+      <Filter>Controllers\ViewControllers</Filter>
+    </ClCompile>
+    <ClCompile Include="RadioPageController.cpp">
+      <Filter>Controllers\ViewControllers</Filter>
+    </ClCompile>
+    <ClCompile Include="TVPageController.cpp">
+      <Filter>Controllers\ViewControllers</Filter>
+    </ClCompile>
+    <ClCompile Include="SetUserInfo.cpp">
+      <Filter>Network\NetCommands</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_SetUserInfo.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_SetUserInfo.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioStreamAsyncDownloader.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_AudioStreamAsyncDownloader.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_AudioStreamAsyncDownloader.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="UrlBuilder.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_IPageController.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_IPageController.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="PageControllerFactory.cpp">
+      <Filter>Controllers\ViewControllers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -416,9 +482,6 @@
     <CustomBuild Include="Views\TVPageView.qml">
       <Filter>Views\QML</Filter>
     </CustomBuild>
-    <CustomBuild Include="..\Bin\Release\Html\VideoPlayer.html">
-      <Filter>Views\Html</Filter>
-    </CustomBuild>
     <CustomBuild Include="Log.h">
       <Filter>Utils</Filter>
     </CustomBuild>
@@ -458,23 +521,14 @@
     <CustomBuild Include="RadioPage.h">
       <Filter>Views\Pages</Filter>
     </CustomBuild>
-    <CustomBuild Include="RadioPageController.h">
-      <Filter>Controllers</Filter>
-    </CustomBuild>
     <CustomBuild Include="UserIdle.h">
       <Filter>Utils</Filter>
     </CustomBuild>
     <CustomBuild Include="TVPage.h">
       <Filter>Views\Pages</Filter>
     </CustomBuild>
-    <CustomBuild Include="TVPageController.h">
-      <Filter>Controllers</Filter>
-    </CustomBuild>
     <CustomBuild Include="TabPage.h">
       <Filter>Views\Pages</Filter>
-    </CustomBuild>
-    <CustomBuild Include="MPRequest.h">
-      <Filter>Network</Filter>
     </CustomBuild>
     <CustomBuild Include="ChannelSourceSortFilterProxyModel.h">
       <Filter>Model</Filter>
@@ -503,6 +557,36 @@
     <CustomBuild Include="AudioStreamAsyncStarter.h">
       <Filter>Audio</Filter>
     </CustomBuild>
+    <CustomBuild Include="PlayerPage.h">
+      <Filter>Views\Pages</Filter>
+    </CustomBuild>
+    <CustomBuild Include="TrackModel.h">
+      <Filter>Model</Filter>
+    </CustomBuild>
+    <CustomBuild Include="TrackModelDataAccessor.h">
+      <Filter>Network\NetCommands</Filter>
+    </CustomBuild>
+    <CustomBuild Include="PlayerPageController.h">
+      <Filter>Controllers\ViewControllers</Filter>
+    </CustomBuild>
+    <CustomBuild Include="RadioPageController.h">
+      <Filter>Controllers\ViewControllers</Filter>
+    </CustomBuild>
+    <CustomBuild Include="TVPageController.h">
+      <Filter>Controllers\ViewControllers</Filter>
+    </CustomBuild>
+    <CustomBuild Include="SetUserInfo.h">
+      <Filter>Network\NetCommands</Filter>
+    </CustomBuild>
+    <CustomBuild Include="AudioStreamAsyncDownloader.h">
+      <Filter>Audio</Filter>
+    </CustomBuild>
+    <CustomBuild Include="UrlBuilder.h">
+      <Filter>Network</Filter>
+    </CustomBuild>
+    <CustomBuild Include="IPageController.h">
+      <Filter>Controllers\ViewControllers</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <None Include="Translations\en.ts">
@@ -514,10 +598,10 @@
     <None Include="Views\Player.qss">
       <Filter>Views\Styles</Filter>
     </None>
-    <None Include="Resources\CheckFlashInstalled.html">
+    <None Include="Resources\FlashInstall.html">
       <Filter>Resource Files\Html</Filter>
     </None>
-    <None Include="Resources\FlashInstall.html">
+    <None Include="Resources\CheckFlashInstalled.html">
       <Filter>Resource Files\Html</Filter>
     </None>
   </ItemGroup>
@@ -526,9 +610,6 @@
       <Filter>Generated Files</Filter>
     </ClInclude>
     <ClInclude Include="Prerequirements.h" />
-    <ClInclude Include="NcFramelessHelper.h">
-      <Filter>Views</Filter>
-    </ClInclude>
     <ClInclude Include="CommandLine.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -536,6 +617,9 @@
       <Filter>FileSystem</Filter>
     </ClInclude>
     <ClInclude Include="ThreadUtils.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="NcFramelessHelper.h">
       <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>

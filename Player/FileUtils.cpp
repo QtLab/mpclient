@@ -8,6 +8,11 @@
 
 namespace mp {
 
+bool FileUtils::Delete(const QString& filePath)
+{
+	return QFile::remove(filePath);
+}
+
 void FileUtils::Delete(const QStringList& filters)
 {
 	QFileInfoList files = QDir::current().entryInfoList(filters);

@@ -5,6 +5,7 @@
 #include "Prerequirements.h"
 
 namespace mp {
+namespace model {
 
 class Category : public QObject
 {
@@ -43,7 +44,6 @@ public:
 	CategoriesModel();
 	virtual ~CategoriesModel();
 
-	CategoryPtr First() const;
 	Q_INVOKABLE int RowIndexById(int id) const;
 	CategoryPtr FindById(int id) const;
 
@@ -52,6 +52,7 @@ public:
 	QHash<int, QByteArray>	roleNames() const;
 };
 
-}
+} //End namespace model
+} //End namespace mp
 
 #endif
