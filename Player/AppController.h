@@ -30,6 +30,7 @@ private slots:
 	void CurrentPageChanged(view::TabPage * newPages, view::TabPage * oldPage);
 	void FlashInstalled();
 	void SearchTracks(QString filter);
+	void PauseAllControllers();
 
 private:
 	void HandleMssageFromAnotherInst(const QString& message);

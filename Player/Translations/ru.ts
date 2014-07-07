@@ -2,6 +2,21 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="ru_RU">
 <context>
+    <name>QObject</name>
+    <message>
+        <source>Paste</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cut</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>mp::AppController</name>
     <message>
         <source>Update</source>
@@ -56,19 +71,11 @@
     <name>mp::controller::AppController</name>
     <message>
         <source>Updating</source>
-        <translation>Обновление</translation>
+        <translation type="vanished">Обновление</translation>
     </message>
     <message>
         <source>Found a new version</source>
-        <translation>Найдена новая версия</translation>
-    </message>
-    <message>
-        <source>Flash player</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Flash was installed press Ok to restart program</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Найдена новая версия</translation>
     </message>
 </context>
 <context>
@@ -76,6 +83,21 @@
     <message>
         <source>Select directory to save the music</source>
         <translation>Выберите директорию для сохранения музыки</translation>
+    </message>
+</context>
+<context>
+    <name>mp::view::MessageBoxView</name>
+    <message>
+        <source>UnisonBox</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>UnisonBox version: %0</source>
+        <translation>UnisonBox версия: %0</translation>
+    </message>
+    <message>
+        <source>Found a new version</source>
+        <translation>Найдена новая версия</translation>
     </message>
 </context>
 <context>
@@ -116,6 +138,13 @@
     <message>
         <source>Flash installing... %0 percents completed</source>
         <translation></translation>
+    </message>
+</context>
+<context>
+    <name>mp::view::WebView</name>
+    <message>
+        <source>Open in New Window</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

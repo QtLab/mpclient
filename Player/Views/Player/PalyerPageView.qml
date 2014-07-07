@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.0
+//import QtDesktop 0.1
 
 Rectangle {
 	id: playerPage;
@@ -15,7 +16,8 @@ Rectangle {
 	signal positionChanged(int volume);
 	signal downloadTrack(int id);
 	signal deleteTrack(int id);
-	signal tracksPathChangeRequest
+	signal tracksPathChangeRequest;
+	signal showToolTip();
 	
 	// properties
 	property bool isPlaying: false;
@@ -252,6 +254,10 @@ Rectangle {
 	
 	function setVolume(volume) {
 		volumeSlider.value = volume * 1000;
+	}
+	
+	function setSearchFilter(filter) {
+		searchEdit.filter = filter;
 	}
 	
 	function search(filter) {

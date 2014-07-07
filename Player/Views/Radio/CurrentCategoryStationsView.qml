@@ -15,7 +15,7 @@ Rectangle {
 		id: topStationsView
 		width: lastStationsView.width
 		anchors {
-			topMargin: 30
+			topMargin: 10
 			leftMargin: 20
 			left: parent.left
 			top: lastStationsView.bottom

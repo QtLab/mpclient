@@ -7,15 +7,15 @@
 namespace mp {
 namespace model {
 
-class Category : public QObject
+class RadioCategory : public QObject
 {
 	Q_OBJECT
 	Q_PROPERTY(int	id READ Id WRITE SetId)
 	Q_PROPERTY(QString name READ Name WRITE SetName)
 
 public:
-	Category();
-	~Category();
+	RadioCategory();
+	~RadioCategory();
 
 	int Id() const;
 	void SetId(int id);
@@ -23,14 +23,18 @@ public:
 	QString Name() const;
 	void SetName(const QString& name);
 
+	bool TopVisible() const;
+	void SetTopVisible(bool topVisible);
+
 private:
 	int						m_id;
 	QString					m_name;
-	Q_DISABLE_COPY(Category)
+	bool					m_topVisible;
+	Q_DISABLE_COPY(RadioCategory)
 };
 
 
-class CategoriesModel : public BaseListModel<Category>
+class RadioCategoriesModel : public BaseListModel<RadioCategory>
 {
 	Q_OBJECT
 
@@ -38,18 +42,25 @@ public:
 	enum CategoryRoles
 	{
 		Name = Qt::UserRole + 1,
-		Id
+		Id,
+		TopVisible
 	};
 
-	CategoriesModel();
-	virtual ~CategoriesModel();
+	RadioCategoriesModel();
+	virtual ~RadioCategoriesModel();
+
+	Q_INVOKABLE int UpdateTopVisibleCategories(int maxWidth, const QString& fontFamily, int pointSize, int spacing);
+	Q_INVOKABLE int InsertLastTopVisibleCategory(int id, int maxWidth, const QString& fontFamily, int pointSize, int spacing);
 
 	Q_INVOKABLE int RowIndexById(int id) const;
-	CategoryPtr FindById(int id) const;
+	RadioCategoryPtr FindById(int id) const;
 
 	QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 	int rowCount(const QModelIndex &parent = QModelIndex()) const;
 	QHash<int, QByteArray>	roleNames() const;
+
+private:
+	int			m_lastTopVIsibleIndex;
 };
 
 } //End namespace model

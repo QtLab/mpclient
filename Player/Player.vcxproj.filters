@@ -75,6 +75,15 @@
     <Filter Include="Network\NetCommands">
       <UniqueIdentifier>{8f186179-e49d-4398-be28-2a20fe30221d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Model\Radio">
+      <UniqueIdentifier>{e5ce4f5b-e1ce-4a20-88e3-56405eef8663}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Model\Music">
+      <UniqueIdentifier>{bd8d89ab-64f2-4904-96f4-ef70841a6041}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Model\TV">
+      <UniqueIdentifier>{d2549b9d-8f4a-49f4-8b10-7fe8e0eb412a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GeneratedFiles\Debug\moc_MainWindow.cpp">
@@ -128,12 +137,6 @@
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_ChannelSourceModel.cpp">
       <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="ChannelSourceModel.cpp">
-      <Filter>Model</Filter>
-    </ClCompile>
-    <ClCompile Include="ChannelMetadataModel.cpp">
-      <Filter>Model</Filter>
     </ClCompile>
     <ClCompile Include="WidgetUtils.cpp">
       <Filter>Utils</Filter>
@@ -276,23 +279,11 @@
     <ClCompile Include="Config.cpp">
       <Filter>Model</Filter>
     </ClCompile>
-    <ClCompile Include="ChannelSourceSortFilterProxyModel.cpp">
-      <Filter>Model</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_ChannelSourceSortFilterProxyModel.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_ChannelSourceSortFilterProxyModel.cpp">
       <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_CategoriesModel.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_CategoriesModel.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="CategoriesModel.cpp">
-      <Filter>Model</Filter>
     </ClCompile>
     <ClCompile Include="NetworkAccessManager.cpp">
       <Filter>Network</Filter>
@@ -378,9 +369,6 @@
     <ClCompile Include="GeneratedFiles\Release\moc_TrackModel.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="TrackModel.cpp">
-      <Filter>Model</Filter>
-    </ClCompile>
     <ClCompile Include="TrackModelDataAccessor.cpp">
       <Filter>Network\NetCommands</Filter>
     </ClCompile>
@@ -432,6 +420,36 @@
     <ClCompile Include="PageControllerFactory.cpp">
       <Filter>Controllers\ViewControllers</Filter>
     </ClCompile>
+    <ClCompile Include="MessageBoxView.cpp">
+      <Filter>Views\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_MessageBoxView.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_MessageBoxView.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="ChannelMetadataModel.cpp">
+      <Filter>Model\Radio</Filter>
+    </ClCompile>
+    <ClCompile Include="ChannelSourceModel.cpp">
+      <Filter>Model\Radio</Filter>
+    </ClCompile>
+    <ClCompile Include="ChannelSourceSortFilterProxyModel.cpp">
+      <Filter>Model\Radio</Filter>
+    </ClCompile>
+    <ClCompile Include="TrackModel.cpp">
+      <Filter>Model\Music</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_RadioCategoriesModel.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_RadioCategoriesModel.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="RadioCategoriesModel.cpp">
+      <Filter>Model\Radio</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Player.qrc">
@@ -442,12 +460,6 @@
     </CustomBuild>
     <CustomBuild Include="Titlebar.h">
       <Filter>Views\Widgets</Filter>
-    </CustomBuild>
-    <CustomBuild Include="ChannelSourceModel.h">
-      <Filter>Model</Filter>
-    </CustomBuild>
-    <CustomBuild Include="ChannelMetadataModel.h">
-      <Filter>Model</Filter>
     </CustomBuild>
     <CustomBuild Include="UpdateModel.h">
       <Filter>Model</Filter>
@@ -530,12 +542,6 @@
     <CustomBuild Include="TabPage.h">
       <Filter>Views\Pages</Filter>
     </CustomBuild>
-    <CustomBuild Include="ChannelSourceSortFilterProxyModel.h">
-      <Filter>Model</Filter>
-    </CustomBuild>
-    <CustomBuild Include="CategoriesModel.h">
-      <Filter>Model</Filter>
-    </CustomBuild>
     <CustomBuild Include="NetworkAccessManager.h">
       <Filter>Network</Filter>
     </CustomBuild>
@@ -560,9 +566,6 @@
     <CustomBuild Include="PlayerPage.h">
       <Filter>Views\Pages</Filter>
     </CustomBuild>
-    <CustomBuild Include="TrackModel.h">
-      <Filter>Model</Filter>
-    </CustomBuild>
     <CustomBuild Include="TrackModelDataAccessor.h">
       <Filter>Network\NetCommands</Filter>
     </CustomBuild>
@@ -586,6 +589,24 @@
     </CustomBuild>
     <CustomBuild Include="IPageController.h">
       <Filter>Controllers\ViewControllers</Filter>
+    </CustomBuild>
+    <CustomBuild Include="MessageBoxView.h">
+      <Filter>Views\Widgets</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ChannelMetadataModel.h">
+      <Filter>Model\Radio</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ChannelSourceModel.h">
+      <Filter>Model\Radio</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ChannelSourceSortFilterProxyModel.h">
+      <Filter>Model\Radio</Filter>
+    </CustomBuild>
+    <CustomBuild Include="TrackModel.h">
+      <Filter>Model\Music</Filter>
+    </CustomBuild>
+    <CustomBuild Include="RadioCategoriesModel.h">
+      <Filter>Model\Radio</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>

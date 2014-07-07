@@ -1,5 +1,6 @@
 #include "SystemTray.h"
 #include "SystemTrayContextMenu.h"
+#include "MessageBoxView.h"
 
 #include <QMainWindow>
 #include <QPainter>
@@ -14,9 +15,13 @@ SystemTray::SystemTray(QMainWindow * parent)
 {
 	setIcon(QIcon(":/mp/Resources/Player.ico"));
 
+	setToolTip(QString("UnisonBox %0").arg(PLAYER_VERSION));
+
 	SystemTrayContextMenu * menu = new SystemTrayContextMenu(m_parent);
 	connect(menu, SIGNAL(CloseApplication()), this, SIGNAL(ShowtdownApplicationReuest()));
 	connect(menu, SIGNAL(UpdateApplication()), this, SIGNAL(UpdateReuest()));
+	connect(menu, SIGNAL(AboutApplication()), this, SLOT(ShowAbout()));
+
 	setContextMenu(menu);
 
 	connect(this, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),this, SLOT(Activated(QSystemTrayIcon::ActivationReason)));
@@ -47,6 +52,11 @@ void SystemTray::Activated(QSystemTrayIcon::ActivationReason reason)
 			m_parent->hide();
 		}
 	}
+}
+
+void SystemTray::ShowAbout()
+{
+	MessageBoxView::ShowAbout(m_parent);
 }
 
 }

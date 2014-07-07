@@ -3,7 +3,7 @@
 
 #include "IPageController.h"
 #include "AudioStream.h"
-#include "CategoriesModel.h"
+#include "RadioCategoriesModel.h"
 #include "ChannelSourceModel.h"
 #include "ChannelSourceSortFilterProxyModel.h"
 
@@ -21,7 +21,7 @@ public:
 	view::TabPage* View() const;
 	void ReLoadData();
 	void Search(const QString& filter);
-	void Stop();
+	void Pause();
 
 private:
 	void SetCategoryFilter(int categoryId);
@@ -42,7 +42,7 @@ signals:
 private:
 	// Current playing channel
 	model::ChannelSourcePtr						m_currentChannel;
-	model::CategoryPtr							m_currentCategory;
+	model::RadioCategoryPtr						m_currentCategory;
 	// Model for all stations channnels
 	model::ChannelSourceModel					m_stations;
 	model::ChannelSourceSortFilterProxyModel	m_searchStationsProxyModel;
@@ -50,7 +50,7 @@ private:
 	model::ChannelSourceSortFilterProxyModel	m_topStationsProxyModel;
 	model::ChannelSourceSortFilterProxyModel	m_lastStationsProxyModel;
 	// All genres
-	model::CategoriesModel						m_categories;
+	model::RadioCategoriesModel					m_categories;
 	// Widget view
 	view::RadioPage*							m_view;
 	// Audio stream manager

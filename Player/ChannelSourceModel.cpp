@@ -96,7 +96,7 @@ void ChannelSource::AddCategoryId(uint id)
 	m_categories.insert(id);
 }
 
-CategoryIds ChannelSource::Categories() const
+RadioCategoryIds ChannelSource::Categories() const
 {
 	return m_categories;
 }

@@ -22,9 +22,10 @@ class UpdateController : public QObject
 public:
 	UpdateController();
 	bool InProcess() const;
-	
+	bool IsActivatedByUser() const;
+
 public slots:
-	void CheckForUpdate();
+	void CheckForUpdate(bool activatedByUser = false);
 
 private slots:
 	void ProcessUpdateList();
@@ -38,6 +39,7 @@ signals:
 	void UpdateFinished(bool restartRequired);
 
 private:
+	bool							m_activatedByUser;
 	// Timer for update
 	QTimer							n_updateTimer;
 	// Processing files count

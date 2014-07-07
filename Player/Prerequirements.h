@@ -8,7 +8,7 @@
 #include <QSet>
 #include <QMap>
 
-#define PLAYER_VERSION "0.9"
+#define PLAYER_VERSION "1.0.0.0"
 
 // Forward declaration
 
@@ -96,12 +96,12 @@ typedef QSharedPointer<ChannelSource> ChannelSourcePtr;
 typedef ChannelSourceModel * ChannelSourceModelPtr;
 typedef QList<ChannelSourcePtr> ChannelSourceList;
 
-class Category;
-class CategoriesModel;
-typedef QSharedPointer<Category> CategoryPtr;
-typedef CategoriesModel * CategoriesModelPtr;
-typedef QList<CategoryPtr> CategoryList;
-typedef QSet<uint> CategoryIds;
+class RadioCategory;
+class RadioCategoriesModel;
+typedef QSharedPointer<RadioCategory> RadioCategoryPtr;
+typedef RadioCategoriesModel * RadioCategoriesModelPtr;
+typedef QList<RadioCategoryPtr> RadioCategoryList;
+typedef QSet<uint> RadioCategoryIds;
 
 }
 

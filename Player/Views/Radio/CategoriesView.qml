@@ -11,7 +11,8 @@ Rectangle {
 		
         Item {
 			property int categoryId: Id;
-            height: categoriesList.width; width: categoryText.paintedWidth + 20; 
+            height: 43; width: categoryText.paintedWidth + 20; 
+			visible: TopVisible;
 			
 			StyledText {
 				id: categoryText;
@@ -23,15 +24,15 @@ Rectangle {
 					top: parent.top
 					topMargin: 10;
 				}
-				
-				MouseArea  {
-					anchors.fill: parent
-					hoverEnabled: true
-					cursorShape: Qt.PointingHandCursor
-					onClicked: {
-						categoryText.forceActiveFocus()
-						categoriesList.currentIndex = index;
-					}
+			}
+			
+			MouseArea  {
+				anchors.fill: parent
+				hoverEnabled: true
+				cursorShape: Qt.PointingHandCursor
+				onClicked: {
+					categoryText.forceActiveFocus()
+					categoriesList.currentIndex = index;
 				}
 			}
         }
@@ -42,28 +43,74 @@ Rectangle {
 		orientation: Qt.Horizontal
 		
 		height: parent.height;
+		width: {
+			categoriesList.model.UpdateTopVisibleCategories(parent.width - (parent.width - moreTextRect.x), openSansLight.name, 10, 21);
+			return parent.width - (parent.width - moreTextRect.x);
+		}
 		
 		anchors {
 			top: parent.top;
-			left: leftArrowLine.right;
-			right: rightArrowLine.left
+			left: parent.left;
 		}
 		
         model: parent.model
         delegate: contactDelegate
-        
+        visible: model.TopVisible
+		
 		highlight: Rectangle { color: "white";}
         focus: true;
 		
 		keyNavigationWraps: false;
 		highlightMoveDuration: 150 ;
 		
+		interactive: false;
 		clip: true;
 		
 		onCurrentItemChanged: {
-			radioPageView.categoryChanged(currentItem.categoryId);
+			if(currentItem) {
+				radioPageView.categoryChanged(currentItem.categoryId);
+			}
 		}
     }
+
+	Rectangle {
+		id: moreTextRect
+		anchors {
+			right: searchEdit.left;
+			rightMargin: 10
+			top: parent.top	
+		}
+		
+		color: categoriesList.currentIndex == -1 ?  'white' : 'transparent'
+		
+		StyledText {
+			id: moreText;
+			text: "Еще"
+
+			anchors {
+				left: parent.left
+				top: parent.top
+				leftMargin: 10
+				topMargin: 10	
+			}
+			
+			color: categoriesList.currentIndex == -1 ?  'black' : 'white'
+			font.pixelSize: 13;
+		}
+		
+		MouseArea  {
+			anchors.fill: parent
+			hoverEnabled: true
+			cursorShape: Qt.PointingHandCursor
+			onClicked: {
+				categoriesList.currentIndex = -1;
+				radioPageView.showMoreCategories();
+			}
+		}
+			
+		width: moreText.width + moreText.anchors.leftMargin * 2
+		height: categoriesList.height
+	}
 	
 	SearchEdit {
 		id: searchEdit
@@ -84,88 +131,8 @@ Rectangle {
 		categoriesList.currentIndex = rowIndex;
 	}
 	
-	// Arrows
-	Rectangle {
-		id: leftArrow
-		color: "#372F2C"
-		width: 10
-		height: parent.height;
-		
-		anchors.top: parent.top;
-		anchors.left: parent.left;
-		
-		Image 
-		{
-			anchors.top: parent.top
-			anchors.topMargin: 15		
-			source: "qrc:///mp/Resources/arrow_left.png"
-		}
-			
-		MouseArea {
-			Timer {
-				id: leftArrowTimer
-				interval: 50; running: false; repeat: true
-				onTriggered: {
-					if(!categoriesList.atXBeginning)
-						categoriesList.flick(2000, 0);
-				}
-			}
-			anchors.fill: parent
-			cursorShape: Qt.PointingHandCursor
-			onPressed: leftArrowTimer.start();
-			onReleased: leftArrowTimer.stop();
-		}
-	}
-	
-	Line {
-		id: leftArrowLine
-		color: '#473f3c'
-		anchors.leftMargin: 2;
-		anchors.top: parent.top;
-		anchors.left: leftArrow.right;
-		height: categoriesView.height
-		width: 1
-	}
-		
-	Rectangle {
-		id: rightArrow
-		color: "#372F2C"
-		width: 10
-		height: parent.height;
-		anchors.top: parent.top;
-		anchors.right: searchEdit.left;
-		
-		Image 
-		{
-			anchors.top: parent.top
-			anchors.topMargin: 15
-			source: "qrc:///mp/Resources/arrow_right.png"
-		}
-		
-		MouseArea {
-			Timer {
-				id: rightArrowTimer
-				interval: 50; running: false; repeat: true;
-				onTriggered: {
-					if(!categoriesList.atXEnd)
-						categoriesList.flick(-2000, 0);
-				}	
-			}
-			anchors.fill: parent
-			cursorShape: Qt.PointingHandCursor
-			onPressed: rightArrowTimer.start();
-			onReleased: rightArrowTimer.stop();
-		}
-	}
-	
-	Line {
-		id: rightArrowLine
-		color: '#473f3c'
-		anchors.rightMargin: 4
-		anchors.top: parent.top;
-		anchors.right: rightArrow.left;
-		height: categoriesView.height
-		width: 1
+	function insertCategoryBeforeMore(id) {
+		categoriesView.model.InsertLastTopVisibleCategory(id, categoriesView.width - (categoriesView.width - moreTextRect.x), openSansLight.name, 10, 21);
 	}
 }
 

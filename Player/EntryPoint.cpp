@@ -53,10 +53,10 @@ int main(int argc, char *argv[])
 
 	mp::view::WebView::SetupGlobalSettings();
 
+	app.SetLang("ru");
 	app.CreateChildControllers();
 	app.CreateView(cmdLine.IsSilent());
 	app.InitSignalsSlots();
-	app.SetLang("ru");
 
 	return app.exec();
 }

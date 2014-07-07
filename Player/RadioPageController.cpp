@@ -86,9 +86,9 @@ void RadioPageController::Search(const QString& filter)
 {
 }
 
-void RadioPageController::Stop()
+void RadioPageController::Pause()
 {
-	m_audioStream.Stop();
+	PauseRadio();
 }
 
 void RadioPageController::SetCategoryFilter(int categoryId)
@@ -104,7 +104,10 @@ void RadioPageController::SetCategoryFilter(int categoryId)
 
 void RadioPageController::PlayRadio(int id)
 {
+	emit PauseAllControllers();
+
 	model::ChannelSourcePtr channel = m_stations.Find(id);
+
 	if(channel)
 	{
 		m_currentChannel = channel;
@@ -127,6 +130,8 @@ void RadioPageController::PlayRadio(int id)
 
 void RadioPageController::ResumeRadio()
 {
+	emit PauseAllControllers();
+
 	if(m_audioStream.State() == AudioStream::ASPaused)
 	{
 		m_audioStream.Resume();

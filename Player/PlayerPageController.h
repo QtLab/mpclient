@@ -18,7 +18,7 @@ public:
 	bool IsActive() const;
 	view::TabPage* View() const;
 	void ReLoadData();
-	void Stop();
+	void Pause();
 
 public slots:
 	void Search(const QString& seasrch);

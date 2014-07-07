@@ -37,6 +37,9 @@ public:
 	void SetPlayStationName(const QString& name);
 	void SetCategory(int id);
 
+private slots:
+	void ShowSearchContextMenu(int x, int y);
+
 signals:
 	void PlayRadio(int id);
 	void ResumeRadio();

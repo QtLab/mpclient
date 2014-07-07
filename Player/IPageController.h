@@ -18,8 +18,11 @@ public:
 	virtual bool IsActive() const= 0;
 	virtual view::TabPage* View() const = 0;
 	virtual void ReLoadData() = 0;
-	virtual void Stop() = 0;
+	virtual void Pause() = 0;
 	virtual void Search(const QString& filter) = 0;
+
+signals:
+	void PauseAllControllers();
 };
 
 IPageControllerPtr CreatePageController(const QString& name);

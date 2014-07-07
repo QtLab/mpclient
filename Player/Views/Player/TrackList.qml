@@ -46,7 +46,6 @@ Rectangle
 					
 					StyledText  {
 						text: Artist + " - " + Title
-						color: '#a2a2a2'
 						font.pixelSize: 12
 						width: parent.width;
 						

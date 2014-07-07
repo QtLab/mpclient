@@ -7,7 +7,6 @@ Item
 	StyledText  {
 		id: stationText
 		text: Name
-		color: '#a2a2a2'
 		font.pixelSize: 12
 		width: parent.width;
 		

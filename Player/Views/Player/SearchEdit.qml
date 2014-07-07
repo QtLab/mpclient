@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.0
+import QtQuick.Controls.Styles 1.0
 
 Rectangle {
 	radius: 3;
@@ -26,6 +27,14 @@ Rectangle {
 		width: 10;
 		placeholderText: "Поиск"
 		text: parent.filter;
+		
+        style: TextFieldStyle {
+            textColor: "black"
+            background: Rectangle {
+                border.color: "#333"
+                border.width: 0
+            }
+        }
 	}
 	
 	Line {
@@ -44,7 +53,8 @@ Rectangle {
 	Image {
 		id: searchIcon
 		anchors {
-			topMargin: 2;
+			topMargin: 1;
+			rightMargin: 1;
 			top: parent.top
 			right: parent.right 
 		}

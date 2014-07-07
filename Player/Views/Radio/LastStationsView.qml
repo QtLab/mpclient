@@ -2,7 +2,8 @@ import QtQuick 2.0
 
 Rectangle {
 	property variant model;
-
+	height: 85;
+	
 	Component {
 		id: channelDelegate
 		StationView {

@@ -1,17 +1,12 @@
 import QtQuick 2.0
 
 Rectangle {
-
-	StyledText { 
-		id: searchText
-		text: "Результаты поиска"
-		font.pixelSize: 13;
-	}
-	
+	property variant model;
+	 
 	Component  {
-		id: searchResultDelegate
+		id: moreCategoryDelegate
+		
 		Rectangle {
-			
 			width: textView.width;
 			height: textView.height;
 			
@@ -28,15 +23,18 @@ Rectangle {
 					cursorShape: Qt.PointingHandCursor
 					
 					onClicked: {
-						playStationView.stationName = Name;
-						playStationView.stationMetadata = Url;
-						playStationView.isPlaying = true;
-						
-						radioPageView.playRadio(Id);
-						var categoryId = FirstCategoryId;
-						
-						radioPageView.insertCategoryBeforeMore(categoryId);
-						radioPageView.setCategory(categoryId);
+						if(TopVisible)
+						{
+							radioPageView.setCategory(Id);
+							radioPageView.showCurrentCategory();
+						}
+						else
+						{
+							var id = Id;
+							radioPageView.insertCategoryBeforeMore(id);
+							radioPageView.setCategory(id);
+							radioPageView.showCurrentCategory();
+						}
 					}
 				}
 			}
@@ -69,10 +67,10 @@ Rectangle {
 	}
 	
 	GridView {
-		id: searchResultGrid
+		id: moreCategoriesGrid
 
 		anchors {
-			top: searchText.bottom;
+			top: parent.top;
 			bottom: parent.bottom
 			left: parent.left
 			right: parent.right
@@ -80,13 +78,20 @@ Rectangle {
 			leftMargin: 17
 		}
 		
+
+		
 		cellWidth: 136; cellHeight: 26
 		
-		model: searchStationsModel
-		delegate: searchResultDelegate
+		Component.onCompleted: {
+			console.log(parent.model);
+			
+		}
+		
+		model: parent.model
+		delegate: moreCategoryDelegate
 	}
 	
 	VerticalScrollBar {
-		flickable: searchResultGrid
+		flickable: moreCategoriesGrid
 	}
 }

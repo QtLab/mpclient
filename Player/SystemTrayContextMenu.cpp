@@ -28,7 +28,7 @@ void SystemTrayContextMenu::Retranslate()
 	addSeparator();
 	addAction(tr("Update"), this, SIGNAL(UpdateApplication()));
 	addSeparator();
-	addAction(tr("About"), this, SIGNAL(About()));
+	addAction(tr("About"), this, SIGNAL(AboutApplication()));
 	addSeparator();
 	addAction(tr("Close"), this, SIGNAL(CloseApplication()));
 }

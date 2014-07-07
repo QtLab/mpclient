@@ -13,6 +13,7 @@ Rectangle {
 	signal searchFilterChanged(string txt);
 	signal searchTracks(string txt);
 	signal volumeChanged(real volume);
+	signal showSearchContextMenu(int x, int y);
 	
 	CategoriesView {
 		id: categoriesView;
@@ -93,14 +94,28 @@ Rectangle {
 		visible: false;
 	}
 	
+	MoreCategoriesView {
+		id: moreCategoriesView;
+		model: categoriesModel;
+		
+		anchors {
+			left: parent.left
+			right: parent.right
+			top: categoriesView.bottom
+			bottom: parent.bottom
+		}
+		
+		visible: false;
+	}
+
 	onCategoryChanged: {
-		hideSearchResults();
+		showCurrentCategory();
 	}
 	
 	onSearchFilterChanged: {
 		if(txt.length == 0)
 		{
-			hideSearchResults();
+			showCurrentCategory();
 		}
 		else
 		{
@@ -109,7 +124,7 @@ Rectangle {
 	}
 	
 	onPlayRadio: {
-		hideSearchResults();
+		showCurrentCategory();
 	}
 	
 	function setPlayStationName(name) {
@@ -132,16 +147,28 @@ Rectangle {
 	
 	function showSearchResults() {
 		currentCategoryStationsView.visible = false;
+		moreCategoriesView.visible = false;
 		searchResultView.visible = true;
 	}
 	
-	function hideSearchResults() {
+	function showMoreCategories() {
+		currentCategoryStationsView.visible = false;
+		searchResultView.visible = false;
+		moreCategoriesView.visible = true;
+	}
+	
+	function showCurrentCategory() {
 		currentCategoryStationsView.visible = true;
 		searchResultView.visible = false;
+		moreCategoriesView.visible = false;
 	}
 
 	function setCategory(id) {
 		categoriesView.setCategory(id);
+	}
+	
+	function insertCategoryBeforeMore(id) {
+		categoriesView.insertCategoryBeforeMore(id);
 	}
 
 }

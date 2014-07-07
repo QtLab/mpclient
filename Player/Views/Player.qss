@@ -1,5 +1,5 @@
 QMainWindow {
-	background-color: 'white';
+	background-color: '#efefeb';
 }
 
 QWidget#centralWidget {
@@ -49,14 +49,14 @@ QTabWidget#tabWidget::pane {
 }
 
 QTabBar::tab {
-	font: 11pt;
+	font: 10pt;
 	background-color: '#efefeb';
 	border: 0px solid #C4C4C3;
 	padding-left: 18px;
 	padding-right: 18px;
 	border-top-left-radius: 3px;
 	border-top-right-radius: 3px;
-	min-width: 100px;
+	min-width: 50px;
 	min-height: 43px;
 }
 

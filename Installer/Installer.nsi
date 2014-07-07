@@ -6,7 +6,7 @@ Unicode True
 
 ${StrLoc}
 
-!define					LOCAL_DEBUG
+;!define					LOCAL_DEBUG
 
 !define APPNAME			"UnisonBox"
 !define APPID			"UnisonBox"
@@ -162,7 +162,7 @@ Function InstallFinish
 	SetOutPath $INSTDIR
 	
 	IfSilent launchSilent
-	MessageBox MB_OK '"$INSTDIR\${LAUNCHER_APP}" /source:$Source'
+	;MessageBox MB_OK '"$INSTDIR\${LAUNCHER_APP}" /source:$Source'
 	Exec '"$INSTDIR\${LAUNCHER_APP}" /source:$Source'
 	Pop $0
 	Goto exit

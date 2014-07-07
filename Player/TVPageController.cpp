@@ -37,7 +37,7 @@ void TVPageController::Search(const QString& filter)
 {
 }
 
-void TVPageController::Stop()
+void TVPageController::Pause()
 {
 }
 

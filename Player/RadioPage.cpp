@@ -6,6 +6,7 @@
 #include <QQuickItem>
 #include <QHBoxLayout>
 #include <QDebug>
+#include <QMenu>
 
 namespace mp {
 namespace view {
@@ -39,6 +40,7 @@ RadioPage::RadioPage(QWidget* parent, QAbstractItemModel* categoriesModel, QAbst
 	connect(m_quickView->rootObject(), SIGNAL(pauseRadio()), this, SIGNAL(PauseRadio()));
 	connect(m_quickView->rootObject(), SIGNAL(searchFilterChanged(QString)), this, SIGNAL(SearchFilterChanged(QString)));
 	connect(m_quickView->rootObject(), SIGNAL(searchTracks(QString)), this, SIGNAL(SearchTracks(QString)));
+	connect(m_quickView->rootObject(), SIGNAL(showSearchContextMenu(int, int)), this, SLOT(ShowSearchContextMenu(int, int)));
 }
 
 RadioPage::~RadioPage()
@@ -100,6 +102,13 @@ void RadioPage::SetPlayStationName(const QString& name)
 void RadioPage::SetCategory(int id)
 {
 	QMetaObject::invokeMethod(m_quickView->rootObject(), "setCategory", Q_ARG(QVariant, id));
+}
+
+void RadioPage::ShowSearchContextMenu(int x, int y)
+{
+	//QMenu menu(this);
+	//menu.addAction(tr("Open in New Window"), this, SLOT(OpenUrlInDefaultBrowser()));
+	//menu.exec(QPoint(x, y));
 }
 
 }

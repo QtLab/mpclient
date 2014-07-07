@@ -8,7 +8,7 @@
 #include "MainWindow.h"
 #include "SystemTray.h"
 #include "TabPage.h"
-#include <QMessageBox>
+#include "MessageBoxView.h"
 
 namespace mp {
 namespace controller {
@@ -21,7 +21,7 @@ AppController::AppController(int argc, char *argv[])
 
 AppController::~AppController()
 {
-	m_updateController->deleteLater();
+	//TODO: free resorces
 }
 
 void AppController::SetLang(const QString& lang)
@@ -37,8 +37,14 @@ void AppController::SetLang(const QString& lang)
 void AppController::CreateChildControllers()
 {
 	m_radioPageController = CreatePageController("radio");
+	connect(m_radioPageController, SIGNAL(PauseAllControllers()), SLOT(PauseAllControllers()));
+
 	m_playerPageController = CreatePageController("palyer");
+	connect(m_playerPageController, SIGNAL(PauseAllControllers()), SLOT(PauseAllControllers()));
+
 	m_tvPageController = CreatePageController("tv");
+	connect(m_tvPageController, SIGNAL(PauseAllControllers()), SLOT(PauseAllControllers()));
+
 	m_updateController = new UpdateController();
 	m_pluginManager = new PluginManager();
 	m_userIdle = new UserIdle();
@@ -108,7 +114,7 @@ void AppController::Showtdown(int exitCode)
 
 void AppController::UpdateStarted()
 {
-	m_updateController->CheckForUpdate();
+	m_updateController->CheckForUpdate(true);
 }
 
 void AppController::UpdateFinished(bool restartRequired)
@@ -122,6 +128,11 @@ void AppController::UpdateFinished(bool restartRequired)
 
 		m_radioPageController->ReLoadData();
 		m_tvPageController->ReLoadData();
+
+		if(m_updateController->IsActivatedByUser())
+		{
+			view::MessageBoxView::ShowNewVersionNotFound();
+		}
 	}
 	else
 	{
@@ -131,7 +142,7 @@ void AppController::UpdateFinished(bool restartRequired)
 		}
 		else
 		{
-			QMessageBox::information(m_mainWidow, tr("Updating"), tr("Found a new version"));
+			view::MessageBoxView::ShowNewVersionFound();
 			Showtdown(UPDATE_EXIT_CODE);
 		}
 	}
@@ -173,7 +184,6 @@ void AppController::FlashInstalled()
 {
 	if(!m_mainWidow->isHidden())
 	{
-		QMessageBox::information(m_mainWidow, tr("Flash player"), tr("Flash was installed press Ok to restart program"));
 		Showtdown(RESTART_EXIT_CODE);
 	}
 	else
@@ -186,6 +196,13 @@ void AppController::SearchTracks(QString filter)
 {
 	m_playerPageController->Search(filter);
 	m_mainWidow->SetCurrentTabIndex(m_playerPageController->View()->TabIndex());
+}
+
+void AppController::PauseAllControllers()
+{
+	m_radioPageController->Pause();
+	m_playerPageController->Pause();
+	m_tvPageController->Pause();
 }
 
 void AppController::HandleMssageFromAnotherInst(const QString& message)

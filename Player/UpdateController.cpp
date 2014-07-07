@@ -15,6 +15,7 @@ const int ParallelFilesUpdating = 4;
 
 UpdateController::UpdateController()
 	:m_filesInProcess(0)
+	,m_activatedByUser(false)
 {
 	n_updateTimer.setInterval(DefualtUpdateInterval);
 	connect(&n_updateTimer, SIGNAL(timeout()), SLOT(CheckForUpdate()));
@@ -27,11 +28,18 @@ bool UpdateController::InProcess() const
 	return inProcess;
 }
 
-void UpdateController::CheckForUpdate()
+bool UpdateController::IsActivatedByUser() const
+{
+	return m_activatedByUser;
+}
+
+void UpdateController::CheckForUpdate(bool activatedByUser)
 {
 #ifndef _DEBUG
 	if(!InProcess())
 	{
+		m_activatedByUser = activatedByUser;
+
 		QUrl url = UrlBuilder::CreateUpdate(Config::Inst().UserId());
 
 		qDebug() << "Download update json from: " << url.toString();

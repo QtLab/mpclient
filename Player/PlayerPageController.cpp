@@ -71,9 +71,9 @@ void PlayerPageController::ReLoadData()
 	m_downlaodedTracksModel->Load(Path::ConfigFile("tracks.db"));
 }
 
-void PlayerPageController::Stop()
+void PlayerPageController::Pause()
 {
-	m_audioStream->Stop();
+	PauseTrack();
 }
 
 void PlayerPageController::Search(const QString& seasrchFilter)
@@ -85,6 +85,8 @@ void PlayerPageController::Search(const QString& seasrchFilter)
 
 void PlayerPageController::PlayTrack(int id)
 {
+	emit PauseAllControllers();
+
 	model::TrackPtr track;
 
 	if(id < 0)
@@ -117,6 +119,8 @@ void PlayerPageController::PlayTrack(int id)
 
 void PlayerPageController::ResumeTrack()
 {
+	emit PauseAllControllers();
+
 	m_audioStream->Resume();
 }
 

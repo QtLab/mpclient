@@ -42,7 +42,7 @@ public:
 	void SetLastPlayNow();
 
 	void AddCategoryId(uint id);
-	CategoryIds Categories() const;
+	RadioCategoryIds Categories() const;
 
 public:
 	int						m_id;
@@ -52,7 +52,7 @@ public:
 	int						m_playCount;
 	// Unix timestamp
 	uint					m_lastPlayTimestamp;
-	CategoryIds				m_categories;
+	RadioCategoryIds		m_categories;
 
 	Q_DISABLE_COPY(ChannelSource)
 };

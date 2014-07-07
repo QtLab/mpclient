@@ -2,7 +2,7 @@ import QtQuick 2.0
 
 Rectangle {
 	property variant model;
-	height: 65;
+	height: 85;
 	
 	Component {
 		id: channelDelegate
@@ -26,7 +26,7 @@ Rectangle {
 	ListView {
 		id: topChannelsList
 		width:parent.width; 
-		height: 40;
+		height: 70;
 		
 		model: parent.model;
 		delegate: channelDelegate;

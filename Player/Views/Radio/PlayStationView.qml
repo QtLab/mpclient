@@ -27,7 +27,6 @@ Rectangle {
 	StyledText  {
 		text: parent.stationName
 		width: centralIcon.width
-		color: '#7A7673'
 		font.pixelSize: 12
 
 		anchors {
@@ -38,9 +37,11 @@ Rectangle {
 		
 		MouseArea  {
 			anchors.fill: parent
-			cursorShape: Qt.PointingHandCursor
+			cursorShape: parent.text == null || parent.text.length == 0 ? Qt.ArrowCursor : Qt.PointingHandCursor
 			onClicked:  {
-				radioPageView.searchTracks(parent.text);
+				if(parent.text != null && parent.text.length > 0) {
+					radioPageView.searchTracks(parent.text);
+				}
 			}
 		}
 	}
@@ -97,7 +98,7 @@ Rectangle {
 	StyledText  {
 		text: parent.stationMetadata
 		width: 220
-		color: '#71C5EA'
+		color: '#338CB2'
 		font.pixelSize: 12
 
 		anchors {
@@ -108,9 +109,11 @@ Rectangle {
 		
 		MouseArea  {
 			anchors.fill: parent
-			cursorShape: Qt.PointingHandCursor
+			cursorShape: parent.text == null || parent.text.length == 0 ? Qt.ArrowCursor : Qt.PointingHandCursor
 			onClicked:  {
-				radioPageView.searchTracks(parent.text);
+				if(parent.text != null && parent.text.length > 0) {
+					radioPageView.searchTracks(parent.text);
+				}
 			}
 		}
 	}

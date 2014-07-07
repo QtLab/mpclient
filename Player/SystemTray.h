@@ -17,6 +17,7 @@ public:
 
 private slots:
 	void Activated(QSystemTrayIcon::ActivationReason reason);
+	void ShowAbout();
 
 signals:
 	void ShowtdownApplicationReuest();

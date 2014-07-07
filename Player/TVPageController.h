@@ -18,7 +18,7 @@ public:
 	view::TabPage* View() const;
 	void ReLoadData();
 	void Search(const QString& filter);
-	void Stop();
+	void Pause();
 
 signals:
 	void FlashInstalled();

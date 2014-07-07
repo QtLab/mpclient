@@ -113,7 +113,7 @@ QString Path::TrackFile(const QString& trackName)
 
 	QDir dir(Config::Inst().PathToSaveTracks());
 
-	if(!dir.cd("plugins"))
+	if(!dir.exists())
 	{
 		dir.mkpath(".");
 	}

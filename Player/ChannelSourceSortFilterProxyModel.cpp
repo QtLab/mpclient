@@ -66,7 +66,7 @@ bool ChannelSourceSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QM
 
 	if(m_categoryIdFilter >= 0)
 	{
-		CategoryIds ids = sourceModel()->data(index, ChannelSourceModel::Categories).value<CategoryIds>();
+		RadioCategoryIds ids = sourceModel()->data(index, ChannelSourceModel::Categories).value<RadioCategoryIds>();
 
 		if(!ids.contains(m_categoryIdFilter))
 		{
