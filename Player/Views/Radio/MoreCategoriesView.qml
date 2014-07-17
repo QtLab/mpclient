@@ -19,20 +19,18 @@ Rectangle {
 				
 				MouseArea  {
 					anchors.fill: parent
-					hoverEnabled: true
 					cursorShape: Qt.PointingHandCursor
 					
 					onClicked: {
 						if(TopVisible)
 						{
-							radioPageView.setCategory(Id);
+							radioPageView.setCategory(Id, true);
 							radioPageView.showCurrentCategory();
 						}
 						else
 						{
 							var id = Id;
-							radioPageView.insertCategoryBeforeMore(id);
-							radioPageView.setCategory(id);
+							radioPageView.setCategory(id, false);
 							radioPageView.showCurrentCategory();
 						}
 					}

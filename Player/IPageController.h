@@ -27,7 +27,7 @@ signals:
 
 IPageControllerPtr CreatePageController(const QString& name);
 
-}
-}
+} //namespace controller
+} //namespace mp
 
 #endif

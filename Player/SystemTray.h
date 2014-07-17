@@ -27,7 +27,7 @@ private:
 	QMainWindow *		m_parent;
 };
 
-}
-}
+} // end namespace view
+} // end namespace mp
 
 #endif // MP_SYSTEM_TRAY_H

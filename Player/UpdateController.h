@@ -4,8 +4,6 @@
 #include "Prerequirements.h"
 #include "UpdateModel.h"
 
-#include <QTimer>
-
 namespace mp {
 namespace controller {
 
@@ -29,21 +27,23 @@ public slots:
 
 private slots:
 	void ProcessUpdateList();
-	void FileDownloaded();
+	void FileDownloaded(bool success, QVariant tag);
 
 private:
 	bool ProcessNextFile();
 	void Cleanup();
 
 signals:
-	void UpdateFinished(bool restartRequired);
+	void UpdateFinished(bool success, bool restartRequired);
 
 private:
 	bool							m_activatedByUser;
 	// Timer for update
-	QTimer							n_updateTimer;
+	QTimer *						m_updateTimer;
 	// Processing files count
 	int								m_filesInProcess;
+	// Newtwork access
+	DownlaodManager *				m_downloadMgr;
 	// Files to update
 	model::UpdateModel				m_updateModel;
 };

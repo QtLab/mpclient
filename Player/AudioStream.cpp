@@ -21,7 +21,7 @@ AudioStream::AudioStream(const  QString& streamName)
 	,m_streamName(streamName)
 {
 	connect(&Config::Inst(), SIGNAL(VolumeChanged(qreal, const QString&)), SLOT(VolumeChanged(qreal, const QString&)));
-	connect(&m_streamStarter, SIGNAL(Ready(HSTREAM, int)), SLOT(StreadStarted(HSTREAM, int)), Qt::DirectConnection);
+	connect(&m_streamStarter, SIGNAL(Ready(HSTREAM, int)), SLOT(StreamStarted(HSTREAM, int)), Qt::DirectConnection);
 }
 
 AudioStream::~AudioStream()
@@ -48,32 +48,39 @@ void AudioStream::InitGlobal()
 	}
 }
 
-AudioStream::ASState AudioStream::RefreshState()
+AudioStream::ASState AudioStream::SyncState()
 {
 	DWORD state = BASS_ChannelIsActive(m_hStream);
+
+	ASState newState;
 
 	switch(state)
 	{
 		//The channel is not active, or handle is not a valid channel.
 		case BASS_ACTIVE_STOPPED:
-			m_state = ASState::ASStopped;
+			newState = ASState::ASStopped;
 			break;
 		//The channel is playing (or recording).
 		case BASS_ACTIVE_PLAYING:
-			m_state = ASState::ASPlaying;
+			newState = ASState::ASPlaying;
 			break;
 		//The channel is paused.
 		case BASS_ACTIVE_PAUSED:
-			m_state = ASState::ASPaused;
+			newState = ASState::ASPaused;
 			break;
 		//Playback of the stream has been stalled due to a lack of sample data. 
 		//The playback will automatically resume once there is sufficient data to do so.
 		case BASS_ACTIVE_STALLED:
-			m_state = ASState::ASStopped;
+			newState = ASState::ASStopped;
 			break;
 	};
 
-	return m_state;
+	if(newState != m_state)
+	{
+		EmitStateChanged(newState);
+	}
+
+	return newState;
 }
 
 AudioStream::ASState AudioStream::State() const
@@ -103,7 +110,7 @@ void AudioStream::Play(const QString& url)
 	}
 }
 
-void AudioStream::StreadStarted(HSTREAM stream, int errorCode)
+void AudioStream::StreamStarted(HSTREAM stream, int errorCode)
 {
 	if(ThreadUtils::IsCurrentThreadOwn(this))
 	{
@@ -128,7 +135,7 @@ void AudioStream::StreadStarted(HSTREAM stream, int errorCode)
 	}
 	else
 	{
-		QMetaObject::invokeMethod(this, "StreadStarted", Qt::QueuedConnection, 
+		QMetaObject::invokeMethod(this, "StreamStarted", Qt::QueuedConnection, 
 									Q_ARG(HSTREAM, stream), Q_ARG(int, errorCode));
 	}
 }

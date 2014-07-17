@@ -5,15 +5,15 @@
     <name>QObject</name>
     <message>
         <source>Paste</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Вставить</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Копировать</translation>
     </message>
     <message>
         <source>Cut</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Вырезать</translation>
     </message>
 </context>
 <context>
@@ -99,6 +99,10 @@
         <source>Found a new version</source>
         <translation>Найдена новая версия</translation>
     </message>
+    <message>
+        <source>A new version isn&apos;t found</source>
+        <translation>Новая версия не найдена</translation>
+    </message>
 </context>
 <context>
     <name>mp::view::PlayerPage</name>
@@ -106,12 +110,35 @@
         <source>Player</source>
         <translation>Музыка</translation>
     </message>
+    <message>
+        <source>a huge collection of artists and albums</source>
+        <translation>огромная коллекция исполнителей и альбомов</translation>
+    </message>
+</context>
+<context>
+    <name>mp::view::QuickPageBase</name>
+    <message>
+        <source>Copy</source>
+        <translation>Копировать</translation>
+    </message>
+    <message>
+        <source>Cut</source>
+        <translation>Вырезать</translation>
+    </message>
+    <message>
+        <source>Paste</source>
+        <translation>Вставить</translation>
+    </message>
 </context>
 <context>
     <name>mp::view::RadioPage</name>
     <message>
         <source>Radio</source>
         <translation>Радио</translation>
+    </message>
+    <message>
+        <source>a collection of the best radio stations from around the world</source>
+        <translation>сборник лучших радио станций со всего мира</translation>
     </message>
 </context>
 <context>
@@ -139,12 +166,16 @@
         <source>Flash installing... %0 percents completed</source>
         <translation></translation>
     </message>
+    <message>
+        <source>the best collection of free videos</source>
+        <translation type="unfinished">лучшая коллекция бесплатнго видео</translation>
+    </message>
 </context>
 <context>
     <name>mp::view::WebView</name>
     <message>
         <source>Open in New Window</source>
-        <translation type="unfinished"></translation>
+        <translation>Открыть в новом окне</translation>
     </message>
 </context>
 </TS>

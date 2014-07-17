@@ -5,8 +5,23 @@ Text {
 	elide: Text.ElideRight;
 	font.family: openSansLight.name
 		
+	Timer {
+		id: toolTipTimer;
+		interval: 500; running: false; repeat: false
+		onTriggered: {
+			if(mouseArea.containsMouse) {
+				radioPageView.showTooltip(parent.text);
+			}
+		}
+	}
+	
 	MouseArea {
 		id: mouseArea
 		anchors.fill: parent
+		hoverEnabled: true
+		
+		onEntered: {
+			toolTipTimer.start();
+		}
 	}
 }

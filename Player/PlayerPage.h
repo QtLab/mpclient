@@ -1,13 +1,12 @@
 #ifndef MP_PLAYER_PAGE_WIDGET_H
 #define MP_PLAYER_PAGE_WIDGET_H
 
-#include "TabPage.h"
-#include "Prerequirements.h"
+#include "QuickPageBase.h"
 
 namespace mp {
 namespace view {
 
-class PlayerPage : public TabPage
+class PlayerPage : public QuickPageBase
 {
 	Q_OBJECT
 
@@ -22,6 +21,7 @@ public:
 	// Languege changed
 	void RetranslateUI();
 	QString Name() const;
+	QString ToolTip() const;
 
 	bool Resizable() const;
 	QSize RestoreSize() const;
@@ -44,12 +44,10 @@ signals:
 	void TrackChangePathRequest();
 
 private:
-	bool									m_initialized;
-	// QML view
-	QQuickView *							m_quickView;
+	bool		m_initialized;
 };
 
-}
-}
+} // end namespace view
+} // end namespace mp
 
 #endif

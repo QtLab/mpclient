@@ -5,15 +5,15 @@
     <name>QObject</name>
     <message>
         <source>Paste</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Paste</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Copy</translation>
     </message>
     <message>
         <source>Cut</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Cut</translation>
     </message>
 </context>
 <context>
@@ -89,15 +89,19 @@
     <name>mp::view::MessageBoxView</name>
     <message>
         <source>UnisonBox</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>UnisonBox version: %0</source>
-        <translation type="unfinished">UnisonBox version: %0</translation>
+        <translation>UnisonBox version: %0</translation>
     </message>
     <message>
         <source>Found a new version</source>
-        <translation type="unfinished">Found a new version</translation>
+        <translation>Found a new version</translation>
+    </message>
+    <message>
+        <source>A new version isn&apos;t found</source>
+        <translation>A new version isn&apos;t found</translation>
     </message>
 </context>
 <context>
@@ -106,12 +110,35 @@
         <source>Player</source>
         <translation>Music</translation>
     </message>
+    <message>
+        <source>a huge collection of artists and albums</source>
+        <translation type="unfinished">a huge collection of artists and albums</translation>
+    </message>
+</context>
+<context>
+    <name>mp::view::QuickPageBase</name>
+    <message>
+        <source>Copy</source>
+        <translation>Copy</translation>
+    </message>
+    <message>
+        <source>Cut</source>
+        <translation>Cut</translation>
+    </message>
+    <message>
+        <source>Paste</source>
+        <translation>Paste</translation>
+    </message>
 </context>
 <context>
     <name>mp::view::RadioPage</name>
     <message>
         <source>Radio</source>
         <translation>Radio</translation>
+    </message>
+    <message>
+        <source>a collection of the best radio stations from around the world</source>
+        <translation type="unfinished">a collection of the best radio stations from around the world</translation>
     </message>
 </context>
 <context>
@@ -139,12 +166,16 @@
         <source>Flash installing... %0 percents completed</source>
         <translation></translation>
     </message>
+    <message>
+        <source>the best collection of free videos</source>
+        <translation type="unfinished">the best collection of free videos</translation>
+    </message>
 </context>
 <context>
     <name>mp::view::WebView</name>
     <message>
         <source>Open in New Window</source>
-        <translation type="unfinished"></translation>
+        <translation>Open in New Window</translation>
     </message>
 </context>
 </TS>

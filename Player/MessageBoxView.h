@@ -16,7 +16,6 @@ public:
 	static void ShowNewVersionNotFound(QWidget* parent = NULL);
 };
 
-}
-}
-
+} // end namespace view
+} // end namespace mp
 #endif

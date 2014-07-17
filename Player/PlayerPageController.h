@@ -48,7 +48,7 @@ private:
 	QTimer *							m_syncProgressTimer;
 };
 
-}
-}
+} //namespace controller
+} //namespace mp
 
 #endif

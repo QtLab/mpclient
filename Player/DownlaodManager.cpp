@@ -4,6 +4,7 @@
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QNetworkReply>
+#include <QNetworkSession>
 
 #include <QDebug>
 
@@ -12,7 +13,8 @@ namespace mp {
 DownlaodManager * DownlaodManager::m_globalInstance = 0;
 
 DownlaodManager::DownlaodManager()
-	:m_manager(new QNetworkAccessManager())
+	:m_manager(new QNetworkAccessManager(this))
+	,m_session(new QNetworkSession(m_manager->configuration(), this))
 {
 }
 
@@ -39,7 +41,7 @@ void DownlaodManager::DownloadFile(const QUrl& url, const QString& filePath,
 
 	if(finishListner && finishSlot)
 	{
-		connect(downlaoder, SIGNAL(Finished()), finishListner, finishSlot);
+		connect(downlaoder, SIGNAL(Finished(bool, QVariant)), finishListner, finishSlot);
 	}
 	
 	if(progressListner && progressSlot)
@@ -86,6 +88,11 @@ void DownlaodManager::Post(const QUrl& url, const QByteArray& body, QObject* lis
 	}
 
 	reply->ignoreSslErrors();
+}
+
+void DownlaodManager::AbortAll()
+{
+	m_session->stop();
 }
 
 void DownlaodManager::HttpReplyFinished()

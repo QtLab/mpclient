@@ -27,8 +27,14 @@ public:
 	typedef QSharedPointer<T>	ItemType;
 	typedef QList<ItemType>		ItemList;
 
-	BaseListModel(){}
-	virtual ~BaseListModel(){}
+	BaseListModel(QObject* parent = NULL)
+		:QAbstractListModel(parent)
+	{
+	}
+
+	virtual ~BaseListModel()
+	{
+	}
 
 	virtual void Add(QSharedPointer<T> item, bool notifiChanged = false)
 	{
@@ -142,11 +148,15 @@ public:
 		emit dataChanged(createIndex(0,0),createIndex(m_items.size(),0));
 	}
 
-	virtual void Cleanup()
+	virtual void Cleanup(bool withNotify = true)
 	{
-		beginResetModel();
+		if(withNotify)
+			beginResetModel();
+
 		m_items.clear();
-		endResetModel();
+
+		if(withNotify)
+			endResetModel();
 	}
 
 	ItemType First() const
@@ -182,7 +192,7 @@ protected:
 	ItemList					m_items;
 };
 
-} //End namespace model
-} //End namespace mp
+} //namespace model
+} //namespace mp
 
 #endif

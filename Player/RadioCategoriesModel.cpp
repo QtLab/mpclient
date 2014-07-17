@@ -50,6 +50,7 @@ void RadioCategory::SetTopVisible(bool topVisible)
 }
 
 RadioCategoriesModel::RadioCategoriesModel()
+	:m_lastTopVIsibleIndex(0)
 {
 }
 
@@ -59,7 +60,14 @@ RadioCategoriesModel::~RadioCategoriesModel()
 
 int RadioCategoriesModel::UpdateTopVisibleCategories(int maxWidth, const QString& fontFamily, int pointSize, int spacing)
 {
+	if(maxWidth < 0)
+	{
+		return 0;
+	}
+
 	int actualVListWidh = 0;
+	int lastTopVIsibleIndex = -1;
+
 	QFont font(fontFamily, pointSize);
 	QFontMetrics fm(font);
 
@@ -81,7 +89,7 @@ int RadioCategoriesModel::UpdateTopVisibleCategories(int maxWidth, const QString
 			{
 				actualVListWidh += (textWidth + spacing);
 				category->SetTopVisible(true);
-				m_lastTopVIsibleIndex = index;
+				lastTopVIsibleIndex = index;
 			}
 			else
 			{
@@ -93,12 +101,36 @@ int RadioCategoriesModel::UpdateTopVisibleCategories(int maxWidth, const QString
 		index++;
 	}
 
-	EmitDataChanged();
+	if(m_lastTopVIsibleIndex != lastTopVIsibleIndex)
+	{
+		m_lastTopVIsibleIndex = lastTopVIsibleIndex;
+		EmitDataChanged();
+	}
 
 	return actualVListWidh;
 }
 
-int RadioCategoriesModel::InsertLastTopVisibleCategory(int id, int maxWidth, const QString& fontFamily, int pointSize, int spacing)
+void RadioCategoriesModel::InsertFirstTopVisibleCategory(int id, int maxWidth, const QString& fontFamily, int pointSize, int spacing)
+{
+	for(int i = 0; i < m_items.count(); i++ )
+	{
+		RadioCategoryPtr category = m_items[i];
+
+		if(category->Id() == id)
+		{
+			if(!category->TopVisible())
+			{
+				m_items.move(i, 0);
+			}
+			
+			break;
+		}
+	}
+
+	UpdateTopVisibleCategories(maxWidth, fontFamily, pointSize, spacing);
+}
+
+void RadioCategoriesModel::InsertLastTopVisibleCategory(int id, int maxWidth, const QString& fontFamily, int pointSize, int spacing)
 {
 	RadioCategoryPtr insertedCategory;
 
@@ -108,6 +140,11 @@ int RadioCategoriesModel::InsertLastTopVisibleCategory(int id, int maxWidth, con
 
 		if(category->Id() == id)
 		{
+			if(category->TopVisible())
+			{
+				return;
+			}
+
 			insertedCategory = category;
 			m_items.removeAt(i);
 			break;
@@ -142,11 +179,7 @@ int RadioCategoriesModel::InsertLastTopVisibleCategory(int id, int maxWidth, con
 		}
 
 		EmitDataChanged();
-
-		return actualVListWidh;
 	}
-
-	return UpdateTopVisibleCategories(maxWidth, fontFamily, pointSize, spacing);
 }
 
 int RadioCategoriesModel::RowIndexById(int id) const
@@ -219,5 +252,11 @@ QHash<int, QByteArray>	RadioCategoriesModel::roleNames() const
 	return roles;
 }
 
-} //End namespace model
-} //End namespace mp
+void RadioCategoriesModel::Cleanup()
+{
+	BaseListModel<RadioCategory>::Cleanup();
+	m_lastTopVIsibleIndex = 0;
+}
+
+} //namespace model
+} //namespace mp

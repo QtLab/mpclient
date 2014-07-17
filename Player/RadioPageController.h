@@ -4,8 +4,8 @@
 #include "IPageController.h"
 #include "AudioStream.h"
 #include "RadioCategoriesModel.h"
-#include "ChannelSourceModel.h"
-#include "ChannelSourceSortFilterProxyModel.h"
+#include "RadioSourcesModel.h"
+#include "RadioSourcesSortFilterProxyModel.h"
 
 namespace mp {
 namespace controller {
@@ -41,14 +41,14 @@ signals:
 
 private:
 	// Current playing channel
-	model::ChannelSourcePtr						m_currentChannel;
+	model::RadioSourcePtr						m_currentChannel;
 	model::RadioCategoryPtr						m_currentCategory;
 	// Model for all stations channnels
-	model::ChannelSourceModel					m_stations;
-	model::ChannelSourceSortFilterProxyModel	m_searchStationsProxyModel;
-	model::ChannelSourceSortFilterProxyModel	m_allStationsProxyModel;
-	model::ChannelSourceSortFilterProxyModel	m_topStationsProxyModel;
-	model::ChannelSourceSortFilterProxyModel	m_lastStationsProxyModel;
+	model::RadioSourcesModel					m_stations;
+	model::RadioSourcesSortFilterProxyModel		m_searchStationsProxyModel;
+	model::RadioSourcesSortFilterProxyModel		m_allStationsProxyModel;
+	model::RadioSourcesSortFilterProxyModel		m_topStationsProxyModel;
+	model::RadioSourcesSortFilterProxyModel		m_lastStationsProxyModel;
 	// All genres
 	model::RadioCategoriesModel					m_categories;
 	// Widget view
@@ -57,7 +57,7 @@ private:
 	AudioStream									m_audioStream;
 };
 
-}
-}
+} //namespace controller
+} //namespace mp
 
 #endif

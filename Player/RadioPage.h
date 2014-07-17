@@ -1,15 +1,12 @@
 #ifndef MP_RADIO_PAGE_WIDGET_H
 #define MP_RADIO_PAGE_WIDGET_H
 
-#include "TabPage.h"
-#include "Prerequirements.h"
-
-#include <QAbstractItemModel>
+#include "QuickPageBase.h"
 
 namespace mp {
 namespace view {
 
-class RadioPage : public TabPage
+class RadioPage : public QuickPageBase
 {
 	Q_OBJECT
 
@@ -26,6 +23,7 @@ public:
 	// Languege changed
 	void RetranslateUI();
 	QString Name() const;
+	QString ToolTip() const;
 
 	bool Resizable() const;
 	QSize RestoreSize() const;
@@ -35,10 +33,8 @@ public:
 	void SetPlayingState(bool play);
 	void SetMetadata(const QString& metadata);
 	void SetPlayStationName(const QString& name);
-	void SetCategory(int id);
-
-private slots:
-	void ShowSearchContextMenu(int x, int y);
+	void SetCategory(int id, bool topVisible);
+	void UpdateTopVisibleCategories();
 
 signals:
 	void PlayRadio(int id);
@@ -49,14 +45,10 @@ signals:
 	void CategoryChanged(int id);
 	void SearchFilterChanged(QString filter);
 	void SearchTracks(QString filter);
-
-private:
-	// QML view
-	QQuickView *							m_quickView;
 };
 
 
-}
-}
+} // end namespace view
+} // end namespace mp
 
 #endif

@@ -20,5 +20,5 @@ void MessageBoxView::ShowNewVersionNotFound(QWidget* parent)
 	QMessageBox::information(parent, tr("UnisonBox"), tr("A new version isn't found"));
 }
 
-}
-}
+} // end namespace view
+} // end namespace mp

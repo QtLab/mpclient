@@ -13,6 +13,11 @@
 
 int main(int argc, char *argv[])
 {
+#if defined(Q_OS_WIN32)
+	::SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX);
+	::_set_abort_behavior(0,_WRITE_ABORT_MSG);
+#endif
+
 	qsrand((uint)QTime::currentTime().msec());
 
 #ifndef _DEBUG
@@ -24,11 +29,13 @@ int main(int argc, char *argv[])
 
 	QNetworkProxyFactory::setUseSystemConfiguration(true);
 
+#ifndef _DEBUG
 	if(app.IsRunningAnotherInstance())
 	{
 		app.SendMessageToAnotherInstance("show");
 		return 0;
 	}
+#endif
 
 #if defined(Q_OS_WIN32) && !defined(_DEBUG)
 	QProcess::startDetached("Launcher.exe /watch");

@@ -29,6 +29,12 @@ class QTimer;
 class QAbstractItemModel;
 class QMouseEvent;
 class QLabel;
+class QQuickView;
+class QQuickItem;
+class QQmlContext;
+class QNetworkSession;
+class QListView;
+class QPropertyAnimation;
 QT_END_NAMESPACE
 
 class NcFramelessHelper;
@@ -58,7 +64,9 @@ class TabWidget;
 class MainWindow;
 class SystemTray;
 class TabPage;
+class TVGenresPopup;
 
+typedef TVGenresPopup * TVGenresPopupPtr;
 typedef TabPage * TabPagePtr;
 
 }
@@ -77,8 +85,6 @@ typedef IPageController* IPageControllerPtr;
 
 namespace model {
 
-class ChannelSourceSortFilterProxyModel;
-
 class Track;
 class TrackModel;
 typedef QSharedPointer<Track> TrackPtr;
@@ -90,19 +96,49 @@ typedef QSharedPointer<FileToUpdate> FileToUpdatePtr;
 typedef UpdateModel * UpdateModelPtr;
 typedef QList<FileToUpdatePtr> FileToUpdateList;
 
-class ChannelSource;
-class ChannelSourceModel;
-typedef QSharedPointer<ChannelSource> ChannelSourcePtr;
-typedef ChannelSourceModel * ChannelSourceModelPtr;
-typedef QList<ChannelSourcePtr> ChannelSourceList;
+class BannerInfo;
+class BannersModel;
+typedef QSharedPointer<BannerInfo> BannerInfoPtr;
+typedef BannersModel * BannersModelPtr;
+typedef QList<int> BannerInfoIds;
+
+class RadioSource;
+class RadioSourcesModel;
+class RadioSourcesSortFilterProxyModel;
+typedef QSharedPointer<RadioSource> RadioSourcePtr;
+typedef RadioSourcesModel * RadioSourcesModelPtr;
+typedef RadioSourcesSortFilterProxyModel * RadioSourcesSortFilterProxyModelPtr;
+typedef QList<RadioSourcePtr> RadioSourceList;
 
 class RadioCategory;
 class RadioCategoriesModel;
 typedef QSharedPointer<RadioCategory> RadioCategoryPtr;
 typedef RadioCategoriesModel * RadioCategoriesModelPtr;
 typedef QList<RadioCategoryPtr> RadioCategoryList;
-typedef QSet<uint> RadioCategoryIds;
+typedef QSet<int> RadioCategoryIds;
 
+class TVCategory;
+class TVCategoriesModel;
+typedef QSharedPointer<TVCategory> TVCategoryPtr;
+typedef TVCategoriesModel * TVCategoriesModelPtr;
+typedef QSet<int> TVCategoryIdsSet;
+
+class TVGenre;
+class TVGenresModel;
+class TVGenresSortFilterProxyModel;
+typedef QSharedPointer<TVGenre> TVGenrePtr;
+typedef TVGenresModel * TVGenresModelPtr;
+typedef TVGenresSortFilterProxyModel* TVGenresSortFilterProxyModelPtr;
+typedef QSet<int> TVGenreIdsSet;
+
+class TVSource;
+class TVSourcesModel;
+class TVSourcesSortFilterProxyModel;
+typedef QSharedPointer<TVSource> TVSourcePtr;
+typedef TVSourcesModel * TVSourcesModelPtr;
+typedef TVSourcesSortFilterProxyModel* TVSourcesSortFilterProxyModelPtr;
+typedef QSet<int> TVSourceIdsSet;
+typedef QList<int> TVSourceIds;
 }
 
 }

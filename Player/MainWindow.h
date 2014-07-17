@@ -37,12 +37,15 @@ private:
 	void closeEvent(QCloseEvent *evt);
 	void resizeEvent(QResizeEvent *evt);
 
+private slots:
+	void SizeChanged(const QSize& newSize);
+
 signals:
 	void CurrentPageChanged(view::TabPage * newPage, view::TabPage * oldPage);
 
 private:
 	QVBoxLayout *			m_layout;
-
+	QPropertyAnimation *	m_changeSizeAnumation;
 	NcFramelessHelper *		m_frameLessHelper;
 	QSize					m_lastTVSize;
 
@@ -51,7 +54,7 @@ private:
 	TabWidget *				m_tabWidget;
 };
 
-}
-}
+} // end namespace view
+} // end namespace mp
 
 #endif // MAINWINDOW_H

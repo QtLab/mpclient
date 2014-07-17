@@ -1,0 +1,48 @@
+QDialog {
+	min-width: 160px;
+	max-width: 160px;
+	border: 2px inset '#316094';
+}
+
+QScrollBar:vertical  {
+	border: none;
+	background: #3C3C3C;
+	width: 5px;
+	margin: 0px 0 0px 0;
+}
+
+QScrollBar::handle:vertical  {
+	background: #F46F2C;
+	min-width: 3px;
+	max-width: 3px;
+	min-height: 3px;
+	max-height: 3px;
+	border-radius: 5px;
+}
+
+QScrollBar::groove:vertical  {
+	background: #3C3C3C;
+	width: 3px; 
+	border-radius: 5px;
+}
+
+QScrollBar::add-line:vertical  {
+	border: none;
+	height: 0px;
+}
+
+QScrollBar::sub-line:vertical  {
+	border: none;
+	height: 0px;
+}
+
+QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical  {
+	border: none;
+	width: 0px;
+	height: 0px;
+	background: 'white';
+}
+
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical  {
+	background: none;
+}

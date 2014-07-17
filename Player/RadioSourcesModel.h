@@ -7,19 +7,18 @@
 namespace mp {
 namespace model {
 
-class ChannelSource : public QObject
+struct RadioSource : public QObject
 {
 	Q_OBJECT
 	Q_PROPERTY(QString name READ Name WRITE SetName)
 	Q_PROPERTY(int id READ Id WRITE SetId)
 	Q_PROPERTY(QString url READ Url WRITE SetUrl)
-	Q_PROPERTY(int genreid READ GenreId WRITE SetGenreId)
 	Q_PROPERTY(uint playcount READ PlayCount WRITE SetPlayCount)
 	Q_PROPERTY(uint lastplay READ LastPlayTimestamp WRITE SetLastPlayTimestamp)
 
 public:
-	ChannelSource();
-	virtual ~ChannelSource();
+	RadioSource();
+	virtual ~RadioSource();
 
 	int Id() const;
 	void SetId(int id);
@@ -30,9 +29,6 @@ public:
 	// Url to channel
 	const QString& Url() const;
 	void SetUrl(const QString& url);
-
-	int GenreId() const;
-	void SetGenreId(int genreId);
 
 	uint PlayCount() const;
 	void SetPlayCount(uint count);
@@ -48,42 +44,40 @@ public:
 	int						m_id;
 	QString					m_name;
 	QString					m_url;
-	int						m_genreId;
 	int						m_playCount;
 	// Unix timestamp
 	uint					m_lastPlayTimestamp;
 	RadioCategoryIds		m_categories;
 
-	Q_DISABLE_COPY(ChannelSource)
+	Q_DISABLE_COPY(RadioSource)
 };
 
-class ChannelSourceModel : public BaseListModel<ChannelSource>
+class RadioSourcesModel : public BaseListModel<RadioSource>
 {
 	Q_OBJECT
 
 public:
-	enum ChannelSourceRoles
+	enum RadioSourceRoles
 	{
 		Id = Qt::UserRole + 1,
 		Name,
 		Url,
 		FirstCategoryId,
 		Categories,
-		GenreId,
 		LastPlayTimestamp,
 		PlayCount
 	};
 
-	ChannelSourceModel();
-	virtual ~ChannelSourceModel();
+	RadioSourcesModel();
+	virtual ~RadioSourcesModel();
 
 	void LoadWithStats(const QString& filePath);
 	bool SaveStats(const QString& filePath);
 
-	ChannelSourcePtr Find(int channelId, int genreId = -1) const;
+	RadioSourcePtr Find(int channelId) const;
 
 	// Merge with items that contains additional information about use it by current user
-	void MergeWithStats(const ChannelSourceModel& channelsWithStats);
+	void MergeWithStats(const RadioSourcesModel& channelsWithStats);
 
 	QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 	int rowCount(const QModelIndex &parent = QModelIndex()) const;
@@ -94,13 +88,13 @@ private:
 
 public:
 	friend QAbstractListModel;
-	Q_DISABLE_COPY(ChannelSourceModel)
+	Q_DISABLE_COPY(RadioSourcesModel)
 };
 
-} //End namespace model
-} //End namespace mp
+} //namespace model
+} //namespace mp
 
-Q_DECLARE_METATYPE(mp::model::ChannelSource);
-Q_DECLARE_METATYPE(mp::model::ChannelSourceModel);
+Q_DECLARE_METATYPE(mp::model::RadioSource);
+Q_DECLARE_METATYPE(mp::model::RadioSourcesModel);
 
 #endif

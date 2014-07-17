@@ -27,5 +27,7 @@
         <file>Resources/w128h1281338911586folder.png</file>
         <file>Resources/w128h1281338911632musicfolder.png</file>
         <file>Resources/w128h1281338911632mu.png</file>
+        <file>Resources/popuptriangle.png</file>
+        <file>Resources/verticaldashedline.png</file>
     </qresource>
 </RCC>

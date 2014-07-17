@@ -12,18 +12,16 @@ RadioPageController::RadioPageController()
 	:m_view(NULL)
 	,m_audioStream("radio")
 {
-	ReLoadData();
-
 	m_allStationsProxyModel.setSourceModel(&m_stations);
-	m_allStationsProxyModel.SetSortType(model::ChannelSourceSortFilterProxyModel::ByName);
+	m_allStationsProxyModel.SetSortType(model::RadioSourcesSortFilterProxyModel::ByName);
 	m_lastStationsProxyModel.sort(0);
 
 	m_lastStationsProxyModel.setSourceModel(&m_stations);
-	m_lastStationsProxyModel.SetSortType(model::ChannelSourceSortFilterProxyModel::ByLastPlayTime);
+	m_lastStationsProxyModel.SetSortType(model::RadioSourcesSortFilterProxyModel::ByLastPlayTime);
 	m_lastStationsProxyModel.sort(0);
 
 	m_topStationsProxyModel.setSourceModel(&m_stations);
-	m_topStationsProxyModel.SetSortType(model::ChannelSourceSortFilterProxyModel::ByTop);
+	m_topStationsProxyModel.SetSortType(model::RadioSourcesSortFilterProxyModel::ByTop);
 	m_topStationsProxyModel.sort(0);
 
 	m_searchStationsProxyModel.setSourceModel(&m_stations);
@@ -43,17 +41,11 @@ RadioPageController::RadioPageController()
 	connect(&m_audioStream, SIGNAL(MetadataUpdated(const ChannelMetadata&)), SLOT(MetadataUpdated(const ChannelMetadata&)));
 	connect(&m_audioStream, SIGNAL(StateChanged(AudioStream::ASState)), SLOT(AudioStreamStateChanged(AudioStream::ASState)));
 
-	m_currentCategory = m_categories.First();
-
-	if(!m_currentCategory.isNull())
-	{
-		SetCategoryFilter(m_currentCategory->Id());
-		m_view->SetCategory(m_currentCategory->Id());
-	}
+	ReLoadData();
 
 	m_view->SetVolume(Config::Inst().Volume(m_audioStream.Name()));
 
-	qDebug() << "Radio widget created";
+	qDebug() << "Radio page widget was created";
 }
 
 bool RadioPageController::IsActive() const
@@ -75,9 +67,17 @@ void RadioPageController::ReLoadData()
 	m_categories.Load(Path::ConfigFile("radiocatygories.j"));
 	m_stations.LoadWithStats(Path::ConfigFile("radio.j"));
 
+	bool topVisible = false;
+
+	if(m_currentCategory.isNull())
+	{
+		topVisible = true;
+		m_currentCategory = m_categories.First();
+	}
+
 	if(!m_currentCategory.isNull())
 	{
-		m_view->SetCategory(m_currentCategory->Id());
+		m_view->SetCategory(m_currentCategory->Id(), topVisible);
 		SetCategoryFilter(m_currentCategory->Id());
 	}
 }
@@ -106,7 +106,7 @@ void RadioPageController::PlayRadio(int id)
 {
 	emit PauseAllControllers();
 
-	model::ChannelSourcePtr channel = m_stations.Find(id);
+	model::RadioSourcePtr channel = m_stations.Find(id);
 
 	if(channel)
 	{
@@ -202,5 +202,5 @@ void RadioPageController::AudioStreamStateChanged(AudioStream::ASState newState)
 	};
 }
 
-}
-}
+} //namespace controller
+} //namespace mp

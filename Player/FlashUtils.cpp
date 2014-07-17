@@ -1,6 +1,7 @@
 #include "FlashUtils.h"
 #include "DownlaodManager.h"
 #include "Path.h"
+#include "UrlBuilder.h"
 
 #include <QProcess>
 #include <QDebug>
@@ -65,9 +66,7 @@ void FlashUtils::StartDownload()
 {
 	m_flashMsiPath = Path::FlashMSI();
 
-	QString url("http://download.macromedia.com/get/flashplayer/current/licensing/win/install_flash_player_11_plugin.msi");
-
-	DownlaodManager::Global().DownloadFile(url, m_flashMsiPath, 
+	DownlaodManager::Global().DownloadFile(UrlBuilder::CreateFlashMSIUrl(), m_flashMsiPath, 
 										true, QVariant(),
 										this, SLOT(Install()),
 										this, SLOT(DownlaodProgressChanged(qint64, qint64)));

@@ -1,6 +1,6 @@
 import QtQuick 2.0
-import QtQuick.Controls 1.0
-//import QtDesktop 0.1
+import QtQuick.Controls 1.1
+import QtQuick.Controls.Styles 1.1
 
 Rectangle {
 	id: playerPage;
@@ -17,7 +17,8 @@ Rectangle {
 	signal downloadTrack(int id);
 	signal deleteTrack(int id);
 	signal tracksPathChangeRequest;
-	signal showToolTip();
+	signal showSearchContextMenu(bool hasSelectedText);
+	signal showTooltip(string text);
 	
 	// properties
 	property bool isPlaying: false;
@@ -136,7 +137,7 @@ Rectangle {
 			anchors.left: trackName.left;
 			anchors.topMargin: 5;
 			width: 200
-			height: 10;
+			height: 6;
 			maximumValue: 1000
 			minimumValue: 0
 			value: 0
@@ -144,6 +145,24 @@ Rectangle {
 			onValueChanged: {
 				if(positionSlider.pressed) {
 					playerPage.positionChanged(value);
+				}
+			}
+			
+			style: SliderStyle {
+				groove: Rectangle {
+					implicitWidth: control.width
+					implicitHeight: control.height
+					color: "#120E0F"
+					radius: 8
+				}
+				handle: Rectangle {
+					anchors.centerIn: parent
+					color: control.pressed ? "white" : "#E1E1E1"
+					border.color: "gray"
+					border.width: 0
+					implicitWidth: 22
+					implicitHeight: control.height
+					radius: 8
 				}
 			}
 		}
@@ -166,7 +185,7 @@ Rectangle {
 			anchors.left: timeLeft.right
 			anchors.topMargin: 5;
 			width: 50;
-			height: 10;
+			height: 6;
 			maximumValue: 1000
 			minimumValue: 0
 			value: 0
@@ -174,6 +193,24 @@ Rectangle {
 			onValueChanged: {
 				var volume = value / 1000;
 				playerPage.volumeChanged(volume);
+			}
+			
+			style: SliderStyle {
+				groove: Rectangle {
+					implicitWidth: control.width
+					implicitHeight: control.height
+					color: "#120E0F"
+					radius: 8
+				}
+				handle: Rectangle {
+					anchors.centerIn: parent
+					color: control.pressed ? "white" : "#E1E1E1"
+					border.color: "gray"
+					border.width: 0
+					implicitWidth: 22
+					implicitHeight: control.height
+					radius: 8
+				}
 			}
 		}
 		
@@ -263,5 +300,17 @@ Rectangle {
 	function search(filter) {
 		tracksList.model = searchTracksModel;
 		searchFilterChanged(filter);
+	}
+	
+	function copyFromSearchEdit() {
+		searchEdit.copyFromSearchEdit();
+	}
+	
+	function cutFromSearchEdit() {
+		searchEdit.cutFromSearchEdit();
+	}
+	
+	function pasteToSearchEdit() {
+		searchEdit.pasteToSearchEdit();
 	}
 }

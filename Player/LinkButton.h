@@ -27,7 +27,7 @@ private:
 	QVariant m_tag;
 };
 
-}
-}
+} // end namespace view
+} // end namespace mp
 
 #endif

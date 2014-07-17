@@ -15,7 +15,8 @@ FileDownloader::FileDownloader(const QUrl& url, const QString& filePath, bool au
 	,m_url(url)
 	,m_filePath(filePath)
 	,m_manager(NULL)
-	,m_reply(0)
+	,m_reply(NULL)
+	,m_file(NULL)
 	,m_autoDelete(autoDelete)
 {
 }
@@ -85,7 +86,8 @@ void FileDownloader::Do()
 	{
 		qDebug() << "Cant open file to write: " << m_filePath << " reason: " << m_file->errorString();
 		m_errorString =  m_file->errorString();
-		emit Finished();
+		Cleanup();
+		emit Finished(false, m_tag);
 	}
 }
 
@@ -106,10 +108,17 @@ void FileDownloader::Abort()
 
 void FileDownloader::Cleanup()
 {
-	m_reply->deleteLater();
-	m_file->deleteLater();
-	m_reply = NULL;
-	m_file = NULL;
+	if(m_reply)
+	{
+		m_reply->deleteLater();
+		m_reply = NULL;
+	}
+
+	if(m_file)
+	{
+		m_file->deleteLater();
+		m_file = NULL;
+	}
 }
 
 void FileDownloader::DownloadFinished()
@@ -121,6 +130,26 @@ void FileDownloader::DownloadFinished()
 
 	if(err == QNetworkReply::NoError && fileSize > 0)
 	{
+		bool success = true;
+
+		QVariant contentLengthVar = m_reply->header(QNetworkRequest::ContentLengthHeader);
+
+		if(!contentLengthVar.isNull())
+		{
+			qlonglong contentLength = m_reply->header(QNetworkRequest::ContentLengthHeader).toULongLong();
+
+			if(contentLength != fileSize)
+			{
+				qDebug() << "Error occurred while download file:" << m_filePath
+					<< " from url: " << m_url.toString()
+					<< " error: Content-Lengh and actual file size isn't equal"
+					<< " downloaded bytes: " << fileSize
+					<< " Content-Lengh: " << contentLength;
+
+				success = false;
+			}
+		}
+
 		if(m_aborted)
 		{
 			m_file->remove();
@@ -130,7 +159,13 @@ void FileDownloader::DownloadFinished()
 		m_file->close();
 		Cleanup();
 
-		emit Finished();
+		if(!success)
+		{
+			QString renameFrom = m_filePath + "old";
+			QFile::rename(renameFrom, m_filePath);
+		}
+
+		emit Finished(success, m_tag);
 	}
 	else
 	{
@@ -139,11 +174,22 @@ void FileDownloader::DownloadFinished()
 			<< " error: " << m_reply->errorString() 
 			<< " downloaded bytes: " << fileSize;
 
-		m_file->remove();
+		if(m_file)
+		{
+			m_file->remove();
+		}
+		
+		if(m_reply)
+		{
+			m_errorString = m_reply->errorString();
+		}
+
 		Cleanup();
 
-		m_errorString = m_reply->errorString();
-		emit Finished();
+		QString renameFrom = m_filePath + "old";
+		QFile::rename(renameFrom, m_filePath);
+
+		emit Finished(false, m_tag);
 	}
 
 	if(m_autoDelete)

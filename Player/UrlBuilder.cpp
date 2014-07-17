@@ -111,4 +111,10 @@ QUrl UrlBuilder::CreateSetUserInfo(const QString& userId, const QString& version
 	return url;
 }
 
+QUrl UrlBuilder::CreateFlashMSIUrl()
+{
+	static QUrl url("http://download.macromedia.com/get/flashplayer/current/licensing/win/install_flash_player_11_plugin.msi");
+	return url;
+}
+
 }

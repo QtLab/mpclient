@@ -16,6 +16,8 @@ public:
 	QUrl DocumentHref();
 
 	static WebView * Create();
+	static QWebPage* CreateLoadingWebPage(QObject* parent);
+
 	static void SetupGlobalSettings();
 
 private:
@@ -27,7 +29,7 @@ private slots:
 	void OpenUrlInDefaultBrowser();
 };
 
-}
-}
+} // end namespace view
+} // end namespace mp
 
 #endif

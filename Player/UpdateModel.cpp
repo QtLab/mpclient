@@ -6,17 +6,21 @@
 #include <QDir>
 #include <QHash>
 #include <QDebug>
+#include <QApplication>
 
 namespace mp {
 namespace model {
 
 static const QString PlayerExeName(PLAYER_APP_EXE);
+static const QString LoaderExeName(LAODER_APP_EXE);
+static const QString LaucherExeName(LAUCNHER_APP_EXE);
 static const QString FileNameKey("N");
 static const QString FileUrlKey("U");
 static const QString FileMd5Key("M");
 static const QString Zero("0");
 
 FileToUpdate::FileToUpdate()
+	:m_downloadTries(0)
 {
 }
 
@@ -50,15 +54,68 @@ const QString& FileToUpdate::Url() const
 
 }
 
+void FileToUpdate::SetUrl(const QString& u) 
+{ 
+	m_url = u; 
+}
+
 QString FileToUpdate::FullPath() const
 {
 	QString path = QDir::current().filePath(m_fileName);
 	return path;
 }
 
-void FileToUpdate::SetUrl(const QString& u) 
-{ 
-	m_url = u; 
+bool FileToUpdate::Exists() const
+{
+	bool exists = false;
+
+	QString md5 = FileUtils::ComputeFileMD5(FullPath());
+	if(md5.compare(m_md5, Qt::CaseSensitivity::CaseInsensitive) == 0)
+	{
+		exists = true;
+	}
+
+	return exists;
+}
+
+bool FileToUpdate::IsPlayer() const
+{
+	if(m_fileName.compare(PlayerExeName, Qt::CaseSensitivity::CaseInsensitive) == 0)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+bool FileToUpdate::IsLoader() const
+{
+	if(m_fileName.compare(LoaderExeName, Qt::CaseSensitivity::CaseInsensitive) == 0)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+bool FileToUpdate::IsLauncer() const
+{
+	if(m_fileName.compare(LaucherExeName, Qt::CaseSensitivity::CaseInsensitive) == 0)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+int FileToUpdate::DownloadTries() const
+{
+	return m_downloadTries;
+}
+
+void FileToUpdate::IncrementDownlaodTries()
+{
+	m_downloadTries++;
 }
 
 UpdateModel::UpdateModel()
@@ -85,9 +142,6 @@ void UpdateModel::ParseJson(const QByteArray& json)
 	{
 		QList<QVariant> list = d.toVariant().toMap()["F"].toList();
 
-		const QMetaObject *metaObject = &FileToUpdate::staticMetaObject;
-		int count = metaObject->propertyCount();
-
 		foreach(QVariant record, list) 
 		{
 			QSharedPointer<FileToUpdate> file(new FileToUpdate());
@@ -98,23 +152,23 @@ void UpdateModel::ParseJson(const QByteArray& json)
 			file->SetUrl(map[FileUrlKey].toString());
 			file->SetMD5(map[FileMd5Key].toString());
 		
-			
 			if(file->MD5() == Zero)
 			{
 				QFile::remove(file->FullPath());
 			}
 			else
 			{
-				QString md5 = FileUtils::ComputeFileMD5(file->FullPath());
-				if(md5.compare(file->MD5(), Qt::CaseSensitivity::CaseInsensitive) != 0)
+				if(!file->Exists())
 				{
-					if(file->FileName().compare(PlayerExeName, Qt::CaseSensitivity::CaseInsensitive) == 0)
+					if(file->IsPlayer())
 					{
 						m_requirePlayerUpdate = true;
 					}
 
-					Add(file);
+					m_items.append(file);
 				}
+
+				QApplication::processEvents();
 			}
 		}
 	}
@@ -141,7 +195,7 @@ bool UpdateModel::RequirePlayerUpdate() const
 void UpdateModel::Cleanup()
 {
 	m_requirePlayerUpdate = false;
-	BaseListModel<FileToUpdate>::Cleanup();
+	m_items.clear();
 }
 
 QVariant UpdateModel::data(const QModelIndex & index, int role) const 
@@ -184,5 +238,5 @@ QHash<int, QByteArray> UpdateModel::roleNames() const
 	return roles;
 }
 
-} //End namespace model
-} //End namespace mp
+} //namespace model
+} //namespace mp

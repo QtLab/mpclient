@@ -120,6 +120,7 @@ Section "install"
 	AccessControl::GrantOnFile "$INSTDIR" "(S-1-1-0)" "FullAccess"
 	File "${LOADER_APP}"
 	File "${LAUNCHER_APP}"
+	File "${PLAYER_APP}"
 	WriteUninstaller "$INSTDIR\uninstall.exe"
 	
 	WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Run" ${APPNAME} "$\"$INSTDIR\${LAUNCHER_APP}$\" /S"

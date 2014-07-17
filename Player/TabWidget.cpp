@@ -22,6 +22,7 @@ TabWidget::TabWidget(QWidget * parent, const QString& name, const QString& tabBa
 int TabWidget::AddPage(TabPage * page)
 {
 	int index = addTab(page, page->Name());
+	setTabToolTip(index, page->ToolTip());
 	m_pages.insert(index, page);
 
 	page->SetTabIndex(index);
@@ -40,7 +41,10 @@ void TabWidget::RetranslateUI()
 	TabPages::const_iterator i = m_pages.constBegin();
 	while (i != m_pages.constEnd()) 
 	{
-		setTabText(i.key(), i.value()->Name());
+		int index = i.key();
+		TabPagePtr tabPage = i.value();
+		setTabText(index, tabPage->Name());
+		setTabToolTip(index, tabPage->ToolTip());
 		++i;
 	}
 }
@@ -77,5 +81,5 @@ void TabWidget::CurretntTabIndexChanged(int newIdnex)
 	m_lastCurrentTabIndex = newIdnex;
 }
 
-}
-}
+} // end namespace view
+} // end namespace mp

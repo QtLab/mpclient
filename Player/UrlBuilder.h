@@ -22,6 +22,7 @@ public:
 	static QUrl CreateInixMedia(const QString& filter);
 	static QUrl CreateMp3Xml(const QString& filter);
 	static QUrl CreateSetUserInfo(const QString& userId, const QString& version, const QString& source, bool isInstall);
+	static QUrl CreateFlashMSIUrl();
 };
 
 }

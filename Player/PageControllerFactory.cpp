@@ -30,5 +30,5 @@ IPageControllerPtr CreatePageController(const QString& name)
 	return IPageControllerPtr();
 }
 
-}
-}
+} //namespace controller
+} //namespace mp

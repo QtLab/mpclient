@@ -1,5 +1,5 @@
-#ifndef MP_TAB_PANE_H
-#define MP_TAB_PANE_H
+#ifndef MP_TAB_PAGE_H
+#define MP_TAB_PAGE_H
 
 #include <QWidget>
 
@@ -19,18 +19,24 @@ public:
 	virtual void Enter();
 	// User leave the page
 	virtual bool Leave();
+	
 	// Languege changed
 	virtual void RetranslateUI();
-	virtual QMargins Margins();
+	
 	virtual QString Name() const = 0;
+	virtual QString ToolTip() const;
+	int TabIndex() const;
+
 	virtual bool Resizable() const = 0;
 	virtual QSize RestoreSize() const = 0;
 	virtual void SaveSize(const QSize& size) = 0;
-	int TabIndex() const;
 
 private:
 	void SetTabIndex(int index);
 	void changeEvent(QEvent *event);
+
+signals:
+	void SizeChangeRequest(const QSize& newSize);
 
 private:
 	int		m_tabIndex;
@@ -38,7 +44,7 @@ private:
 	friend class TabWidget;
 };
 
-}
-}
+} // end namespace view
+} // end namespace mp
 
 #endif

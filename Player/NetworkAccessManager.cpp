@@ -30,7 +30,9 @@ QNetworkReply * NetworkAccessManager::createRequest(Operation op, const QNetwork
 
 	QNetworkRequest newReq = req;
 	newReq.setAttribute(QNetworkRequest::CacheLoadControlAttribute, QNetworkRequest::PreferCache);
-	return QNetworkAccessManager::createRequest(op, newReq, outgoingData);
+	QNetworkReply * reply = QNetworkAccessManager::createRequest(op, newReq, outgoingData);
+	reply->ignoreSslErrors();
+	return reply;
 }
 
 void NetworkAccessManager::HandleSslErrors(QNetworkReply * reply, const QList<QSslError> & errors)

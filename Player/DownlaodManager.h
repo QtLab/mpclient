@@ -26,11 +26,14 @@ public:
 	
 	void Post(const QUrl& url, const QByteArray& body, QObject* listenerFinish = NULL, const char* slot = NULL);
 
+	void AbortAll();
+
 private slots:
 	void HttpReplyFinished();
 
 private:
 	QNetworkAccessManager *			m_manager;
+	QNetworkSession	*				m_session;
 	static DownlaodManager *		m_globalInstance;
 };
 

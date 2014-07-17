@@ -13,7 +13,8 @@ Rectangle {
 	signal searchFilterChanged(string txt);
 	signal searchTracks(string txt);
 	signal volumeChanged(real volume);
-	signal showSearchContextMenu(int x, int y);
+	signal showSearchContextMenu(bool hasSelectedText);
+	signal showTooltip(string text);
 	
 	CategoriesView {
 		id: categoriesView;
@@ -163,12 +164,35 @@ Rectangle {
 		moreCategoriesView.visible = false;
 	}
 
-	function setCategory(id) {
+	function setCategory(id, topVisible) {
+		if(!topVisible){
+			categoriesView.insertLastTopVisibleCategory(id);
+		}
+		
 		categoriesView.setCategory(id);
 	}
 	
-	function insertCategoryBeforeMore(id) {
-		categoriesView.insertCategoryBeforeMore(id);
+	function insertLastTopVisibleCategory(id) {
+		categoriesView.insertLastTopVisibleCategory(id);
+	}
+	
+	function insertFirstTopVisibleCategory(id) {
+		categoriesView.insertFirstTopVisibleCategory(id);
 	}
 
+	function updateTopVisibleCategories() {
+		categoriesView.updateTopVisibleCategories();
+	}
+	
+	function copyFromSearchEdit() {
+		categoriesView.copyFromSearchEdit();
+	}
+	
+	function cutFromSearchEdit() {
+		categoriesView.cutFromSearchEdit();
+	}
+	
+	function pasteToSearchEdit() {
+		categoriesView.pasteToSearchEdit();
+	}
 }

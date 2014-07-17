@@ -230,5 +230,5 @@ void PlayerPageController::ChangeTracksPath()
 	}
 }
 
-}
-}
+} //namespace controller
+} //namespace mp

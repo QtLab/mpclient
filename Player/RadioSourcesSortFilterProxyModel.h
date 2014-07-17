@@ -6,7 +6,7 @@
 namespace mp {
 namespace model {
 
-class ChannelSourceSortFilterProxyModel : public QSortFilterProxyModel
+class RadioSourcesSortFilterProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 
@@ -19,7 +19,7 @@ public:
 		ByLastPlayTime
 	};
 
-    ChannelSourceSortFilterProxyModel(QObject *parent = 0);
+    RadioSourcesSortFilterProxyModel(QObject *parent = 0);
 
 	int CategoryIdFilter() const;
 	void SetCategoryIdFilter(int categoryId);
@@ -36,7 +36,7 @@ protected:
 
 public:
 	friend QAbstractListModel;
-	Q_DISABLE_COPY(ChannelSourceSortFilterProxyModel)
+	Q_DISABLE_COPY(RadioSourcesSortFilterProxyModel)
 
 private:
 	int				m_categoryIdFilter;
@@ -44,9 +44,9 @@ private:
 	SortT			m_sortBy;
 };
 
-} //End namespace model
-} //End namespace mp
+} //namespace model
+} //namespace mp
 
-Q_DECLARE_METATYPE(mp::model::ChannelSourceSortFilterProxyModel);
+Q_DECLARE_METATYPE(mp::model::RadioSourcesSortFilterProxyModel);
 
 #endif

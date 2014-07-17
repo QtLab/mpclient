@@ -47,15 +47,16 @@ private slots:
 	void ErrorSlot ( QNetworkReply::NetworkError code );
 
 signals:
-	void Finished();
+	void Finished(bool success, QVariant tag);
 	void ProgressChanged(qint64 bytesReceived, qint64 bytesTotal);
 
 private:
+	const bool					m_autoDelete;
+	const QString				m_filePath;
+	const QUrl					m_url;
+
 	bool						m_continueDownload;
 	bool						m_aborted;
-	bool						m_autoDelete;
-	QUrl						m_url;
-	QString						m_filePath;
 	QNetworkAccessManager*		m_manager;
 	QFile *						m_file;
 	QNetworkReply *				m_reply;

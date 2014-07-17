@@ -116,11 +116,28 @@ WebView* WebView::Create()
 	return webView;
 }
 
+QWebPage* WebView::CreateLoadingWebPage(QObject* parent)
+{
+	static QString tempalte = 
+		"<html>\
+		<body style='background:white;'>\
+		<div align='center' style='margin-top: 20%'>\
+		<h1 style='color:black'>%0\</h1>\
+		</div>\
+		</body></html>";
+
+	QWebPage * page = new QWebPage(parent);
+	
+	QString html = tempalte.arg(QObject::tr("Loading..."));
+	page->mainFrame()->setHtml(html);
+	return page;
+}
+
 void WebView::SetupGlobalSettings()
 {
 	QWebSettings* settings = QWebSettings::globalSettings();
 	SetupSettings(settings);
 }
 
-}
-}
+} // end namespace view
+} // end namespace mp

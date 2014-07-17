@@ -55,7 +55,6 @@ Rectangle {
 		
         model: parent.model
         delegate: contactDelegate
-        visible: model.TopVisible
 		
 		highlight: Rectangle { color: "white";}
         focus: true;
@@ -72,7 +71,14 @@ Rectangle {
 			}
 		}
     }
-
+	
+    Connections {
+        target: categoriesList.model
+        onDataChanged: {
+			updateTopVisibleCategories();
+        }
+    }
+	
 	Rectangle {
 		id: moreTextRect
 		anchors {
@@ -131,8 +137,28 @@ Rectangle {
 		categoriesList.currentIndex = rowIndex;
 	}
 	
-	function insertCategoryBeforeMore(id) {
+	function updateTopVisibleCategories() {
+		categoriesList.model.UpdateTopVisibleCategories(parent.width - (parent.width - moreTextRect.x), openSansLight.name, 10, 21);
+	}
+	
+	function insertLastTopVisibleCategory(id) {
 		categoriesView.model.InsertLastTopVisibleCategory(id, categoriesView.width - (categoriesView.width - moreTextRect.x), openSansLight.name, 10, 21);
+	}
+	
+	function insertFirstTopVisibleCategory(id) {
+		categoriesView.model.InsertFirstTopVisibleCategory(id, categoriesView.width - (categoriesView.width - moreTextRect.x), openSansLight.name, 10, 21);
+	}
+	
+	function copyFromSearchEdit() {
+		searchEdit.copyFromSearchEdit();
+	}
+	
+	function cutFromSearchEdit() {
+		searchEdit.cutFromSearchEdit();
+	}
+	
+	function pasteToSearchEdit() {
+		searchEdit.pasteToSearchEdit();
 	}
 }
 

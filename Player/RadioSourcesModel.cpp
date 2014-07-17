@@ -1,8 +1,5 @@
-#include "ChannelSourceModel.h"
+#include "RadioSourcesModel.h"
 
-#include <QFile>
-#include <QDir>
-#include <QHash>
 #include <QDebug>
 
 namespace mp {
@@ -15,136 +12,126 @@ static const QString CategoriesKeyName		= "categories";
 static const QString PlayCountKeyName		= "playcount";
 static const QString LastPlayKeyName		= "lastplay";
 
-ChannelSource::ChannelSource()
+RadioSource::RadioSource()
 	:m_playCount(0)
 	,m_lastPlayTimestamp(0)
 {
 }
 
-ChannelSource::~ChannelSource()
+RadioSource::~RadioSource()
 {
 }
 
-const QString& ChannelSource::Name() const
+const QString& RadioSource::Name() const
 { 
 	return m_name; 
 }
 
-void ChannelSource::SetName(const QString& name)
+void RadioSource::SetName(const QString& name)
 { 
 	m_name = name; 
 }
 
-int ChannelSource::Id() const
+int RadioSource::Id() const
 {
 	return m_id;
 }
 
-void ChannelSource::SetId(int id)
+void RadioSource::SetId(int id)
 {
 	m_id = id;
 }
 
-const QString& ChannelSource::Url() const
+const QString& RadioSource::Url() const
 {
 	return m_url;
 }
 
-void ChannelSource::SetUrl(const QString& url)
+void RadioSource::SetUrl(const QString& url)
 {
 	m_url = url;
 }
 
-int ChannelSource::GenreId() const
-{
-	return m_genreId;
-}
-
-void ChannelSource::SetGenreId(int genreId)
-{
-	m_genreId = genreId;
-}
-
-uint ChannelSource::PlayCount() const
+uint RadioSource::PlayCount() const
 {
 	return m_playCount;
 }
 
-void ChannelSource::SetPlayCount(uint count)
+void RadioSource::SetPlayCount(uint count)
 {
 	m_playCount = count;
 }
 
-uint ChannelSource::LastPlayTimestamp() const
+uint RadioSource::LastPlayTimestamp() const
 {
 	return m_lastPlayTimestamp;
 }
 
-void ChannelSource::SetLastPlayTimestamp(uint ts)
+void RadioSource::SetLastPlayTimestamp(uint ts)
 {
 	m_lastPlayTimestamp = ts;
 }
 
-void ChannelSource::SetLastPlayNow()
+void RadioSource::SetLastPlayNow()
 {
 	QDateTime dt = QDateTime::currentDateTime();
 	m_lastPlayTimestamp = dt.toTime_t();
 }
 
-void ChannelSource::AddCategoryId(uint id)
+void RadioSource::AddCategoryId(uint id)
 {
 	m_categories.insert(id);
 }
 
-RadioCategoryIds ChannelSource::Categories() const
+RadioCategoryIds RadioSource::Categories() const
 {
 	return m_categories;
 }
 
-ChannelSourceModel::ChannelSourceModel()
+RadioSourcesModel::RadioSourcesModel()
 {
 }
 
-ChannelSourceModel::~ChannelSourceModel() 
+RadioSourcesModel::~RadioSourcesModel() 
 {
 }
 
-void ChannelSourceModel::LoadWithStats(const QString& filePath)
+void RadioSourcesModel::LoadWithStats(const QString& filePath)
 {
 	QByteArray fileBody;
 	if(FileUtils::LoadFileToByteArray(filePath, fileBody))
 	{
 		ParseChannelsJson(fileBody);
 
-		ChannelSourceModel channelsStats;
+		RadioSourcesModel channelsStats;
 		channelsStats.Load(filePath + "st", PropertiesSet() << IdKeyName  << PlayCountKeyName << LastPlayKeyName);
 
 		MergeWithStats(channelsStats);
 	}
 }
 
-bool ChannelSourceModel::SaveStats(const QString& filePath)
+bool RadioSourcesModel::SaveStats(const QString& filePath)
 {
 	Save(filePath + "st", PropertiesSet() << IdKeyName << PlayCountKeyName << LastPlayKeyName);
 	return true;
 }
 
-ChannelSourcePtr ChannelSourceModel::Find(int channelId, int genreId) const
+RadioSourcePtr RadioSourcesModel::Find(int channelId) const
 {
-	foreach(ChannelSourcePtr channel, m_items)
+	foreach(RadioSourcePtr channel, m_items)
 	{
-		if(channel->Id() == channelId && (genreId < 0 || channel->GenreId() == genreId))
+		if(channel->Id() == channelId)
 			return channel;
 	}
 
-	return ChannelSourcePtr();
+	return RadioSourcePtr();
 }
 
-void ChannelSourceModel::MergeWithStats(const ChannelSourceModel& channelsWithStats)
+void RadioSourcesModel::MergeWithStats(const RadioSourcesModel& channelsWithStats)
 {
-	foreach(ChannelSourcePtr channel, m_items)
+	foreach(RadioSourcePtr channel, m_items)
 	{
-		ChannelSourcePtr channelWithAdditional = channelsWithStats.Find(channel->Id());
+		RadioSourcePtr channelWithAdditional = channelsWithStats.Find(channel->Id());
 
 		if(!channelWithAdditional.isNull())
 		{
@@ -154,12 +141,12 @@ void ChannelSourceModel::MergeWithStats(const ChannelSourceModel& channelsWithSt
 	}
 }
 
-QVariant ChannelSourceModel::data(const QModelIndex & index, int role) const 
+QVariant RadioSourcesModel::data(const QModelIndex & index, int role) const 
 {
 	if (index.row() < 0 || index.row() > m_items.count())
 		return QVariant();
 
-	const ChannelSourcePtr channel = m_items.at(index.row());
+	const RadioSourcePtr channel = m_items.at(index.row());
 	
 	QVariant result;
 
@@ -173,9 +160,6 @@ QVariant ChannelSourceModel::data(const QModelIndex & index, int role) const
 			break;
 		case Url:
 			result = QVariant(channel->Url());
-			break;
-		case GenreId:
-			result = QVariant(channel->GenreId());
 			break;
 		case FirstCategoryId:
 			{
@@ -197,19 +181,18 @@ QVariant ChannelSourceModel::data(const QModelIndex & index, int role) const
 	return result;
 }
 
-int ChannelSourceModel::rowCount(const QModelIndex &parent) const
+int RadioSourcesModel::rowCount(const QModelIndex &parent) const
 {
 	int count = m_items.count();
 	return count;
 }
 
-QHash<int, QByteArray>	ChannelSourceModel::roleNames() const
+QHash<int, QByteArray>	RadioSourcesModel::roleNames() const
 {
 	QHash<int, QByteArray> roles;
 	roles[Id] = "Id";
 	roles[Name] = "Name";
 	roles[Url] = "Url";
-	roles[GenreId] = "GenreId";
 	roles[FirstCategoryId] = "FirstCategoryId";
 	roles[Categories] = "Categories";
 	roles[LastPlayTimestamp] = "LastPlayTimestamp";
@@ -218,7 +201,7 @@ QHash<int, QByteArray>	ChannelSourceModel::roleNames() const
 	return roles;
 }
 
-void ChannelSourceModel::ParseChannelsJson(const QByteArray& json)
+void RadioSourcesModel::ParseChannelsJson(const QByteArray& json)
 {
 	QJsonParseError parseResult;
 	QJsonDocument d = QJsonDocument::fromJson(json, &parseResult);
@@ -237,7 +220,7 @@ void ChannelSourceModel::ParseChannelsJson(const QByteArray& json)
 			
 			if(!id.isNull() && !name.isNull() && !url.isNull() && !categories.isNull())
 			{
-				ChannelSourcePtr item(new ChannelSource);
+				RadioSourcePtr item(new RadioSource);
 				
 				QString _id = id.toString();
 
@@ -264,9 +247,9 @@ void ChannelSourceModel::ParseChannelsJson(const QByteArray& json)
 	}
 	else
 	{
-		qDebug() << "ChannelSourceModel json parse error: " << parseResult.errorString();
+		qDebug() << "RadioSourcesModel json parse error: " << parseResult.errorString();
 	}
 }
 
-} //End namespace model
-} //End namespace mp
+} //namespace model
+} //namespace mp

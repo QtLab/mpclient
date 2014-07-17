@@ -87,7 +87,6 @@ public:
 
 	bool LoadFrom(const QByteArray& data, SourceType source);
 	
-
 	QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 	bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole);
 
@@ -102,7 +101,7 @@ public:
 	Q_DISABLE_COPY(TrackModel)
 };
 
-} //End namespace model
-} //End namespace mp
+} //namespace model
+} //namespace mp
 
 #endif

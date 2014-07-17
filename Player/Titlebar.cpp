@@ -2,13 +2,14 @@
 #include "ChannelMetadataModel.h"
 #include "LinkButton.h"
 
+#ifdef Q_OS_WIN32
 #include <Windows.h>
+#endif
 
 #include <QHBoxLayout>
 #include <QMouseEvent>
 #include <QSpacerItem>
 #include <QDebug>
-#include <QCoreApplication>
 
 namespace mp {
 namespace view {
@@ -22,18 +23,12 @@ Titlebar::Titlebar(QWidget *parent)
 	setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Fixed);
 
 	setObjectName("titleBar");
-	setAttribute(Qt::WA_StyledBackground);
-	qDebug() << "Titlebar layouts created";
+	//setAttribute(Qt::WA_StyledBackground);
 
 	m_logo = new QLabel(this);
-	connect(m_logo, SIGNAL(clicked()), this, SLOT(ShowMenuSlot()));
 	m_layout->addWidget(m_logo, 0);
 
-	qDebug() << "Titlebar playerLogo created";
-
 	m_layout->addSpacerItem(new QSpacerItem(300, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
-
-	qDebug() << "Titlebar messages created";
 
 	m_layout->addWidget(new QLabel(), 1);
 
@@ -83,5 +78,5 @@ void Titlebar::MetadataUpdated(const ChannelMetadata& metadata)
 	m_logo->setText(metadata.ToString());
 }
 
-}
-}
+} // end namespace view
+} // end namespace mp

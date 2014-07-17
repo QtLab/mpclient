@@ -4,11 +4,14 @@
 #include "WidgetUtils.h"
 #include "NcFramelessHelper.h"
 #include "Config.h"
+#include "Path.h"
 #include "TabPage.h"
 
 #include <QDebug>
 #include <QVBoxLayout>
 #include <QStatusBar>
+#include <QPropertyAnimation>
+#include <QSysInfo>
 
 namespace mp {
 namespace view {
@@ -21,15 +24,16 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
 	m_frameLessHelper->setWidgetResizable(false);
 	m_frameLessHelper->activateOn(this);
 
-	setWindowFlags( Qt::FramelessWindowHint | Qt::WindowSystemMenuHint | Qt::WindowMinimizeButtonHint );
-
-	WidgetUtils::LoadStyleSheets(this, "Player.qss");
+	WidgetUtils::LoadStyleSheets(this, Path::CssFile("MainWindow.qss"));
 
 	setWindowIcon(QIcon(":/mp/Resources/Player.ico"));
 
 	QWidget * central = new QWidget();
 	central->setObjectName("centralWidget");
 	setCentralWidget(central);
+
+	m_changeSizeAnumation = new QPropertyAnimation(this, "geometry");
+	m_changeSizeAnumation->setDuration(200);
 
 	m_layout = new QVBoxLayout(central);
 	m_layout->setContentsMargins(0, 0, 0, 0);
@@ -63,6 +67,7 @@ TabWidget * MainWindow::Tabs() const
 
 int MainWindow::AddTab(TabPage * page)
 {
+	connect(page, SIGNAL(SizeChangeRequest(const QSize&)), SLOT(SizeChanged(const QSize&)));
 	return m_tabWidget->AddPage(page);
 }
 
@@ -87,9 +92,22 @@ QSize MainWindow::Size() const
 	return size();
 }
 
-void MainWindow::SetSize(const QSize& size)
+void MainWindow::SetSize(const QSize& newSize)
 {
-	resize(size);
+	if(QSysInfo::windowsVersion() >= QSysInfo::WV_WINDOWS8)
+	{
+		QRect newGeometry = geometry();
+		newGeometry.setWidth(newSize.width());
+		newGeometry.setHeight(newSize.height());
+
+		m_changeSizeAnumation->setStartValue(this->geometry());
+		m_changeSizeAnumation->setEndValue(newGeometry);
+		m_changeSizeAnumation->start();
+	}
+	else
+	{
+		resize(newSize);
+	}
 }
 
 void MainWindow::closeEvent(QCloseEvent *evt)
@@ -101,12 +119,13 @@ void MainWindow::closeEvent(QCloseEvent *evt)
 
 void MainWindow::resizeEvent(QResizeEvent *evt)
 {
-	//TabPagePtr page = m_tabWidget->PageAtIndex(m_tabWidget->CurrentPageIndex());
-	//if(page && page->Resizable())
-	//{
-	//	page->SaveSize(evt->size());
-	//}
+	QMainWindow::resizeEvent(evt);
 }
 
+void MainWindow::SizeChanged(const QSize& newSize)
+{
+	SetSize(newSize);
 }
-}
+
+} // end namespace view
+} // end namespace mp

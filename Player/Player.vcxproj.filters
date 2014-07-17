@@ -84,6 +84,21 @@
     <Filter Include="Model\TV">
       <UniqueIdentifier>{d2549b9d-8f4a-49f4-8b10-7fe8e0eb412a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Controllers\Update">
+      <UniqueIdentifier>{751f7271-176f-4353-885c-7cc391b5f16b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Views\Popups">
+      <UniqueIdentifier>{5c930fc1-81a7-41a2-9ac6-f1e812f0f1a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Views\QML\TV">
+      <UniqueIdentifier>{7ac602e9-a33d-4aa3-a01b-4d231ac70753}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Views\QML\Radio">
+      <UniqueIdentifier>{fbefaeda-9557-47b0-aac4-b7ab58992830}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Views\QML\Player">
+      <UniqueIdentifier>{8aa3047a-3960-478c-ab78-d1d8d12d484c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GeneratedFiles\Debug\moc_MainWindow.cpp">
@@ -130,12 +145,6 @@
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_Titlebar.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_ChannelSourceModel.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_ChannelSourceModel.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
     <ClCompile Include="WidgetUtils.cpp">
@@ -240,9 +249,6 @@
     <ClCompile Include="GeneratedFiles\Release\moc_UpdateController.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="UpdateController.cpp">
-      <Filter>Controllers</Filter>
-    </ClCompile>
     <ClCompile Include="DefaultBrowser.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
@@ -278,12 +284,6 @@
     </ClCompile>
     <ClCompile Include="Config.cpp">
       <Filter>Model</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_ChannelSourceSortFilterProxyModel.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_ChannelSourceSortFilterProxyModel.cpp">
-      <Filter>Generated Files\Release</Filter>
     </ClCompile>
     <ClCompile Include="NetworkAccessManager.cpp">
       <Filter>Network</Filter>
@@ -420,9 +420,6 @@
     <ClCompile Include="PageControllerFactory.cpp">
       <Filter>Controllers\ViewControllers</Filter>
     </ClCompile>
-    <ClCompile Include="MessageBoxView.cpp">
-      <Filter>Views\Widgets</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_MessageBoxView.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
@@ -430,12 +427,6 @@
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
     <ClCompile Include="ChannelMetadataModel.cpp">
-      <Filter>Model\Radio</Filter>
-    </ClCompile>
-    <ClCompile Include="ChannelSourceModel.cpp">
-      <Filter>Model\Radio</Filter>
-    </ClCompile>
-    <ClCompile Include="ChannelSourceSortFilterProxyModel.cpp">
       <Filter>Model\Radio</Filter>
     </ClCompile>
     <ClCompile Include="TrackModel.cpp">
@@ -449,6 +440,102 @@
     </ClCompile>
     <ClCompile Include="RadioCategoriesModel.cpp">
       <Filter>Model\Radio</Filter>
+    </ClCompile>
+    <ClCompile Include="QuickPageBase.cpp">
+      <Filter>Views\Pages</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_QuickPageBase.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_QuickPageBase.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="UpdateController.cpp">
+      <Filter>Controllers\Update</Filter>
+    </ClCompile>
+    <ClCompile Include="TVCategoriesModel.cpp">
+      <Filter>Model\TV</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_TVCategoriesModel.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_TVCategoriesModel.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="TVGenresModel.cpp">
+      <Filter>Model\TV</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_TVGenresModel.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_TVGenresModel.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="TVGenresSortFilterProxyModel.cpp">
+      <Filter>Model\TV</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_TVGenresSortFilterProxyModel.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_TVGenresSortFilterProxyModel.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="MessageBoxView.cpp">
+      <Filter>Views\Popups</Filter>
+    </ClCompile>
+    <ClCompile Include="TVGenresPopup.cpp">
+      <Filter>Views\Popups</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_TVGenresPopup.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_TVGenresPopup.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="TVSourcesModel.cpp">
+      <Filter>Model\TV</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_TVSourcesModel.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_TVSourcesModel.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_RadioSourcesModel.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_RadioSourcesModel.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="RadioSourcesModel.cpp">
+      <Filter>Model\Radio</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_RadioSourcesSortFilterProxyModel.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_RadioSourcesSortFilterProxyModel.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="RadioSourcesSortFilterProxyModel.cpp">
+      <Filter>Model\Radio</Filter>
+    </ClCompile>
+    <ClCompile Include="TVSourcesSortFilterProxyModel.cpp">
+      <Filter>Model\TV</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_TVSourcesSortFilterProxyModel.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_TVSourcesSortFilterProxyModel.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="BannersModel.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_BannersModel.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_BannersModel.cpp">
+      <Filter>Generated Files\Release</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -469,30 +556,6 @@
     </CustomBuild>
     <CustomBuild Include="WebView.h">
       <Filter>Views\Widgets</Filter>
-    </CustomBuild>
-    <CustomBuild Include="Views\GenresView.qml">
-      <Filter>Views\QML</Filter>
-    </CustomBuild>
-    <CustomBuild Include="Views\LastStationsView.qml">
-      <Filter>Views\QML</Filter>
-    </CustomBuild>
-    <CustomBuild Include="Views\Line.qml">
-      <Filter>Views\QML</Filter>
-    </CustomBuild>
-    <CustomBuild Include="Views\CurrentStationView.qml">
-      <Filter>Views\QML</Filter>
-    </CustomBuild>
-    <CustomBuild Include="Views\RadioPageView.qml">
-      <Filter>Views\QML</Filter>
-    </CustomBuild>
-    <CustomBuild Include="Views\StationsView.qml">
-      <Filter>Views\QML</Filter>
-    </CustomBuild>
-    <CustomBuild Include="Views\TopStationsView.qml">
-      <Filter>Views\QML</Filter>
-    </CustomBuild>
-    <CustomBuild Include="Views\TVPageView.qml">
-      <Filter>Views\QML</Filter>
     </CustomBuild>
     <CustomBuild Include="Log.h">
       <Filter>Utils</Filter>
@@ -523,9 +586,6 @@
     </CustomBuild>
     <CustomBuild Include="DownlaodManager.h">
       <Filter>Network</Filter>
-    </CustomBuild>
-    <CustomBuild Include="UpdateController.h">
-      <Filter>Controllers</Filter>
     </CustomBuild>
     <CustomBuild Include="DefaultBrowser.h">
       <Filter>Utils</Filter>
@@ -590,16 +650,7 @@
     <CustomBuild Include="IPageController.h">
       <Filter>Controllers\ViewControllers</Filter>
     </CustomBuild>
-    <CustomBuild Include="MessageBoxView.h">
-      <Filter>Views\Widgets</Filter>
-    </CustomBuild>
     <CustomBuild Include="ChannelMetadataModel.h">
-      <Filter>Model\Radio</Filter>
-    </CustomBuild>
-    <CustomBuild Include="ChannelSourceModel.h">
-      <Filter>Model\Radio</Filter>
-    </CustomBuild>
-    <CustomBuild Include="ChannelSourceSortFilterProxyModel.h">
       <Filter>Model\Radio</Filter>
     </CustomBuild>
     <CustomBuild Include="TrackModel.h">
@@ -607,6 +658,42 @@
     </CustomBuild>
     <CustomBuild Include="RadioCategoriesModel.h">
       <Filter>Model\Radio</Filter>
+    </CustomBuild>
+    <CustomBuild Include="QuickPageBase.h">
+      <Filter>Views\Pages</Filter>
+    </CustomBuild>
+    <CustomBuild Include="UpdateController.h">
+      <Filter>Controllers\Update</Filter>
+    </CustomBuild>
+    <CustomBuild Include="TVCategoriesModel.h">
+      <Filter>Model\TV</Filter>
+    </CustomBuild>
+    <CustomBuild Include="TVGenresModel.h">
+      <Filter>Model\TV</Filter>
+    </CustomBuild>
+    <CustomBuild Include="TVGenresSortFilterProxyModel.h">
+      <Filter>Model\TV</Filter>
+    </CustomBuild>
+    <CustomBuild Include="MessageBoxView.h">
+      <Filter>Views\Popups</Filter>
+    </CustomBuild>
+    <CustomBuild Include="TVGenresPopup.h">
+      <Filter>Views\Popups</Filter>
+    </CustomBuild>
+    <CustomBuild Include="TVSourcesModel.h">
+      <Filter>Model\TV</Filter>
+    </CustomBuild>
+    <CustomBuild Include="RadioSourcesModel.h">
+      <Filter>Model\Radio</Filter>
+    </CustomBuild>
+    <CustomBuild Include="RadioSourcesSortFilterProxyModel.h">
+      <Filter>Model\Radio</Filter>
+    </CustomBuild>
+    <CustomBuild Include="TVSourcesSortFilterProxyModel.h">
+      <Filter>Model\TV</Filter>
+    </CustomBuild>
+    <CustomBuild Include="BannersModel.h">
+      <Filter>Model</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
@@ -625,11 +712,101 @@
     <None Include="Resources\CheckFlashInstalled.html">
       <Filter>Resource Files\Html</Filter>
     </None>
+    <None Include="Views\Player\SearchEdit.qml">
+      <Filter>Views\QML\Player</Filter>
+    </None>
+    <None Include="Views\Player\StyledText.qml">
+      <Filter>Views\QML\Player</Filter>
+    </None>
+    <None Include="Views\Player\TrackList.qml">
+      <Filter>Views\QML\Player</Filter>
+    </None>
+    <None Include="Views\Player\VerticalScrollBar.qml">
+      <Filter>Views\QML\Player</Filter>
+    </None>
+    <None Include="Views\Player\Line.qml">
+      <Filter>Views\QML\Player</Filter>
+    </None>
+    <None Include="Views\Player\PalyerPageView.qml">
+      <Filter>Views\QML\Player</Filter>
+    </None>
+    <None Include="Views\Radio\LastStationsView.qml">
+      <Filter>Views\QML\Radio</Filter>
+    </None>
+    <None Include="Views\Radio\Line.qml">
+      <Filter>Views\QML\Radio</Filter>
+    </None>
+    <None Include="Views\Radio\MoreCategoriesView.qml">
+      <Filter>Views\QML\Radio</Filter>
+    </None>
+    <None Include="Views\Radio\PlayStationView.qml">
+      <Filter>Views\QML\Radio</Filter>
+    </None>
+    <None Include="Views\Radio\RadioPageView.qml">
+      <Filter>Views\QML\Radio</Filter>
+    </None>
+    <None Include="Views\Radio\SearchEdit.qml">
+      <Filter>Views\QML\Radio</Filter>
+    </None>
+    <None Include="Views\Radio\SearchResultView.qml">
+      <Filter>Views\QML\Radio</Filter>
+    </None>
+    <None Include="Views\Radio\StationsView.qml">
+      <Filter>Views\QML\Radio</Filter>
+    </None>
+    <None Include="Views\Radio\StationView.qml">
+      <Filter>Views\QML\Radio</Filter>
+    </None>
+    <None Include="Views\Radio\StyledText.qml">
+      <Filter>Views\QML\Radio</Filter>
+    </None>
+    <None Include="Views\Radio\TopStationsView.qml">
+      <Filter>Views\QML\Radio</Filter>
+    </None>
+    <None Include="Views\Radio\VerticalScrollBar.qml">
+      <Filter>Views\QML\Radio</Filter>
+    </None>
+    <None Include="Views\Radio\CategoriesView.qml">
+      <Filter>Views\QML\Radio</Filter>
+    </None>
+    <None Include="Views\Radio\CurrentCategoryStationsView.qml">
+      <Filter>Views\QML\Radio</Filter>
+    </None>
+    <None Include="Views\Radio\HorizontalScrollBar.qml">
+      <Filter>Views\QML\Radio</Filter>
+    </None>
+    <None Include="Views\TV\MoreCategoriesView.qml">
+      <Filter>Views\QML\TV</Filter>
+    </None>
+    <None Include="Views\TV\SearchEdit.qml">
+      <Filter>Views\QML\TV</Filter>
+    </None>
+    <None Include="Views\TV\StyledText.qml">
+      <Filter>Views\QML\TV</Filter>
+    </None>
+    <None Include="Views\TV\TVCategoriesView.qml">
+      <Filter>Views\QML\TV</Filter>
+    </None>
+    <None Include="Views\TV\TVCurrentCategoryView.qml">
+      <Filter>Views\QML\TV</Filter>
+    </None>
+    <None Include="Views\TV\TVFilter.qml">
+      <Filter>Views\QML\TV</Filter>
+    </None>
+    <None Include="Views\TV\TVPageView.qml">
+      <Filter>Views\QML\TV</Filter>
+    </None>
+    <None Include="Views\TV\TVSourcesView.qml">
+      <Filter>Views\QML\TV</Filter>
+    </None>
+    <None Include="Views\TV\VerticalScrollBar.qml">
+      <Filter>Views\QML\TV</Filter>
+    </None>
+    <None Include="Views\TV\Line.qml">
+      <Filter>Views\QML\TV</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="resource.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
     <ClInclude Include="Prerequirements.h" />
     <ClInclude Include="CommandLine.h">
       <Filter>Utils</Filter>
@@ -642,6 +819,9 @@
     </ClInclude>
     <ClInclude Include="NcFramelessHelper.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Resource Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -674,5 +854,10 @@
     <Font Include="Resources\txdJ2vM9.ttf">
       <Filter>Resource Files\Images</Filter>
     </Font>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Player.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

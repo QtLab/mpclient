@@ -1,6 +1,6 @@
 import QtQuick 2.0
-import QtQuick.Controls 1.0
-import QtQuick.Controls.Styles 1.0
+import QtQuick.Controls 1.1
+import QtQuick.Controls.Styles 1.1
 
 Rectangle {
 	radius: 3;
@@ -31,8 +31,7 @@ Rectangle {
 			 anchors.fill: parent
 			 acceptedButtons: Qt.RightButton
 			 onClicked: {
-				var globalPos = mapToItem(null, mouseX, mouseY);
-				radioPageView.showSearchContextMenu(globalPos.x, globalPos.y);
+				radioPageView.showSearchContextMenu(parent.selectedText.length > 0);
 			 }
 		 }
 	 
@@ -102,5 +101,17 @@ Rectangle {
 				radioPageView.searchFilterChanged(searchField.text)
 			}
 		}
+	}
+	
+	function copyFromSearchEdit() {
+		searchField.copy();
+	}
+	
+	function cutFromSearchEdit() {
+		searchField.cut();
+	}
+	
+	function pasteToSearchEdit() {
+		searchField.paste();
 	}
 }

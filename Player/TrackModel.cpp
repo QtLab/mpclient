@@ -341,5 +341,5 @@ bool TrackModel::ParseMp3xml(const QByteArray& xml)
 	return success;
 }
 
-} //End namespace model
-} //End namespace mp
+} //namespace model
+} //namespace mp

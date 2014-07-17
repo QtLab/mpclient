@@ -28,7 +28,7 @@ public:
 
 	static void InitGlobal();
 
-	ASState RefreshState();
+	ASState SyncState();
 	ASState State() const;
 	const QString& Name() const;
 
@@ -50,7 +50,7 @@ private slots:
 	void ProcessMeta();
 	void CleanupStream();
 	void VolumeChanged(qreal value, const QString& streamName);
-	void StreadStarted(HSTREAM stream, int errorCode);
+	void StreamStarted(HSTREAM stream, int errorCode);
 
 signals:
 	void StateChanged(AudioStream::ASState newState);

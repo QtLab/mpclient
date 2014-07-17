@@ -7,14 +7,9 @@
 namespace mp {
 namespace model {
 
-class FileToUpdate : public QObject
+struct FileToUpdate// : public QObject
 {
-	Q_OBJECT
-	Q_PROPERTY(QString N READ FileName WRITE SetFileName)
-	Q_PROPERTY(QString M READ MD5 WRITE SetMD5)
-	Q_PROPERTY(QString U READ Url WRITE SetUrl)
 public:
-
 	FileToUpdate();
 	~FileToUpdate();
 
@@ -28,15 +23,22 @@ public:
 	void SetUrl(const QString& u);
 
 	QString FullPath() const;
+	bool Exists() const;
+	bool IsPlayer() const;
+	bool IsLoader() const;
+	bool IsLauncer() const;
+
+	int DownloadTries() const;
+	void IncrementDownlaodTries();
 
 private:
 	QString		m_fileName;
 	QString		m_md5;
 	QString		m_url;
-	Q_DISABLE_COPY(FileToUpdate)
+	int			m_downloadTries;
 };
 
-class UpdateModel : public BaseListModel<FileToUpdate>
+class UpdateModel : public QAbstractListModel
 {
 	Q_OBJECT
 
@@ -61,13 +63,16 @@ public:
 	QHash<int, QByteArray>	roleNames() const;
 
 private:
-	bool	m_requirePlayerUpdate;
+	bool							m_requirePlayerUpdate;
+	QList<FileToUpdatePtr>			m_items;
 
-	friend class UpdateController;
 	Q_DISABLE_COPY(UpdateModel)
 };
 
-} //End namespace model
-} //End namespace mp
+} //namespace model
+} //namespace mp
+
+Q_DECLARE_METATYPE(mp::model::FileToUpdate)
+
 
 #endif

@@ -3,6 +3,7 @@
 #include "UpdateModel.h"
 #include "UrlBuilder.h"
 #include "Config.h"
+#include <QTimer>
 
 #include <QDebug>
 #include <QtNetwork/QNetworkReply>
@@ -10,16 +11,19 @@
 namespace mp {
 namespace controller {
 
-const int DefualtUpdateInterval = 1000 * 60 * 60 * 5; //5 h
-const int ParallelFilesUpdating = 4;
+const int DefualtUpdateInterval		= 1000 * 60 * 60 * 5; //5 h
+const int ParallelFilesUpdating		= 4;
+const int MaxTriesDownload			= 2;
 
 UpdateController::UpdateController()
 	:m_filesInProcess(0)
 	,m_activatedByUser(false)
+	,m_downloadMgr(new DownlaodManager())
 {
-	n_updateTimer.setInterval(DefualtUpdateInterval);
-	connect(&n_updateTimer, SIGNAL(timeout()), SLOT(CheckForUpdate()));
-	n_updateTimer.start();
+	m_updateTimer = new QTimer();
+	m_updateTimer->setInterval(DefualtUpdateInterval);
+	connect(m_updateTimer, SIGNAL(timeout()), SLOT(CheckForUpdate()));
+	m_updateTimer->start();
 }
 
 bool UpdateController::InProcess() const
@@ -42,14 +46,16 @@ void UpdateController::CheckForUpdate(bool activatedByUser)
 
 		QUrl url = UrlBuilder::CreateUpdate(Config::Inst().UserId());
 
-		qDebug() << "Download update json from: " << url.toString();
-
-		DownlaodManager::Global().Get(url, this, SLOT(ProcessUpdateList()));
+		m_downloadMgr->Get(url, this, SLOT(ProcessUpdateList()));
 	}
 	else
 	{
+
 		qDebug() << "Update already in process";
 	}
+#else
+	m_activatedByUser = activatedByUser;
+	emit UpdateFinished(true, false);
 #endif
 }
 
@@ -62,24 +68,26 @@ void UpdateController::ProcessUpdateList()
 			qDebug() << "Network error, url: "
 				<< reply->request().url().toString() 
 				<<  ", error: " << reply->errorString()  << ", size" << reply->size();
+
+		emit UpdateFinished(false, false);
 	}
 	else
 	{
 		Cleanup();
 		
+
 		m_updateModel.ParseJson(reply->readAll());
 
-		qDebug() << "Processed update models, RequirePlayerUpdate is: " << m_updateModel.RequirePlayerUpdate();
+		qDebug() << "Update model processed, require player restart is: " << m_updateModel.RequirePlayerUpdate();
 
 		while(m_updateModel.rowCount() > 0 && m_filesInProcess < ParallelFilesUpdating)
 		{
 			ProcessNextFile();
-			m_filesInProcess++;
 		}
 
 		if(m_filesInProcess == 0)
 		{
-			emit UpdateFinished(false);
+			emit UpdateFinished(true, false);
 			Cleanup();
 		}
 	}
@@ -87,18 +95,44 @@ void UpdateController::ProcessUpdateList()
 	reply->deleteLater();
 }
 
-void UpdateController::FileDownloaded()
+void UpdateController::FileDownloaded(bool success, QVariant tag)
 {
-	if(m_filesInProcess > 0 && !ProcessNextFile())
-	{
-		qDebug() << "Update finished, RequirePlayerUpdate is: " << m_updateModel.RequirePlayerUpdate();
+	model::FileToUpdate file = tag.value<model::FileToUpdate>();
 
-		emit UpdateFinished(m_updateModel.RequirePlayerUpdate());
-		Cleanup();
+	if(file.Exists())
+	{
+		if(!ProcessNextFile() && m_filesInProcess <= 1)
+		{
+			qDebug() << "Update finished, player restart required is: " << m_updateModel.RequirePlayerUpdate();
+
+			bool rstartRequired = m_updateModel.RequirePlayerUpdate();
+			Cleanup();
+			emit UpdateFinished(true, rstartRequired);
+		}
+		else
+		{
+			m_filesInProcess--;
+
+			qDebug() << "Update - files in process : " << m_filesInProcess  << ", also files to update"  << m_updateModel.rowCount();
+		}
 	}
 	else
 	{
-		m_filesInProcess--;
+		if(file.DownloadTries() >= MaxTriesDownload)
+		{
+			Cleanup();
+			m_downloadMgr->AbortAll();
+
+			emit UpdateFinished(false, false);
+		}
+		else
+		{
+			file.IncrementDownlaodTries();
+
+			m_downloadMgr->DownloadFile(file.Url(), file.FullPath(), 
+										false, qVariantFromValue(file), 
+										this, SLOT(FileDownloaded(bool, QVariant)));
+		}
 	}
 }
 
@@ -110,9 +144,9 @@ bool UpdateController::ProcessNextFile()
 	{
 		QString filePath = fileToUpdate->FullPath();
 
-		DownlaodManager::Global().DownloadFile(fileToUpdate->Url(), filePath, 
-									false, QVariant(), 
-									this, SLOT(FileDownloaded()));
+		m_downloadMgr->DownloadFile(fileToUpdate->Url(), filePath, 
+									false, qVariantFromValue(*fileToUpdate.data()), 
+									this, SLOT(FileDownloaded(bool, QVariant)));
 		m_filesInProcess++;
 		return true;
 	}

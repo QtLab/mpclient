@@ -4,7 +4,7 @@ Rectangle {
 
 	StyledText { 
 		id: searchText
-		text: "Результаты поиска"
+		text: "Результаты поиска:"
 		font.pixelSize: 13;
 	}
 	
@@ -24,7 +24,6 @@ Rectangle {
 				
 				MouseArea  {
 					anchors.fill: parent
-					hoverEnabled: true
 					cursorShape: Qt.PointingHandCursor
 					
 					onClicked: {
@@ -34,9 +33,7 @@ Rectangle {
 						
 						radioPageView.playRadio(Id);
 						var categoryId = FirstCategoryId;
-						
-						radioPageView.insertCategoryBeforeMore(categoryId);
-						radioPageView.setCategory(categoryId);
+						radioPageView.setCategory(categoryId, false);
 					}
 				}
 			}
@@ -76,7 +73,7 @@ Rectangle {
 			bottom: parent.bottom
 			left: parent.left
 			right: parent.right
-			topMargin: 25
+			topMargin: 20
 			leftMargin: 17
 		}
 		

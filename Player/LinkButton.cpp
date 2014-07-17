@@ -32,5 +32,5 @@ void LinkButton::mouseReleaseEvent(QMouseEvent *e)
 	}
 }
 
-}
-}
+} // end namespace view
+} // end namespace mp

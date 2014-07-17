@@ -59,5 +59,5 @@ void SystemTray::ShowAbout()
 	MessageBoxView::ShowAbout(m_parent);
 }
 
-}
-}
+} // end namespace view
+} // end namespace mp

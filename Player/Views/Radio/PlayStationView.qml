@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.1
+import QtQuick.Controls.Styles 1.1
 
 Rectangle {
 	color: 'red'
@@ -83,7 +84,7 @@ Rectangle {
 			id: volumeSlider
 			y: 100; x: 40;
 			width: 50;
-			height: 10;
+			height: 6;
 			maximumValue: 1000
 			minimumValue: 0
 			value: 50
@@ -91,6 +92,24 @@ Rectangle {
 			onValueChanged: {
 				var volume = value / 1000;
 				radioPageView.volumeChanged(volume);
+			}
+			
+			style: SliderStyle {
+				groove: Rectangle {
+					implicitWidth: control.width
+					implicitHeight: control.height
+					color: "#120E0F"
+					radius: 8
+				}
+				handle: Rectangle {
+					anchors.centerIn: parent
+					color: control.pressed ? "white" : "#E1E1E1"
+					border.color: "gray"
+					border.width: 0
+					implicitWidth: 22
+					implicitHeight: control.height
+					radius: 8
+				}
 			}
 		}
 	}

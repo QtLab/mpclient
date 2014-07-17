@@ -36,7 +36,7 @@ private:
 	int				m_lastCurrentTabIndex;
 };
 
-}
-}
+} // end namespace view
+} // end namespace mp
 
 #endif

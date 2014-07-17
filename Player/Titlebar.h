@@ -35,7 +35,7 @@ private:
 	LinkButton *					m_closeLnk;
 };
 
-}
-}
+} // end namespace view
+} // end namespace mp
 
 #endif // MP_TITLE_BAR_WIDGET_H

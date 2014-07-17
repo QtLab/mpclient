@@ -35,6 +35,14 @@ Rectangle {
                 border.width: 0
             }
         }
+		
+		 MouseArea {
+			 anchors.fill: parent
+			 acceptedButtons: Qt.RightButton
+			 onClicked: {
+				playerPage.showSearchContextMenu(parent.selectedText.length > 0);
+			 }
+		 }
 	}
 	
 	Line {
@@ -71,5 +79,17 @@ Rectangle {
 				playerPage.search(searchField.text)
 			}
 		}
+	}
+	
+	function copyFromSearchEdit() {
+		searchField.copy();
+	}
+	
+	function cutFromSearchEdit() {
+		searchField.cut();
+	}
+	
+	function pasteToSearchEdit() {
+		searchField.paste();
 	}
 }

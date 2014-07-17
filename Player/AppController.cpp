@@ -17,6 +17,7 @@ AppController::AppController(int argc, char *argv[])
 	:SingleApplication(argc, argv, "{5D8D9A8F-31A1-49E7-B730-E8396556366A}")
 {
 	QDir::setCurrent(QCoreApplication::applicationDirPath());
+	setQuitOnLastWindowClosed(false);
 }
 
 AppController::~AppController()
@@ -81,7 +82,7 @@ void AppController::InitSignalsSlots()
 	connect(m_trayIcon, SIGNAL(UpdateReuest()), SLOT(UpdateStarted()));
 	connect(m_radioPageController, SIGNAL(SearchTracks(QString)), this, SLOT(SearchTracks(QString)));
 	connect(m_tvPageController, SIGNAL(FlashInstalled()), SLOT(FlashInstalled()));
-	connect(m_updateController, SIGNAL(UpdateFinished(bool)), SLOT(UpdateFinished(bool)));
+	connect(m_updateController, SIGNAL(UpdateFinished(bool, bool)), SLOT(UpdateFinished(bool, bool)));
 	connect(m_userIdle, SIGNAL(IdleStateChanged(bool)), SLOT(UserIdleStateChanged(bool)));
 	connect(m_mainWidow, SIGNAL(CurrentPageChanged(view::TabPage *, view::TabPage *)), SLOT(CurrentPageChanged(view::TabPage *, view::TabPage *)));
 }
@@ -99,7 +100,7 @@ void AppController::Showtdown(int exitCode)
 	m_mainWidow->deleteLater();
 	m_trayIcon->deleteLater();	
 
-	qDebug() << "Showtdown exit code: " << exitCode;
+	qDebug() << "Player showtdown, exit code: " << exitCode;
 
 	if(exitCode != 0)
 	{
@@ -117,33 +118,36 @@ void AppController::UpdateStarted()
 	m_updateController->CheckForUpdate(true);
 }
 
-void AppController::UpdateFinished(bool restartRequired)
+void AppController::UpdateFinished(bool success, bool restartRequired)
 {
-	if(!restartRequired)
+	if(success)
 	{
-		if(!m_pluginManager->AnyLongRunningPluginStarted())
-			m_pluginManager->UnloadAllPlugins();
-
-		m_pluginManager->StartUpdateCompletedPlugin();
-
-		m_radioPageController->ReLoadData();
-		m_tvPageController->ReLoadData();
-
-		if(m_updateController->IsActivatedByUser())
+		if(!restartRequired)
 		{
-			view::MessageBoxView::ShowNewVersionNotFound();
-		}
-	}
-	else
-	{
-		if(m_mainWidow->isHidden())
-		{
-			Showtdown(SILENT_UPDATE_EXIT_CODE);
+			if(!m_pluginManager->AnyLongRunningPluginStarted())
+				m_pluginManager->UnloadAllPlugins();
+
+			m_pluginManager->StartUpdateCompletedPlugin();
+
+			m_radioPageController->ReLoadData();
+			m_tvPageController->ReLoadData();
+
+			if(m_updateController->IsActivatedByUser())
+			{
+				view::MessageBoxView::ShowNewVersionNotFound();
+			}
 		}
 		else
 		{
-			view::MessageBoxView::ShowNewVersionFound();
-			Showtdown(UPDATE_EXIT_CODE);
+			if(m_mainWidow->isHidden())
+			{
+				Showtdown(SILENT_UPDATE_EXIT_CODE);
+			}
+			else
+			{
+				view::MessageBoxView::ShowNewVersionFound();
+				Showtdown(UPDATE_EXIT_CODE);
+			}
 		}
 	}
 }
@@ -247,5 +251,5 @@ bool AppController::notify(QObject* receiver, QEvent* even)
 	return false;
 }
 
-}
-}
+} //namespace controller
+} //namespace mp

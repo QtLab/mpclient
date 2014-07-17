@@ -50,7 +50,8 @@ public:
 	virtual ~RadioCategoriesModel();
 
 	Q_INVOKABLE int UpdateTopVisibleCategories(int maxWidth, const QString& fontFamily, int pointSize, int spacing);
-	Q_INVOKABLE int InsertLastTopVisibleCategory(int id, int maxWidth, const QString& fontFamily, int pointSize, int spacing);
+	Q_INVOKABLE void InsertFirstTopVisibleCategory(int id, int maxWidth, const QString& fontFamily, int pointSize, int spacing);
+	Q_INVOKABLE void InsertLastTopVisibleCategory(int id, int maxWidth, const QString& fontFamily, int pointSize, int spacing);
 
 	Q_INVOKABLE int RowIndexById(int id) const;
 	RadioCategoryPtr FindById(int id) const;
@@ -59,11 +60,13 @@ public:
 	int rowCount(const QModelIndex &parent = QModelIndex()) const;
 	QHash<int, QByteArray>	roleNames() const;
 
+	void Cleanup();
+
 private:
 	int			m_lastTopVIsibleIndex;
 };
 
-} //End namespace model
-} //End namespace mp
+} //namespace model
+} //namespace mp
 
 #endif
