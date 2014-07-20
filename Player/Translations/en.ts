@@ -15,6 +15,10 @@
         <source>Cut</source>
         <translation type="unfinished">Cut</translation>
     </message>
+    <message>
+        <source>Loading...</source>
+        <translation type="unfinished">Loading...</translation>
+    </message>
 </context>
 <context>
     <name>mp::AppController</name>
@@ -161,10 +165,6 @@
     <message>
         <source>TV</source>
         <translation>TV</translation>
-    </message>
-    <message>
-        <source>Flash installing... %0 percents completed</source>
-        <translation></translation>
     </message>
     <message>
         <source>the best collection of free videos</source>

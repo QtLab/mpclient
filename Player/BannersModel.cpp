@@ -11,7 +11,7 @@ namespace mp {
 namespace model {
 
 BannerInfo::BannerInfo()
-	:m_tvSourceId(0)
+	:m_tvSourceId(-1)
 {				
 }
 

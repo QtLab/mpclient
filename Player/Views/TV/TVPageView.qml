@@ -13,6 +13,7 @@ Rectangle {
 	signal showTooltip(string text);
 	signal gotoTVSource(int id);
 	signal closeCurrentTVSource();
+	signal processBanner(int id);
 	
 	TVCategoriesView {
 		id: categoriesView;

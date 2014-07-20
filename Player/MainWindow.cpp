@@ -67,7 +67,7 @@ TabWidget * MainWindow::Tabs() const
 
 int MainWindow::AddTab(TabPage * page)
 {
-	connect(page, SIGNAL(SizeChangeRequest(const QSize&)), SLOT(SizeChanged(const QSize&)));
+	connect(page, SIGNAL(SizeChangeRequest(const QSize&, bool)), SLOT(SizeChanged(const QSize&, bool)));
 	return m_tabWidget->AddPage(page);
 }
 
@@ -122,8 +122,9 @@ void MainWindow::resizeEvent(QResizeEvent *evt)
 	QMainWindow::resizeEvent(evt);
 }
 
-void MainWindow::SizeChanged(const QSize& newSize)
+void MainWindow::SizeChanged(const QSize& newSize, bool canResize)
 {
+	m_frameLessHelper->setWidgetResizable(canResize);
 	SetSize(newSize);
 }
 

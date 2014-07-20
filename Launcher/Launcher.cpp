@@ -144,7 +144,7 @@ void RunPlayer(const cmn::StartupParameters& startupParams)
 
 		// Watch player apllication only if it isn't first launch with installer,
 		// othewise exit for continues setup execution 
-		if(!startupParams.IsInstall())
+		if(!isInstall)
 		{
 			process.Wait();
 
@@ -156,11 +156,9 @@ void RunPlayer(const cmn::StartupParameters& startupParams)
 			{
 				case RESTART_EXIT_CODE:
 					silentMode = false;
-					continue;
 					break;
 				case SILENT_RESTART_EXIT_CODE:
 					silentMode = true;
-					continue;
 					break;
 				case UPDATE_EXIT_CODE:
 					std ::cout << " Update and restart" << std::endl;

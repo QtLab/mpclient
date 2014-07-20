@@ -8,6 +8,7 @@ namespace view {
 
 TabPage::TabPage(QWidget* parent)
 	:QWidget(parent)
+	,m_isActived(false)
 {
 }
 
@@ -15,12 +16,19 @@ TabPage::~TabPage()
 {
 }
 
+bool TabPage::IsActived() const
+{
+	return m_isActived;
+}
+
 void TabPage::Enter()
 {
+	m_isActived = true;
 }
 
 bool TabPage::Leave()
 {
+	m_isActived = false;
 	return true;
 }
 

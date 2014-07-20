@@ -21,7 +21,9 @@ QuickPageBase::QuickPageBase(QWidget* parent, const QString& qmlFile)
 	m_layout->setContentsMargins(0, 0, 0, 0);
 
 	m_quickView = new QQuickView();
-	m_layout->addWidget(QWidget::createWindowContainer(m_quickView, this));
+	m_quickViewWidget = QWidget::createWindowContainer(m_quickView, this);
+
+	m_layout->addWidget(m_quickViewWidget);
 
 	QString localUrl = QUrl::fromLocalFile(Path::QmlFile(qmlFile)).toString();
 	qDebug()  << "Load qml from: "<< localUrl;
@@ -40,6 +42,11 @@ QuickPageBase::~QuickPageBase()
 QQuickView * QuickPageBase::QuickView() const
 {
 	return m_quickView;
+}
+
+QWidget * QuickPageBase::QuickViewWidget() const
+{
+	return m_quickViewWidget;
 }
 
 QQuickItem * QuickPageBase::RootQuickItem() const

@@ -33,14 +33,20 @@ public:
 	void AddGenreId(int id);
 	TVGenreIdsSet GenreIds() const;
 
+	int CategoryId() const;
+	void SetCategoryId(int id);
+
+	void SetSelector(const QString& selector);
+	const QString& Selector() const;
 public:
 	int						m_id;
 	QString					m_name;
 	QString					m_url;
 	QString					m_logo;
 	int						m_partnerId;
-	TVGenreIdsSet				m_genreIds;
-	bool					m_viewOnlyInBrowser;
+	TVGenreIdsSet			m_genreIds;
+	int						m_categoryId;
+	QString					m_selector;
 
 	Q_DISABLE_COPY(TVSource)
 };
@@ -58,22 +64,22 @@ public:
 		Logo,
 		PartnerId,
 		FirstGenreId,
+		CategoryId,
 		GenreIds
 	};
 
 	TVSourcesModel(QObject* parent = NULL);
 	virtual ~TVSourcesModel();
 
-	void Load(const QString& filePath);
+	void Load(const QString& filePath, const GenreIdsToCategoryIdMap& genresModel);
 
 	TVSourcePtr Find(int channelId) const;
 
 	QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-	int rowCount(const QModelIndex &parent = QModelIndex()) const;
 	QHash<int, QByteArray>	roleNames() const;
 
 private:
-	void ParseChannelsJson(const QByteArray& json);
+	void ParseChannelsJson(const QByteArray& json, const GenreIdsToCategoryIdMap& genresToCategoriesBinding);
 
 public:
 	friend QAbstractListModel;

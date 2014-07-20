@@ -27,14 +27,14 @@ public:
 	TVSourceIdsSet TVTopSourceIds() const;
 	void AddTVTopSourceId(int id);
 
-	int NextBannerId() const;
+	int RandomBannerId() const;
 	BannerInfoIds BannerIds() const;
 	void AddBannerId(int id);
 private:
 	int						m_id;
 	QString					m_name;
 	bool					m_topVisible;
-	TVSourceIdsSet				m_tvTopSourceIds;
+	TVSourceIdsSet			m_tvTopSourceIds;
 	BannerInfoIds			m_bannerIds;
 	Q_DISABLE_COPY(TVCategory)
 };

@@ -144,23 +144,23 @@ void UpdateModel::ParseJson(const QByteArray& json)
 
 		foreach(QVariant record, list) 
 		{
-			QSharedPointer<FileToUpdate> file(new FileToUpdate());
+			FileToUpdate file;
 
 			QMap<QString, QVariant> map = record.toMap();
 
-			file->SetFileName(map[FileNameKey].toString());
-			file->SetUrl(map[FileUrlKey].toString());
-			file->SetMD5(map[FileMd5Key].toString());
+			file.SetFileName(map[FileNameKey].toString());
+			file.SetUrl(map[FileUrlKey].toString());
+			file.SetMD5(map[FileMd5Key].toString());
 		
-			if(file->MD5() == Zero)
+			if(file.MD5() == Zero)
 			{
-				QFile::remove(file->FullPath());
+				QFile::remove(file.FullPath());
 			}
 			else
 			{
-				if(!file->Exists())
+				if(!file.Exists())
 				{
-					if(file->IsPlayer())
+					if(file.IsPlayer())
 					{
 						m_requirePlayerUpdate = true;
 					}
@@ -174,17 +174,17 @@ void UpdateModel::ParseJson(const QByteArray& json)
 	}
 }
 
-FileToUpdatePtr UpdateModel::PopBack()
+bool UpdateModel::PopBack(FileToUpdate& file)
 {
 	if(m_items.count() > 0)
 	{
-		FileToUpdatePtr fileToUpdate = m_items.last();
+		file= m_items.last();
 		m_items.pop_back();
 
-		return fileToUpdate;
+		return true;
 	}
 
-	return FileToUpdatePtr();
+	return false;
 }
 
 bool UpdateModel::RequirePlayerUpdate() const
@@ -198,44 +198,9 @@ void UpdateModel::Cleanup()
 	m_items.clear();
 }
 
-QVariant UpdateModel::data(const QModelIndex & index, int role) const 
+int UpdateModel::Count() const
 {
-	if (index.row() < 0 || index.row() > m_items.count())
-		return QVariant();
-
-	const FileToUpdatePtr item = m_items.at(index.row());
-	
-	QVariant result;
-
-	switch (role) 
-	{
-		case FileName:
-			result = QVariant(item->FileName());
-			break;
-		case MD5:
-			result = QVariant(item->MD5());
-			break;
-		case Url:
-			result = QVariant(item->Url());
-			break;
-	}
-
-	return result;
-}
-
-int UpdateModel::rowCount(const QModelIndex &parent) const
-{
-	return m_items.count();
-}
-
-QHash<int, QByteArray> UpdateModel::roleNames() const
-{
-	QHash<int, QByteArray> roles;
-	roles[FileName] = "FileName";
-	roles[MD5] = "MD5";
-	roles[Url] = "Url";
-
-	return roles;
+	return  m_items.count();
 }
 
 } //namespace model

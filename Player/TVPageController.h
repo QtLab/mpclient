@@ -21,7 +21,7 @@ public:
 	void Pause();
 
 private:
-	void SetCurentCategory(model::TVCategoryPtr category);
+	void GotoCategory(model::TVCategoryPtr category);
 
 private slots:
 	void TVCurrentCategoryChanged(int categoryId);
@@ -29,14 +29,15 @@ private slots:
 	void TVCurrentGenreChanged(int genreId);
 	void SearchFilterChanged(QString filter);
 	void GotoTVSource(int id);
+	void ProcessBanner(int id);
 
 signals:
 	void FlashInstalled();
 
 private:
 	// Widget view
-	view::TVPage *								m_view;
-	view::TVGenresPopupPtr						m_genresPopup;
+	view::TVPage *								m_tvPageView;
+	view::TVGenresPopupViewPtr					m_genresPopupView;
 	// TV Cateories model
 	model::TVCategoryPtr						m_currentCategory;
 	model::TVCategoriesModelPtr					m_categoriesModel;
@@ -50,6 +51,7 @@ private:
 	model::TVSourcesSortFilterProxyModelPtr		m_currentGenreSourcesModel;
 	model::TVSourcesSortFilterProxyModelPtr		m_searchSourcesModel;
 	model::TVSourcesSortFilterProxyModelPtr		m_topSourcesModel;
+
 	//Banners model
 	model::BannersModelPtr						m_bannersModel;
 };

@@ -1,4 +1,4 @@
-#include "TrackModelDataAccessor.h"
+#include "TracksDataProvider.h"
 #include "TrackModel.h"
 #include "UrlBuilder.h"
 
@@ -6,22 +6,23 @@
 
 namespace mp {
 
-TrackModelDataAccessor::TrackModelDataAccessor()
-	:m_inProcess(false)
+TracksDataProvider::TracksDataProvider(QObject* parent)
+	:QObject(parent)
+	,m_inProcess(false)
 {
 }
 
-model::TrackModelPtr TrackModelDataAccessor::Model() const
+model::TrackModelPtr TracksDataProvider::Model() const
 {
 	return m_model;
 }
 
-void TrackModelDataAccessor::SetModel(model::TrackModelPtr model)
+void TracksDataProvider::SetModel(model::TrackModelPtr model)
 {
 	m_model = model;
 }
 
-void TrackModelDataAccessor::Search(const QString& searchFilter)
+void TracksDataProvider::Search(const QString& searchFilter)
 {
 	if(!m_inProcess)
 	{
@@ -37,7 +38,7 @@ void TrackModelDataAccessor::Search(const QString& searchFilter)
 	}
 }
 
-void TrackModelDataAccessor::Mp3XmlHttpRequestFinished()
+void TracksDataProvider::Mp3XmlHttpRequestFinished()
 {
 	bool success = false;
 
@@ -70,7 +71,7 @@ void TrackModelDataAccessor::Mp3XmlHttpRequestFinished()
 	}
 }
 
-void TrackModelDataAccessor::InixmediaHttpRequestFinished()
+void TracksDataProvider::InixmediaHttpRequestFinished()
 {
 	bool success = false;
 

@@ -66,10 +66,20 @@ void TVCategory::AddTVTopSourceId(int id)
 	m_tvTopSourceIds.insert(id);
 }
 
-int TVCategory::NextBannerId() const
+int TVCategory::RandomBannerId() const
 {
-	// TODO: return different ids
-	return m_bannerIds.first();
+	if(m_bannerIds.count() > 0)
+	{
+		int max = m_bannerIds.count() - 1;
+
+		int min = 0;
+
+		int index =  qrand() % ((max + 1) - min) + min;
+
+		return m_bannerIds[index];
+	}
+
+	return -1;
 }
 
 BannerInfoIds TVCategory::BannerIds() const

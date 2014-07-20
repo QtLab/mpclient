@@ -120,11 +120,12 @@ QWebPage* WebView::CreateLoadingWebPage(QObject* parent)
 {
 	static QString tempalte = 
 		"<html>\
-		<body style='background:white;'>\
-		<div align='center' style='margin-top: 20%'>\
-		<h1 style='color:black'>%0\</h1>\
-		</div>\
-		</body></html>";
+			<body style='background:white;'>\
+				<div align='center' style='margin-top: 20%'>\
+				<h1 style='color:black'>%0\</h1>\
+				</div>\
+			</body>\
+		</html>";
 
 	QWebPage * page = new QWebPage(parent);
 	

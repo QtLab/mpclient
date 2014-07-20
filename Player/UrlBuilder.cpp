@@ -31,6 +31,18 @@ void UrlBuilder::SetQueryParameter(QUrl& url, const QString& key, const QString&
 	url.setQuery(urlQuery);
 }
 
+bool UrlBuilder::IsEmtyUrl(const QUrl& url)
+{
+	QString strUrl = url.toString();
+
+	if(url.isEmpty()|| strUrl == QLatin1String("about:blank"))
+	{
+		return true;
+	}
+
+	return false;
+}
+
 QUrl UrlBuilder::CreateUpdate(const QString& userId)
 {
 	QUrl url = DefaultHostUrl();

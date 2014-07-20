@@ -34,7 +34,7 @@ public:
 
 	void SetCurrentGenre(int id, const QString& name);
 	void SetCurrentCategory(int id, bool topVisible, int bannerId, const QString& bannerLogo);
-	void ShowTVSource(const QString& url);
+	void ShowTVSource(const QString& url, const QString& tvSourceSelector);
 
 private slots:
 	void CloseCurrentTVSource();
@@ -45,10 +45,13 @@ signals:
 	void ShowGenres(int id);
 	void SearchFilterChanged(QString);
 	void GotoTVSource(int id);
+	void ProcessBanner(int id);
 
 private:
 	WebView *		m_webView;
 	QSize			m_pageSize;
+	bool			m_resizable;
+	QString			m_tvSourceSelector;
 	QWebPage *		m_loadingWebPage;
 	QWebPage *		m_contentWebPage;
 };

@@ -4,7 +4,7 @@ Rectangle {
 	property int bannerId;
 	property string bannerLogo;
 
-	Image {
+	AnimatedImage {
 		id: bannerImg
 
 		anchors {
@@ -17,6 +17,13 @@ Rectangle {
 		height: 174;
 		
 		source: bannerLogo
+		
+		MouseArea  {
+			anchors.fill: parent
+			hoverEnabled: true
+			cursorShape: Qt.PointingHandCursor
+			onClicked: tvPage.processBanner(bannerId);
+		}
 	}
 	
 	StyledText {

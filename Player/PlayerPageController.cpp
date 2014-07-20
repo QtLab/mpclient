@@ -2,7 +2,7 @@
 #include "AudioStream.h"
 #include "PlayerPage.h"
 #include "TrackModel.h"
-#include "TrackModelDataAccessor.h"
+#include "TracksDataProvider.h"
 #include "AudioStreamAsyncDownloader.h"
 #include "Config.h"
 #include "FileUtils.h"
@@ -18,12 +18,12 @@ namespace controller {
 PlayerPageController::PlayerPageController()
 	:m_trackSearchResultModel(new model::TrackModel())
 	,m_downlaodedTracksModel(new model::TrackModel())
-	,m_trackSearcher(new TrackModelDataAccessor())
+	,m_tracksDataProvider(new TracksDataProvider())
 	,m_audioStream(new AudioStream("player"))
 {
 	m_view = new view::PlayerPage(NULL, m_trackSearchResultModel, m_downlaodedTracksModel);
 	m_view->SetVolume(Config::Inst().Volume(m_audioStream->Name()));
-	m_trackSearcher->SetModel(m_trackSearchResultModel);
+	m_tracksDataProvider->SetModel(m_trackSearchResultModel);
 
 	connect(m_view, SIGNAL(PlayTrack(int)), this, SLOT(PlayTrack(int)));
 	connect(m_view, SIGNAL(PauseTrack()), this, SLOT(PauseTrack()));
@@ -49,7 +49,7 @@ PlayerPageController::PlayerPageController()
 PlayerPageController::~PlayerPageController()
 {
 	m_syncProgressTimer->deleteLater();
-	m_trackSearcher->deleteLater();
+	m_tracksDataProvider->deleteLater();
 	m_view->deleteLater();
 	m_trackSearchResultModel->deleteLater();
 }
@@ -79,7 +79,7 @@ void PlayerPageController::Pause()
 void PlayerPageController::Search(const QString& seasrchFilter)
 {
 	m_trackSearchResultModel->Cleanup();
-	m_trackSearcher->Search(seasrchFilter);
+	m_tracksDataProvider->Search(seasrchFilter);
 	m_view->SetSearchFilter(seasrchFilter);
 }
 

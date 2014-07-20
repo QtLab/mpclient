@@ -46,7 +46,7 @@ public:
 		TopVisible
 	};
 
-	RadioCategoriesModel();
+	RadioCategoriesModel(QObject* parent = NULL);
 	virtual ~RadioCategoriesModel();
 
 	Q_INVOKABLE int UpdateTopVisibleCategories(int maxWidth, const QString& fontFamily, int pointSize, int spacing);

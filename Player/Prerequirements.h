@@ -7,8 +7,9 @@
 #include <QList>
 #include <QSet>
 #include <QMap>
+#include <QMultiMap>
 
-#define PLAYER_VERSION "1.0.0.0"
+#define PLAYER_VERSION "1.0.0.5"
 
 // Forward declaration
 
@@ -47,10 +48,10 @@ class PluginManager;
 class DownlaodManager;
 class UserIdle;
 class FlashUtils;
-class TrackModelDataAccessor;
+class TracksDataProvider;
 
 typedef AudioStream * AudioStreamPtr;
-typedef TrackModelDataAccessor * TrackModelDataAccessorPtr;
+typedef TracksDataProvider * TracksDataProviderPtr;
 
 namespace view {
 
@@ -64,9 +65,9 @@ class TabWidget;
 class MainWindow;
 class SystemTray;
 class TabPage;
-class TVGenresPopup;
+class TVGenresPopupView;
 
-typedef TVGenresPopup * TVGenresPopupPtr;
+typedef TVGenresPopupView * TVGenresPopupViewPtr;
 typedef TabPage * TabPagePtr;
 
 }
@@ -76,6 +77,7 @@ namespace controller {
 class IPageController;
 class TVPageController;
 class RadioPageController;
+class UpdateResult;
 class UpdateController;
 class PlayerPageController;
 
@@ -130,6 +132,8 @@ typedef QSharedPointer<TVGenre> TVGenrePtr;
 typedef TVGenresModel * TVGenresModelPtr;
 typedef TVGenresSortFilterProxyModel* TVGenresSortFilterProxyModelPtr;
 typedef QSet<int> TVGenreIdsSet;
+
+typedef QMap<int, int> GenreIdsToCategoryIdMap;
 
 class TVSource;
 class TVSourcesModel;

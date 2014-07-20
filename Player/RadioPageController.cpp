@@ -2,6 +2,9 @@
 #include "RadioPage.h"
 #include "AudioStream.h"
 #include "ChannelMetadataModel.h"
+#include "RadioCategoriesModel.h"
+#include "RadioSourcesModel.h"
+#include "RadioSourcesSortFilterProxyModel.h"
 #include "Config.h"
 #include "Path.h"
 
@@ -11,24 +14,27 @@ namespace controller {
 RadioPageController::RadioPageController()
 	:m_view(NULL)
 	,m_audioStream("radio")
+	,m_stations(new model::RadioSourcesModel(this))
+	,m_searchStationsProxyModel(new model::RadioSourcesSortFilterProxyModel(this))
+	,m_allStationsProxyModel(new model::RadioSourcesSortFilterProxyModel(this))
+	,m_topStationsProxyModel(new model::RadioSourcesSortFilterProxyModel(this))
+	,m_lastStationsProxyModel(new model::RadioSourcesSortFilterProxyModel(this))
+	,m_categories(new model::RadioCategoriesModel(this))
 {
-	m_allStationsProxyModel.setSourceModel(&m_stations);
-	m_allStationsProxyModel.SetSortType(model::RadioSourcesSortFilterProxyModel::ByName);
-	m_lastStationsProxyModel.sort(0);
+	m_allStationsProxyModel->setSourceModel(m_stations);
+	m_allStationsProxyModel->SetSortType(model::RadioSourcesSortFilterProxyModel::ByName);
 
-	m_lastStationsProxyModel.setSourceModel(&m_stations);
-	m_lastStationsProxyModel.SetSortType(model::RadioSourcesSortFilterProxyModel::ByLastPlayTime);
-	m_lastStationsProxyModel.sort(0);
+	m_lastStationsProxyModel->setSourceModel(m_stations);
+	m_lastStationsProxyModel->SetSortType(model::RadioSourcesSortFilterProxyModel::ByLastPlayTime);
 
-	m_topStationsProxyModel.setSourceModel(&m_stations);
-	m_topStationsProxyModel.SetSortType(model::RadioSourcesSortFilterProxyModel::ByTop);
-	m_topStationsProxyModel.sort(0);
+	m_topStationsProxyModel->setSourceModel(m_stations);
+	m_topStationsProxyModel->SetSortType(model::RadioSourcesSortFilterProxyModel::ByTop);
 
-	m_searchStationsProxyModel.setSourceModel(&m_stations);
+	m_searchStationsProxyModel->setSourceModel(m_stations);
 
-	m_view = new view::RadioPage(NULL, &m_categories, 
-							&m_allStationsProxyModel, &m_topStationsProxyModel, 
-							&m_lastStationsProxyModel, &m_searchStationsProxyModel);
+	m_view = new view::RadioPage(NULL, m_categories, 
+							m_allStationsProxyModel, m_topStationsProxyModel, 
+							m_lastStationsProxyModel, m_searchStationsProxyModel);
 
 	connect(m_view, SIGNAL(PlayRadio(int)), this, SLOT(PlayRadio(int)));
 	connect(m_view, SIGNAL(ResumeRadio()), this, SLOT(ResumeRadio()));
@@ -61,18 +67,18 @@ view::TabPage* RadioPageController::View() const
 
 void RadioPageController::ReLoadData()
 {
-	m_categories.Cleanup();
-	m_stations.Cleanup();
+	m_categories->Cleanup();
+	m_stations->Cleanup();
 
-	m_categories.Load(Path::ConfigFile("radiocatygories.j"));
-	m_stations.LoadWithStats(Path::ConfigFile("radio.j"));
+	m_categories->Load(Path::ConfigFile("radiocatygories.j"));
+	m_stations->LoadWithStats(Path::ConfigFile("radio.j"));
 
 	bool topVisible = false;
 
 	if(m_currentCategory.isNull())
 	{
 		topVisible = true;
-		m_currentCategory = m_categories.First();
+		m_currentCategory = m_categories->First();
 	}
 
 	if(!m_currentCategory.isNull())
@@ -93,20 +99,20 @@ void RadioPageController::Pause()
 
 void RadioPageController::SetCategoryFilter(int categoryId)
 {
-	m_allStationsProxyModel.SetCategoryIdFilter(categoryId);
-	m_lastStationsProxyModel.SetCategoryIdFilter(categoryId);
-	m_topStationsProxyModel.SetCategoryIdFilter(categoryId);
+	m_allStationsProxyModel->SetCategoryIdFilter(categoryId);
+	m_lastStationsProxyModel->SetCategoryIdFilter(categoryId);
+	m_topStationsProxyModel->SetCategoryIdFilter(categoryId);
 
-	m_allStationsProxyModel.invalidate();
-	m_lastStationsProxyModel.invalidate();
-	m_topStationsProxyModel.invalidate();
+	m_allStationsProxyModel->invalidate();
+	m_lastStationsProxyModel->invalidate();
+	m_topStationsProxyModel->invalidate();
 }
 
 void RadioPageController::PlayRadio(int id)
 {
 	emit PauseAllControllers();
 
-	model::RadioSourcePtr channel = m_stations.Find(id);
+	model::RadioSourcePtr channel = m_stations->Find(id);
 
 	if(channel)
 	{
@@ -117,10 +123,10 @@ void RadioPageController::PlayRadio(int id)
 		channel->SetPlayCount(newPlayCount);
 		channel->SetLastPlayNow();
 
-		m_stations.SaveStats(Path::ConfigFile("radio.j"));
+		m_stations->SaveStats(Path::ConfigFile("radio.j"));
 
-		m_topStationsProxyModel.invalidate();
-		m_lastStationsProxyModel.invalidate();
+		m_topStationsProxyModel->invalidate();
+		m_lastStationsProxyModel->invalidate();
 	}
 	else
 	{
@@ -140,7 +146,7 @@ void RadioPageController::ResumeRadio()
 	{
 		if(m_currentChannel.isNull())
 		{
-			m_currentChannel = m_stations.Random();
+			m_currentChannel = m_stations->Random();
 		}
 
 		if(!m_currentChannel.isNull())
@@ -162,13 +168,13 @@ void RadioPageController::VolumeChanged(qreal value)
 
 void RadioPageController::CategoryChanged(int id)
 {
-	m_currentCategory = m_categories.FindById(id);
+	m_currentCategory = m_categories->FindById(id);
 	SetCategoryFilter(id);
 }
 
 void RadioPageController::SearchFilterChanged(QString filter)
 {
-	m_searchStationsProxyModel.SetNameFilter(filter);
+	m_searchStationsProxyModel->SetNameFilter(filter);
 }
 
 void RadioPageController::MetadataUpdated(const ChannelMetadata& metadata)

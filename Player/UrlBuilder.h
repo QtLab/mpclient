@@ -16,6 +16,7 @@ public:
 	static QUrl DefaultHostUrl();
 	static void SetUserId(QUrl& url, const QString& userId);
 	static void SetQueryParameter(QUrl& url, const QString& key, const QString& value);
+	static bool IsEmtyUrl(const QUrl& url);
 
 	static QUrl CreateUpdate(const QString& userId);
 	static QUrl CreateCurrentDirUrl(const QString& relativePath);

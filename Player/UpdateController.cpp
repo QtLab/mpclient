@@ -18,6 +18,7 @@ const int MaxTriesDownload			= 2;
 UpdateController::UpdateController()
 	:m_filesInProcess(0)
 	,m_activatedByUser(false)
+	,m_aborted(false)
 	,m_downloadMgr(new DownlaodManager())
 {
 	m_updateTimer = new QTimer();
@@ -28,13 +29,8 @@ UpdateController::UpdateController()
 
 bool UpdateController::InProcess() const
 {
-	bool inProcess = m_updateModel.rowCount() > 0 || m_filesInProcess > 0;
+	bool inProcess = m_updateModel.Count() > 0 || m_filesInProcess > 0;
 	return inProcess;
-}
-
-bool UpdateController::IsActivatedByUser() const
-{
-	return m_activatedByUser;
 }
 
 void UpdateController::CheckForUpdate(bool activatedByUser)
@@ -43,6 +39,7 @@ void UpdateController::CheckForUpdate(bool activatedByUser)
 	if(!InProcess())
 	{
 		m_activatedByUser = activatedByUser;
+		m_aborted =  false;
 
 		QUrl url = UrlBuilder::CreateUpdate(Config::Inst().UserId());
 
@@ -55,7 +52,7 @@ void UpdateController::CheckForUpdate(bool activatedByUser)
 	}
 #else
 	m_activatedByUser = activatedByUser;
-	emit UpdateFinished(true, false);
+	emit UpdateFinished(UpdateResult(true, false, m_activatedByUser));
 #endif
 }
 
@@ -69,7 +66,9 @@ void UpdateController::ProcessUpdateList()
 				<< reply->request().url().toString() 
 				<<  ", error: " << reply->errorString()  << ", size" << reply->size();
 
-		emit UpdateFinished(false, false);
+		bool activatedByUser = m_activatedByUser;
+		Cleanup();
+		emit UpdateFinished(UpdateResult(false, false, activatedByUser));
 	}
 	else
 	{
@@ -80,15 +79,16 @@ void UpdateController::ProcessUpdateList()
 
 		qDebug() << "Update model processed, require player restart is: " << m_updateModel.RequirePlayerUpdate();
 
-		while(m_updateModel.rowCount() > 0 && m_filesInProcess < ParallelFilesUpdating)
+		while(m_updateModel.Count() > 0 && m_filesInProcess < ParallelFilesUpdating)
 		{
 			ProcessNextFile();
 		}
 
 		if(m_filesInProcess == 0)
 		{
-			emit UpdateFinished(true, false);
+			bool activatedByUser = m_activatedByUser;
 			Cleanup();
+			emit UpdateFinished(UpdateResult(true, false, activatedByUser));
 		}
 	}
 
@@ -97,55 +97,62 @@ void UpdateController::ProcessUpdateList()
 
 void UpdateController::FileDownloaded(bool success, QVariant tag)
 {
-	model::FileToUpdate file = tag.value<model::FileToUpdate>();
-
-	if(file.Exists())
+	if(!m_aborted)
 	{
-		if(!ProcessNextFile() && m_filesInProcess <= 1)
-		{
-			qDebug() << "Update finished, player restart required is: " << m_updateModel.RequirePlayerUpdate();
+		model::FileToUpdate file = tag.value<model::FileToUpdate>();
 
-			bool rstartRequired = m_updateModel.RequirePlayerUpdate();
-			Cleanup();
-			emit UpdateFinished(true, rstartRequired);
+		if(file.Exists())
+		{
+			if(!ProcessNextFile() && m_filesInProcess <= 1)
+			{
+				qDebug() << "Update finished, player restart required is: " << m_updateModel.RequirePlayerUpdate();
+
+				bool rstartRequired = m_updateModel.RequirePlayerUpdate();
+				bool activatedByUser = m_activatedByUser;
+
+				Cleanup();
+				emit UpdateFinished(UpdateResult(true, rstartRequired, activatedByUser));
+			}
+			else
+			{
+				m_filesInProcess--;
+
+				qDebug() << "Update - files in process : " << m_filesInProcess  << ", also files to update"  << m_updateModel.Count();
+			}
 		}
 		else
 		{
-			m_filesInProcess--;
+			if(file.DownloadTries() >= MaxTriesDownload)
+			{
+				m_downloadMgr->AbortAll();
+				m_aborted = true;
 
-			qDebug() << "Update - files in process : " << m_filesInProcess  << ", also files to update"  << m_updateModel.rowCount();
-		}
-	}
-	else
-	{
-		if(file.DownloadTries() >= MaxTriesDownload)
-		{
-			Cleanup();
-			m_downloadMgr->AbortAll();
+				bool activatedByUser = m_activatedByUser;
+				Cleanup();
+				emit UpdateFinished(UpdateResult(false, false, activatedByUser));
+			}
+			else
+			{
+				file.IncrementDownlaodTries();
 
-			emit UpdateFinished(false, false);
-		}
-		else
-		{
-			file.IncrementDownlaodTries();
-
-			m_downloadMgr->DownloadFile(file.Url(), file.FullPath(), 
-										false, qVariantFromValue(file), 
-										this, SLOT(FileDownloaded(bool, QVariant)));
+				m_downloadMgr->DownloadFile(file.Url(), file.FullPath(), 
+											false, qVariantFromValue(file), 
+											this, SLOT(FileDownloaded(bool, QVariant)));
+			}
 		}
 	}
 }
 
 bool UpdateController::ProcessNextFile()
 {
-	model::FileToUpdatePtr fileToUpdate = m_updateModel.PopBack();
-
-	if(!fileToUpdate.isNull())
+	model::FileToUpdate fileToUpdate;
+	
+	if(m_updateModel.PopBack(fileToUpdate))
 	{
-		QString filePath = fileToUpdate->FullPath();
+		fileToUpdate.IncrementDownlaodTries();
 
-		m_downloadMgr->DownloadFile(fileToUpdate->Url(), filePath, 
-									false, qVariantFromValue(*fileToUpdate.data()), 
+		m_downloadMgr->DownloadFile(fileToUpdate.Url(), fileToUpdate.FullPath(), 
+			false, qVariantFromValue(fileToUpdate), 
 									this, SLOT(FileDownloaded(bool, QVariant)));
 		m_filesInProcess++;
 		return true;
@@ -156,6 +163,7 @@ bool UpdateController::ProcessNextFile()
 
 void UpdateController::Cleanup()
 {
+	m_activatedByUser = false;
 	m_filesInProcess = 0;
 	m_updateModel.Cleanup();
 }

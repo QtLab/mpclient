@@ -15,6 +15,7 @@ public:
 	TabPage(QWidget* parent);
 	virtual ~TabPage();
 
+	virtual bool IsActived() const;
 	// User leave the page
 	virtual void Enter();
 	// User leave the page
@@ -36,11 +37,11 @@ private:
 	void changeEvent(QEvent *event);
 
 signals:
-	void SizeChangeRequest(const QSize& newSize);
+	void SizeChangeRequest(const QSize& newSize, bool canResize);
 
 private:
 	int		m_tabIndex;
-
+	bool	m_isActived;
 	friend class TabWidget;
 };
 

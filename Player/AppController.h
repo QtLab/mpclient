@@ -25,7 +25,7 @@ public:
 private slots:
 	void Showtdown(int exitCode = 0);
 	void UpdateStarted();
-	void UpdateFinished(bool success, bool restartRequired);
+	void UpdateFinished(const UpdateResult& result);
 	void UserIdleStateChanged(bool isIdle);
 	void CurrentPageChanged(view::TabPage * newPages, view::TabPage * oldPage);
 	void FlashInstalled();

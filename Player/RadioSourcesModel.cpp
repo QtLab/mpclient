@@ -88,7 +88,8 @@ RadioCategoryIds RadioSource::Categories() const
 	return m_categories;
 }
 
-RadioSourcesModel::RadioSourcesModel()
+RadioSourcesModel::RadioSourcesModel(QObject* parent)
+	:BaseListModel<RadioSource>(parent)
 {
 }
 

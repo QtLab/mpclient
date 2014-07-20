@@ -7,12 +7,12 @@
 namespace mp {
 namespace view {
 
-class TVGenresPopup : public QDialog
+class TVGenresPopupView : public QDialog
 {
 	Q_OBJECT
 
 public:
-	TVGenresPopup(QAbstractItemModel* genresModel, QWidget* parent = NULL);
+	TVGenresPopupView(QAbstractItemModel* genresModel, QWidget* parent = NULL);
 	void Show(QPoint pos);
 
 private slots:

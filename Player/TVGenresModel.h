@@ -52,10 +52,17 @@ public:
 
 	Q_INVOKABLE int RowIndexById(int id) const;
 	TVGenrePtr FindById(int id) const;
+	const GenreIdsToCategoryIdMap& GenreIdsToCategoryIdBindingMap() const;
+	void Cleanup();
 
 	QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-	int rowCount(const QModelIndex &parent = QModelIndex()) const;
 	QHash<int, QByteArray>	roleNames() const;
+
+private:
+	void ParseJson(const QByteArray& json, const PropertiesSet& propertiesToLoad = PropertiesSet());
+
+private:
+	GenreIdsToCategoryIdMap		m_genreIdsToCategoryIdToMap;
 };
 
 } //namespace model

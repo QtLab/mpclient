@@ -1,4 +1,4 @@
-#include "TVGenresPopup.h"
+#include "TVGenresPopupView.h"
 #include "TVGenresModel.h"
 #include "WidgetUtils.h"
 #include "Config.h"
@@ -25,6 +25,9 @@ const int TriangleHeight			= 8;
 const int TriangleLeftMargin		= 22;
 const int TriangleBaseWidth			= 15;
 
+const int GenresPopupTopMagrin		= 70;
+const int GenresPopupLeftMagrin		= 11;
+
 class GenreViewDelegate : public QStyledItemDelegate
 {
 public:
@@ -40,7 +43,7 @@ public:
 
 };
 
-TVGenresPopup::TVGenresPopup(QAbstractItemModel* genresModel, QWidget* parent)
+TVGenresPopupView::TVGenresPopupView(QAbstractItemModel* genresModel, QWidget* parent)
 	:QDialog(parent)
 {
 	WidgetUtils::LoadStyleSheets(this, Path::CssFile("TVGenresPopup.qss"));
@@ -56,7 +59,7 @@ TVGenresPopup::TVGenresPopup(QAbstractItemModel* genresModel, QWidget* parent)
 	connect( m_genresListView, SIGNAL(clicked(const QModelIndex&)), SLOT(GenreSelected(const QModelIndex&)));
 
 	m_wrapLayout = new QVBoxLayout(this);
-	m_wrapLayout->setContentsMargins(0, TriangleHeight, 0, 0);
+	m_wrapLayout->setContentsMargins(0, 8, 0, 0);
 
 	m_centralWidget = new CentralWidget();
 	m_centralWidget->setObjectName("centralWidget");
@@ -67,7 +70,7 @@ TVGenresPopup::TVGenresPopup(QAbstractItemModel* genresModel, QWidget* parent)
 	m_contentLayout->addWidget(m_genresListView, 0);
 }
 
-void TVGenresPopup::Show(QPoint pos)
+void TVGenresPopupView::Show(QPoint pos)
 {
 	int rowCount = m_genresListView->model()->rowCount();
 
@@ -76,34 +79,37 @@ void TVGenresPopup::Show(QPoint pos)
 		const int desktopBottom = QApplication::desktop()->rect().bottom();
 		const int maxHeight = desktopBottom - (pos.y() + 5);
 
-		int height = (rowCount * GenreItemHeight) + 8;
+		int height = (rowCount * GenreItemHeight);
 
 		if(height > maxHeight)
 		{
 			height = maxHeight;
 		}
 
-		m_centralWidget->setFixedHeight(height);
+		m_centralWidget->setFixedHeight(height + TriangleHeight);
 
 		const int topBottomMargins = m_contentLayout->contentsMargins().top() 
 									+ m_contentLayout->contentsMargins().bottom();
 
-		m_genresListView->setFixedHeight(height - topBottomMargins);
+		setFixedHeight(height + TriangleHeight * 2);
 		m_genresListView->verticalScrollBar()->setValue(0);
 		
+		pos.setY(pos.y() + GenresPopupTopMagrin);
+		pos.setX(pos.x() + GenresPopupLeftMagrin);
+
 		move(pos);
 		show();
 	}
 }
 
-void TVGenresPopup::GenreSelected(const QModelIndex & index)
+void TVGenresPopupView::GenreSelected(const QModelIndex & index)
 {
 	close();
 	int genreId = index.data(model::TVGenresModel::Id).toInt();
 	emit TVGenreChanged(genreId);
 }
 
-void TVGenresPopup::paintEvent(QPaintEvent *e)
+void TVGenresPopupView::paintEvent(QPaintEvent *e)
 {
 	QPainter painter(this);
 	painter.setRenderHint(QPainter::Antialiasing);

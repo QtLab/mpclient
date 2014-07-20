@@ -1,4 +1,5 @@
 #include "TVSourcesModel.h"
+#include "TVGenresModel.h"
 
 #include <QUrl>
 #include <QFile>
@@ -16,6 +17,7 @@ static const QString GenresKeyName			= "genres";
 static const QString PartnerIdKeyName		= "partnerid";
 
 TVSource::TVSource()
+	:m_categoryId(-1)
 {
 }
 
@@ -83,6 +85,26 @@ TVGenreIdsSet TVSource::GenreIds() const
 	return m_genreIds;
 }
 
+int TVSource::CategoryId() const
+{
+	return m_categoryId;
+}
+
+void TVSource::SetCategoryId(int id)
+{
+	m_categoryId = id;
+}
+
+void TVSource::SetSelector(const QString& selector)
+{
+	m_selector = selector;
+}
+
+const QString& TVSource::Selector() const
+{
+	return m_selector;
+}
+
 TVSourcesModel::TVSourcesModel(QObject* parent)
 	:BaseListModel<TVSource>(parent)
 {
@@ -92,12 +114,12 @@ TVSourcesModel::~TVSourcesModel()
 {
 }
 
-void TVSourcesModel::Load(const QString& filePath)
+void TVSourcesModel::Load(const QString& filePath, const GenreIdsToCategoryIdMap& genresToCategoriesBinding)
 {
 	QByteArray fileBody;
 	if(FileUtils::LoadFileToByteArray(filePath, fileBody))
 	{
-		ParseChannelsJson(fileBody);
+		ParseChannelsJson(fileBody, genresToCategoriesBinding);
 	}
 }
 
@@ -135,6 +157,9 @@ QVariant TVSourcesModel::data(const QModelIndex & index, int role) const
 		case GenreIds:
 			result = QVariant(qVariantFromValue(tvSource->GenreIds()));
 			break;
+		case CategoryId:
+			result = QVariant(tvSource->CategoryId());
+			break;
 		case FirstGenreId:
 			{
 				uint id = (*tvSource->GenreIds().begin());
@@ -152,12 +177,6 @@ QVariant TVSourcesModel::data(const QModelIndex & index, int role) const
 	return result;
 }
 
-int TVSourcesModel::rowCount(const QModelIndex &parent) const
-{
-	int count = m_items.count();
-	return count;
-}
-
 QHash<int, QByteArray>	TVSourcesModel::roleNames() const
 {
 	QHash<int, QByteArray> roles;
@@ -167,12 +186,13 @@ QHash<int, QByteArray>	TVSourcesModel::roleNames() const
 	roles[Logo] = "Logo";
 	roles[PartnerId] = "PartnerId";
 	roles[FirstGenreId] = "FirstGenreId";
+	roles[CategoryId] = "CategoryId";
 	roles[GenreIds] = "GenreIds";
 		
 	return roles;
 }
 
-void TVSourcesModel::ParseChannelsJson(const QByteArray& json)
+void TVSourcesModel::ParseChannelsJson(const QByteArray& json, const GenreIdsToCategoryIdMap& genresToCategoriesBinding)
 {
 	QJsonParseError parseResult;
 	QJsonDocument d = QJsonDocument::fromJson(json, &parseResult);
@@ -219,8 +239,19 @@ void TVSourcesModel::ParseChannelsJson(const QByteArray& json)
 				QJsonArray::const_iterator iter = genresJsonArray.begin();
 				while(iter != genresJsonArray.end())
 				{
+
 					QJsonValue value = (*iter);
-					int genreId = value.toInt(); 
+					int genreId = value.toInt();
+
+					if(item->CategoryId() < 0)
+					{
+						GenreIdsToCategoryIdMap::const_iterator iter = genresToCategoriesBinding.find(item->Id());
+						if(iter != genresToCategoriesBinding.end())
+						{
+							item->SetCategoryId(iter.value());
+						}
+					}
+
 					item->AddGenreId(genreId);
 					iter++;
 				}

@@ -14,14 +14,17 @@ class TVSourcesSortFilterProxyModel : public QSortFilterProxyModel
 public:
     TVSourcesSortFilterProxyModel(QObject *parent = 0);
 
-	const TVSourceIdsSet& TvSourceIdsFilter() const;
-	void SetTvSourceIdsFilter(const TVSourceIdsSet& filter);
+	int CategoryIdFilter() const;
+	void SetCategoryIdFilter(int categoryId);
 
 	int GenreIdFilter() const;
 	void SetGenreIdFilter(int genreId);
 
 	const QString& NameFilter() const;
 	void SetNameFilter(const QString& nameFilter);
+
+	const TVSourceIdsSet& TvSourceIdsFilter() const;
+	void SetTvSourceIdsFilter(const TVSourceIdsSet& filter);
 
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const;
@@ -32,6 +35,7 @@ public:
 	Q_DISABLE_COPY(TVSourcesSortFilterProxyModel)
 
 private:
+	int					m_categoryIdFilter;
 	int					m_genreIdFilter;
 	QString				m_nameFilter;
 	TVSourceIdsSet		m_tvSourceIdsFilter;

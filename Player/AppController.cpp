@@ -82,7 +82,7 @@ void AppController::InitSignalsSlots()
 	connect(m_trayIcon, SIGNAL(UpdateReuest()), SLOT(UpdateStarted()));
 	connect(m_radioPageController, SIGNAL(SearchTracks(QString)), this, SLOT(SearchTracks(QString)));
 	connect(m_tvPageController, SIGNAL(FlashInstalled()), SLOT(FlashInstalled()));
-	connect(m_updateController, SIGNAL(UpdateFinished(bool, bool)), SLOT(UpdateFinished(bool, bool)));
+	connect(m_updateController, SIGNAL(UpdateFinished(const UpdateResult&)), SLOT(UpdateFinished(const UpdateResult&)));
 	connect(m_userIdle, SIGNAL(IdleStateChanged(bool)), SLOT(UserIdleStateChanged(bool)));
 	connect(m_mainWidow, SIGNAL(CurrentPageChanged(view::TabPage *, view::TabPage *)), SLOT(CurrentPageChanged(view::TabPage *, view::TabPage *)));
 }
@@ -118,11 +118,11 @@ void AppController::UpdateStarted()
 	m_updateController->CheckForUpdate(true);
 }
 
-void AppController::UpdateFinished(bool success, bool restartRequired)
+void AppController::UpdateFinished(const UpdateResult& result)
 {
-	if(success)
+	if(result.Success())
 	{
-		if(!restartRequired)
+		if(!result.RestartRequired())
 		{
 			if(!m_pluginManager->AnyLongRunningPluginStarted())
 				m_pluginManager->UnloadAllPlugins();
@@ -132,21 +132,23 @@ void AppController::UpdateFinished(bool success, bool restartRequired)
 			m_radioPageController->ReLoadData();
 			m_tvPageController->ReLoadData();
 
-			if(m_updateController->IsActivatedByUser())
+			if(result.ActivatedByUser())
 			{
 				view::MessageBoxView::ShowNewVersionNotFound();
 			}
 		}
 		else
 		{
+			m_trayIcon->deleteLater();
+
 			if(m_mainWidow->isHidden())
 			{
-				Showtdown(SILENT_UPDATE_EXIT_CODE);
+				Showtdown(SILENT_RESTART_EXIT_CODE);
 			}
 			else
 			{
 				view::MessageBoxView::ShowNewVersionFound();
-				Showtdown(UPDATE_EXIT_CODE);
+				Showtdown(RESTART_EXIT_CODE);
 			}
 		}
 	}

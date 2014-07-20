@@ -18,9 +18,11 @@
 namespace mp {
 namespace view {
 
-const QSize DefaultPageSize			= QSize(580, 534);
-const int DefaultWebViewViewHieght	= 370;
-const int MinimumQuickViewHieght	= 160;
+const QSize		DefaultPageSize			= QSize(580, 534);
+const int		MinimumQuickViewHieght	= 90;
+const int		DefaultQuickViewHieght	= 460;
+const int		DefaultTitlebarHieght	= 75;
+const QString	DefaultSelector			= "object";
 
 TVPage::TVPage(QWidget* parent, QAbstractItemModel* categories
 								,QAbstractItemModel* tvSourcesCurrentGenre
@@ -28,6 +30,8 @@ TVPage::TVPage(QWidget* parent, QAbstractItemModel* categories
 								,QAbstractItemModel* topTvSources)
 
 	:QuickPageBase(parent, "TV\\TVPageView.qml")
+	,m_pageSize(DefaultPageSize)
+	,m_resizable(false)
 {
 	m_webView = WebView::Create();
 
@@ -44,8 +48,9 @@ TVPage::TVPage(QWidget* parent, QAbstractItemModel* categories
 	connect(RootQuickItem(), SIGNAL(showGenres(int)), this, SIGNAL(ShowGenres(int)));
 	connect(RootQuickItem(), SIGNAL(searchFilterChanged(QString)), this, SIGNAL(SearchFilterChanged(QString)));
 	connect(RootQuickItem(), SIGNAL(gotoTVSource(int)), this, SIGNAL(GotoTVSource(int)));
+	connect(RootQuickItem(), SIGNAL(processBanner(int)), this, SIGNAL(ProcessBanner(int)));
 	connect(RootQuickItem(), SIGNAL(closeCurrentTVSource()), this, SLOT(CloseCurrentTVSource()));
-	
+
 	RootContext()->setContextProperty("tvCategoriesModel", categories);
 	RootContext()->setContextProperty("tvSourcesSearchResultodel", tvSourcesSearchResults);
 	RootContext()->setContextProperty("topTvSourcesModel", topTvSources);
@@ -58,18 +63,18 @@ TVPage::~TVPage()
 
 void TVPage::Enter()
 {
-	QString u = m_webView->url().toString();
-
-	if(!m_webView->url().isEmpty() && m_webView->url().toString() != QLatin1String("about:blank"))
+	if(!UrlBuilder::IsEmtyUrl(m_contentWebPage->mainFrame()->url()))
 	{
 		m_webView->setVisible(true);
 	}
+
+	QuickPageBase::Enter();
 }
 
 bool TVPage::Leave()
 {
 	m_webView->setVisible(false);
-	return true;
+	return QuickPageBase::Leave();
 }
 
 void TVPage::RetranslateUI()
@@ -88,20 +93,16 @@ QString TVPage::ToolTip() const
 
 bool TVPage::Resizable() const
 {
-	return false;
+	return m_resizable;
 }
-
-static const QString TabName("tv");
 
 QSize TVPage::RestoreSize() const
 {
-	//return Config::Inst().TabSize(TabName);
 	return m_pageSize;
 }
 
 void TVPage::SaveSize(const QSize& size)
 {
-	//Config::Inst().SetTabSize(TabName, size);
 }
 
 void TVPage::SetCurrentGenre(int id, const QString& name)
@@ -115,50 +116,76 @@ void TVPage::SetCurrentCategory(int id, bool topVisible, int bannerId, const QSt
 																	,Q_ARG(QVariant, bannerId), Q_ARG(QVariant, bannerLogo));
 }
 
-void TVPage::ShowTVSource(const QString& url)
+void TVPage::ShowTVSource(const QString& url, const QString& tvSourceSelector)
 {
+	if(tvSourceSelector.isEmpty())
+	{
+		m_tvSourceSelector = DefaultSelector;
+	}
+	else
+	{
+		m_tvSourceSelector = tvSourceSelector;
+	}
+
 	m_webView->setVisible(true);
 	m_webView->setPage(m_loadingWebPage);
-	m_webView->setFixedHeight(DefaultWebViewViewHieght);
+
+	QuickViewWidget()->setFixedHeight(MinimumQuickViewHieght);
 	m_contentWebPage->mainFrame()->setUrl(QUrl(url));
 }
 
 void TVPage::CloseCurrentTVSource()
 {
-	m_pageSize = DefaultPageSize;
-	
-	emit SizeChangeRequest(m_pageSize);
+	if(m_webView->isVisible() || !UrlBuilder::IsEmtyUrl(m_contentWebPage->mainFrame()->url()))
+	{
+		m_pageSize = DefaultPageSize;
+		m_resizable = false;
 
-	m_webView->setVisible(false);
-	m_webView->setUrl(QUrl());
+		QuickViewWidget()->setFixedHeight(DefaultQuickViewHieght);
+
+		if(IsActived())
+		{
+			emit SizeChangeRequest(m_pageSize, m_resizable);
+		}
+
+		m_webView->setVisible(false);
+
+		m_contentWebPage->mainFrame()->setUrl(QUrl());
+	}
 }
 
 void TVPage::ContentLoaded(bool ok)
 {
-	QWebElement el = m_contentWebPage->mainFrame()->findFirstElement("object");
-
-	if(!el.isNull())
+	if(!UrlBuilder::IsEmtyUrl(m_contentWebPage->mainFrame()->url()))
 	{
-		m_pageSize = el.geometry().size();
-		m_webView->setFixedHeight(m_pageSize.height());
+		QWebElement el = m_contentWebPage->mainFrame()->findFirstElement(m_tvSourceSelector);
 
-		int left = el.geometry().left();
-
-		m_pageSize.setHeight(m_pageSize.height() + MinimumQuickViewHieght);
-		m_pageSize.setWidth(m_pageSize.width() + left);
-
-		if(m_pageSize.width() < DefaultPageSize.width())
+		if(!el.isNull())
 		{
-			m_pageSize.setWidth(DefaultPageSize.width());
+			m_pageSize = el.geometry().size();
+			int left = el.geometry().left();
+			int top = el.geometry().top();
+
+			m_pageSize.setHeight(m_pageSize.height() + MinimumQuickViewHieght + DefaultTitlebarHieght);
+			m_pageSize.setWidth(m_pageSize.width() + left);
+
+			if(m_pageSize.width() < DefaultPageSize.width())
+			{
+				m_pageSize.setWidth(DefaultPageSize.width());
+			}
+
+			m_resizable = true;
+
+			if(IsActived())
+			{
+				emit SizeChangeRequest(m_pageSize, m_resizable);
+			}
+
+			m_webView->page()->mainFrame()->setScrollPosition(QPoint(left, top));
 		}
 
-		emit SizeChangeRequest(m_pageSize);
-
-		int top = el.geometry().top() - 10;
-		m_webView->page()->mainFrame()->setScrollPosition(QPoint(left, top));
+		m_webView->setPage(m_contentWebPage);
 	}
-
-	m_webView->setPage(m_contentWebPage);
 }
 
 } // end namespace view

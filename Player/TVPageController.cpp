@@ -6,17 +6,17 @@
 #include "TVSourcesSortFilterProxyModel.h"
 #include "BannersModel.h"
 #include "TVPage.h"
-#include "TVGenresPopup.h"
+#include "TVGenresPopupView.h"
 #include "Path.h"
+
+#include <QUrl>
+#include <QDesktopServices>
 
 namespace mp {
 namespace controller {
 
-const int GenresPopupTopMagrin		= 70;
-const int GenresPopupLeftMagrin		= 11;
-
 TVPageController::TVPageController()
-	:m_genresPopup(NULL)
+	:m_genresPopupView(NULL)
 {
 	m_categoriesModel = new model::TVCategoriesModel(this);
 	m_genresModel = new model::TVGenresModel(this);
@@ -37,15 +37,16 @@ TVPageController::TVPageController()
 
 	m_bannersModel = new model::BannersModel(this);
 
-	m_view = new view::TVPage(NULL, m_categoriesModel, m_currentGenreSourcesModel, m_searchSourcesModel, m_topSourcesModel);
-	m_genresPopup = new view::TVGenresPopup(m_genresProxyModel);
+	m_tvPageView = new view::TVPage(NULL, m_categoriesModel, m_currentGenreSourcesModel, m_searchSourcesModel, m_topSourcesModel);
+	m_genresPopupView = new view::TVGenresPopupView(m_genresProxyModel);
 
-	connect(m_view, SIGNAL(TVCurrentCategoryChanged(int)), SLOT(TVCurrentCategoryChanged(int)));
-	connect(m_view, SIGNAL(ShowGenres(int)), SLOT(ShowGenres(int)));
-	connect(m_view, SIGNAL(SearchFilterChanged(QString)), SLOT(SearchFilterChanged(QString)));
-	connect(m_view, SIGNAL(GotoTVSource(int)), SLOT(GotoTVSource(int)));
+	connect(m_tvPageView, SIGNAL(TVCurrentCategoryChanged(int)), SLOT(TVCurrentCategoryChanged(int)));
+	connect(m_tvPageView, SIGNAL(ShowGenres(int)), SLOT(ShowGenres(int)));
+	connect(m_tvPageView, SIGNAL(SearchFilterChanged(QString)), SLOT(SearchFilterChanged(QString)));
+	connect(m_tvPageView, SIGNAL(GotoTVSource(int)), SLOT(GotoTVSource(int)));
+	connect(m_tvPageView, SIGNAL(ProcessBanner(int)), this, SLOT(ProcessBanner(int)));
 
-	connect(m_genresPopup, SIGNAL(TVGenreChanged(int)), SLOT(TVCurrentGenreChanged(int)));
+	connect(m_genresPopupView, SIGNAL(TVGenreChanged(int)), SLOT(TVCurrentGenreChanged(int)));
 	
 	ReLoadData();
 }
@@ -62,7 +63,7 @@ bool TVPageController::IsActive() const
 
 view::TabPage* TVPageController::View() const
 {
-	return m_view;
+	return m_tvPageView;
 }
 
 void TVPageController::ReLoadData()
@@ -73,17 +74,20 @@ void TVPageController::ReLoadData()
 
 	m_categoriesModel->Load(Path::ConfigFile("tvcategories.j"));
 	m_genresModel->Load(Path::ConfigFile("tvgenres.j"));
-	m_sourcesModel->Load(Path::ConfigFile("tvsoures.j"));
-
 	m_bannersModel->Load(Path::ConfigFile("tvbanners.j"));
+	m_sourcesModel->Load(Path::ConfigFile("tvsoures.j"), m_genresModel->GenreIdsToCategoryIdBindingMap());
 
 	if(m_currentCategory.isNull())
 	{
 		m_currentCategory = m_categoriesModel->First();
-		m_currentCategory->SetTopVisible(true);
+
+		if(!m_currentCategory.isNull())
+		{
+			m_currentCategory->SetTopVisible(true);
+		}
 	}
 
-	SetCurentCategory(m_currentCategory);
+	GotoCategory(m_currentCategory);
 }
 
 void TVPageController::Search(const QString& filter)
@@ -94,13 +98,13 @@ void TVPageController::Pause()
 {
 }
 
-void TVPageController::SetCurentCategory(model::TVCategoryPtr category)
+void TVPageController::GotoCategory(model::TVCategoryPtr category)
 {
-	m_genresProxyModel->SetCategoryIdFilter(category->Id());
-
-	if(!m_currentCategory.isNull())
+	if(!category.isNull())
 	{
-		model::BannerInfoPtr banner = m_bannersModel->FindById(category->NextBannerId());
+		m_genresProxyModel->SetCategoryIdFilter(category->Id());
+
+		model::BannerInfoPtr banner = m_bannersModel->FindById(category->RandomBannerId());
 		
 		int bannerId = 0;
 		QString bannerLogo;
@@ -111,9 +115,9 @@ void TVPageController::SetCurentCategory(model::TVCategoryPtr category)
 			bannerLogo = banner->Logo();
 		}
 
-		m_topSourcesModel->SetTvSourceIdsFilter(m_currentCategory->TVTopSourceIds());
+		m_topSourcesModel->SetTvSourceIdsFilter(category->TVTopSourceIds());
 
-		m_view->SetCurrentCategory(category->Id(), category->TopVisible(), bannerId, bannerLogo);
+		m_tvPageView->SetCurrentCategory(category->Id(), category->TopVisible(), bannerId, bannerLogo);
 	}
 }
 
@@ -123,17 +127,14 @@ void TVPageController::TVCurrentCategoryChanged(int categoryId)
 
 	if(!m_currentCategory.isNull())
 	{
-		SetCurentCategory(m_currentCategory);
+		GotoCategory(m_currentCategory);
 	}
 }
 
 void TVPageController::ShowGenres(int categoryId)
 {
-	QPoint pos = m_view->mapToGlobal(m_view->pos());
-	pos.setY(pos.y() + GenresPopupTopMagrin);
-	pos.setX(pos.x() + GenresPopupLeftMagrin);
-
-	m_genresPopup->Show(pos);
+	QPoint pos = m_tvPageView->mapToGlobal(m_tvPageView->pos());
+	m_genresPopupView->Show(pos);
 }
 
 void TVPageController::TVCurrentGenreChanged(int genreId)
@@ -142,7 +143,7 @@ void TVPageController::TVCurrentGenreChanged(int genreId)
 
 	if(!m_currentTVGenre.isNull())
 	{
-		m_view->SetCurrentGenre(m_currentTVGenre->Id(), m_currentTVGenre->Name());
+		m_tvPageView->SetCurrentGenre(m_currentTVGenre->Id(), m_currentTVGenre->Name());
 	}
 
 	m_currentGenreSourcesModel->SetGenreIdFilter(genreId);
@@ -159,7 +160,29 @@ void TVPageController::GotoTVSource(int id)
 
 	if(!m_currentTVSource.isNull())
 	{
-		m_view->ShowTVSource(m_currentTVSource->Url());
+		m_tvPageView->ShowTVSource(m_currentTVSource->Url(), m_currentTVSource->Selector());
+	}
+}
+
+void TVPageController::ProcessBanner(int id)
+{
+	model::BannerInfoPtr banner = m_bannersModel->FindById(id);
+		
+	if(!banner.isNull())
+	{
+		int tvSourceId = banner->TVSourceId();
+
+		if(tvSourceId >= 0)
+		{
+			GotoTVSource(tvSourceId);
+		}
+
+		QString url = banner->ExternalUrl();
+
+		if(!url.isEmpty())
+		{
+			QDesktopServices::openUrl(QUrl(url));
+		}
 	}
 }
 

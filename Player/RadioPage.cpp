@@ -35,11 +35,12 @@ RadioPage::~RadioPage()
 
 void RadioPage::Enter()
 {
+	QuickPageBase::Enter();
 }
 
 bool RadioPage::Leave()
 {
-	return true;
+	return QuickPageBase::Leave();
 }
 
 void RadioPage::RetranslateUI()

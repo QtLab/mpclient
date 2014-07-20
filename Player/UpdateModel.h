@@ -7,7 +7,7 @@
 namespace mp {
 namespace model {
 
-struct FileToUpdate// : public QObject
+struct FileToUpdate
 {
 public:
 	FileToUpdate();
@@ -38,10 +38,8 @@ private:
 	int			m_downloadTries;
 };
 
-class UpdateModel : public QAbstractListModel
+class UpdateModel
 {
-	Q_OBJECT
-
 public:
 	enum FileToUpdateRoles
 	{
@@ -53,18 +51,15 @@ public:
 	UpdateModel();
 	~UpdateModel();
 
-	FileToUpdatePtr PopBack();
+	bool PopBack(FileToUpdate& file);
 	bool RequirePlayerUpdate() const;
 	void Cleanup();
 	void ParseJson(const QByteArray& json);
-
-	QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-	int rowCount(const QModelIndex &parent = QModelIndex()) const;
-	QHash<int, QByteArray>	roleNames() const;
+	int Count() const;
 
 private:
 	bool							m_requirePlayerUpdate;
-	QList<FileToUpdatePtr>			m_items;
+	QList<FileToUpdate>				m_items;
 
 	Q_DISABLE_COPY(UpdateModel)
 };

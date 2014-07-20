@@ -72,9 +72,6 @@
     <Filter Include="Controllers\ViewControllers">
       <UniqueIdentifier>{d9539d26-41a5-4d57-aad7-a22d1a233bad}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Network\NetCommands">
-      <UniqueIdentifier>{8f186179-e49d-4398-be28-2a20fe30221d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Model\Radio">
       <UniqueIdentifier>{e5ce4f5b-e1ce-4a20-88e3-56405eef8663}</UniqueIdentifier>
     </Filter>
@@ -98,6 +95,9 @@
     </Filter>
     <Filter Include="Views\QML\Player">
       <UniqueIdentifier>{8aa3047a-3960-478c-ab78-d1d8d12d484c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DataProviders">
+      <UniqueIdentifier>{64759900-00aa-4b15-8037-6ee86e6196b6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -167,12 +167,6 @@
     </ClCompile>
     <ClCompile Include="UpdateModel.cpp">
       <Filter>Model</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_UpdateModel.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_UpdateModel.cpp">
-      <Filter>Generated Files\Release</Filter>
     </ClCompile>
     <ClCompile Include="LinkButton.cpp">
       <Filter>Views\Widgets</Filter>
@@ -369,15 +363,6 @@
     <ClCompile Include="GeneratedFiles\Release\moc_TrackModel.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="TrackModelDataAccessor.cpp">
-      <Filter>Network\NetCommands</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_TrackModelDataAccessor.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_TrackModelDataAccessor.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
     <ClCompile Include="NcFramelessHelper.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
@@ -389,9 +374,6 @@
     </ClCompile>
     <ClCompile Include="TVPageController.cpp">
       <Filter>Controllers\ViewControllers</Filter>
-    </ClCompile>
-    <ClCompile Include="SetUserInfo.cpp">
-      <Filter>Network\NetCommands</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_SetUserInfo.cpp">
       <Filter>Generated Files\Debug</Filter>
@@ -483,15 +465,6 @@
     <ClCompile Include="MessageBoxView.cpp">
       <Filter>Views\Popups</Filter>
     </ClCompile>
-    <ClCompile Include="TVGenresPopup.cpp">
-      <Filter>Views\Popups</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_TVGenresPopup.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_TVGenresPopup.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
     <ClCompile Include="TVSourcesModel.cpp">
       <Filter>Model\TV</Filter>
     </ClCompile>
@@ -536,6 +509,27 @@
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_BannersModel.cpp">
       <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_TVGenresPopupView.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_TVGenresPopupView.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="TVGenresPopupView.cpp">
+      <Filter>Views\Popups</Filter>
+    </ClCompile>
+    <ClCompile Include="SetUserInfo.cpp">
+      <Filter>DataProviders</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_TracksDataProvider.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_TracksDataProvider.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="TracksDataProvider.cpp">
+      <Filter>DataProviders</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -626,9 +620,6 @@
     <CustomBuild Include="PlayerPage.h">
       <Filter>Views\Pages</Filter>
     </CustomBuild>
-    <CustomBuild Include="TrackModelDataAccessor.h">
-      <Filter>Network\NetCommands</Filter>
-    </CustomBuild>
     <CustomBuild Include="PlayerPageController.h">
       <Filter>Controllers\ViewControllers</Filter>
     </CustomBuild>
@@ -637,9 +628,6 @@
     </CustomBuild>
     <CustomBuild Include="TVPageController.h">
       <Filter>Controllers\ViewControllers</Filter>
-    </CustomBuild>
-    <CustomBuild Include="SetUserInfo.h">
-      <Filter>Network\NetCommands</Filter>
     </CustomBuild>
     <CustomBuild Include="AudioStreamAsyncDownloader.h">
       <Filter>Audio</Filter>
@@ -677,9 +665,6 @@
     <CustomBuild Include="MessageBoxView.h">
       <Filter>Views\Popups</Filter>
     </CustomBuild>
-    <CustomBuild Include="TVGenresPopup.h">
-      <Filter>Views\Popups</Filter>
-    </CustomBuild>
     <CustomBuild Include="TVSourcesModel.h">
       <Filter>Model\TV</Filter>
     </CustomBuild>
@@ -694,6 +679,15 @@
     </CustomBuild>
     <CustomBuild Include="BannersModel.h">
       <Filter>Model</Filter>
+    </CustomBuild>
+    <CustomBuild Include="TVGenresPopupView.h">
+      <Filter>Views\Popups</Filter>
+    </CustomBuild>
+    <CustomBuild Include="SetUserInfo.h">
+      <Filter>DataProviders</Filter>
+    </CustomBuild>
+    <CustomBuild Include="TracksDataProvider.h">
+      <Filter>DataProviders</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>

@@ -1,7 +1,19 @@
 QDialog {
 	min-width: 160px;
 	max-width: 160px;
-	border: 2px inset '#316094';
+	border:none;
+	background: 'white';
+}
+
+QListView {
+	border: none;
+}
+
+QWidget#centralWidget {
+	border: 2px solid '#316094';
+	border-radius: 3px;
+	min-width: 156px;
+	max-width: 156px;
 }
 
 QScrollBar:vertical  {

@@ -68,7 +68,7 @@ public:
 		PlayCount
 	};
 
-	RadioSourcesModel();
+	RadioSourcesModel(QObject* parent = NULL);
 	virtual ~RadioSourcesModel();
 
 	void LoadWithStats(const QString& filePath);

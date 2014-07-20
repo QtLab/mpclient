@@ -49,8 +49,9 @@ void RadioCategory::SetTopVisible(bool topVisible)
 	m_topVisible = topVisible;
 }
 
-RadioCategoriesModel::RadioCategoriesModel()
-	:m_lastTopVIsibleIndex(0)
+RadioCategoriesModel::RadioCategoriesModel(QObject* parent)
+	:BaseListModel<RadioCategory>(parent)
+	,m_lastTopVIsibleIndex(0)
 {
 }
 

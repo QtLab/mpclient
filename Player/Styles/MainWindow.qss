@@ -1,5 +1,6 @@
 QMainWindow {
 	background-color: '#efefeb';
+	min-height: 351px;
 }
 
 QWidget#centralWidget {

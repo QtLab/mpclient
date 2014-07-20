@@ -38,7 +38,7 @@ private:
 	void resizeEvent(QResizeEvent *evt);
 
 private slots:
-	void SizeChanged(const QSize& newSize);
+	void SizeChanged(const QSize& newSize, bool canResize);
 
 signals:
 	void CurrentPageChanged(view::TabPage * newPage, view::TabPage * oldPage);

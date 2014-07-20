@@ -8,6 +8,10 @@
 namespace mp {
 namespace model {
 
+static const QString IdKeyName					= "id";
+static const QString NameKeyName				= "name";
+static const QString CategoryIdKeyName			= "categoryid";
+
 TVGenre::TVGenre()
 {
 }
@@ -86,6 +90,17 @@ TVGenrePtr TVGenresModel::FindById(int id) const
 	return TVGenrePtr();
 }
 
+const GenreIdsToCategoryIdMap& TVGenresModel::GenreIdsToCategoryIdBindingMap() const
+{
+	return m_genreIdsToCategoryIdToMap;
+}
+
+void TVGenresModel::Cleanup()
+{
+	BaseListModel<TVGenre>::Cleanup();
+	m_genreIdsToCategoryIdToMap.clear();
+}
+
 QVariant TVGenresModel::data(const QModelIndex & index, int role) const 
 {
 	if (index.row() < 0 || index.row() > m_items.count())
@@ -111,11 +126,6 @@ QVariant TVGenresModel::data(const QModelIndex & index, int role) const
 	return result;
 }
 
-int TVGenresModel::rowCount(const QModelIndex &parent) const
-{
-	return m_items.count();
-}
-
 QHash<int, QByteArray>	TVGenresModel::roleNames() const
 {
 	QHash<int, QByteArray> roles;
@@ -124,6 +134,49 @@ QHash<int, QByteArray>	TVGenresModel::roleNames() const
 	roles[CategoryId] = "CategoryId";
 
 	return roles;
+}
+
+void TVGenresModel::ParseJson(const QByteArray& json, const PropertiesSet& properties)
+{
+	QJsonParseError parseResult;
+	QJsonDocument d = QJsonDocument::fromJson(json, &parseResult);
+
+	if(parseResult.error == QJsonParseError::NoError)
+	{
+		QJsonArray list = d.array();
+		foreach(QJsonValue record, list) 
+		{
+			QJsonObject object = record.toObject();
+
+			QJsonValue id = object.value(IdKeyName);
+			QJsonValue name = object.value(NameKeyName);
+			QJsonValue categoryId = object.value(CategoryIdKeyName);
+
+			if(!id.isNull() && !name.isNull() && !categoryId.isNull())
+			{
+
+				TVGenrePtr item(new TVGenre);
+				
+				QString _id = id.toString();
+
+				item->SetId(id.toInt());
+				item->SetName(name.toString());
+				item->SetCategoryId(categoryId.toInt());
+
+				m_genreIdsToCategoryIdToMap.insert(item->Id(), item->CategoryId());
+
+				Add(item);
+			}
+		}
+
+		
+		if(rowCount() > 0)
+			emit dataChanged(createIndex(0,0),createIndex(m_items.size(),0));
+	}
+	else
+	{
+		qDebug() << "TVGenresModel json parse error: " << parseResult.errorString();
+	}
 }
 
 } //namespace model

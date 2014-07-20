@@ -44,7 +44,7 @@ private:
 	model::TrackPtr						m_currentTrack;
 	model::TrackModelPtr				m_trackSearchResultModel;
 	model::TrackModelPtr				m_downlaodedTracksModel;
-	TrackModelDataAccessorPtr			m_trackSearcher;
+	TracksDataProviderPtr				m_tracksDataProvider;
 	QTimer *							m_syncProgressTimer;
 };
 

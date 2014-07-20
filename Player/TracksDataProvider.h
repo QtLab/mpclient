@@ -1,17 +1,17 @@
-#ifndef MP_TRACK_MODEL_DATA_ACCESSOR_H
-#define MP_TRACK_MODEL_DATA_ACCESSOR_H
+#ifndef MP_TRACKS_DATA_PROVIDER_H
+#define MP_TRACKS_DATA_PROVIDER_H
 
 #include "Prerequirements.h"
 #include "DownlaodManager.h"
 
 namespace mp {
 
-class TrackModelDataAccessor : public QObject
+class TracksDataProvider : public QObject
 {
 	Q_OBJECT
 
 public:
-	TrackModelDataAccessor();
+	TracksDataProvider(QObject* parent = NULL);
 
 	model::TrackModelPtr Model() const;
 	void SetModel(model::TrackModelPtr model);

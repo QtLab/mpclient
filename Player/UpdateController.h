@@ -7,6 +7,26 @@
 namespace mp {
 namespace controller {
 
+class UpdateResult
+{
+public:
+	UpdateResult(bool success, bool	restartRequired, bool activatedByUser)
+		:m_success(success)
+		,m_restartRequired(restartRequired)
+		,m_activatedByUser(activatedByUser)
+	{
+	}
+
+	bool Success() const { return m_success; }
+	bool RestartRequired() const { return m_restartRequired; }
+	bool ActivatedByUser() const { return m_activatedByUser; }
+
+private:
+	bool	m_success;
+	bool	m_restartRequired;
+	bool	m_activatedByUser;
+};
+
 // takes a list of files in the format of the file name-file לה5
 // compares the hashes with current files
 // if the hash varies file pumped
@@ -20,7 +40,6 @@ class UpdateController : public QObject
 public:
 	UpdateController();
 	bool InProcess() const;
-	bool IsActivatedByUser() const;
 
 public slots:
 	void CheckForUpdate(bool activatedByUser = false);
@@ -34,10 +53,11 @@ private:
 	void Cleanup();
 
 signals:
-	void UpdateFinished(bool success, bool restartRequired);
+	void UpdateFinished(const UpdateResult&);
 
 private:
 	bool							m_activatedByUser;
+	bool							m_aborted;
 	// Timer for update
 	QTimer *						m_updateTimer;
 	// Processing files count

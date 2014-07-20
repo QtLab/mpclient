@@ -5,15 +5,19 @@
     <name>QObject</name>
     <message>
         <source>Paste</source>
-        <translation type="unfinished">Вставить</translation>
+        <translation>Вставить</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation type="unfinished">Копировать</translation>
+        <translation>Копировать</translation>
     </message>
     <message>
         <source>Cut</source>
-        <translation type="unfinished">Вырезать</translation>
+        <translation>Вырезать</translation>
+    </message>
+    <message>
+        <source>Loading...</source>
+        <translation>Загрузка...</translation>
     </message>
 </context>
 <context>
@@ -161,10 +165,6 @@
     <message>
         <source>TV</source>
         <translation>ТВ</translation>
-    </message>
-    <message>
-        <source>Flash installing... %0 percents completed</source>
-        <translation></translation>
     </message>
     <message>
         <source>the best collection of free videos</source>

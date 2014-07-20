@@ -7,19 +7,19 @@ namespace model {
 TVSourcesSortFilterProxyModel::TVSourcesSortFilterProxyModel(QObject *parent)
 	: QSortFilterProxyModel(parent)
 	,m_genreIdFilter(-1)
+	,m_categoryIdFilter(-1)
 {
 	setDynamicSortFilter(true);
 }
 
-const TVSourceIdsSet& TVSourcesSortFilterProxyModel::TvSourceIdsFilter() const
+int TVSourcesSortFilterProxyModel::CategoryIdFilter() const
 {
-	return m_tvSourceIdsFilter;
+	return m_categoryIdFilter;
 }
 
-void TVSourcesSortFilterProxyModel::SetTvSourceIdsFilter(const TVSourceIdsSet& filter)
+void TVSourcesSortFilterProxyModel::SetCategoryIdFilter(int categoryId)
 {
-	m_tvSourceIdsFilter = filter;
-	invalidate();
+	m_categoryIdFilter = categoryId;
 }
 
 int TVSourcesSortFilterProxyModel::GenreIdFilter() const
@@ -47,9 +47,20 @@ void TVSourcesSortFilterProxyModel::SetNameFilter(const QString& nameFilter)
 	}
 }
 
+const TVSourceIdsSet& TVSourcesSortFilterProxyModel::TvSourceIdsFilter() const
+{
+	return m_tvSourceIdsFilter;
+}
+
+void TVSourcesSortFilterProxyModel::SetTvSourceIdsFilter(const TVSourceIdsSet& filter)
+{
+	m_tvSourceIdsFilter = filter;
+	invalidate();
+}
+
 bool TVSourcesSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
-	if(m_genreIdFilter < 0 && m_nameFilter.isEmpty() && m_tvSourceIdsFilter.count() <= 0)
+	if(m_categoryIdFilter < 0 && m_genreIdFilter < 0 && m_nameFilter.isEmpty() && m_tvSourceIdsFilter.count() <= 0)
 	{
 		return true;
 	}
@@ -78,6 +89,16 @@ bool TVSourcesSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModel
 		TVGenreIdsSet genreIds = sourceModel()->data(index, TVSourcesModel::GenreIds).value<TVGenreIdsSet>();
 
 		if(!genreIds.contains(m_genreIdFilter))
+		{
+			return false;
+		}
+	}
+
+	if(m_categoryIdFilter >= 0)
+	{
+		int categoryId = sourceModel()->data(index, TVSourcesModel::CategoryId).toInt();
+
+		if(categoryId != m_categoryIdFilter)
 		{
 			return false;
 		}

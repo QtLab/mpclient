@@ -18,6 +18,7 @@ public:
 
 protected:
 	QQuickView * QuickView() const;
+	QWidget * QuickViewWidget() const;
 	QQuickItem * RootQuickItem() const;
 	QQmlContext* RootContext() const;
 	QVBoxLayout * Layout() const;
@@ -30,6 +31,7 @@ private slots:
 	void ShowTooltip(QString text);
 
 private:
+	QWidget *					m_quickViewWidget;
 	// QML view
 	QQuickView *				m_quickView;
 	QVBoxLayout *				m_layout;

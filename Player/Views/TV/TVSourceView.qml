@@ -1,5 +1,4 @@
 import QtQuick 2.0;
-import QtGraphicalEffects 1.0
 
 Rectangle {
 	width: logoView.width;
@@ -18,16 +17,6 @@ Rectangle {
 		
 		source: Logo;
 	}
-	
-    DropShadow {
-
-        horizontalOffset: 3
-        verticalOffset: 3
-        radius: 8.0
-        samples: 16
-        color: "#80000000"
-        source: logoView
-    }
 	
 	StyledText {
 		id: textView;

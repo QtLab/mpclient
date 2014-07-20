@@ -41,11 +41,13 @@ void PlayerPage::Enter()
 		m_initialized = true;
 		emit SearchFilterChanged("");
 	}
+
+	QuickPageBase::Enter();
 }
 
 bool PlayerPage::Leave()
 {
-	return true;
+	return QuickPageBase::Leave();
 }
 
 void PlayerPage::RetranslateUI()
