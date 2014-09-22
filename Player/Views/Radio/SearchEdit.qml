@@ -12,7 +12,7 @@ Rectangle {
 	TextField {
 		id: searchField
 		anchors {
-			topMargin: 2
+			topMargin: 4
 			leftMargin: 2
 			top: parent.top
 			left: parent.left
@@ -29,17 +29,18 @@ Rectangle {
 		
 		 MouseArea {
 			 anchors.fill: parent
-			 acceptedButtons: Qt.RightButton
+			 acceptedButtons: Qt.RightButton;
 			 onClicked: {
 				radioPageView.showSearchContextMenu(parent.selectedText.length > 0);
 			 }
 		 }
 	 
-		font.pixelSize: 10
+		font.pixelSize: 11;
 		font.family: openSansLight.name
 		width: 10;
+		height: 18;
 		text: parent.filter;
-		placeholderText: "Поиск"
+		placeholderText: focus? "" : "Поиск"
 		
         style: TextFieldStyle {
             textColor: "black"

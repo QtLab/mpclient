@@ -71,7 +71,7 @@ bool PlayerPage::Resizable() const
 
 QSize PlayerPage::RestoreSize() const
 {
-	return QSize(580, 450);
+	return QSize(580, 534);
 }
 
 void PlayerPage::SaveSize(const QSize& size)

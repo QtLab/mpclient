@@ -66,9 +66,6 @@
     <Filter Include="Plugins">
       <UniqueIdentifier>{ce17c983-8c58-421d-8fe0-ba3c669b7e33}</UniqueIdentifier>
     </Filter>
-    <Filter Include="FileSystem">
-      <UniqueIdentifier>{e21a3440-95db-477b-9684-03a8f9568c62}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Controllers\ViewControllers">
       <UniqueIdentifier>{d9539d26-41a5-4d57-aad7-a22d1a233bad}</UniqueIdentifier>
     </Filter>
@@ -98,6 +95,15 @@
     </Filter>
     <Filter Include="DataProviders">
       <UniqueIdentifier>{64759900-00aa-4b15-8037-6ee86e6196b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils\FileSystem">
+      <UniqueIdentifier>{e21a3440-95db-477b-9684-03a8f9568c62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils\Gui">
+      <UniqueIdentifier>{4509394d-e4b4-4b6b-944d-996ee335b9ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils\Core">
+      <UniqueIdentifier>{885f78ed-31cc-4db3-8b9c-e160b663e8a4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -146,9 +152,6 @@
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_Titlebar.cpp">
       <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="WidgetUtils.cpp">
-      <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="Log.cpp">
       <Filter>Utils</Filter>
@@ -255,9 +258,6 @@
     <ClCompile Include="GeneratedFiles\Release\moc_UserIdle.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="UserIdle.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_TVPage.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
@@ -306,9 +306,6 @@
     <ClCompile Include="CommandLine.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
-    <ClCompile Include="SingleApplication.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_SingleApplication.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
@@ -325,10 +322,10 @@
       <Filter>Plugins</Filter>
     </ClCompile>
     <ClCompile Include="FileUtils.cpp">
-      <Filter>FileSystem</Filter>
+      <Filter>Utils\FileSystem</Filter>
     </ClCompile>
     <ClCompile Include="Path.cpp">
-      <Filter>FileSystem</Filter>
+      <Filter>Utils\FileSystem</Filter>
     </ClCompile>
     <ClCompile Include="AudioStreamAsyncStarter.cpp">
       <Filter>Audio</Filter>
@@ -338,9 +335,6 @@
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_AudioStreamAsyncStarter.cpp">
       <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="ThreadUtils.cpp">
-      <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="PlayerPage.cpp">
       <Filter>Views\Pages</Filter>
@@ -362,9 +356,6 @@
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_TrackModel.cpp">
       <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="NcFramelessHelper.cpp">
-      <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="PlayerPageController.cpp">
       <Filter>Controllers\ViewControllers</Filter>
@@ -531,6 +522,39 @@
     <ClCompile Include="TracksDataProvider.cpp">
       <Filter>DataProviders</Filter>
     </ClCompile>
+    <ClCompile Include="WidgetUtils.cpp">
+      <Filter>Utils\Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="NcFramelessHelper.cpp">
+      <Filter>Utils\Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="UserIdle.cpp">
+      <Filter>Utils\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="ThreadUtils.cpp">
+      <Filter>Utils\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="SingleApplication.cpp">
+      <Filter>Utils\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="StateTooltip.cpp">
+      <Filter>Views\Popups</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_StateTooltip.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_StateTooltip.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="StubPage.cpp">
+      <Filter>Views\Pages</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_StubPage.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_StubPage.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Player.qrc">
@@ -552,9 +576,6 @@
       <Filter>Views\Widgets</Filter>
     </CustomBuild>
     <CustomBuild Include="Log.h">
-      <Filter>Utils</Filter>
-    </CustomBuild>
-    <CustomBuild Include="WidgetUtils.h">
       <Filter>Utils</Filter>
     </CustomBuild>
     <CustomBuild Include="BaseListModel.h">
@@ -587,9 +608,6 @@
     <CustomBuild Include="RadioPage.h">
       <Filter>Views\Pages</Filter>
     </CustomBuild>
-    <CustomBuild Include="UserIdle.h">
-      <Filter>Utils</Filter>
-    </CustomBuild>
     <CustomBuild Include="TVPage.h">
       <Filter>Views\Pages</Filter>
     </CustomBuild>
@@ -605,14 +623,11 @@
     <CustomBuild Include="FlashUtils.h">
       <Filter>Utils</Filter>
     </CustomBuild>
-    <CustomBuild Include="SingleApplication.h">
-      <Filter>Utils</Filter>
-    </CustomBuild>
     <CustomBuild Include="PluginManager.h">
       <Filter>Plugins</Filter>
     </CustomBuild>
     <CustomBuild Include="Path.h">
-      <Filter>FileSystem</Filter>
+      <Filter>Utils\FileSystem</Filter>
     </CustomBuild>
     <CustomBuild Include="AudioStreamAsyncStarter.h">
       <Filter>Audio</Filter>
@@ -689,6 +704,21 @@
     <CustomBuild Include="TracksDataProvider.h">
       <Filter>DataProviders</Filter>
     </CustomBuild>
+    <CustomBuild Include="WidgetUtils.h">
+      <Filter>Utils\Gui</Filter>
+    </CustomBuild>
+    <CustomBuild Include="UserIdle.h">
+      <Filter>Utils\Core</Filter>
+    </CustomBuild>
+    <CustomBuild Include="SingleApplication.h">
+      <Filter>Utils\Core</Filter>
+    </CustomBuild>
+    <CustomBuild Include="StateTooltip.h">
+      <Filter>Views\Popups</Filter>
+    </CustomBuild>
+    <CustomBuild Include="StubPage.h">
+      <Filter>Views\Pages</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <None Include="Translations\en.ts">
@@ -696,9 +726,6 @@
     </None>
     <None Include="Translations\ru.ts">
       <Filter>Translations</Filter>
-    </None>
-    <None Include="Views\Player.qss">
-      <Filter>Views\Styles</Filter>
     </None>
     <None Include="Resources\FlashInstall.html">
       <Filter>Resource Files\Html</Filter>
@@ -799,6 +826,15 @@
     <None Include="Views\TV\Line.qml">
       <Filter>Views\QML\TV</Filter>
     </None>
+    <None Include="Styles\MessageBoxPoup.qss">
+      <Filter>Views\Styles</Filter>
+    </None>
+    <None Include="Styles\TVGenresPopup.qss">
+      <Filter>Views\Styles</Filter>
+    </None>
+    <None Include="Styles\MainWindow.qss">
+      <Filter>Views\Styles</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Prerequirements.h" />
@@ -806,16 +842,16 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="FileUtils.h">
-      <Filter>FileSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="ThreadUtils.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="NcFramelessHelper.h">
-      <Filter>Utils</Filter>
+      <Filter>Utils\FileSystem</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NcFramelessHelper.h">
+      <Filter>Utils\Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="ThreadUtils.h">
+      <Filter>Utils\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

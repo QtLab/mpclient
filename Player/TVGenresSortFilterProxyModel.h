@@ -35,6 +35,8 @@ private:
 } //namespace model
 } //namespace mp
 
+#ifdef BUILD_WITH_METATYPES
 Q_DECLARE_METATYPE(mp::model::TVGenresSortFilterProxyModel);
+#endif
 
 #endif

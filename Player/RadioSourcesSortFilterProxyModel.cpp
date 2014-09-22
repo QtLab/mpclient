@@ -41,7 +41,7 @@ RadioSourcesSortFilterProxyModel::SortT RadioSourcesSortFilterProxyModel::SortTy
 	return m_sortBy;
 }
 
-void RadioSourcesSortFilterProxyModel::SetSortType(SortT sortBy )
+void RadioSourcesSortFilterProxyModel::SetSortType(SortT sortBy)
 {
 	m_sortBy = sortBy;
 	invalidateFilter();

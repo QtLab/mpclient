@@ -29,9 +29,9 @@ Rectangle {
 		currentCategoryId: categoriesView.currentCategoryId;
 		
 		anchors {
-			top: categoriesView.bottom
-			left: parent.left
-			right: parent.right
+			top: categoriesView.bottom;
+			left: parent.left;
+			right: parent.right;
 			leftMargin: 12;
 			rightMargin: 12;
 			topMargin: 6;

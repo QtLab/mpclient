@@ -154,7 +154,7 @@ void GenreViewDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
 	font.setBold(true);
 	painter->setFont(font);
 
-	QFontMetrics fm(option.font);
+	QFontMetrics fm(font);
 
 	int textWidth = GenreItemWidth - (GenreItemLeftMargin + 20);
 	name = fm.elidedText(name, Qt::TextElideMode::ElideRight, textWidth);

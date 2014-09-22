@@ -26,7 +26,7 @@ String HttpApi::Domain() const
 String HttpApi::CreateNewUser()
 {
 	std::string response;
-	DoGetRequest(Domain(), "/Handlers/RegisterNewUser.ashx", response);
+	DoGetRequest(Domain(), DEFAULT_PORT, "/Handlers/RegisterNewUser.ashx", response);
 
 	Json::Value root;
 	Json::Reader reader;
@@ -47,7 +47,7 @@ bool HttpApi::GetUpdateInfo(const std::string& userId, FilesToUpdate& fielsToUpd
 	std::cout << "Get update info started..." << std::endl;
 
 	std::string response;
-	DoGetRequest(Domain(), STR"/Handlers/GetDataFile.ashx?UserId=" + userId, response);
+	DoGetRequest(Domain(), DEFAULT_PORT, STR"/Handlers/GetDataFile.ashx?UserId=" + userId, response);
 
 	Json::Value root;
 	Json::Reader reader;
@@ -91,7 +91,7 @@ bool HttpApi::GetPakageInfo(const String& userId, FileToUpdate& pakage)
 	std::cout << "Get pakage info started..." << std::endl;
 
 	std::string response;
-	DoGetRequest(Domain(), STR"/Handlers/GetDataFile.ashx?IsZip=true&UserId=" + userId, response);
+	DoGetRequest(Domain(), DEFAULT_PORT, STR"/Handlers/GetDataFile.ashx?IsZip=true&UserId=" + userId, response);
 
 	Json::Value root;
 	Json::Reader reader;
@@ -131,7 +131,7 @@ bool HttpApi::DownloadFile(FileToUpdatePtr fileToDownlaod)
 	String tmpFilePath = fileToDownlaod->AbsolutePath() + STR"tmp";
 
 	std::ofstream ostream(tmpFilePath, std::ios::out | std::ios::binary | std::ios::trunc);
-	if(DoGetRequest(fileToDownlaod->Domain(), fileToDownlaod->Query(), ostream))
+	if (DoGetRequest(fileToDownlaod->Domain(), fileToDownlaod->Port(), fileToDownlaod->Query(), ostream))
 	{
 		ostream.flush();
 		ostream.close();
@@ -175,7 +175,7 @@ bool HttpApi::DownloadFile(FileToUpdatePtr fileToDownlaod)
 	return false;
 }
 
-bool HttpApi::DoGetRequest(const String& domain, const String& query, std::ostream& ostream)
+bool HttpApi::DoGetRequest(const String& domain, int port, const String& query, std::ostream& ostream)
 {
 	HINTERNET hIntSession = ::InternetOpen(APP_UA, INTERNET_OPEN_TYPE_DIRECT, NULL, NULL, 0);
 
@@ -186,7 +186,7 @@ bool HttpApi::DoGetRequest(const String& domain, const String& query, std::ostre
 		return false;
 	}
 
-	HINTERNET hHttpSession = InternetConnect(hIntSession, domain.c_str(), 80, 0, 0, INTERNET_SERVICE_HTTP, 0, NULL);
+	HINTERNET hHttpSession = InternetConnect(hIntSession, domain.c_str(), port, 0, 0, INTERNET_SERVICE_HTTP, 0, NULL);
 
 	if(!hHttpSession)
 	{
@@ -242,10 +242,10 @@ bool HttpApi::DoGetRequest(const String& domain, const String& query, std::ostre
 	return true;
 }
 
-bool HttpApi::DoGetRequest(const String& domain, const String& query, std::string& data)
+bool HttpApi::DoGetRequest(const String& domain, int port, const String& query, std::string& data)
 {
 	std::ostringstream stream;
-	if(DoGetRequest(domain, query, stream))
+	if (DoGetRequest(domain, port, query, stream))
 	{
 		data = stream.str();
 		return true;

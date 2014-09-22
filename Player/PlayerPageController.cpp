@@ -168,14 +168,26 @@ void PlayerPageController::DownloadTrack(int id)
 
 	if(track)
 	{
-		auto downlaoder = new AudioStreamAsyncDownloader(track->Url(), track->FilePath(), track->Id());
-		if(downlaoder->FileOpened())
-		{
-			connect(downlaoder, SIGNAL(Finished()), SLOT(TrackDownlaoded()));
-			QThreadPool::globalInstance()->start(downlaoder);
+		QString filePathToSaveTrack = Path::TrackFile(track->Artist() + " " + track->Title());
+		
+		filePathToSaveTrack = QFileDialog::getSaveFileName(m_view, tr("Select file to save track"), 
+										filePathToSaveTrack, "mp3 (*.mp3);");
 
-			track->SetDownloading(true);
-			m_trackSearchResultModel->EmitDataChanged();
+		if(!filePathToSaveTrack.isEmpty())
+		{
+			Config::Inst().SetPathToSaveTracks(QDir(filePathToSaveTrack).absolutePath());
+
+			auto downlaoder = new AudioStreamAsyncDownloader(track->Url(), filePathToSaveTrack, track->Id());
+			if (downlaoder->FileOpened())
+			{
+				track->SetFilePath(filePathToSaveTrack);
+
+				connect(downlaoder, SIGNAL(Finished()), SLOT(TrackDownlaoded()));
+				QThreadPool::globalInstance()->start(downlaoder);
+
+				track->SetDownloading(true);
+				m_trackSearchResultModel->EmitDataChanged();
+			}
 		}
 	}
 }
@@ -207,12 +219,11 @@ void PlayerPageController::DeleteTrack(int id)
 	if(track)
 	{
 		FileUtils::Delete(track->FilePath());
-		//m_trackSearchResultModel->EmitDataChanged();
 
 		if(m_downlaodedTracksModel->Remove(id))
 		{
 			m_downlaodedTracksModel->Save(Path::ConfigFile("tracks.db"));
-			//m_downlaodedTracksModel->EmitDataChanged();
+			m_downlaodedTracksModel->EmitDataChanged();
 		}
 	}
 }

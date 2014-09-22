@@ -21,7 +21,7 @@ Rectangle {
 	signal showTooltip(string text);
 	
 	// properties
-	property bool isPlaying: false;
+	property bool isPlaying: false;		
 	property int currentTrackId: 0;
 	
 	Rectangle {
@@ -34,10 +34,10 @@ Rectangle {
 		
 		Image {
 			id: playIcon
-			source: playerPage.isPlaying ? "qrc:///mp/Resources/pauseicon.png" :"qrc:///mp/Resources/playicon.png"
+			source: playerPage.isPlaying ? "qrc:///mp/Resources/pl_pauseicon.png" : "qrc:///mp/Resources/pl_playicon.png"
 			
-			anchors.topMargin: 10;
-			anchors.leftMargin: 5;
+			anchors.topMargin: 15;
+			anchors.leftMargin: 15;
 			anchors.top: parent.top;
 			anchors.left: parent.left
 			
@@ -53,8 +53,6 @@ Rectangle {
 		Image {
 			id: playPrevIcon
 			source: "qrc:///mp/Resources/playprevicon.png"
-			width: 18;
-			height: 18;
 			anchors.topMargin: 14;
 			anchors.leftMargin: 5;
 			anchors.top: parent.top;
@@ -70,8 +68,6 @@ Rectangle {
 		Image {
 			id: playNextIcon
 			source: "qrc:///mp/Resources/playnexticon.png"
-			width: 18;
-			height: 18;
 			anchors.topMargin: 14;
 			anchors.leftMargin: 5;
 			anchors.top: parent.top;
@@ -88,149 +84,85 @@ Rectangle {
 			id: trackName
 			anchors.top: parent.top
 			anchors.left: playNextIcon.right;
-			anchors.topMargin: 5;
+			anchors.topMargin: 10;
 			anchors.leftMargin: 10;
-			width: 250
+			width: 315
 			color: '#a2a2a2'
 			font.pixelSize: 12
 		}
 		
-		Image {
-			id: showDownloadTracks
-			source: "qrc:///mp/Resources/w128h1281338911632musicfolder.png"
-			anchors.top: parent.top
-			anchors.left: trackName.right;
-			anchors.topMargin: 5;
-			
-			MouseArea  {
-				anchors.fill: parent
-				cursorShape: Qt.PointingHandCursor
-				onClicked: {
-					if(tracksList.model == searchTracksModel) {
-						tracksList.model = downloadedTracksModel;
-					}
-					else {
-						tracksList.model = searchTracksModel;
-					}
-				}
-			}
-		}
-		
-		Image {
-			id: changeTracksFolder
-			source: "qrc:///mp/Resources/w128h1281338911586folder.png"
-			anchors.top: parent.top
-			anchors.left: showDownloadTracks.right;
-			anchors.topMargin: 5;
-			anchors.leftMargin: 10;
-			
-			MouseArea  {
-				anchors.fill: parent
-				cursorShape: Qt.PointingHandCursor
-				onClicked: playerPage.tracksPathChangeRequest();
-			}
-		}
-		
-		Slider {
-			id: positionSlider
-			anchors.top: trackName.bottom
+		SliderProgressBar {
+			id: positionSlider;
+			anchors.top: trackName.bottom;
 			anchors.left: trackName.left;
-			anchors.topMargin: 5;
-			width: 200
-			height: 6;
-			maximumValue: 1000
-			minimumValue: 0
-			value: 0
-			stepSize: 0
-			onValueChanged: {
-				if(positionSlider.pressed) {
-					playerPage.positionChanged(value);
-				}
-			}
+			anchors.topMargin: 2;
+			maximumValue: 1000;
+			minimumValue: 0;
+			value: 0;
+			width: 315
+			height: 5;
+			progressBarStyle: positionSlider.defaultStyle;
 			
-			style: SliderStyle {
-				groove: Rectangle {
-					implicitWidth: control.width
-					implicitHeight: control.height
-					color: "#120E0F"
-					radius: 8
-				}
-				handle: Rectangle {
-					anchors.centerIn: parent
-					color: control.pressed ? "white" : "#E1E1E1"
-					border.color: "gray"
-					border.width: 0
-					implicitWidth: 22
-					implicitHeight: control.height
-					radius: 8
-				}
+			onValueChangedByUser: {
+				playerPage.positionChanged(value);
 			}
 		}
 		
-		StyledText  {
-			id: timeLeft
-			property bool showTimeLeft: true;
-			anchors.top: trackName.bottom
-			anchors.left: positionSlider.right;
-			anchors.leftMargin: 10;
-			width: 40
-			text: "00:00"
-			color: '#a2a2a2'
-			font.pixelSize: 12
+		Image {
+			id: muteIcon
+			source: "qrc:///mp/Resources/volumeicon.png";
+			anchors.topMargin: 15;
+			anchors.leftMargin: 15;
+			anchors.top: parent.top;
+			anchors.left: positionSlider.right
 		}
-		
-		Slider {
-			id: volumeSlider
-			anchors.top: trackName.bottom
-			anchors.left: timeLeft.right
-			anchors.topMargin: 5;
-			width: 50;
-			height: 6;
-			maximumValue: 1000
+
+		SliderProgressBar {
+			id: volumeSlider;
+			anchors.top: muteIcon.top;
+			anchors.left: muteIcon.right;
+			anchors.leftMargin: 6;
+			anchors.topMargin: 4;
+			width: 40
+			height: 11;
+			maximumValue: 100
 			minimumValue: 0
-			value: 0
-			stepSize: 1
-			onValueChanged: {
-				var volume = value / 1000;
+			wheelStep: 10;
+			progressBarStyle: positionSlider.divisionStyle;
+			
+			onValueChangedByUser: {
+				var volume = value / maximumValue;
 				playerPage.volumeChanged(volume);
 			}
-			
-			style: SliderStyle {
-				groove: Rectangle {
-					implicitWidth: control.width
-					implicitHeight: control.height
-					color: "#120E0F"
-					radius: 8
-				}
-				handle: Rectangle {
-					anchors.centerIn: parent
-					color: control.pressed ? "white" : "#E1E1E1"
-					border.color: "gray"
-					border.width: 0
-					implicitWidth: 22
-					implicitHeight: control.height
-					radius: 8
-				}
-			}
-		}
-		
-		SearchEdit {
-			id: searchEdit
-			anchors.top: parent.top;
-			anchors.right: parent.right;
-			anchors.topMargin: 10;
-			anchors.rightMargin: 8;
-			
-			height: 24
-			width: 160
-		}
+		}		
 	}
 	
 	TrackList {
 		id: tracksList
-		width: parent.width
+
 		height: parent.height - (playerContols.height + 15)
 		model: searchTracksModel
+		width: 544;
+		
+		property string searchLine: "";
+		
+		header: Rectangle {
+			id: trackListHeader;
+			anchors.top: parent.top;
+			anchors.left: parent.left;
+			height: 50;
+			
+			SearchEdit {
+				id: searchEdit
+				anchors.top: parent.top;
+				anchors.left: parent.left;
+				anchors.topMargin: 10;
+				filter: tracksList.searchLine;
+				height: 30
+				width: 440
+			}
+		}
+		
 		anchors {
 			top: playerContols.bottom;
 			left: parent.left;
@@ -259,26 +191,13 @@ Rectangle {
 			playerPage.resumeTrack();
 		}
 	}
-	
-	function secondsToTime(secs) {
-		var t = new Date(1970,0,1);
-		t.setSeconds(secs);
-		var s = t.toTimeString().substr(0,8);
-		if(secs > 86399)
-			s = Math.floor((t - Date.parse("1/1/70")) / 3600000) + s.substr(2);
-		if(s.substr(0, 2) == 00)
-			return s.substr(3);
-		return s;
-	}
-	
+
 	function updateTrackPosition(currentPos, trackLenght) {
 		if(!positionSlider.pressed) {
 			positionSlider.maximumValue = trackLenght;
 			positionSlider.value = currentPos;
 		}
-		
-		timeLeft.text = "-" + secondsToTime(trackLenght - currentPos);
-		
+
 		if(currentPos == trackLenght) {
 			isPlaying = false;
 			tracksList.gotoNextTrack();
@@ -290,11 +209,11 @@ Rectangle {
 	}
 	
 	function setVolume(volume) {
-		volumeSlider.value = volume * 1000;
+		volumeSlider.value = volume * volumeSlider.maximumValue;
 	}
 	
 	function setSearchFilter(filter) {
-		searchEdit.filter = filter;
+		tracksList.searchLine = filter;
 	}
 	
 	function search(filter) {

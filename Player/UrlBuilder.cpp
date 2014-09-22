@@ -14,7 +14,7 @@ QUrl UrlBuilder::DefaultHostUrl()
 	QUrl url;
 	url.setScheme(HTTP_SCHEME);
 	url.setHost(DEFAULT_HOST_N);
-
+	url.setPort(DEFAULT_PORT);
 	return url;
 }
 

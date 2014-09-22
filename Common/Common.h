@@ -39,7 +39,8 @@ namespace cmn {
 #define LAODER_APP_EXE			STR"UboxLoader.exe"
 #define LAUCNHER_APP_EXE		STR"UboxLauncher.exe"
 //#define DEFAULT_HOST			STR"127.0.0.1"
-#define DEFAULT_HOST			STR"109.120.163.35"
+#define DEFAULT_HOST			STR"unisonbox.com"
+#define DEFAULT_PORT			1666
 #define CONFIG_DIR				STR"UboxData"
 #define PATH_SEPARATOR			STR"\\"
 

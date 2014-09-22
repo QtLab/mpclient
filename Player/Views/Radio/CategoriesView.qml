@@ -1,13 +1,13 @@
 import QtQuick 2.0
 
 Rectangle {
-	width: parent.width
-	height: 43
-	color: '#372F2C'
+	width: parent.width;
+	height: 43;
+	color: '#372F2C';
 	property variant model;
 	
     Component {
-        id: contactDelegate
+        id: categoryDelegate
 		
         Item {
 			property int categoryId: Id;
@@ -22,7 +22,7 @@ Rectangle {
 				font.pixelSize: 13;
 				anchors {
 					top: parent.top
-					topMargin: 10;
+					topMargin: 12;
 				}
 			}
 			
@@ -54,7 +54,7 @@ Rectangle {
 		}
 		
         model: parent.model
-        delegate: contactDelegate
+        delegate: categoryDelegate
 		
 		highlight: Rectangle { color: "white";}
         focus: true;
@@ -80,14 +80,14 @@ Rectangle {
     }
 	
 	Rectangle {
-		id: moreTextRect
+		id: moreTextRect;
+		color: categoriesList.currentIndex == -1 ?  'white' : 'transparent';
+		
 		anchors {
 			right: searchEdit.left;
-			rightMargin: 10
-			top: parent.top	
+			rightMargin: 1;
+			top: parent.top;	
 		}
-		
-		color: categoriesList.currentIndex == -1 ?  'white' : 'transparent'
 		
 		StyledText {
 			id: moreText;
@@ -97,7 +97,7 @@ Rectangle {
 				left: parent.left
 				top: parent.top
 				leftMargin: 10
-				topMargin: 10	
+				topMargin: 12	
 			}
 			
 			color: categoriesList.currentIndex == -1 ?  'black' : 'white'

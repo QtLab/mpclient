@@ -94,7 +94,9 @@ public:
 } //namespace model
 } //namespace mp
 
+#ifdef BUILD_WITH_METATYPES
 Q_DECLARE_METATYPE(mp::model::RadioSource);
 Q_DECLARE_METATYPE(mp::model::RadioSourcesModel);
+#endif
 
 #endif

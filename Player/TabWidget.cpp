@@ -22,7 +22,6 @@ TabWidget::TabWidget(QWidget * parent, const QString& name, const QString& tabBa
 int TabWidget::AddPage(TabPage * page)
 {
 	int index = addTab(page, page->Name());
-	setTabToolTip(index, page->ToolTip());
 	m_pages.insert(index, page);
 
 	page->SetTabIndex(index);

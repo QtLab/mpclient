@@ -22,10 +22,11 @@ Rectangle {
 			playerPage.search(searchField.text)
 		}
 		
-		font.pixelSize: 10
+		font.pixelSize: 11
 		font.family: openSansLight.name
 		width: 10;
-		placeholderText: "Поиск"
+		height: 25;
+		placeholderText: focus? "" : "Поиск"
 		text: parent.filter;
 		
         style: TextFieldStyle {
@@ -61,7 +62,7 @@ Rectangle {
 	Image {
 		id: searchIcon
 		anchors {
-			topMargin: 1;
+			topMargin: 4;
 			rightMargin: 1;
 			top: parent.top
 			right: parent.right 

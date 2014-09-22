@@ -45,7 +45,6 @@ signals:
 
 private:
 	QVBoxLayout *			m_layout;
-	QPropertyAnimation *	m_changeSizeAnumation;
 	NcFramelessHelper *		m_frameLessHelper;
 	QSize					m_lastTVSize;
 

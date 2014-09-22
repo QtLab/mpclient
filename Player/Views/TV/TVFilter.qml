@@ -13,16 +13,13 @@ Rectangle {
 		anchors {
 			left: parent.left;
 			top: parent.top;
-
 		}
 		
 		MouseArea  {
 			anchors.fill: parent
 			hoverEnabled: true
 			cursorShape: Qt.PointingHandCursor
-			onClicked: {
-					tvPage.showGenres(parent.currentCategoryId);
-			}
+			onClicked: tvPage.showGenres(parent.currentCategoryId);
 		}
 	}
 		
@@ -37,8 +34,8 @@ Rectangle {
 			top: parent.top;
 
 		}
-	
 	}
+	
 	SearchEdit {
 		id: searchEdit
 		anchors {

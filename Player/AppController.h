@@ -34,6 +34,7 @@ private slots:
 
 private:
 	void HandleMssageFromAnotherInst(const QString& message);
+	void HandeleNotifyErrorException(QObject* receiver, QEvent* even);
 	bool notify(QObject* receiver, QEvent* even);
 
 private:

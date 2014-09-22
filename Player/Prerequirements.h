@@ -9,9 +9,11 @@
 #include <QMap>
 #include <QMultiMap>
 
-#define PLAYER_VERSION "1.0.0.5"
+#define PLAYER_VERSION "1.0.0.6"
+//#define BUILD_WITH_METATYPES
 
 // Forward declaration
+
 
 QT_BEGIN_NAMESPACE
 class QNetworkAccessManager;

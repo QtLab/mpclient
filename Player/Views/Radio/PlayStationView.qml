@@ -93,7 +93,7 @@ Rectangle {
 				var volume = value / 1000;
 				radioPageView.volumeChanged(volume);
 			}
-			
+					
 			style: SliderStyle {
 				groove: Rectangle {
 					implicitWidth: control.width
@@ -104,10 +104,10 @@ Rectangle {
 				handle: Rectangle {
 					anchors.centerIn: parent
 					color: control.pressed ? "white" : "#E1E1E1"
-					border.color: "gray"
-					border.width: 0
-					implicitWidth: 22
-					implicitHeight: control.height
+					border.color: "gray";
+					border.width: 0;
+					implicitWidth: 22;
+					implicitHeight: control.height;
 					radius: 8
 				}
 			}

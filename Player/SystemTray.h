@@ -19,6 +19,10 @@ private slots:
 	void Activated(QSystemTrayIcon::ActivationReason reason);
 	void ShowAbout();
 
+public:
+	bool eventFilter(QObject *object, QEvent *event);
+	virtual bool event(QEvent * e);
+	
 signals:
 	void ShowtdownApplicationReuest();
 	void UpdateReuest();

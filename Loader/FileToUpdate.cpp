@@ -8,7 +8,7 @@ namespace ldr {
 
 using namespace cmn;
 
-bool CrackUrl(const String& url, String& domain, String& query)
+bool CrackUrl(const String& url, String& domain, int * port, String& query)
 {
 	URL_COMPONENTS uc = {};
 
@@ -26,7 +26,7 @@ bool CrackUrl(const String& url, String& domain, String& query)
 	{
 		domain = HostName;
 		query = UrlPath;
-
+		*port = uc.nPort;
 		return true;
 	}
 
@@ -38,6 +38,11 @@ const String& FileToUpdate::Domain() const
 	return m_domain;
 }
 
+int FileToUpdate::Port() const
+{
+	return m_port;
+}
+
 const String& FileToUpdate::Query() const
 {
 	return m_query;
@@ -45,7 +50,7 @@ const String& FileToUpdate::Query() const
 
 void FileToUpdate::SetUrl(const String& url)
 {
-	CrackUrl(url, m_domain, m_query);
+	CrackUrl(url, m_domain, &m_port, m_query);
 	m_url = url;
 }
 

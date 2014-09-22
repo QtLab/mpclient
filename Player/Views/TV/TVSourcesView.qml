@@ -25,7 +25,7 @@ Rectangle {
 
 		width: parent.width + 35;
 		
-		cellWidth: 150; cellHeight: 160
+		cellWidth: 150; cellHeight: 170
 		interactive: parent.interactive;
 		clip: true;
 		Component.onCompleted: {

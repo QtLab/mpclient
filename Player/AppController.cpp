@@ -8,6 +8,8 @@
 #include "MainWindow.h"
 #include "SystemTray.h"
 #include "TabPage.h"
+#include "StubPage.h"
+
 #include "MessageBoxView.h"
 
 namespace mp {
@@ -62,6 +64,10 @@ void AppController::CreateView(bool silent)
 	m_mainWidow->AddTab(m_playerPageController->View());
 	m_mainWidow->AddTab(m_tvPageController->View());
 
+	//m_mainWidow->AddTab(new view::StubPage(m_mainWidow));
+	//m_mainWidow->AddTab(new view::StubPage(m_mainWidow));
+	//m_mainWidow->AddTab(new view::StubPage(m_mainWidow));
+	
 	CurrentPageChanged(m_radioPageController->View(), NULL);
 
 	if(silent)
@@ -120,6 +126,10 @@ void AppController::UpdateStarted()
 
 void AppController::UpdateFinished(const UpdateResult& result)
 {
+	qDebug() << "Update finished andler, Success: " << result.Success()
+		<< " RestartRequired: " << result.RestartRequired()
+		<< " ActivatedByUser: " << result.ActivatedByUser();
+
 	if(result.Success())
 	{
 		if(!result.RestartRequired())
@@ -222,10 +232,19 @@ void AppController::HandleMssageFromAnotherInst(const QString& message)
 	}
 }
 
-void NotifyErrorLog(QObject* receiver, QEvent* even)
+void AppController::HandeleNotifyErrorException(QObject* receiver, QEvent* even)
 {
 	qDebug("Error <unknown> sending event %s to object %s (%s)", 
 		typeid(*even).name(), qPrintable(receiver->objectName()), typeid(*receiver).name());
+
+	if (m_mainWidow->isHidden())
+	{
+		Showtdown(SILENT_RESTART_EXIT_CODE);
+	}
+	else
+	{
+		Showtdown(RESTART_EXIT_CODE);
+	}
 }
 
 bool AppController::notify(QObject* receiver, QEvent* even)
@@ -237,7 +256,7 @@ bool AppController::notify(QObject* receiver, QEvent* even)
 	}
 	__except (EXCEPTION_EXECUTE_HANDLER)
 	{
-		NotifyErrorLog(receiver, even);
+		HandeleNotifyErrorException(receiver, even);
 	}
 #else
 	try

@@ -13,8 +13,6 @@ class AudioStream : public QObject
 	Q_OBJECT
 
 public:
-	Q_ENUMS(ASState)
-
 	enum ASState
 	{
 		ASStarting,
@@ -23,7 +21,9 @@ public:
 		ASStopped
 	};
 
-	AudioStream(const  QString& streamName);
+	Q_ENUMS(ASState)
+
+	AudioStream(const  QString& streamName = QString());
 	virtual ~AudioStream();
 
 	static void InitGlobal();
@@ -44,7 +44,8 @@ public:
 private:
 	static void CALLBACK ProcessMetaCallback(HSYNC handle, DWORD channel, DWORD data, void *user); 
 	static void CALLBACK ProcessStreamStalled(HSYNC handle, DWORD channel, DWORD data, void *user);
-	
+	static void CALLBACK ProcessStreamEnded(HSYNC handle, DWORD channel, DWORD data, void *user);
+
 private slots:
 	void EmitStateChanged(AudioStream::ASState newState);
 	void ProcessMeta();

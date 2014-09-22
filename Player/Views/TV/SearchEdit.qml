@@ -11,9 +11,11 @@ Rectangle {
 		
 	TextField {
 		id: searchField
+		
 		anchors {
 			topMargin: 2
 			leftMargin: 2
+			bottomMargin: 0
 			top: parent.top
 			left: parent.left
 			right: searchIconSeparator.left
@@ -38,8 +40,9 @@ Rectangle {
 		font.pixelSize: 10
 		font.family: openSansLight.name
 		width: 10;
+		height: 20;
 		text: parent.filter;
-		placeholderText: "Поиск"
+		placeholderText: focus? "" : "Поиск"
 		
         style: TextFieldStyle {
             textColor: "black"

@@ -19,15 +19,15 @@
         <file>Resources/FlashInstall.html</file>
         <file>Resources/playnexticon.png</file>
         <file>Resources/playprevicon.png</file>
-        <file>Resources/arrow_left.png</file>
-        <file>Resources/arrow_right.png</file>
-        <file>Resources/ajax-loader.gif</file>
-        <file>Resources/addtofavorits.png</file>
-        <file>Resources/favoritesremove.png</file>
-        <file>Resources/w128h1281338911586folder.png</file>
-        <file>Resources/w128h1281338911632musicfolder.png</file>
-        <file>Resources/w128h1281338911632mu.png</file>
         <file>Resources/popuptriangle.png</file>
         <file>Resources/verticaldashedline.png</file>
+        <file>Resources/closepopup.png</file>
+        <file>Resources/pl_pauseicon.png</file>
+        <file>Resources/volumeicon.png</file>
+        <file>Resources/pl_trackpauseicon.png</file>
+        <file>Resources/pl_trackplayicon.png</file>
+        <file>Resources/download.png</file>
+        <file>Resources/downloading.gif</file>
+        <file>Resources/pl_playicon.png</file>
     </qresource>
 </RCC>

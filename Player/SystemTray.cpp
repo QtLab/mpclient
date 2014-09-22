@@ -1,6 +1,7 @@
 #include "SystemTray.h"
 #include "SystemTrayContextMenu.h"
 #include "MessageBoxView.h"
+#include "StateTooltip.h"
 
 #include <QMainWindow>
 #include <QPainter>
@@ -24,6 +25,7 @@ SystemTray::SystemTray(QMainWindow * parent)
 
 	setContextMenu(menu);
 
+	installEventFilter(this);
 	connect(this, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),this, SLOT(Activated(QSystemTrayIcon::ActivationReason)));
 }
 
@@ -57,6 +59,28 @@ void SystemTray::Activated(QSystemTrayIcon::ActivationReason reason)
 void SystemTray::ShowAbout()
 {
 	MessageBoxView::ShowAbout(m_parent);
+}
+
+bool SystemTray::eventFilter(QObject *object, QEvent *event)
+{
+	if (event->type() != QEvent::ToolTip)
+	{
+		(new StateTooltip(NULL))->Show(QPoint());
+	}
+
+	return QSystemTrayIcon::eventFilter(object, event);
+}
+
+bool SystemTray::event(QEvent * e)
+{
+	if (e->type() != QEvent::ToolTip)
+	{
+		(new StateTooltip(NULL))->Show(QPoint());
+	}
+	else
+	{
+		return QSystemTrayIcon::event(e);
+	}
 }
 
 } // end namespace view

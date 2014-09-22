@@ -3,6 +3,7 @@
 #include "ThreadUtils.h"
 #include "Config.h"
 
+#include <qqml.h>
 #include <QDebug>
 #include <QTextCodec>
 #include <QThreadPool>
@@ -34,6 +35,8 @@ void AudioStream::InitGlobal()
 	qRegisterMetaType<AudioStream::ASState>("AudioStream::ASState");
 	qRegisterMetaType<HSTREAM>("HSTREAM");
 	
+	qmlRegisterType<AudioStream>("AudioStream", 1, 0, "AudioStream");
+
 	if (!BASS_Init(-1,44100, 0, 0, NULL)) 
 	{
 		qDebug() << "BASS_Init: can't initialize device, error code: " << BASS_ErrorGetCode();
@@ -120,6 +123,7 @@ void AudioStream::StreamStarted(HSTREAM stream, int errorCode)
 			BASS_ChannelSetSync(m_hStream, BASS_SYNC_META, 0, &AudioStream::ProcessMetaCallback, this); // Shoutcast
 			BASS_ChannelSetSync(m_hStream, BASS_SYNC_OGG_CHANGE, 0, &AudioStream::ProcessMetaCallback, this); // Icecast/OGG
 			BASS_ChannelSetSync(m_hStream, BASS_SYNC_STALL | BASS_SYNC_MIXTIME, 0, &AudioStream::ProcessStreamStalled, this);
+			BASS_ChannelSetSync(m_hStream, BASS_SYNC_END | BASS_SYNC_MIXTIME, 0, &AudioStream::ProcessStreamEnded, this);
 
 			int eeror = BASS_ErrorGetCode();
 
@@ -311,6 +315,14 @@ void AudioStream::ProcessStreamStalled(HSYNC handle, DWORD channel, DWORD data, 
 	{
 		QMetaObject::invokeMethod( stream, "ProcessMeta", Qt::QueuedConnection);
 	}
+}
+
+void AudioStream::ProcessStreamEnded(HSYNC handle, DWORD channel, DWORD data, void *user)
+{
+	AudioStream * stream = reinterpret_cast<AudioStream*>(user);
+
+	QMetaObject::invokeMethod(stream, "EmitStateChanged", Qt::QueuedConnection,
+		Q_ARG(AudioStream::ASState, AudioStream::ASStopped));
 }
 
 }

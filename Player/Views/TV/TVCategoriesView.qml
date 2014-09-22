@@ -18,12 +18,12 @@ Rectangle {
 			StyledText {
 				id: categoryText;
 				text: Name
-				anchors.horizontalCenter: parent.horizontalCenter
-				color: categoriesList.currentIndex == index ?  '#f78449' : 'white'
+				anchors.horizontalCenter: parent.horizontalCenter;
+				color: categoriesList.currentIndex == index ?  'black' : 'white'
 				font.pixelSize: 13;
 				anchors {
 					top: parent.top
-					topMargin: 10;
+					topMargin: 12;
 				}
 			}
 			
@@ -46,8 +46,8 @@ Rectangle {
 		
 		height: parent.height;
 		width: {
-			categoriesList.model.UpdateTopVisibleCategories(parent.width - (parent.width - moreText.x), openSansLight.name, 10, 21);
-			return parent.width - (parent.width - moreText.x);
+			categoriesList.model.UpdateTopVisibleCategories(parent.width - (parent.width - moreTextRect.x), openSansLight.name, 10, 21);
+			return parent.width - (parent.width - moreTextRect.x);
 		}
 		
 		anchors {
@@ -64,6 +64,8 @@ Rectangle {
 		
 		interactive: false;
 		clip: true;
+		
+		highlight: Rectangle { color: "white";}
 		
 		onCurrentItemChanged: {
 			var currentCategoryId = -1;
@@ -83,27 +85,38 @@ Rectangle {
         }
     }
 	
-	StyledText {
-		id: moreText;
-		text: "Еще"
-		color: categoriesList.currentIndex == -1 ?  '#f78449' : 'white'
-		font.pixelSize: 13;
+	Rectangle {
+		id: moreTextRect;
+		color: categoriesList.currentIndex == -1 ?  'white' : 'transparent';
 		
 		anchors {
 			right: parent.right;
-			top: parent.top
-			rightMargin: 10;
-			leftMargin: 10;
-			topMargin: 10;
+			top: parent.top;
+			rightMargin: 1;
 		}
 		
-		MouseArea  {
-			anchors.fill: parent
-			hoverEnabled: true
-			cursorShape: Qt.PointingHandCursor
-			onClicked: {
-				categoriesList.currentIndex = -1;
-				tvPage.showMoreCategories();
+		StyledText {
+			id: moreText;
+			text: "Еще"
+			color: categoriesList.currentIndex == -1 ?  'black' : 'white'
+			font.pixelSize: 13;
+			
+			anchors {
+				right: parent.right;
+				top: parent.top
+				rightMargin: 10;
+				leftMargin: 10;
+				topMargin: 12;
+			}
+			
+			MouseArea  {
+				anchors.fill: parent
+				hoverEnabled: true
+				cursorShape: Qt.PointingHandCursor
+				onClicked: {
+					categoriesList.currentIndex = -1;
+					tvPage.showMoreCategories();
+				}
 			}
 		}
 	}
@@ -114,11 +127,11 @@ Rectangle {
 	}
 	
 	function updateTopVisibleCategories() {
-		categoriesList.model.UpdateTopVisibleCategories(parent.width - (parent.width - moreText.x), openSansLight.name, 10, 21);
+		categoriesList.model.UpdateTopVisibleCategories(parent.width - (parent.width - moreTextRect.x), openSansLight.name, 10, 21);
 	}
 	
 	function insertLastTopVisibleCategory(id) {
-		categoriesView.model.InsertLastTopVisibleCategory(id, parent.width - (parent.width - moreText.x), openSansLight.name, 10, 21);
+		categoriesView.model.InsertLastTopVisibleCategory(id, parent.width - (parent.width - moreTextRect.x), openSansLight.name, 10, 21);
 	}
 	
 }

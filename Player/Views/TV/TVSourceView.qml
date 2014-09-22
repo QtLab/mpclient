@@ -19,17 +19,47 @@ Rectangle {
 	}
 	
 	StyledText {
+		id: tempText
+		visible: false
+		width: 95;
+		wrapMode: Text.WordWrap
+		
+		function elideMultiline(text, font, linesCount) {
+			tempText.font = font
+			var l = text.length
+			var s = "";
+			for (var i = 0; i < linesCount; i++) {
+				s += "W";
+				if (i < linesCount - 1)
+					s += "\n"
+			}
+			tempText.text = s
+			var maxHeight = tempText.paintedHeight
+			tempText.text = text
+			while (tempText.paintedHeight > maxHeight) {
+				tempText.text = text.substring(0, --l) + "..."
+			}
+			return tempText.text
+		}
+	}
+
+	StyledText {
 		id: textView;
+		wrapMode: Text.WordWrap;
+		horizontalAlignment: Text.AlignHCenter;
 		color: "#3987C5";
 		font.bold: true;
 		width: 95; 
-		text: Name;
-		elide: Text.ElideRight;
+
 		font.pixelSize: 13;
 
 		anchors {
 			top: logoView.bottom;
 			left: parent.left;
+		}
+		
+		Component.onCompleted: {
+			text = tempText.elideMultiline(Name, font, 2);
 		}
 	}
 	

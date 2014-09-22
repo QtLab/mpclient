@@ -1,0 +1,92 @@
+QDialog {
+	min-height: 145px;
+	border:none;
+	min-width: 215px;
+}
+
+QWidget#centralWidget {
+	background-color: 'transparent';
+	min-height: 145px;
+	max-height: 145px;
+}
+
+QWidget#contectAndFooterWidget {
+	/*border: 2px solid '#E6E6E6';
+	border-top-width: 1px;
+	boreder-radius: 5px;
+	background-color: 'red';*/
+	min-height: 108px;
+}
+
+QWidget#headerWidget {
+	background-color: '#3377B4';
+	min-height: 36px;
+	max-height: 36px;
+	/*border-radius: 5px;*/
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+}
+
+QLabel#captionLabel {
+	font: 14px;
+	color: 'white';
+}
+
+QLabel#contentLbl {
+	font: 14px;
+	color: #5F5F5F
+}
+
+QWidget#contentWidget {
+	background-color: 'white';
+	min-height: 52px;
+	border-color: '#E6E6E6';
+	border-left-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+}
+
+QWidget#footerWiget {
+	background-color: 'white';
+	/*border-radius: 5px;*/
+	min-height: 54px;
+	max-height: 54px;
+	border-left-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+}
+
+QLabel#lnkOk {
+	font: 14px;
+	color: white;
+	background-color: '#3377B4';
+	border-radius: 5px;
+	border: none;
+	min-width: 76px;
+	max-width: 76px;
+	min-height: 30px;
+	max-height: 30px;
+	qproperty-alignment: 'AlignVCenter | AlignHCenter';
+}
+
+QLabel#lnkCancel {
+	font: 14px;
+	color: white;
+	background-color: '#999999';
+	border-radius: 5px;
+	border: none;
+	min-width: 76px;
+	max-width: 76px;
+	min-height: 30px;
+	max-height: 30px;
+	qproperty-alignment: 'AlignVCenter | AlignHCenter';
+}
+
+QLabel#closeLnk {
+	color : white;
+	background-image: url(:/mp/Resources/closepopup.png);
+	background-repeat: no-repeat;
+	margin-top: 12px;
+	min-width: 16px;
+	max-width: 16px;
+}

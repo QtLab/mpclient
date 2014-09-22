@@ -6,10 +6,10 @@ Rectangle {
 	FontLoader { id: openSansLight; source: "qrc:///mp/Resources/txdJ2vM9.ttf" }
 
 	// signals
-	signal categoryChanged(int id)
-	signal playRadio(int id)
-	signal resumeRadio
-	signal pauseRadio
+	signal categoryChanged(int id);
+	signal playRadio(int id);
+	signal resumeRadio;
+	signal pauseRadio;
 	signal searchFilterChanged(string txt);
 	signal searchTracks(string txt);
 	signal volumeChanged(real volume);
@@ -20,7 +20,7 @@ Rectangle {
 		id: categoriesView;
 		model: categoriesModel;
 		anchors {
-			top: radioPageView.top
+			top: radioPageView.top;
 		}
 	}
 	
@@ -28,56 +28,56 @@ Rectangle {
 		id: currentCategoryStationsView;
 		
 		anchors {
-			left: parent.left
-			right: parent.right
-			top: categoriesView.bottom
-			bottom: parent.bottom
+			left: parent.left;
+			right: parent.right;
+			top: categoriesView.bottom;
+			bottom: parent.bottom;
 		}
 		
 		LastStationsView {
-			id: lastStationsView
-			width: 130
+			id: lastStationsView;
+			width: 130;
 			model: lastStationsModel;
 			
 			anchors {
-				leftMargin:20
-				topMargin: 15
-				left: parent.left
-				top: parent.top
+				leftMargin:20;
+				topMargin: 15;
+				left: parent.left;
+				top: parent.top;
 			}
 		}
 		
 		TopStationsView {
-			id: topStationsView
-			width: 130
-			model: topStationsModel
+			id: topStationsView;
+			width: 130;
+			model: topStationsModel;
 			
 			anchors {
-				leftMargin: 20
-				bottomMargin: 20
-				left: parent.left
-				bottom: parent.bottom
+				leftMargin: 20;
+				bottomMargin: 20;
+				left: parent.left;
+				bottom: parent.bottom;
 			}
 		}
 		
 		PlayStationView {
-			id: playStationView
-			stationName: stationName
-			stationMetadata: stationMetadata
+			id: playStationView;
+			stationName: stationName;
+			stationMetadata: stationMetadata;
 			anchors {
 				centerIn: parent;
 			}
 		}
 		
 		StationsView {
-			id: allStationsView
-			width: 130
-			height: parent.height
-			model: allStationsModel
+			id: allStationsView;
+			width: 130;
+			height: parent.height;
+			model: allStationsModel;
 			anchors {
-				topMargin: 15
-				right: parent.right
-				top: parent.top
+				topMargin: 15;
+				right: parent.right;
+				top: parent.top;
 			}
 		}
 	}
@@ -100,10 +100,10 @@ Rectangle {
 		model: categoriesModel;
 		
 		anchors {
-			left: parent.left
-			right: parent.right
-			top: categoriesView.bottom
-			bottom: parent.bottom
+			left: parent.left;
+			right: parent.right;
+			top: categoriesView.bottom;
+			bottom: parent.bottom;
 		}
 		
 		visible: false;

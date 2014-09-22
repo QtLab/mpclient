@@ -32,9 +32,6 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
 	central->setObjectName("centralWidget");
 	setCentralWidget(central);
 
-	m_changeSizeAnumation = new QPropertyAnimation(this, "geometry");
-	m_changeSizeAnumation->setDuration(200);
-
 	m_layout = new QVBoxLayout(central);
 	m_layout->setContentsMargins(0, 0, 0, 0);
 	m_layout->setSpacing(0);
@@ -94,20 +91,7 @@ QSize MainWindow::Size() const
 
 void MainWindow::SetSize(const QSize& newSize)
 {
-	if(QSysInfo::windowsVersion() >= QSysInfo::WV_WINDOWS8)
-	{
-		QRect newGeometry = geometry();
-		newGeometry.setWidth(newSize.width());
-		newGeometry.setHeight(newSize.height());
-
-		m_changeSizeAnumation->setStartValue(this->geometry());
-		m_changeSizeAnumation->setEndValue(newGeometry);
-		m_changeSizeAnumation->start();
-	}
-	else
-	{
-		resize(newSize);
-	}
+	resize(newSize);
 }
 
 void MainWindow::closeEvent(QCloseEvent *evt)

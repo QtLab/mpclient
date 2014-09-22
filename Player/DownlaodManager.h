@@ -14,7 +14,7 @@ class DownlaodManager : public QObject
 
 public:
 	DownlaodManager();
-
+	
 	static DownlaodManager& Global();
 
 	void DownloadFile(const QUrl& url, const QString& filePath,

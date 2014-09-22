@@ -18,8 +18,8 @@ public:
 	bool DownloadFile(FileToUpdatePtr fileToDownlaod);
 
 private:
-	bool DoGetRequest(const String& domain, const String& query, std::string& data);
-	bool DoGetRequest(const String& domain, const String& query, std::ostream& ostream);
+	bool DoGetRequest(const String& domain, int port, const String& query, std::string& data);
+	bool DoGetRequest(const String& domain, int port, const String& query, std::ostream& ostream);
 	
 private:
 	String		m_domain;

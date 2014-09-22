@@ -126,7 +126,9 @@ void RadioPageController::PlayRadio(int id)
 		m_stations->SaveStats(Path::ConfigFile("radio.j"));
 
 		m_topStationsProxyModel->invalidate();
+		m_topStationsProxyModel->sort(0);
 		m_lastStationsProxyModel->invalidate();
+		m_lastStationsProxyModel->sort(0);
 	}
 	else
 	{

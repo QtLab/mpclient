@@ -109,8 +109,9 @@ QString Path::TrackFile(const QString& trackName)
 {
 	QString fileName = trackName;
 	fileName.replace("/", "").replace("/", "");
-	fileName = fileName.mid(0, 20) + ".mp3";
-
+	fileName = fileName.mid(0, 40);
+	fileName = fileName.trimmed() + ".mp3";;
+	
 	QDir dir(Config::Inst().PathToSaveTracks());
 
 	if(!dir.exists())

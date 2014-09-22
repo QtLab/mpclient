@@ -89,7 +89,9 @@ public:
 } //namespace model
 } //namespace mp
 
+#ifdef BUILD_WITH_METATYPES
 Q_DECLARE_METATYPE(mp::model::TVSource);
 Q_DECLARE_METATYPE(mp::model::TVSourcesModel);
+#endif
 
 #endif

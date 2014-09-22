@@ -3,8 +3,8 @@
 #include "UpdateModel.h"
 #include "UrlBuilder.h"
 #include "Config.h"
-#include <QTimer>
 
+#include <QTimer>
 #include <QDebug>
 #include <QtNetwork/QNetworkReply>
 
@@ -66,6 +66,8 @@ void UpdateController::ProcessUpdateList()
 				<< reply->request().url().toString() 
 				<<  ", error: " << reply->errorString()  << ", size" << reply->size();
 
+		qDebug() << "m_activatedByUser:" << m_activatedByUser;
+
 		bool activatedByUser = m_activatedByUser;
 		Cleanup();
 		emit UpdateFinished(UpdateResult(false, false, activatedByUser));
@@ -74,7 +76,6 @@ void UpdateController::ProcessUpdateList()
 	{
 		Cleanup();
 		
-
 		m_updateModel.ParseJson(reply->readAll());
 
 		qDebug() << "Update model processed, require player restart is: " << m_updateModel.RequirePlayerUpdate();
@@ -163,7 +164,6 @@ bool UpdateController::ProcessNextFile()
 
 void UpdateController::Cleanup()
 {
-	m_activatedByUser = false;
 	m_filesInProcess = 0;
 	m_updateModel.Cleanup();
 }

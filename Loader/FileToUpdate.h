@@ -23,6 +23,7 @@ public:
 	void SetMD5(const String& md5);
 
 	const String& Domain() const;
+	int Port() const;
 	const String& Query() const;
 	const String& Url() const;
 	const String& RelativePath() const;
@@ -38,6 +39,7 @@ public:
 	static bool FillFromJsonValue(FileToUpdatePtr fileToUpdate, const Json::Value& value);
 private:
 	String		m_domain;
+	int			m_port;
 	String		m_query;
 	String		m_url;
 	String		m_relativePath;

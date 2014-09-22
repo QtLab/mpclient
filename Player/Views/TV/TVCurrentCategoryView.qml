@@ -5,7 +5,7 @@ Rectangle {
 	property string bannerLogo;
 
 	AnimatedImage {
-		id: bannerImg
+		id: bannerImg;
 
 		anchors {
 			left: parent.left;
@@ -16,38 +16,13 @@ Rectangle {
 		width: 545; 
 		height: 174;
 		
-		source: bannerLogo
+		source: bannerLogo;
 		
 		MouseArea  {
-			anchors.fill: parent
-			hoverEnabled: true
-			cursorShape: Qt.PointingHandCursor
+			anchors.fill: parent;
+			hoverEnabled: true;
+			cursorShape: Qt.PointingHandCursor;
 			onClicked: tvPage.processBanner(bannerId);
-		}
-	}
-	
-	StyledText {
-		id: showAllTxt;
-		text: "Показать все";
-		color: "#3987C5";
-		font.underline: true;
-		font.pixelSize: 13;
-		font.bold: true;
-		font.weight: Font.DemiBold
-		anchors {
-			left: parent.left;
-			top: bannerImg.bottom;
-			topMargin: 14;
-			leftMargin: 12;
-
-		}
-		
-		MouseArea  {
-			anchors.fill: parent
-			hoverEnabled: true
-			cursorShape: Qt.PointingHandCursor
-			onClicked: {
-			}
 		}
 	}
 	
@@ -56,9 +31,9 @@ Rectangle {
 		model: topTvSourcesModel;
 
 		anchors {
-			left: parent.left
-			top: showAllTxt.bottom
-			topMargin: 8;
+			left: parent.left;
+			top: bannerImg.bottom;
+			topMargin: 28;
 		}
 		
 		interactive: false;
